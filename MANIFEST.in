@@ -1,0 +1,6 @@
+include COMPATIBILITY.md
+include VALIDATION.md
+include RUNTIME_STATUS.md
+recursive-include examples *.py
+recursive-include tests *.py
+recursive-include evidence *.json *.txt

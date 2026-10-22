@@ -1,0 +1,19 @@
+{
+  "status": "failed",
+  "started_utc": "2026-10-22T23:14:44.430853+00:00",
+  "host": "127.0.0.1",
+  "port": 2000,
+  "mujoco_version": "3.16.0",
+  "provenance": {
+    "expected_ref": "ue58-dev",
+    "asserted_ref": "ue58-dev",
+    "asserted_commit": null,
+    "source_verified": false
+  },
+  "scenarios": [],
+  "error": {
+    "type": "ModuleNotFoundError",
+    "message": "No module named 'carla'"
+  },
+  "finished_utc": "2026-10-22T23:14:44.431899+00:00"
+}
