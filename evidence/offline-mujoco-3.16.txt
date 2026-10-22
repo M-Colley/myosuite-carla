@@ -1,5 +1,5 @@
-........................................................................ [ 51%]
-.................................s.................................      [100%]
+........................................................................ [ 50%]
+.....................................s.................................  [100%]
 ============================== warnings summary ===============================
 tests/test_cockpit.py::test_composes_with_real_muscle_models[elbow]
   C:\Users\Mark\Desktop\myosuite-carla-bridge\myosuite\core\model_builder.py:820: UserWarning: Attach conflict when attaching 'MyoElbow_v0.1.7', policy is 'warning'
@@ -32,4 +32,4 @@ src\myosuite_carla\validation.py     171     92    46%   84, 151-152, 166, 170-2
 src\myosuite_carla\wrapper.py         51      4    92%   30, 50-52
 ----------------------------------------------------------------
 TOTAL                                901    117    87%
-138 passed, 1 skipped, 2 warnings in 7.89s
+142 passed, 1 skipped, 2 warnings in 8.58s

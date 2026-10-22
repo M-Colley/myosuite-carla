@@ -165,9 +165,9 @@ class JointPosition:
     def bind(self, model: mujoco.MjModel) -> Reader:
         """Resolve a scalar joint, rejecting ball and free joints."""
         index = _named_id(model, mujoco.mjtObj.mjOBJ_JOINT, self.name)
-        if model.jnt_type[index] not in (
-            mujoco.mjtJoint.mjJNT_HINGE,
-            mujoco.mjtJoint.mjJNT_SLIDE,
+        if int(model.jnt_type[index]) not in (
+            int(mujoco.mjtJoint.mjJNT_HINGE),
+            int(mujoco.mjtJoint.mjJNT_SLIDE),
         ):
             raise ValueError(
                 f"Joint {self.name!r} must be a scalar hinge or slide joint"

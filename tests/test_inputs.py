@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Callable
+from types import SimpleNamespace
 
 import mujoco
 import numpy as np
@@ -144,6 +145,37 @@ def test_joint_position_uses_qpos_address(
     assert mapper.sample(data).command.steer == pytest.approx(0.4)
     data.qpos[8] = 0.2
     assert JointPosition("pedal_travel").bind(model)(data) == 0.2
+
+
+@pytest.mark.parametrize("name", ["steering", "pedal_travel"])
+@pytest.mark.parametrize("integer_only_enums", [False, True])
+def test_scalar_joint_types_bind_across_python_numpy_enum_versions(
+    mechanism: tuple[mujoco.MjModel, mujoco.MjData],
+    name: str,
+    integer_only_enums: bool,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    model, data = mechanism
+    joint = model.joint(name)
+    data.qpos[int(joint.qposadr[0])] = 0.37
+    if integer_only_enums:
+
+        class IntegerEnum:
+            def __init__(self, value: int) -> None:
+                self.value = value
+
+            def __int__(self) -> int:
+                return self.value
+
+        monkeypatch.setattr(
+            mujoco,
+            "mjtJoint",
+            SimpleNamespace(
+                mjJNT_HINGE=IntegerEnum(int(mujoco.mjtJoint.mjJNT_HINGE)),
+                mjJNT_SLIDE=IntegerEnum(int(mujoco.mjtJoint.mjJNT_SLIDE)),
+            ),
+        )
+    assert JointPosition(name).bind(model)(data) == pytest.approx(0.37)
 
 
 @pytest.mark.parametrize("name", ["missing", "root_free", "ball_joint"])

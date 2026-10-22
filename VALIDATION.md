@@ -9,11 +9,14 @@ The initial offline results below were obtained before extraction from the
 MyoSuite worktree; the commands use the equivalent standalone root layout.
 
 The standalone suite, including the sustained muscle fixtures and failed-live-
-evidence checks, passes **138 tests** under both MuJoCo 3.6.0 and 3.16.0. The single skipped
+evidence checks, passes **142 tests** under both MuJoCo 3.6.0 and 3.16.0. The single skipped
 test requires an actual CARLA server. Full source statement coverage is **87%**;
 the real-server scenario paths remain unexecuted. See the saved
 [offline test output](evidence/offline-mujoco-3.16.txt).
 The [MuJoCo 3.6 output](evidence/offline-mujoco-3.6.txt) records the minimum-version run.
+Focused input and bridge tests also pass on local Python 3.14.6. A regression
+test reproduces and guards against the NumPy/pybind enum equality failure found
+by Linux Python 3.14 CI; joint-type validation now compares builtin integers.
 
 ## Package verification
 
