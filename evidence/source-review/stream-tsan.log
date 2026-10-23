@@ -1,0 +1,683 @@
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+
+Repeating all tests (iteration 1) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (28 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (35 ms)
+[----------] 9 tests from StreamListenerState (73 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (39 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (39 ms total)
+
+[==========] 11 tests from 2 test suites ran. (112 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 2) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (37 ms)
+[----------] 9 tests from StreamListenerState (58 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (38 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (38 ms total)
+
+[==========] 11 tests from 2 test suites ran. (97 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 3) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (21 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (45 ms)
+[----------] 9 tests from StreamListenerState (73 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (39 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (39 ms total)
+
+[==========] 11 tests from 2 test suites ran. (112 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 4) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (23 ms)
+[----------] 9 tests from StreamListenerState (45 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (38 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (38 ms total)
+
+[==========] 11 tests from 2 test suites ran. (83 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 5) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (47 ms)
+[----------] 9 tests from StreamListenerState (67 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (38 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (38 ms total)
+
+[==========] 11 tests from 2 test suites ran. (106 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 6) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (19 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (38 ms)
+[----------] 9 tests from StreamListenerState (63 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (59 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (59 ms total)
+
+[==========] 11 tests from 2 test suites ran. (123 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 7) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (14 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (48 ms)
+[----------] 9 tests from StreamListenerState (69 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (39 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (39 ms total)
+
+[==========] 11 tests from 2 test suites ran. (108 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 8) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (48 ms)
+[----------] 9 tests from StreamListenerState (69 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (39 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (39 ms total)
+
+[==========] 11 tests from 2 test suites ran. (108 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 9) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (34 ms)
+[----------] 9 tests from StreamListenerState (55 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (38 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (39 ms total)
+
+[==========] 11 tests from 2 test suites ran. (94 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 10) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (37 ms)
+[----------] 9 tests from StreamListenerState (57 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (39 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (39 ms total)
+
+[==========] 11 tests from 2 test suites ran. (97 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 11) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (49 ms)
+[----------] 9 tests from StreamListenerState (70 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (38 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (38 ms total)
+
+[==========] 11 tests from 2 test suites ran. (108 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 12) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (42 ms)
+[----------] 9 tests from StreamListenerState (63 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (39 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (39 ms total)
+
+[==========] 11 tests from 2 test suites ran. (102 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 13) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (33 ms)
+[----------] 9 tests from StreamListenerState (54 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (37 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (37 ms total)
+
+[==========] 11 tests from 2 test suites ran. (92 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 14) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (39 ms)
+[----------] 9 tests from StreamListenerState (60 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (39 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (39 ms total)
+
+[==========] 11 tests from 2 test suites ran. (99 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 15) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (33 ms)
+[----------] 9 tests from StreamListenerState (55 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (39 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (39 ms total)
+
+[==========] 11 tests from 2 test suites ran. (94 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 16) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (33 ms)
+[----------] 9 tests from StreamListenerState (54 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (37 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (37 ms total)
+
+[==========] 11 tests from 2 test suites ran. (91 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 17) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (32 ms)
+[----------] 9 tests from StreamListenerState (53 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (37 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (37 ms total)
+
+[==========] 11 tests from 2 test suites ran. (91 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 18) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (35 ms)
+[----------] 9 tests from StreamListenerState (56 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (38 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (38 ms total)
+
+[==========] 11 tests from 2 test suites ran. (95 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 19) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (15 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (24 ms)
+[----------] 9 tests from StreamListenerState (45 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (38 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (38 ms total)
+
+[==========] 11 tests from 2 test suites ran. (84 ms total)
+[  PASSED  ] 11 tests.
+
+Repeating all tests (iteration 20) . . .
+
+[==========] Running 11 tests from 2 test suites.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (0 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (14 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (27 ms)
+[----------] 9 tests from StreamListenerState (48 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (39 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (39 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (88 ms total)
+[  PASSED  ] 11 tests.

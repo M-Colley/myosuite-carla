@@ -1,0 +1,1019 @@
+{
+  "generated_at_utc": "2026-10-23T10:00:52.0025081Z",
+  "comparison_target": "D:/carla-review-client-build",
+  "integration": {
+    "repository": "M-Colley/carla",
+    "remote_url": "https://github.com/M-Colley/carla.git",
+    "branch": "codex/ue58-client-validation",
+    "head": "ee5859b4e63a4b79c69b02e381c95fb5727e0874",
+    "expected_head": "ee5859b4e63a4b79c69b02e381c95fb5727e0874",
+    "expected_head_matches": true
+  },
+  "scope": "Committed changes versus origin/ue58-dev; excludes CHANGELOG, README, documentation, Skills and CI. SHA256 hashes refer to exact working-tree file bytes, including line endings. Generated test-results.xml is excluded and untouched. Uncommitted source changes are reported separately.",
+  "branches": [
+    {
+      "task": "windows",
+      "worktree": "D:\\carla-review-windows",
+      "branch": "codex/ue58-windows-setup",
+      "head": "d8256f6815482f3f14bbcf11cec10c1e3856b551",
+      "origin_ue58_dev": "defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5",
+      "clean": true,
+      "committed_source_files": [
+        {
+          "path": "CarlaSetup.bat",
+          "source_path": "D:\\carla-review-windows\\CarlaSetup.bat",
+          "head_blob_sha1": "17601c052b8c9319002c5cc92172a0cdd2048383",
+          "worktree_sha256": "b190c4c1a7f10f150725be70da0ca75112053346cd7446a8559cd6f20f1cf574",
+          "source_exists": true
+        },
+        {
+          "path": "Util/SetupUtils/InstallPrerequisites.bat",
+          "source_path": "D:\\carla-review-windows\\Util\\SetupUtils\\InstallPrerequisites.bat",
+          "head_blob_sha1": "3cca22dd6c990253f7ae603a354f151f8e75a2ae",
+          "worktree_sha256": "fa4aec839fe56d8d602237f62cc03f78f91e2dc4b461b65786f6ae5d76ff9264",
+          "source_exists": true
+        },
+        {
+          "path": "Util/SetupUtils/tests/test_windows_setup.py",
+          "source_path": "D:\\carla-review-windows\\Util\\SetupUtils\\tests\\test_windows_setup.py",
+          "head_blob_sha1": "47df5f85fbf407f2f37116c500673649f49acf74",
+          "worktree_sha256": "d4667f1238d9ec9ca1aa9020f0ae6792c6437fb682d43751126c0db54a00bc9f",
+          "source_exists": true
+        }
+      ],
+      "uncommitted_source_changes": []
+    },
+    {
+      "task": "ratios",
+      "worktree": "D:\\carla-review-ratios",
+      "branch": "codex/ue58-gear-ratios",
+      "head": "73ba60d5ffc1ff7142c6d9417219c9bd473464d4",
+      "origin_ue58_dev": "defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5",
+      "clean": true,
+      "committed_source_files": [
+        {
+          "path": "PythonAPI/carla/src/Control.cpp",
+          "source_path": "D:\\carla-review-ratios\\PythonAPI\\carla\\src\\Control.cpp",
+          "head_blob_sha1": "a42f43341c2c713e92894023ab0d286f349d9d17",
+          "worktree_sha256": "c66e5acf13ad705d3f50e780f20f5c3d2228c2c802eb9a2de78cdd5fb42efe47",
+          "source_exists": true
+        },
+        {
+          "path": "PythonAPI/test/unit/test_vehicle.py",
+          "source_path": "D:\\carla-review-ratios\\PythonAPI\\test\\unit\\test_vehicle.py",
+          "head_blob_sha1": "cff153f34a32b4b0e7c0aa05c461640a12965cb3",
+          "worktree_sha256": "22e22cc4efbb0e7adff046fb767463f77588f1dec8b9f212fd8086726b818e5a",
+          "source_exists": true
+        }
+      ],
+      "uncommitted_source_changes": []
+    },
+    {
+      "task": "snapshots",
+      "worktree": "D:\\carla-review-snapshots",
+      "branch": "codex/ue58-snapshot-defaults",
+      "head": "faaf4b24ee53d5f40db33ff9ce5e5d2e86c8b870",
+      "origin_ue58_dev": "defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5",
+      "clean": true,
+      "committed_source_files": [
+        {
+          "path": "LibCarla/source/carla/client/ActorSnapshot.h",
+          "source_path": "D:\\carla-review-snapshots\\LibCarla\\source\\carla\\client\\ActorSnapshot.h",
+          "head_blob_sha1": "f466436946fa7829904d214313144ba4a0b6e0db",
+          "worktree_sha256": "d6285ae4674e19802f2c0b9d90e201d1ee8b6ea009038679a85e8848afea5f50",
+          "source_exists": true
+        },
+        {
+          "path": "LibCarla/source/test/client/test_episode_state.cpp",
+          "source_path": "D:\\carla-review-snapshots\\LibCarla\\source\\test\\client\\test_episode_state.cpp",
+          "head_blob_sha1": "23e8fa42d41052114b3330295da79b6fe6aa5a1e",
+          "worktree_sha256": "ad0e0eba2c89c2759c1662c7ffc9b38dc9dd309210a647d61abc9e123fa185c5",
+          "source_exists": true
+        }
+      ],
+      "uncommitted_source_changes": []
+    },
+    {
+      "task": "python-deep",
+      "worktree": "D:\\carla-review-python-deep",
+      "branch": "codex/ue58-python-deep",
+      "head": "3235edc05358770a7df2f9d872f4c72cee4a7f86",
+      "origin_ue58_dev": "defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5",
+      "clean": true,
+      "committed_source_files": [
+        {
+          "path": "CMake/Dependencies.cmake",
+          "source_path": "D:\\carla-review-python-deep\\CMake\\Dependencies.cmake",
+          "head_blob_sha1": "86708834ad6644e0bd61004cce22bc445c51392f",
+          "worktree_sha256": "b2c39927bbb1e0425c378167c72772dd5effb128e2ccffb5444eb5b31061e41a",
+          "source_exists": true
+        },
+        {
+          "path": "CMake/Options.cmake",
+          "source_path": "D:\\carla-review-python-deep\\CMake\\Options.cmake",
+          "head_blob_sha1": "73a018a84fa7e7d8261e81a692b13ca1c1c87b33",
+          "worktree_sha256": "329b590c20ab2f6769e88f609d904c6e339a7a32cbf18d3a6629653e39cbe28d",
+          "source_exists": true
+        },
+        {
+          "path": "PythonAPI/CMakeLists.txt",
+          "source_path": "D:\\carla-review-python-deep\\PythonAPI\\CMakeLists.txt",
+          "head_blob_sha1": "1d0fca5ad7f7ed992947ea134b6a96ce7088f288",
+          "worktree_sha256": "568a8f4f6edbcd90a22b3a2d7b854aedfdfa39cf88533c07b2facea5c190a26d",
+          "source_exists": true
+        },
+        {
+          "path": "PythonAPI/carla/CMakeLists.txt.in",
+          "source_path": "D:\\carla-review-python-deep\\PythonAPI\\carla\\CMakeLists.txt.in",
+          "head_blob_sha1": "aed561e30f2a6555aa6234bee0180a4885b0255d",
+          "worktree_sha256": "79bd0fe067b1c82552ec8e486e8202f8a0b26c9b50ecc7a0f24d7f6ea940c899",
+          "source_exists": true
+        },
+        {
+          "path": "PythonAPI/test/unit/test_boost_version.py",
+          "source_path": "D:\\carla-review-python-deep\\PythonAPI\\test\\unit\\test_boost_version.py",
+          "head_blob_sha1": "fd7fc849e576736435d5f6a7c0b33058271b70f1",
+          "worktree_sha256": "52f3e37fca296f0f20115e4964a3edbffd02d49dbd3b76b4b931951c35fd6563",
+          "source_exists": true
+        },
+        {
+          "path": "PythonAPI/test/unit/test_python_api_packaging.py",
+          "source_path": "D:\\carla-review-python-deep\\PythonAPI\\test\\unit\\test_python_api_packaging.py",
+          "head_blob_sha1": "0fa1cf2e705ad3979c0f47b862d192f03b614395",
+          "worktree_sha256": "2a36241b0d40399be0e9168f3b35025eca82164eab691103fcface8ec9b77e1a",
+          "source_exists": true
+        }
+      ],
+      "uncommitted_source_changes": []
+    },
+    {
+      "task": "atomic",
+      "worktree": "D:\\carla-review-atomic",
+      "branch": "codex/ue58-atomic-order",
+      "head": "23ac20775e2d78baef6ad168261796c075bd037f",
+      "origin_ue58_dev": "defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5",
+      "clean": true,
+      "committed_source_files": [
+        {
+          "path": "LibCarla/source/carla/AtomicSharedPtr.h",
+          "source_path": "D:\\carla-review-atomic\\LibCarla\\source\\carla\\AtomicSharedPtr.h",
+          "head_blob_sha1": "59071fa9175b052a07de9209883685b35e3cb609",
+          "worktree_sha256": "595743bbe266c87e80fcc8922746678a087f5e82ea4e468a602401c7605d6c13",
+          "source_exists": true
+        },
+        {
+          "path": "LibCarla/source/test/client/test_atomic_shared_ptr.cpp",
+          "source_path": "D:\\carla-review-atomic\\LibCarla\\source\\test\\client\\test_atomic_shared_ptr.cpp",
+          "head_blob_sha1": "89d880ef738bf59ee51730cda8a748f15ddceb95",
+          "worktree_sha256": "d4395ae37cd9b4797dcd7054640a651f292fc46acca83e96a7b9366bcc8d445d",
+          "source_exists": true
+        }
+      ],
+      "uncommitted_source_changes": []
+    },
+    {
+      "task": "sync",
+      "worktree": "D:\\carla-review-sync",
+      "branch": "codex/ue58-sync-audit",
+      "head": "d819bb506de382a18131a46b3f0f80cb520d24be",
+      "origin_ue58_dev": "defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5",
+      "clean": true,
+      "committed_source_files": [
+        {
+          "path": "LibCarla/source/carla/RecurrentSharedFuture.h",
+          "source_path": "D:\\carla-review-sync\\LibCarla\\source\\carla\\RecurrentSharedFuture.h",
+          "head_blob_sha1": "9039108a8581261db48f571da3009c45046809bf",
+          "worktree_sha256": "935f9643c61abc05d2fb815051905a6c440718f0fd1fea0c26a1e7870abd5bf5",
+          "source_exists": true
+        },
+        {
+          "path": "LibCarla/source/test/client/test_recurrent_shared_future.cpp",
+          "source_path": "D:\\carla-review-sync\\LibCarla\\source\\test\\client\\test_recurrent_shared_future.cpp",
+          "head_blob_sha1": "e8a7652eb49e6cc28381f5f0a96b2b59ab8625a9",
+          "worktree_sha256": "e8f57834da3b980a571854a003f7eedeed21d254b33a3fb9b014b5ac31d2e420",
+          "source_exists": true
+        },
+        {
+          "path": "LibCarla/source/test/client/test_recurrent_shared_future_lifetime.cpp",
+          "source_path": "D:\\carla-review-sync\\LibCarla\\source\\test\\client\\test_recurrent_shared_future_lifetime.cpp",
+          "head_blob_sha1": "e2bf23220babc39b4636e14190412dad75e9ac64",
+          "worktree_sha256": "5fbc015b9725165fb97500bc4a79039f90f1501917c5419e2fb2c1c7abd7a45b",
+          "source_exists": true
+        },
+        {
+          "path": "Util/Benchmarks/CMakeLists.txt",
+          "source_path": "D:\\carla-review-sync\\Util\\Benchmarks\\CMakeLists.txt",
+          "head_blob_sha1": "1df2f1324ed1bf8e39cac421192a49a6b9c9cb87",
+          "worktree_sha256": "ed6991de3fc1eabe4ead0a3af7390b9dbfb5020d0d0c6440f54a7d6d68161683",
+          "source_exists": true
+        },
+        {
+          "path": "Util/Benchmarks/recurrent_shared_future.cpp",
+          "source_path": "D:\\carla-review-sync\\Util\\Benchmarks\\recurrent_shared_future.cpp",
+          "head_blob_sha1": "fc618f65684d0a6cb8bd54aad49d2fa8d9c2075a",
+          "worktree_sha256": "9ade39b3f5216aba3b107af77d338585e57c7f3cd6638357d4ff3ce6d4687110",
+          "source_exists": true
+        },
+        {
+          "path": "Util/Tests/ClientPrimitives/CMakeLists.txt",
+          "source_path": "D:\\carla-review-sync\\Util\\Tests\\ClientPrimitives\\CMakeLists.txt",
+          "head_blob_sha1": "dd09af68e913d6315af5453e3403088eab85ce87",
+          "worktree_sha256": "1a361386d4064813ac2704ae009dad1a9bd822fe2ce8330ba262a7107e56eee4",
+          "source_exists": true
+        }
+      ],
+      "uncommitted_source_changes": []
+    },
+    {
+      "task": "stream",
+      "worktree": "D:\\carla-review-stream",
+      "branch": "codex/ue58-stream-listeners",
+      "head": "3f45aec996da258778d7e16ab3b7bad810670459",
+      "origin_ue58_dev": "defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5",
+      "clean": true,
+      "committed_source_files": [
+        {
+          "path": "LibCarla/source/carla/streaming/detail/Dispatcher.h",
+          "source_path": "D:\\carla-review-stream\\LibCarla\\source\\carla\\streaming\\detail\\Dispatcher.h",
+          "head_blob_sha1": "5c6e0c029dd06704b4021da7b9dde316de007f8e",
+          "worktree_sha256": "35523753c0034f95a5b2c80421f38612859bb003ce090bb095616065b83dfc53",
+          "source_exists": true
+        },
+        {
+          "path": "LibCarla/source/carla/streaming/detail/MultiStreamState.h",
+          "source_path": "D:\\carla-review-stream\\LibCarla\\source\\carla\\streaming\\detail\\MultiStreamState.h",
+          "head_blob_sha1": "96db43960ac45e69434815046693ea735aab4dc0",
+          "worktree_sha256": "7711c09d26e7beeff2d5e0324e719fa083a96d395428a50853715b4eac7a87f2",
+          "source_exists": true
+        },
+        {
+          "path": "LibCarla/source/test/common/test_stream_listener_state.cpp",
+          "source_path": "D:\\carla-review-stream\\LibCarla\\source\\test\\common\\test_stream_listener_state.cpp",
+          "head_blob_sha1": "6589cff440580be88af8ac8de7a19cb9a953d316",
+          "worktree_sha256": "ee2033a804bbf6b2a3dcc4c12b2945120c3f8b7a40207b3902d95424ddbfa61f",
+          "source_exists": true
+        },
+        {
+          "path": "Util/Tests/StreamListeners/CMakeLists.txt",
+          "source_path": "D:\\carla-review-stream\\Util\\Tests\\StreamListeners\\CMakeLists.txt",
+          "head_blob_sha1": "97aa4cb613a4fc70b3a35b8422c859e6259a42b5",
+          "worktree_sha256": "286d7d9aa933120198baf549ebee0bf83a7177dac43fa005704890f87e57735c",
+          "source_exists": true
+        },
+        {
+          "path": "Util/Tests/StreamListeners/benchmark.cpp",
+          "source_path": "D:\\carla-review-stream\\Util\\Tests\\StreamListeners\\benchmark.cpp",
+          "head_blob_sha1": "abc93ff9ce63811625e976689a499d0d5f723383",
+          "worktree_sha256": "ac885266e1080844431474411fb1f56665d99e478f68cf7facc094ca8a533e0d",
+          "source_exists": true
+        },
+        {
+          "path": "Util/Tests/StreamListeners/benchmark_poll.cpp",
+          "source_path": "D:\\carla-review-stream\\Util\\Tests\\StreamListeners\\benchmark_poll.cpp",
+          "head_blob_sha1": "768398f4f5f1dd7f8be747d3de583746feefdafd",
+          "worktree_sha256": "23b625881e0c8ec11d67ff8129794b49acd5ce30aa9de9fbe52f608362566ce7",
+          "source_exists": true
+        }
+      ],
+      "uncommitted_source_changes": []
+    },
+    {
+      "task": "test-portability",
+      "worktree": "D:\\carla-review-test-portability",
+      "branch": "codex/ue58-test-portability",
+      "head": "b188eb39192a3395faccf611532e3ef4f45b6b09",
+      "origin_ue58_dev": "defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5",
+      "clean": true,
+      "committed_source_files": [
+        {
+          "path": "LibCarla/source/test/client/test_rpc.cpp",
+          "source_path": "D:\\carla-review-test-portability\\LibCarla\\source\\test\\client\\test_rpc.cpp",
+          "head_blob_sha1": "9792bdd91b1bdde3813197a096f9e78492973e0c",
+          "worktree_sha256": "145db6d449897ca9f42a1b9ae8d8854204803b0583ca0133387ab66058e070d0",
+          "source_exists": true
+        },
+        {
+          "path": "LibCarla/source/test/common/test_streaming.cpp",
+          "source_path": "D:\\carla-review-test-portability\\LibCarla\\source\\test\\common\\test_streaming.cpp",
+          "head_blob_sha1": "e67d9f11958f49c4b89b0db61972398539799ca7",
+          "worktree_sha256": "5a7b97e77da9da46287e5a1ba637365d0e3c51cdf2807892aea008393e655e57",
+          "source_exists": true
+        },
+        {
+          "path": "PythonAPI/test/unit/test_client.py",
+          "source_path": "D:\\carla-review-test-portability\\PythonAPI\\test\\unit\\test_client.py",
+          "head_blob_sha1": "38ac02854983397138f64fe9b6cf1ea1e398c589",
+          "worktree_sha256": "10d4e4d48a96b34a26e6c811a2b0261855e867c6b74dd681c7406a6aedbfa1e2",
+          "source_exists": true
+        }
+      ],
+      "uncommitted_source_changes": []
+    },
+    {
+      "task": "episode",
+      "worktree": "D:\\carla-review-episode",
+      "branch": "codex/ue58-episode-races",
+      "head": "33c94d510df742e081179cfaf2ecc3f9c65c7f8f",
+      "origin_ue58_dev": "defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5",
+      "clean": true,
+      "committed_source_files": [
+        {
+          "path": "LibCarla/source/carla/client/detail/Episode.cpp",
+          "source_path": "D:\\carla-review-episode\\LibCarla\\source\\carla\\client\\detail\\Episode.cpp",
+          "head_blob_sha1": "fe1087e9b3b2c2b4c7bc238e7ab6f2c0e3440183",
+          "worktree_sha256": "b6c56912e78758506880332fd4d6effa7cd066ad163fe25482a0fb278e91b549",
+          "source_exists": true
+        },
+        {
+          "path": "LibCarla/source/carla/client/detail/Episode.h",
+          "source_path": "D:\\carla-review-episode\\LibCarla\\source\\carla\\client\\detail\\Episode.h",
+          "head_blob_sha1": "7efdc1c59ed69c945773edeb74a26e53cfa89665",
+          "worktree_sha256": "80b0d2727f2704239c6da77a08f18fb5a634d3a0b387cefd5bc69012fe8022a1",
+          "source_exists": true
+        },
+        {
+          "path": "LibCarla/source/test/client/EpisodeTestServer.h",
+          "source_path": "D:\\carla-review-episode\\LibCarla\\source\\test\\client\\EpisodeTestServer.h",
+          "head_blob_sha1": "97f57abb9c3041f9d61660d8f972cfd8654b2d1d",
+          "worktree_sha256": "076c12104a7abe0d46799b541e677131b23833ee07b9cb336fb6293b177426db",
+          "source_exists": true
+        },
+        {
+          "path": "LibCarla/source/test/client/test_episode_concurrency.cpp",
+          "source_path": "D:\\carla-review-episode\\LibCarla\\source\\test\\client\\test_episode_concurrency.cpp",
+          "head_blob_sha1": "bbab213c728bf38e83bab3997c54d471b202b080",
+          "worktree_sha256": "bfa52bdebd8027f5d88c99fe483d7cd9e9567093745bf376ddcff1b45eafd761",
+          "source_exists": true
+        },
+        {
+          "path": "Util/Tests/EpisodeConcurrency/CMakeLists.txt",
+          "source_path": "D:\\carla-review-episode\\Util\\Tests\\EpisodeConcurrency\\CMakeLists.txt",
+          "head_blob_sha1": "92248c018301413421642d36abfc7b5a91739131",
+          "worktree_sha256": "522e27b27b590dc878b91cf1cacda763fb33746aaba8a88a98c74e51d8ae1fa7",
+          "source_exists": true
+        }
+      ],
+      "uncommitted_source_changes": []
+    }
+  ],
+  "union_source_paths": [
+    "CarlaSetup.bat",
+    "CMake/Dependencies.cmake",
+    "CMake/Options.cmake",
+    "LibCarla/source/carla/AtomicSharedPtr.h",
+    "LibCarla/source/carla/client/ActorSnapshot.h",
+    "LibCarla/source/carla/client/detail/Episode.cpp",
+    "LibCarla/source/carla/client/detail/Episode.h",
+    "LibCarla/source/carla/RecurrentSharedFuture.h",
+    "LibCarla/source/carla/streaming/detail/Dispatcher.h",
+    "LibCarla/source/carla/streaming/detail/MultiStreamState.h",
+    "LibCarla/source/test/client/EpisodeTestServer.h",
+    "LibCarla/source/test/client/test_atomic_shared_ptr.cpp",
+    "LibCarla/source/test/client/test_episode_concurrency.cpp",
+    "LibCarla/source/test/client/test_episode_state.cpp",
+    "LibCarla/source/test/client/test_recurrent_shared_future_lifetime.cpp",
+    "LibCarla/source/test/client/test_recurrent_shared_future.cpp",
+    "LibCarla/source/test/client/test_rpc.cpp",
+    "LibCarla/source/test/common/test_stream_listener_state.cpp",
+    "LibCarla/source/test/common/test_streaming.cpp",
+    "PythonAPI/carla/CMakeLists.txt.in",
+    "PythonAPI/carla/src/Control.cpp",
+    "PythonAPI/CMakeLists.txt",
+    "PythonAPI/test/unit/test_boost_version.py",
+    "PythonAPI/test/unit/test_client.py",
+    "PythonAPI/test/unit/test_python_api_packaging.py",
+    "PythonAPI/test/unit/test_vehicle.py",
+    "Util/Benchmarks/CMakeLists.txt",
+    "Util/Benchmarks/recurrent_shared_future.cpp",
+    "Util/SetupUtils/InstallPrerequisites.bat",
+    "Util/SetupUtils/tests/test_windows_setup.py",
+    "Util/Tests/ClientPrimitives/CMakeLists.txt",
+    "Util/Tests/EpisodeConcurrency/CMakeLists.txt",
+    "Util/Tests/StreamListeners/benchmark_poll.cpp",
+    "Util/Tests/StreamListeners/benchmark.cpp",
+    "Util/Tests/StreamListeners/CMakeLists.txt"
+  ],
+  "uncommitted_source_changes": [],
+  "all_source_build_test_files_match": true,
+  "file_copy_check": {
+    "compared": 35,
+    "matches": 35,
+    "missing": 0,
+    "different": 0,
+    "files": [
+      {
+        "path": "CarlaSetup.bat",
+        "source_worktree": "D:\\carla-review-windows",
+        "source_branch": "codex/ue58-windows-setup",
+        "source_head": "d8256f6815482f3f14bbcf11cec10c1e3856b551",
+        "source_sha256": "b190c4c1a7f10f150725be70da0ca75112053346cd7446a8559cd6f20f1cf574",
+        "copied_path": "D:\\carla-review-client-build\\CarlaSetup.bat",
+        "copied_sha256": "b190c4c1a7f10f150725be70da0ca75112053346cd7446a8559cd6f20f1cf574",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "Util/SetupUtils/InstallPrerequisites.bat",
+        "source_worktree": "D:\\carla-review-windows",
+        "source_branch": "codex/ue58-windows-setup",
+        "source_head": "d8256f6815482f3f14bbcf11cec10c1e3856b551",
+        "source_sha256": "fa4aec839fe56d8d602237f62cc03f78f91e2dc4b461b65786f6ae5d76ff9264",
+        "copied_path": "D:\\carla-review-client-build\\Util\\SetupUtils\\InstallPrerequisites.bat",
+        "copied_sha256": "fa4aec839fe56d8d602237f62cc03f78f91e2dc4b461b65786f6ae5d76ff9264",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "Util/SetupUtils/tests/test_windows_setup.py",
+        "source_worktree": "D:\\carla-review-windows",
+        "source_branch": "codex/ue58-windows-setup",
+        "source_head": "d8256f6815482f3f14bbcf11cec10c1e3856b551",
+        "source_sha256": "d4667f1238d9ec9ca1aa9020f0ae6792c6437fb682d43751126c0db54a00bc9f",
+        "copied_path": "D:\\carla-review-client-build\\Util\\SetupUtils\\tests\\test_windows_setup.py",
+        "copied_sha256": "d4667f1238d9ec9ca1aa9020f0ae6792c6437fb682d43751126c0db54a00bc9f",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "PythonAPI/carla/src/Control.cpp",
+        "source_worktree": "D:\\carla-review-ratios",
+        "source_branch": "codex/ue58-gear-ratios",
+        "source_head": "73ba60d5ffc1ff7142c6d9417219c9bd473464d4",
+        "source_sha256": "c66e5acf13ad705d3f50e780f20f5c3d2228c2c802eb9a2de78cdd5fb42efe47",
+        "copied_path": "D:\\carla-review-client-build\\PythonAPI\\carla\\src\\Control.cpp",
+        "copied_sha256": "c66e5acf13ad705d3f50e780f20f5c3d2228c2c802eb9a2de78cdd5fb42efe47",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "PythonAPI/test/unit/test_vehicle.py",
+        "source_worktree": "D:\\carla-review-ratios",
+        "source_branch": "codex/ue58-gear-ratios",
+        "source_head": "73ba60d5ffc1ff7142c6d9417219c9bd473464d4",
+        "source_sha256": "22e22cc4efbb0e7adff046fb767463f77588f1dec8b9f212fd8086726b818e5a",
+        "copied_path": "D:\\carla-review-client-build\\PythonAPI\\test\\unit\\test_vehicle.py",
+        "copied_sha256": "22e22cc4efbb0e7adff046fb767463f77588f1dec8b9f212fd8086726b818e5a",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "LibCarla/source/carla/client/ActorSnapshot.h",
+        "source_worktree": "D:\\carla-review-snapshots",
+        "source_branch": "codex/ue58-snapshot-defaults",
+        "source_head": "faaf4b24ee53d5f40db33ff9ce5e5d2e86c8b870",
+        "source_sha256": "d6285ae4674e19802f2c0b9d90e201d1ee8b6ea009038679a85e8848afea5f50",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\client\\ActorSnapshot.h",
+        "copied_sha256": "d6285ae4674e19802f2c0b9d90e201d1ee8b6ea009038679a85e8848afea5f50",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/test_episode_state.cpp",
+        "source_worktree": "D:\\carla-review-snapshots",
+        "source_branch": "codex/ue58-snapshot-defaults",
+        "source_head": "faaf4b24ee53d5f40db33ff9ce5e5d2e86c8b870",
+        "source_sha256": "ad0e0eba2c89c2759c1662c7ffc9b38dc9dd309210a647d61abc9e123fa185c5",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_episode_state.cpp",
+        "copied_sha256": "ad0e0eba2c89c2759c1662c7ffc9b38dc9dd309210a647d61abc9e123fa185c5",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "CMake/Dependencies.cmake",
+        "source_worktree": "D:\\carla-review-python-deep",
+        "source_branch": "codex/ue58-python-deep",
+        "source_head": "3235edc05358770a7df2f9d872f4c72cee4a7f86",
+        "source_sha256": "b2c39927bbb1e0425c378167c72772dd5effb128e2ccffb5444eb5b31061e41a",
+        "copied_path": "D:\\carla-review-client-build\\CMake\\Dependencies.cmake",
+        "copied_sha256": "b2c39927bbb1e0425c378167c72772dd5effb128e2ccffb5444eb5b31061e41a",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "CMake/Options.cmake",
+        "source_worktree": "D:\\carla-review-python-deep",
+        "source_branch": "codex/ue58-python-deep",
+        "source_head": "3235edc05358770a7df2f9d872f4c72cee4a7f86",
+        "source_sha256": "329b590c20ab2f6769e88f609d904c6e339a7a32cbf18d3a6629653e39cbe28d",
+        "copied_path": "D:\\carla-review-client-build\\CMake\\Options.cmake",
+        "copied_sha256": "329b590c20ab2f6769e88f609d904c6e339a7a32cbf18d3a6629653e39cbe28d",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "PythonAPI/CMakeLists.txt",
+        "source_worktree": "D:\\carla-review-python-deep",
+        "source_branch": "codex/ue58-python-deep",
+        "source_head": "3235edc05358770a7df2f9d872f4c72cee4a7f86",
+        "source_sha256": "568a8f4f6edbcd90a22b3a2d7b854aedfdfa39cf88533c07b2facea5c190a26d",
+        "copied_path": "D:\\carla-review-client-build\\PythonAPI\\CMakeLists.txt",
+        "copied_sha256": "568a8f4f6edbcd90a22b3a2d7b854aedfdfa39cf88533c07b2facea5c190a26d",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "PythonAPI/carla/CMakeLists.txt.in",
+        "source_worktree": "D:\\carla-review-python-deep",
+        "source_branch": "codex/ue58-python-deep",
+        "source_head": "3235edc05358770a7df2f9d872f4c72cee4a7f86",
+        "source_sha256": "79bd0fe067b1c82552ec8e486e8202f8a0b26c9b50ecc7a0f24d7f6ea940c899",
+        "copied_path": "D:\\carla-review-client-build\\PythonAPI\\carla\\CMakeLists.txt.in",
+        "copied_sha256": "79bd0fe067b1c82552ec8e486e8202f8a0b26c9b50ecc7a0f24d7f6ea940c899",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "PythonAPI/test/unit/test_boost_version.py",
+        "source_worktree": "D:\\carla-review-python-deep",
+        "source_branch": "codex/ue58-python-deep",
+        "source_head": "3235edc05358770a7df2f9d872f4c72cee4a7f86",
+        "source_sha256": "52f3e37fca296f0f20115e4964a3edbffd02d49dbd3b76b4b931951c35fd6563",
+        "copied_path": "D:\\carla-review-client-build\\PythonAPI\\test\\unit\\test_boost_version.py",
+        "copied_sha256": "52f3e37fca296f0f20115e4964a3edbffd02d49dbd3b76b4b931951c35fd6563",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "PythonAPI/test/unit/test_python_api_packaging.py",
+        "source_worktree": "D:\\carla-review-python-deep",
+        "source_branch": "codex/ue58-python-deep",
+        "source_head": "3235edc05358770a7df2f9d872f4c72cee4a7f86",
+        "source_sha256": "2a36241b0d40399be0e9168f3b35025eca82164eab691103fcface8ec9b77e1a",
+        "copied_path": "D:\\carla-review-client-build\\PythonAPI\\test\\unit\\test_python_api_packaging.py",
+        "copied_sha256": "2a36241b0d40399be0e9168f3b35025eca82164eab691103fcface8ec9b77e1a",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "LibCarla/source/carla/AtomicSharedPtr.h",
+        "source_worktree": "D:\\carla-review-atomic",
+        "source_branch": "codex/ue58-atomic-order",
+        "source_head": "23ac20775e2d78baef6ad168261796c075bd037f",
+        "source_sha256": "595743bbe266c87e80fcc8922746678a087f5e82ea4e468a602401c7605d6c13",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\AtomicSharedPtr.h",
+        "copied_sha256": "595743bbe266c87e80fcc8922746678a087f5e82ea4e468a602401c7605d6c13",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/test_atomic_shared_ptr.cpp",
+        "source_worktree": "D:\\carla-review-atomic",
+        "source_branch": "codex/ue58-atomic-order",
+        "source_head": "23ac20775e2d78baef6ad168261796c075bd037f",
+        "source_sha256": "d4395ae37cd9b4797dcd7054640a651f292fc46acca83e96a7b9366bcc8d445d",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_atomic_shared_ptr.cpp",
+        "copied_sha256": "d4395ae37cd9b4797dcd7054640a651f292fc46acca83e96a7b9366bcc8d445d",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/carla/RecurrentSharedFuture.h",
+        "source_worktree": "D:\\carla-review-sync",
+        "source_branch": "codex/ue58-sync-audit",
+        "source_head": "d819bb506de382a18131a46b3f0f80cb520d24be",
+        "source_sha256": "935f9643c61abc05d2fb815051905a6c440718f0fd1fea0c26a1e7870abd5bf5",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\RecurrentSharedFuture.h",
+        "copied_sha256": "935f9643c61abc05d2fb815051905a6c440718f0fd1fea0c26a1e7870abd5bf5",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/test_recurrent_shared_future.cpp",
+        "source_worktree": "D:\\carla-review-sync",
+        "source_branch": "codex/ue58-sync-audit",
+        "source_head": "d819bb506de382a18131a46b3f0f80cb520d24be",
+        "source_sha256": "e8f57834da3b980a571854a003f7eedeed21d254b33a3fb9b014b5ac31d2e420",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_recurrent_shared_future.cpp",
+        "copied_sha256": "e8f57834da3b980a571854a003f7eedeed21d254b33a3fb9b014b5ac31d2e420",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/test_recurrent_shared_future_lifetime.cpp",
+        "source_worktree": "D:\\carla-review-sync",
+        "source_branch": "codex/ue58-sync-audit",
+        "source_head": "d819bb506de382a18131a46b3f0f80cb520d24be",
+        "source_sha256": "5fbc015b9725165fb97500bc4a79039f90f1501917c5419e2fb2c1c7abd7a45b",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_recurrent_shared_future_lifetime.cpp",
+        "copied_sha256": "5fbc015b9725165fb97500bc4a79039f90f1501917c5419e2fb2c1c7abd7a45b",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "Util/Benchmarks/CMakeLists.txt",
+        "source_worktree": "D:\\carla-review-sync",
+        "source_branch": "codex/ue58-sync-audit",
+        "source_head": "d819bb506de382a18131a46b3f0f80cb520d24be",
+        "source_sha256": "ed6991de3fc1eabe4ead0a3af7390b9dbfb5020d0d0c6440f54a7d6d68161683",
+        "copied_path": "D:\\carla-review-client-build\\Util\\Benchmarks\\CMakeLists.txt",
+        "copied_sha256": "ed6991de3fc1eabe4ead0a3af7390b9dbfb5020d0d0c6440f54a7d6d68161683",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "Util/Benchmarks/recurrent_shared_future.cpp",
+        "source_worktree": "D:\\carla-review-sync",
+        "source_branch": "codex/ue58-sync-audit",
+        "source_head": "d819bb506de382a18131a46b3f0f80cb520d24be",
+        "source_sha256": "9ade39b3f5216aba3b107af77d338585e57c7f3cd6638357d4ff3ce6d4687110",
+        "copied_path": "D:\\carla-review-client-build\\Util\\Benchmarks\\recurrent_shared_future.cpp",
+        "copied_sha256": "9ade39b3f5216aba3b107af77d338585e57c7f3cd6638357d4ff3ce6d4687110",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "Util/Tests/ClientPrimitives/CMakeLists.txt",
+        "source_worktree": "D:\\carla-review-sync",
+        "source_branch": "codex/ue58-sync-audit",
+        "source_head": "d819bb506de382a18131a46b3f0f80cb520d24be",
+        "source_sha256": "1a361386d4064813ac2704ae009dad1a9bd822fe2ce8330ba262a7107e56eee4",
+        "copied_path": "D:\\carla-review-client-build\\Util\\Tests\\ClientPrimitives\\CMakeLists.txt",
+        "copied_sha256": "1a361386d4064813ac2704ae009dad1a9bd822fe2ce8330ba262a7107e56eee4",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "LibCarla/source/carla/streaming/detail/Dispatcher.h",
+        "source_worktree": "D:\\carla-review-stream",
+        "source_branch": "codex/ue58-stream-listeners",
+        "source_head": "3f45aec996da258778d7e16ab3b7bad810670459",
+        "source_sha256": "35523753c0034f95a5b2c80421f38612859bb003ce090bb095616065b83dfc53",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\streaming\\detail\\Dispatcher.h",
+        "copied_sha256": "35523753c0034f95a5b2c80421f38612859bb003ce090bb095616065b83dfc53",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/carla/streaming/detail/MultiStreamState.h",
+        "source_worktree": "D:\\carla-review-stream",
+        "source_branch": "codex/ue58-stream-listeners",
+        "source_head": "3f45aec996da258778d7e16ab3b7bad810670459",
+        "source_sha256": "7711c09d26e7beeff2d5e0324e719fa083a96d395428a50853715b4eac7a87f2",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\streaming\\detail\\MultiStreamState.h",
+        "copied_sha256": "7711c09d26e7beeff2d5e0324e719fa083a96d395428a50853715b4eac7a87f2",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/common/test_stream_listener_state.cpp",
+        "source_worktree": "D:\\carla-review-stream",
+        "source_branch": "codex/ue58-stream-listeners",
+        "source_head": "3f45aec996da258778d7e16ab3b7bad810670459",
+        "source_sha256": "ee2033a804bbf6b2a3dcc4c12b2945120c3f8b7a40207b3902d95424ddbfa61f",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\common\\test_stream_listener_state.cpp",
+        "copied_sha256": "ee2033a804bbf6b2a3dcc4c12b2945120c3f8b7a40207b3902d95424ddbfa61f",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "Util/Tests/StreamListeners/CMakeLists.txt",
+        "source_worktree": "D:\\carla-review-stream",
+        "source_branch": "codex/ue58-stream-listeners",
+        "source_head": "3f45aec996da258778d7e16ab3b7bad810670459",
+        "source_sha256": "286d7d9aa933120198baf549ebee0bf83a7177dac43fa005704890f87e57735c",
+        "copied_path": "D:\\carla-review-client-build\\Util\\Tests\\StreamListeners\\CMakeLists.txt",
+        "copied_sha256": "286d7d9aa933120198baf549ebee0bf83a7177dac43fa005704890f87e57735c",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "Util/Tests/StreamListeners/benchmark.cpp",
+        "source_worktree": "D:\\carla-review-stream",
+        "source_branch": "codex/ue58-stream-listeners",
+        "source_head": "3f45aec996da258778d7e16ab3b7bad810670459",
+        "source_sha256": "ac885266e1080844431474411fb1f56665d99e478f68cf7facc094ca8a533e0d",
+        "copied_path": "D:\\carla-review-client-build\\Util\\Tests\\StreamListeners\\benchmark.cpp",
+        "copied_sha256": "ac885266e1080844431474411fb1f56665d99e478f68cf7facc094ca8a533e0d",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "Util/Tests/StreamListeners/benchmark_poll.cpp",
+        "source_worktree": "D:\\carla-review-stream",
+        "source_branch": "codex/ue58-stream-listeners",
+        "source_head": "3f45aec996da258778d7e16ab3b7bad810670459",
+        "source_sha256": "23b625881e0c8ec11d67ff8129794b49acd5ce30aa9de9fbe52f608362566ce7",
+        "copied_path": "D:\\carla-review-client-build\\Util\\Tests\\StreamListeners\\benchmark_poll.cpp",
+        "copied_sha256": "23b625881e0c8ec11d67ff8129794b49acd5ce30aa9de9fbe52f608362566ce7",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/test_rpc.cpp",
+        "source_worktree": "D:\\carla-review-test-portability",
+        "source_branch": "codex/ue58-test-portability",
+        "source_head": "b188eb39192a3395faccf611532e3ef4f45b6b09",
+        "source_sha256": "145db6d449897ca9f42a1b9ae8d8854204803b0583ca0133387ab66058e070d0",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_rpc.cpp",
+        "copied_sha256": "145db6d449897ca9f42a1b9ae8d8854204803b0583ca0133387ab66058e070d0",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/common/test_streaming.cpp",
+        "source_worktree": "D:\\carla-review-test-portability",
+        "source_branch": "codex/ue58-test-portability",
+        "source_head": "b188eb39192a3395faccf611532e3ef4f45b6b09",
+        "source_sha256": "5a7b97e77da9da46287e5a1ba637365d0e3c51cdf2807892aea008393e655e57",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\common\\test_streaming.cpp",
+        "copied_sha256": "5a7b97e77da9da46287e5a1ba637365d0e3c51cdf2807892aea008393e655e57",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "PythonAPI/test/unit/test_client.py",
+        "source_worktree": "D:\\carla-review-test-portability",
+        "source_branch": "codex/ue58-test-portability",
+        "source_head": "b188eb39192a3395faccf611532e3ef4f45b6b09",
+        "source_sha256": "10d4e4d48a96b34a26e6c811a2b0261855e867c6b74dd681c7406a6aedbfa1e2",
+        "copied_path": "D:\\carla-review-client-build\\PythonAPI\\test\\unit\\test_client.py",
+        "copied_sha256": "10d4e4d48a96b34a26e6c811a2b0261855e867c6b74dd681c7406a6aedbfa1e2",
+        "status": "match",
+        "cpp_file": false
+      },
+      {
+        "path": "LibCarla/source/carla/client/detail/Episode.cpp",
+        "source_worktree": "D:\\carla-review-episode",
+        "source_branch": "codex/ue58-episode-races",
+        "source_head": "33c94d510df742e081179cfaf2ecc3f9c65c7f8f",
+        "source_sha256": "b6c56912e78758506880332fd4d6effa7cd066ad163fe25482a0fb278e91b549",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\client\\detail\\Episode.cpp",
+        "copied_sha256": "b6c56912e78758506880332fd4d6effa7cd066ad163fe25482a0fb278e91b549",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/carla/client/detail/Episode.h",
+        "source_worktree": "D:\\carla-review-episode",
+        "source_branch": "codex/ue58-episode-races",
+        "source_head": "33c94d510df742e081179cfaf2ecc3f9c65c7f8f",
+        "source_sha256": "80b0d2727f2704239c6da77a08f18fb5a634d3a0b387cefd5bc69012fe8022a1",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\client\\detail\\Episode.h",
+        "copied_sha256": "80b0d2727f2704239c6da77a08f18fb5a634d3a0b387cefd5bc69012fe8022a1",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/EpisodeTestServer.h",
+        "source_worktree": "D:\\carla-review-episode",
+        "source_branch": "codex/ue58-episode-races",
+        "source_head": "33c94d510df742e081179cfaf2ecc3f9c65c7f8f",
+        "source_sha256": "076c12104a7abe0d46799b541e677131b23833ee07b9cb336fb6293b177426db",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\EpisodeTestServer.h",
+        "copied_sha256": "076c12104a7abe0d46799b541e677131b23833ee07b9cb336fb6293b177426db",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/test_episode_concurrency.cpp",
+        "source_worktree": "D:\\carla-review-episode",
+        "source_branch": "codex/ue58-episode-races",
+        "source_head": "33c94d510df742e081179cfaf2ecc3f9c65c7f8f",
+        "source_sha256": "bfa52bdebd8027f5d88c99fe483d7cd9e9567093745bf376ddcff1b45eafd761",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_episode_concurrency.cpp",
+        "copied_sha256": "bfa52bdebd8027f5d88c99fe483d7cd9e9567093745bf376ddcff1b45eafd761",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "Util/Tests/EpisodeConcurrency/CMakeLists.txt",
+        "source_worktree": "D:\\carla-review-episode",
+        "source_branch": "codex/ue58-episode-races",
+        "source_head": "33c94d510df742e081179cfaf2ecc3f9c65c7f8f",
+        "source_sha256": "522e27b27b590dc878b91cf1cacda763fb33746aaba8a88a98c74e51d8ae1fa7",
+        "copied_path": "D:\\carla-review-client-build\\Util\\Tests\\EpisodeConcurrency\\CMakeLists.txt",
+        "copied_sha256": "522e27b27b590dc878b91cf1cacda763fb33746aaba8a88a98c74e51d8ae1fa7",
+        "status": "match",
+        "cpp_file": false
+      }
+    ]
+  },
+  "cpp_copy_check": {
+    "compared": 20,
+    "matches": 20,
+    "missing": 0,
+    "different": 0,
+    "files": [
+      {
+        "path": "PythonAPI/carla/src/Control.cpp",
+        "source_worktree": "D:\\carla-review-ratios",
+        "source_branch": "codex/ue58-gear-ratios",
+        "source_head": "73ba60d5ffc1ff7142c6d9417219c9bd473464d4",
+        "source_sha256": "c66e5acf13ad705d3f50e780f20f5c3d2228c2c802eb9a2de78cdd5fb42efe47",
+        "copied_path": "D:\\carla-review-client-build\\PythonAPI\\carla\\src\\Control.cpp",
+        "copied_sha256": "c66e5acf13ad705d3f50e780f20f5c3d2228c2c802eb9a2de78cdd5fb42efe47",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/carla/client/ActorSnapshot.h",
+        "source_worktree": "D:\\carla-review-snapshots",
+        "source_branch": "codex/ue58-snapshot-defaults",
+        "source_head": "faaf4b24ee53d5f40db33ff9ce5e5d2e86c8b870",
+        "source_sha256": "d6285ae4674e19802f2c0b9d90e201d1ee8b6ea009038679a85e8848afea5f50",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\client\\ActorSnapshot.h",
+        "copied_sha256": "d6285ae4674e19802f2c0b9d90e201d1ee8b6ea009038679a85e8848afea5f50",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/test_episode_state.cpp",
+        "source_worktree": "D:\\carla-review-snapshots",
+        "source_branch": "codex/ue58-snapshot-defaults",
+        "source_head": "faaf4b24ee53d5f40db33ff9ce5e5d2e86c8b870",
+        "source_sha256": "ad0e0eba2c89c2759c1662c7ffc9b38dc9dd309210a647d61abc9e123fa185c5",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_episode_state.cpp",
+        "copied_sha256": "ad0e0eba2c89c2759c1662c7ffc9b38dc9dd309210a647d61abc9e123fa185c5",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/carla/AtomicSharedPtr.h",
+        "source_worktree": "D:\\carla-review-atomic",
+        "source_branch": "codex/ue58-atomic-order",
+        "source_head": "23ac20775e2d78baef6ad168261796c075bd037f",
+        "source_sha256": "595743bbe266c87e80fcc8922746678a087f5e82ea4e468a602401c7605d6c13",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\AtomicSharedPtr.h",
+        "copied_sha256": "595743bbe266c87e80fcc8922746678a087f5e82ea4e468a602401c7605d6c13",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/test_atomic_shared_ptr.cpp",
+        "source_worktree": "D:\\carla-review-atomic",
+        "source_branch": "codex/ue58-atomic-order",
+        "source_head": "23ac20775e2d78baef6ad168261796c075bd037f",
+        "source_sha256": "d4395ae37cd9b4797dcd7054640a651f292fc46acca83e96a7b9366bcc8d445d",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_atomic_shared_ptr.cpp",
+        "copied_sha256": "d4395ae37cd9b4797dcd7054640a651f292fc46acca83e96a7b9366bcc8d445d",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/carla/RecurrentSharedFuture.h",
+        "source_worktree": "D:\\carla-review-sync",
+        "source_branch": "codex/ue58-sync-audit",
+        "source_head": "d819bb506de382a18131a46b3f0f80cb520d24be",
+        "source_sha256": "935f9643c61abc05d2fb815051905a6c440718f0fd1fea0c26a1e7870abd5bf5",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\RecurrentSharedFuture.h",
+        "copied_sha256": "935f9643c61abc05d2fb815051905a6c440718f0fd1fea0c26a1e7870abd5bf5",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/test_recurrent_shared_future.cpp",
+        "source_worktree": "D:\\carla-review-sync",
+        "source_branch": "codex/ue58-sync-audit",
+        "source_head": "d819bb506de382a18131a46b3f0f80cb520d24be",
+        "source_sha256": "e8f57834da3b980a571854a003f7eedeed21d254b33a3fb9b014b5ac31d2e420",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_recurrent_shared_future.cpp",
+        "copied_sha256": "e8f57834da3b980a571854a003f7eedeed21d254b33a3fb9b014b5ac31d2e420",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/test_recurrent_shared_future_lifetime.cpp",
+        "source_worktree": "D:\\carla-review-sync",
+        "source_branch": "codex/ue58-sync-audit",
+        "source_head": "d819bb506de382a18131a46b3f0f80cb520d24be",
+        "source_sha256": "5fbc015b9725165fb97500bc4a79039f90f1501917c5419e2fb2c1c7abd7a45b",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_recurrent_shared_future_lifetime.cpp",
+        "copied_sha256": "5fbc015b9725165fb97500bc4a79039f90f1501917c5419e2fb2c1c7abd7a45b",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "Util/Benchmarks/recurrent_shared_future.cpp",
+        "source_worktree": "D:\\carla-review-sync",
+        "source_branch": "codex/ue58-sync-audit",
+        "source_head": "d819bb506de382a18131a46b3f0f80cb520d24be",
+        "source_sha256": "9ade39b3f5216aba3b107af77d338585e57c7f3cd6638357d4ff3ce6d4687110",
+        "copied_path": "D:\\carla-review-client-build\\Util\\Benchmarks\\recurrent_shared_future.cpp",
+        "copied_sha256": "9ade39b3f5216aba3b107af77d338585e57c7f3cd6638357d4ff3ce6d4687110",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/carla/streaming/detail/Dispatcher.h",
+        "source_worktree": "D:\\carla-review-stream",
+        "source_branch": "codex/ue58-stream-listeners",
+        "source_head": "3f45aec996da258778d7e16ab3b7bad810670459",
+        "source_sha256": "35523753c0034f95a5b2c80421f38612859bb003ce090bb095616065b83dfc53",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\streaming\\detail\\Dispatcher.h",
+        "copied_sha256": "35523753c0034f95a5b2c80421f38612859bb003ce090bb095616065b83dfc53",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/carla/streaming/detail/MultiStreamState.h",
+        "source_worktree": "D:\\carla-review-stream",
+        "source_branch": "codex/ue58-stream-listeners",
+        "source_head": "3f45aec996da258778d7e16ab3b7bad810670459",
+        "source_sha256": "7711c09d26e7beeff2d5e0324e719fa083a96d395428a50853715b4eac7a87f2",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\streaming\\detail\\MultiStreamState.h",
+        "copied_sha256": "7711c09d26e7beeff2d5e0324e719fa083a96d395428a50853715b4eac7a87f2",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/common/test_stream_listener_state.cpp",
+        "source_worktree": "D:\\carla-review-stream",
+        "source_branch": "codex/ue58-stream-listeners",
+        "source_head": "3f45aec996da258778d7e16ab3b7bad810670459",
+        "source_sha256": "ee2033a804bbf6b2a3dcc4c12b2945120c3f8b7a40207b3902d95424ddbfa61f",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\common\\test_stream_listener_state.cpp",
+        "copied_sha256": "ee2033a804bbf6b2a3dcc4c12b2945120c3f8b7a40207b3902d95424ddbfa61f",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "Util/Tests/StreamListeners/benchmark.cpp",
+        "source_worktree": "D:\\carla-review-stream",
+        "source_branch": "codex/ue58-stream-listeners",
+        "source_head": "3f45aec996da258778d7e16ab3b7bad810670459",
+        "source_sha256": "ac885266e1080844431474411fb1f56665d99e478f68cf7facc094ca8a533e0d",
+        "copied_path": "D:\\carla-review-client-build\\Util\\Tests\\StreamListeners\\benchmark.cpp",
+        "copied_sha256": "ac885266e1080844431474411fb1f56665d99e478f68cf7facc094ca8a533e0d",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "Util/Tests/StreamListeners/benchmark_poll.cpp",
+        "source_worktree": "D:\\carla-review-stream",
+        "source_branch": "codex/ue58-stream-listeners",
+        "source_head": "3f45aec996da258778d7e16ab3b7bad810670459",
+        "source_sha256": "23b625881e0c8ec11d67ff8129794b49acd5ce30aa9de9fbe52f608362566ce7",
+        "copied_path": "D:\\carla-review-client-build\\Util\\Tests\\StreamListeners\\benchmark_poll.cpp",
+        "copied_sha256": "23b625881e0c8ec11d67ff8129794b49acd5ce30aa9de9fbe52f608362566ce7",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/test_rpc.cpp",
+        "source_worktree": "D:\\carla-review-test-portability",
+        "source_branch": "codex/ue58-test-portability",
+        "source_head": "b188eb39192a3395faccf611532e3ef4f45b6b09",
+        "source_sha256": "145db6d449897ca9f42a1b9ae8d8854204803b0583ca0133387ab66058e070d0",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_rpc.cpp",
+        "copied_sha256": "145db6d449897ca9f42a1b9ae8d8854204803b0583ca0133387ab66058e070d0",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/common/test_streaming.cpp",
+        "source_worktree": "D:\\carla-review-test-portability",
+        "source_branch": "codex/ue58-test-portability",
+        "source_head": "b188eb39192a3395faccf611532e3ef4f45b6b09",
+        "source_sha256": "5a7b97e77da9da46287e5a1ba637365d0e3c51cdf2807892aea008393e655e57",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\common\\test_streaming.cpp",
+        "copied_sha256": "5a7b97e77da9da46287e5a1ba637365d0e3c51cdf2807892aea008393e655e57",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/carla/client/detail/Episode.cpp",
+        "source_worktree": "D:\\carla-review-episode",
+        "source_branch": "codex/ue58-episode-races",
+        "source_head": "33c94d510df742e081179cfaf2ecc3f9c65c7f8f",
+        "source_sha256": "b6c56912e78758506880332fd4d6effa7cd066ad163fe25482a0fb278e91b549",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\client\\detail\\Episode.cpp",
+        "copied_sha256": "b6c56912e78758506880332fd4d6effa7cd066ad163fe25482a0fb278e91b549",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/carla/client/detail/Episode.h",
+        "source_worktree": "D:\\carla-review-episode",
+        "source_branch": "codex/ue58-episode-races",
+        "source_head": "33c94d510df742e081179cfaf2ecc3f9c65c7f8f",
+        "source_sha256": "80b0d2727f2704239c6da77a08f18fb5a634d3a0b387cefd5bc69012fe8022a1",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\client\\detail\\Episode.h",
+        "copied_sha256": "80b0d2727f2704239c6da77a08f18fb5a634d3a0b387cefd5bc69012fe8022a1",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/EpisodeTestServer.h",
+        "source_worktree": "D:\\carla-review-episode",
+        "source_branch": "codex/ue58-episode-races",
+        "source_head": "33c94d510df742e081179cfaf2ecc3f9c65c7f8f",
+        "source_sha256": "076c12104a7abe0d46799b541e677131b23833ee07b9cb336fb6293b177426db",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\EpisodeTestServer.h",
+        "copied_sha256": "076c12104a7abe0d46799b541e677131b23833ee07b9cb336fb6293b177426db",
+        "status": "match",
+        "cpp_file": true
+      },
+      {
+        "path": "LibCarla/source/test/client/test_episode_concurrency.cpp",
+        "source_worktree": "D:\\carla-review-episode",
+        "source_branch": "codex/ue58-episode-races",
+        "source_head": "33c94d510df742e081179cfaf2ecc3f9c65c7f8f",
+        "source_sha256": "bfa52bdebd8027f5d88c99fe483d7cd9e9567093745bf376ddcff1b45eafd761",
+        "copied_path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_episode_concurrency.cpp",
+        "copied_sha256": "bfa52bdebd8027f5d88c99fe483d7cd9e9567093745bf376ddcff1b45eafd761",
+        "status": "match",
+        "cpp_file": true
+      }
+    ]
+  }
+}

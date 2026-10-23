@@ -90,25 +90,110 @@ CARLA rendering/network/physics performance is outside that measurement.
 Further CARLA `ue58-dev` fixes were submitted under M-Colley:
 
 - [PR #9994](https://github.com/carla-simulator/carla/pull/9994): successful
-  metadata-only wheels and generated paths with spaces. Actual CMake templates
-  build/import native fixture wheels; all three tests and Linux/Windows CI pass.
+  metadata-only wheels, generated paths with spaces and a client-only build
+  requesting Boost.Python while disabling it. Actual CMake templates
+  build/import native fixture wheels; three packaging tests, two dependency
+  selection tests and [Linux/Windows CI](https://github.com/M-Colley/carla/actions/runs/39933137062) pass.
 - [PR #9995](https://github.com/carla-simulator/carla/pull/9995): invalid atomic
   compare-exchange failure ordering, corrected without changing object layout.
 - [PR #9996](https://github.com/carla-simulator/carla/pull/9996): completed and
   timed-out future waiters retained objects and received redundant publications.
-  Registration now lasts only for an active wait. The private class layout
+  Registration now lasts only for an active wait. Mutable/const lvalue
+  exceptions also compile and retain owned copies. The private class layout
   changes, so LibCarla and consumers must be rebuilt together.
+- [PR #9997](https://github.com/carla-simulator/carla/pull/9997): sensor listener
+  queries raced subscriber changes, ROS visibility and forced activity;
+  Dispatcher ROS methods also raced its stream map. One atomic reason mask and
+  the existing map mutex preserve the prior visibility/reset rules.
+- [PR #9998](https://github.com/carla-simulator/carla/pull/9998): the native RPC
+  test exhausted empty polls and then hung joining a client still awaiting
+  service; a TCP test connected to the wildcard bind address on Windows.
+  Bounded elapsed-time waits, guaranteed cleanup and a loopback fixture fix
+  both failures. Each corrected case passes five repeated executions. The
+  Python version test now checks installed wheel metadata instead of requiring
+  reachable Git tags; original failure and actual-module success are recorded.
+- [PR #9999](https://github.com/carla-simulator/carla/pull/9999): pending Episode
+  exceptions raced their flag/message readers, and map invalidation raced
+  publication/consumption. A mutex with optional text and an atomic exchange
+  preserve latest/empty messages and new-episode ordering.
 
 Actual source-header tests passed on native MSVC and GCC. The combined future
-and atomic suites passed **170 repetitions under ThreadSanitizer** and **170
+and atomic suites passed **190 repetitions under ThreadSanitizer** and **190
 under AddressSanitizer/UndefinedBehaviorSanitizer**, with no reports. These
-counts mean 17 tests repeated ten times per sanitizer configuration. The
+counts mean 19 tests repeated ten times per sanitizer configuration. The
 no-exception build passed 36 tests (12 repeated three times). A repeatable
 `WorldSnapshot` publication benchmark is included in PR #9996: with 256
 inactive waiters, publication measured **8.50-9.10 microseconds before** and
 **23-30 nanoseconds after**; the zero-waiter case changed from 22-23 to 26-28 ns.
 These are native primitive measurements, not end-to-end simulator FPS results.
-No full Unreal/CARLA build is claimed for these source patches.
+
+The actual production streaming subset passes **11 cases repeated 20 times**,
+or **220 case executions per configuration**, on native Windows/MSVC Debug,
+Linux/GCC Release, ThreadSanitizer and AddressSanitizer/UndefinedBehaviorSanitizer.
+Four original-code filters independently reproduce races. The hot listener
+getter uses one atomic load, with no new mutex. Its interleaved Release
+benchmark measured roughly 0.84–1.07 ns before and 0.86 ns after; differences
+this small are noise-sensitive and do not establish a sensor FPS improvement.
+
+The Episode tests build the **full production client and dependencies** and
+drive genuine RPC/TCP world-state packets through its deserializer. Seven
+cases repeated 20 times pass under each sanitizer configuration: **140 TSAN
+executions and 140 ASan/UBSan executions**, with no reports. Original-source
+traces reproduce the flag, string and map invalidation races. Independent
+review checked message semantics, callback lifetime and publication ordering.
+
+Saved [source review evidence](evidence/source-review/README.md) includes repeat
+logs, original failures, build provenance and the listener benchmark. No Unreal
+Engine or UE5.8 simulator runtime pass is claimed for these source patches.
+
+## Complete UE5.8 client build and source suites
+
+The complete production `carla-client` library and native Python extension
+were built on Windows without the Unreal engine/project or simulator content.
+The combined, published source is
+[`ee5859b4e63a4b79c69b02e381c95fb5727e0874`](https://github.com/M-Colley/carla/tree/ee5859b4e63a4b79c69b02e381c95fb5727e0874),
+based on `defabe35`, with the source/test fixes from PRs #9991–#9999.
+All **35 changed source/build/test files** match their individual PR revisions;
+see [the exact source map](evidence/source-review/patch-source-map.json).
+
+The rebuilt integrated client passed **306 native tests in 57 suites**, with
+no failures/errors/skips, in 62.304 seconds. The actual installed native Python
+module passed **92 source Python API tests**, with no failures/errors/skips,
+in 76.338 seconds. The latter includes all three native wheel packaging
+fixtures under the activated compiler environment. See the
+[native JUnit](evidence/source-review/client-tests-integrated.xml) and
+[Python API JUnit](evidence/source-review/python-api-tests-integrated.xml).
+The original broad run's failures and the focused fixes are retained alongside
+the successful integrated reports.
+
+Build inputs were MSVC 19.51 x64, CPython 3.12.10, CMake 4.4.2, Boost 1.90 and
+NumPy 2.5.4 headers. The generated
+`carla-0.10.0-cp312-cp312-win_amd64.whl` is **1,692,729 bytes**, SHA-256
+`8aedb4423378ee0c12b7319de94e8566a5dca3ab7fc18fc84c2bfa1fd760322a`.
+The client archive was rebuilt after copying source changes, and the complete
+Python module was rebuilt/relinked against it. A preliminary wheel that used
+older object files was explicitly excluded from final integrated validation.
+
+With this actual wheel installed, the bridge passes **240 tests with three
+explicit live-server skips** under both NumPy **1.26.4** and **2.5.4**. These
+final runs use the clean MyoSuite clone at `c0af9c6`; the reports assert its
+import path and the standalone bridge's `src` path. Real MuJoCo muscle/contact
+outputs for throttle, brake and steering convert successfully into the
+compiled `carla.VehicleControl` and `carla.command.ApplyVehicleControl` classes,
+including signed 32-bit gear boundaries. No Unreal connection was made.
+The [build manifest](evidence/source-review/build-manifest.json) records exact
+commands, object/wheel hashes, dependency revisions, environment provenance,
+all test counts and both native-binding smoke reports. Exploratory runs using
+an older local MyoSuite worktree were superseded by these clean-clone runs.
+The source distribution now includes the serialization benchmark and complete
+evidence records (including their README/logs); a final wheel/sdist rebuild
+and archive-content check passed.
+
+The [fresh-PC guide](NEW_PC_SETUP.md#10-optional-reproduce-the-ue58-client-source-checks-without-the-engine)
+now pins this source snapshot and the actual rpclib, GoogleTest and OpenDRIVE
+fixture revisions for a separate client-only reproduction. These results
+validate native client code and Python bindings. **No Unreal Engine 5.8
+simulator build or live physics run is established by them.**
 
 ## Fresh-PC rehearsal and independent code audit
 

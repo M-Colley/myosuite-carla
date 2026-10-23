@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="1"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="1"
+	timestamp="2026-10-23T11:41:58"
+	>
+	<testcase name="stream-listener-state" classname="stream-listener-state" time="0.0705094" status="run">
+		<properties/>
+		<system-out>Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clien...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+</testsuite>

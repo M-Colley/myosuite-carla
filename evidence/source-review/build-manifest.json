@@ -1,0 +1,632 @@
+{
+  "generated_utc": "2026-10-23T10:04:36.302770+00:00",
+  "scope": "Real CARLA ue58-dev production native client, complete native Python module, source unit suites, and offline physical driver conversions",
+  "limits": [
+    "Unreal Engine, CARLA Unreal project and packaged UE5.8 server were not built or run here.",
+    "The new ue58-dev Python wheel was never connected to the older packaged UE5.5 server.",
+    "Native RPC/streaming tests use real current-source in-process servers on loopback; offline bridge tests do not drive an Unreal vehicle."
+  ],
+  "source": {
+    "base_commit": "defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5",
+    "validation_head_at_capture": "ee5859b4e63a4b79c69b02e381c95fb5727e0874",
+    "branch": "codex/ue58-client-validation",
+    "worktree_status": "",
+    "patch_branches": [
+      {
+        "task": "windows",
+        "branch": "codex/ue58-windows-setup",
+        "head": "d8256f6815482f3f14bbcf11cec10c1e3856b551"
+      },
+      {
+        "task": "ratios",
+        "branch": "codex/ue58-gear-ratios",
+        "head": "73ba60d5ffc1ff7142c6d9417219c9bd473464d4"
+      },
+      {
+        "task": "snapshots",
+        "branch": "codex/ue58-snapshot-defaults",
+        "head": "faaf4b24ee53d5f40db33ff9ce5e5d2e86c8b870"
+      },
+      {
+        "task": "python-deep",
+        "branch": "codex/ue58-python-deep",
+        "head": "3235edc05358770a7df2f9d872f4c72cee4a7f86"
+      },
+      {
+        "task": "atomic",
+        "branch": "codex/ue58-atomic-order",
+        "head": "23ac20775e2d78baef6ad168261796c075bd037f"
+      },
+      {
+        "task": "sync",
+        "branch": "codex/ue58-sync-audit",
+        "head": "d819bb506de382a18131a46b3f0f80cb520d24be"
+      },
+      {
+        "task": "stream",
+        "branch": "codex/ue58-stream-listeners",
+        "head": "3f45aec996da258778d7e16ab3b7bad810670459"
+      },
+      {
+        "task": "test-portability",
+        "branch": "codex/ue58-test-portability",
+        "head": "b188eb39192a3395faccf611532e3ef4f45b6b09"
+      },
+      {
+        "task": "episode",
+        "branch": "codex/ue58-episode-races",
+        "head": "33c94d510df742e081179cfaf2ecc3f9c65c7f8f"
+      }
+    ],
+    "files": [
+      {
+        "path": "D:\\carla-review-client-build\\CarlaSetup.bat",
+        "bytes": 5087,
+        "sha256": "b190c4c1a7f10f150725be70da0ca75112053346cd7446a8559cd6f20f1cf574",
+        "modified_utc": "2026-10-23T08:14:52.493962+00:00",
+        "repository_path": "CarlaSetup.bat"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\CMake\\Dependencies.cmake",
+        "bytes": 7624,
+        "sha256": "b2c39927bbb1e0425c378167c72772dd5effb128e2ccffb5444eb5b31061e41a",
+        "modified_utc": "2026-10-23T09:24:04.862906+00:00",
+        "repository_path": "CMake/Dependencies.cmake"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\CMake\\Options.cmake",
+        "bytes": 11722,
+        "sha256": "329b590c20ab2f6769e88f609d904c6e339a7a32cbf18d3a6629653e39cbe28d",
+        "modified_utc": "2026-10-23T08:53:25.849767+00:00",
+        "repository_path": "CMake/Options.cmake"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\AtomicSharedPtr.h",
+        "bytes": 1737,
+        "sha256": "595743bbe266c87e80fcc8922746678a087f5e82ea4e468a602401c7605d6c13",
+        "modified_utc": "2026-10-23T09:49:07.043262+00:00",
+        "repository_path": "LibCarla/source/carla/AtomicSharedPtr.h"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\client\\ActorSnapshot.h",
+        "bytes": 914,
+        "sha256": "d6285ae4674e19802f2c0b9d90e201d1ee8b6ea009038679a85e8848afea5f50",
+        "modified_utc": "2026-10-23T09:49:07.112010+00:00",
+        "repository_path": "LibCarla/source/carla/client/ActorSnapshot.h"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\client\\detail\\Episode.cpp",
+        "bytes": 6434,
+        "sha256": "b6c56912e78758506880332fd4d6effa7cd066ad163fe25482a0fb278e91b549",
+        "modified_utc": "2026-10-23T09:49:07.114129+00:00",
+        "repository_path": "LibCarla/source/carla/client/detail/Episode.cpp"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\client\\detail\\Episode.h",
+        "bytes": 3962,
+        "sha256": "80b0d2727f2704239c6da77a08f18fb5a634d3a0b387cefd5bc69012fe8022a1",
+        "modified_utc": "2026-10-23T09:49:07.131876+00:00",
+        "repository_path": "LibCarla/source/carla/client/detail/Episode.h"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\RecurrentSharedFuture.h",
+        "bytes": 4615,
+        "sha256": "935f9643c61abc05d2fb815051905a6c440718f0fd1fea0c26a1e7870abd5bf5",
+        "modified_utc": "2026-10-23T09:49:07.092644+00:00",
+        "repository_path": "LibCarla/source/carla/RecurrentSharedFuture.h"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\streaming\\detail\\Dispatcher.h",
+        "bytes": 2744,
+        "sha256": "35523753c0034f95a5b2c80421f38612859bb003ce090bb095616065b83dfc53",
+        "modified_utc": "2026-10-23T09:49:07.153791+00:00",
+        "repository_path": "LibCarla/source/carla/streaming/detail/Dispatcher.h"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\carla\\streaming\\detail\\MultiStreamState.h",
+        "bytes": 4843,
+        "sha256": "7711c09d26e7beeff2d5e0324e719fa083a96d395428a50853715b4eac7a87f2",
+        "modified_utc": "2026-10-23T09:49:07.170819+00:00",
+        "repository_path": "LibCarla/source/carla/streaming/detail/MultiStreamState.h"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\EpisodeTestServer.h",
+        "bytes": 5347,
+        "sha256": "076c12104a7abe0d46799b541e677131b23833ee07b9cb336fb6293b177426db",
+        "modified_utc": "2026-10-23T09:49:07.209845+00:00",
+        "repository_path": "LibCarla/source/test/client/EpisodeTestServer.h"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_atomic_shared_ptr.cpp",
+        "bytes": 2150,
+        "sha256": "d4395ae37cd9b4797dcd7054640a651f292fc46acca83e96a7b9366bcc8d445d",
+        "modified_utc": "2026-10-23T09:49:07.228295+00:00",
+        "repository_path": "LibCarla/source/test/client/test_atomic_shared_ptr.cpp"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_episode_concurrency.cpp",
+        "bytes": 5374,
+        "sha256": "bfa52bdebd8027f5d88c99fe483d7cd9e9567093745bf376ddcff1b45eafd761",
+        "modified_utc": "2026-10-23T09:49:07.246720+00:00",
+        "repository_path": "LibCarla/source/test/client/test_episode_concurrency.cpp"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_episode_state.cpp",
+        "bytes": 2039,
+        "sha256": "ad0e0eba2c89c2759c1662c7ffc9b38dc9dd309210a647d61abc9e123fa185c5",
+        "modified_utc": "2026-10-23T09:49:07.265949+00:00",
+        "repository_path": "LibCarla/source/test/client/test_episode_state.cpp"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_recurrent_shared_future_lifetime.cpp",
+        "bytes": 10137,
+        "sha256": "5fbc015b9725165fb97500bc4a79039f90f1501917c5419e2fb2c1c7abd7a45b",
+        "modified_utc": "2026-10-23T09:49:07.267926+00:00",
+        "repository_path": "LibCarla/source/test/client/test_recurrent_shared_future_lifetime.cpp"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_recurrent_shared_future.cpp",
+        "bytes": 2060,
+        "sha256": "e8f57834da3b980a571854a003f7eedeed21d254b33a3fb9b014b5ac31d2e420",
+        "modified_utc": "2026-10-23T09:58:05.978371+00:00",
+        "repository_path": "LibCarla/source/test/client/test_recurrent_shared_future.cpp"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\client\\test_rpc.cpp",
+        "bytes": 2337,
+        "sha256": "145db6d449897ca9f42a1b9ae8d8854204803b0583ca0133387ab66058e070d0",
+        "modified_utc": "2026-10-23T09:49:07.189407+00:00",
+        "repository_path": "LibCarla/source/test/client/test_rpc.cpp"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\common\\test_stream_listener_state.cpp",
+        "bytes": 6969,
+        "sha256": "ee2033a804bbf6b2a3dcc4c12b2945120c3f8b7a40207b3902d95424ddbfa61f",
+        "modified_utc": "2026-10-23T09:49:07.286707+00:00",
+        "repository_path": "LibCarla/source/test/common/test_stream_listener_state.cpp"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\LibCarla\\source\\test\\common\\test_streaming.cpp",
+        "bytes": 11441,
+        "sha256": "5a7b97e77da9da46287e5a1ba637365d0e3c51cdf2807892aea008393e655e57",
+        "modified_utc": "2026-10-23T09:49:07.189964+00:00",
+        "repository_path": "LibCarla/source/test/common/test_streaming.cpp"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\PythonAPI\\carla\\CMakeLists.txt.in",
+        "bytes": 5752,
+        "sha256": "79bd0fe067b1c82552ec8e486e8202f8a0b26c9b50ecc7a0f24d7f6ea940c899",
+        "modified_utc": "2026-10-23T08:57:33.136750+00:00",
+        "repository_path": "PythonAPI/carla/CMakeLists.txt.in"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\PythonAPI\\carla\\src\\Control.cpp",
+        "bytes": 22879,
+        "sha256": "c66e5acf13ad705d3f50e780f20f5c3d2228c2c802eb9a2de78cdd5fb42efe47",
+        "modified_utc": "2026-10-23T09:49:07.190592+00:00",
+        "repository_path": "PythonAPI/carla/src/Control.cpp"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\PythonAPI\\CMakeLists.txt",
+        "bytes": 3839,
+        "sha256": "568a8f4f6edbcd90a22b3a2d7b854aedfdfa39cf88533c07b2facea5c190a26d",
+        "modified_utc": "2026-10-23T08:53:25.843144+00:00",
+        "repository_path": "PythonAPI/CMakeLists.txt"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\PythonAPI\\test\\unit\\test_boost_version.py",
+        "bytes": 6420,
+        "sha256": "52f3e37fca296f0f20115e4964a3edbffd02d49dbd3b76b4b931951c35fd6563",
+        "modified_utc": "2026-10-23T09:25:57.070340+00:00",
+        "repository_path": "PythonAPI/test/unit/test_boost_version.py"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\PythonAPI\\test\\unit\\test_client.py",
+        "bytes": 505,
+        "sha256": "10d4e4d48a96b34a26e6c811a2b0261855e867c6b74dd681c7406a6aedbfa1e2",
+        "modified_utc": "2026-10-23T09:48:52.777674+00:00",
+        "repository_path": "PythonAPI/test/unit/test_client.py"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\PythonAPI\\test\\unit\\test_python_api_packaging.py",
+        "bytes": 7074,
+        "sha256": "2a36241b0d40399be0e9168f3b35025eca82164eab691103fcface8ec9b77e1a",
+        "modified_utc": "2026-10-23T08:57:33.139744+00:00",
+        "repository_path": "PythonAPI/test/unit/test_python_api_packaging.py"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\PythonAPI\\test\\unit\\test_vehicle.py",
+        "bytes": 7187,
+        "sha256": "22e22cc4efbb0e7adff046fb767463f77588f1dec8b9f212fd8086726b818e5a",
+        "modified_utc": "2026-10-23T08:14:26.755125+00:00",
+        "repository_path": "PythonAPI/test/unit/test_vehicle.py"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\Util\\Benchmarks\\CMakeLists.txt",
+        "bytes": 1107,
+        "sha256": "ed6991de3fc1eabe4ead0a3af7390b9dbfb5020d0d0c6440f54a7d6d68161683",
+        "modified_utc": "2026-10-23T09:11:05.057417+00:00",
+        "repository_path": "Util/Benchmarks/CMakeLists.txt"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\Util\\Benchmarks\\recurrent_shared_future.cpp",
+        "bytes": 2823,
+        "sha256": "9ade39b3f5216aba3b107af77d338585e57c7f3cd6638357d4ff3ce6d4687110",
+        "modified_utc": "2026-10-23T09:09:23.470219+00:00",
+        "repository_path": "Util/Benchmarks/recurrent_shared_future.cpp"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\Util\\SetupUtils\\InstallPrerequisites.bat",
+        "bytes": 4470,
+        "sha256": "fa4aec839fe56d8d602237f62cc03f78f91e2dc4b461b65786f6ae5d76ff9264",
+        "modified_utc": "2026-10-23T08:14:52.552546+00:00",
+        "repository_path": "Util/SetupUtils/InstallPrerequisites.bat"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\Util\\SetupUtils\\tests\\test_windows_setup.py",
+        "bytes": 9615,
+        "sha256": "d4667f1238d9ec9ca1aa9020f0ae6792c6437fb682d43751126c0db54a00bc9f",
+        "modified_utc": "2026-10-23T08:16:50.807361+00:00",
+        "repository_path": "Util/SetupUtils/tests/test_windows_setup.py"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\Util\\Tests\\ClientPrimitives\\CMakeLists.txt",
+        "bytes": 1526,
+        "sha256": "1a361386d4064813ac2704ae009dad1a9bd822fe2ce8330ba262a7107e56eee4",
+        "modified_utc": "2026-10-23T09:11:05.057417+00:00",
+        "repository_path": "Util/Tests/ClientPrimitives/CMakeLists.txt"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\Util\\Tests\\EpisodeConcurrency\\CMakeLists.txt",
+        "bytes": 1264,
+        "sha256": "522e27b27b590dc878b91cf1cacda763fb33746aaba8a88a98c74e51d8ae1fa7",
+        "modified_utc": "2026-10-23T09:44:12.479192+00:00",
+        "repository_path": "Util/Tests/EpisodeConcurrency/CMakeLists.txt"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\Util\\Tests\\StreamListeners\\benchmark_poll.cpp",
+        "bytes": 306,
+        "sha256": "23b625881e0c8ec11d67ff8129794b49acd5ce30aa9de9fbe52f608362566ce7",
+        "modified_utc": "2026-10-23T09:39:38.902604+00:00",
+        "repository_path": "Util/Tests/StreamListeners/benchmark_poll.cpp"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\Util\\Tests\\StreamListeners\\benchmark.cpp",
+        "bytes": 2061,
+        "sha256": "ac885266e1080844431474411fb1f56665d99e478f68cf7facc094ca8a533e0d",
+        "modified_utc": "2026-10-23T09:39:38.902604+00:00",
+        "repository_path": "Util/Tests/StreamListeners/benchmark.cpp"
+      },
+      {
+        "path": "D:\\carla-review-client-build\\Util\\Tests\\StreamListeners\\CMakeLists.txt",
+        "bytes": 3194,
+        "sha256": "286d7d9aa933120198baf549ebee0bf83a7177dac43fa005704890f87e57735c",
+        "modified_utc": "2026-10-23T09:39:38.901606+00:00",
+        "repository_path": "Util/Tests/StreamListeners/CMakeLists.txt"
+      }
+    ]
+  },
+  "toolchain": {
+    "cmake": "cmake version 4.4.2",
+    "ninja": "1.13.0.git.kitware.jobserver-pipe-1",
+    "uv": "uv 0.11.32 (3010295ae 2026-07-23 x86_64-pc-windows-msvc)",
+    "compiler": "Microsoft Visual Studio 2026 Community; MSVC 19.51.36252.0 (14.51.36231 toolset), x64",
+    "native_build_type": "Release",
+    "parallel_jobs": 2,
+    "python": "CPython 3.12.10 x64",
+    "boost": "1.90.0",
+    "build_numpy_headers": "2.5.4"
+  },
+  "commands": {
+    "configure.cmd": "@echo off\ncall \"C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"\nif errorlevel 1 exit /b %errorlevel%\ncmake -S D:/carla-review-client-build -B D:/carla-review-client-build/Build/ClientReview -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_CARLA_UNREAL=OFF -DBUILD_CARLA_SERVER=OFF -DBUILD_CARLA_CLIENT=ON -DBUILD_PYTHON_API=OFF -DBUILD_EXAMPLES=OFF -DBUILD_LIBCARLA_TESTS=ON -DBUILD_OSM_WORLD_RENDERER=OFF -DENABLE_ROS2=OFF -DENABLE_ROS2_DEMO=OFF -DENABLE_RSS=OFF -DENABLE_OSM2ODR=OFF -DENABLE_PYTORCH=OFF -DINSTALL_LIBCARLA=OFF \"-DFETCHCONTENT_SOURCE_DIR_RPCLIB=C:/Users/Mark/AppData/Local/Temp/carla-snapshot-review-deps/rpclib\" \"-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=C:/Users/Mark/AppData/Local/Temp/carla-snapshot-review-deps/googletest\"\n",
+    "configure-python-api.cmd": "@echo off\ncall \"C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"\nif errorlevel 1 exit /b %errorlevel%\ncmake -S D:/carla-review-client-build -B D:/carla-review-client-build/Build/ClientReview -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_CARLA_UNREAL=OFF -DBUILD_CARLA_SERVER=OFF -DBUILD_CARLA_CLIENT=ON -DBUILD_PYTHON_API=ON -DBUILD_EXAMPLES=OFF -DBUILD_LIBCARLA_TESTS=ON -DBUILD_OSM_WORLD_RENDERER=OFF -DENABLE_ROS2=OFF -DENABLE_ROS2_DEMO=OFF -DENABLE_RSS=OFF -DENABLE_OSM2ODR=OFF -DENABLE_PYTORCH=OFF -DINSTALL_LIBCARLA=OFF \"-DFETCHCONTENT_SOURCE_DIR_RPCLIB=C:/Users/Mark/AppData/Local/Temp/carla-snapshot-review-deps/rpclib\" \"-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=C:/Users/Mark/AppData/Local/Temp/carla-snapshot-review-deps/googletest\" -DPython_EXECUTABLE=D:/carla-client-build-evidence/.venv-python-api/Scripts/python.exe -DPython3_EXECUTABLE=D:/carla-client-build-evidence/.venv-python-api/Scripts/python.exe\n\n",
+    "build.cmd": "@echo off\ncall \"C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"\nif errorlevel 1 exit /b %errorlevel%\ncmake --build D:/carla-review-client-build/Build/ClientReview --target carla-client libcarla_test_client -j 2\n",
+    "build-integrated.cmd": "@echo off\ncall \"C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"\nif errorlevel 1 exit /b %errorlevel%\nset CMAKE_BUILD_PARALLEL_LEVEL=2\ncmake --build D:/carla-review-client-build/Build/ClientReview --target carla-python-api libcarla_test_client -j 2\n\n",
+    "run-python-api-tests.cmd": "@echo off\ncall \"C:\\Program Files\\Microsoft Visual Studio\\18\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"\nif errorlevel 1 exit /b %errorlevel%\nset CMAKE_BUILD_PARALLEL_LEVEL=2\n\"D:\\carla-client-build-evidence\\.venv-python-api\\Scripts\\python.exe\" D:/carla-client-build-evidence/run-integrated-validation.py api\n"
+  },
+  "test_maps": {
+    "repository": "https://github.com/carla-simulator/test-content.git",
+    "tag": "0.1.4",
+    "commit": "5929b67cc414b611b701ad251fe1e6d30f465bba"
+  },
+  "integrated_build_log": {
+    "path": "D:\\carla-client-build-evidence\\build-integrated.log",
+    "bytes": 329980,
+    "sha256": "c200c234a846ee3b80a4169cf9b4566e4b6e625bab630c33592a7b3d6e8aa56d",
+    "modified_utc": "2026-10-23T09:57:51.049672+00:00"
+  },
+  "integrated_build_wall_seconds_from_log_timestamps": 515.8137271404266,
+  "native_client_library": {
+    "path": "D:\\carla-review-client-build\\Build\\ClientReview\\LibCarla\\carla-client.lib",
+    "bytes": 162946072,
+    "sha256": "842f336c83bf7a3a412e2420143b7ccdb0df22110e8cd979528b8e376da40c81",
+    "modified_utc": "2026-10-23T09:53:20.291375+00:00"
+  },
+  "native_test_executable": {
+    "path": "D:\\carla-review-client-build\\Build\\ClientReview\\LibCarla\\libcarla_test_client.exe",
+    "bytes": 2716160,
+    "sha256": "9e14b28543c10d08d56f5d3e57dbbd6a07feb8e8650dc56e307d38cb01a1ec38",
+    "modified_utc": "2026-10-23T09:58:19.675240+00:00"
+  },
+  "wheel": {
+    "path": "D:\\carla-review-client-build\\Build\\ClientReview\\PythonAPI\\dist\\carla-0.10.0-cp312-cp312-win_amd64.whl",
+    "bytes": 1692729,
+    "sha256": "8aedb4423378ee0c12b7319de94e8566a5dca3ab7fc18fc84c2bfa1fd760322a",
+    "modified_utc": "2026-10-23T09:57:50.653176+00:00",
+    "native_files": [
+      "carla.cp312-win_amd64.pyd"
+    ],
+    "metadata": "Wheel-Version: 1.0\nGenerator: scikit-build-core 1.1.1\nRoot-Is-Purelib: false\nTag: cp312-cp312-win_amd64\n\n"
+  },
+  "installed_extension": {
+    "path": "D:\\carla-client-build-evidence\\.venv-python-api\\Lib\\site-packages\\carla.cp312-win_amd64.pyd",
+    "bytes": 4980224,
+    "sha256": "739cdcf82d0598e9ba9f4f561a91784c8d10b450bcb54aff84948b010ccb6453",
+    "modified_utc": "2026-10-23T09:58:06.318443+00:00",
+    "matches_wheel_native_entry_sha256": "739cdcf82d0598e9ba9f4f561a91784c8d10b450bcb54aff84948b010ccb6453"
+  },
+  "runtime_source_repositories": {
+    "myosuite": {
+      "path": "C:/Users/Mark/Desktop/myosuite-carla/test-results/fresh-pc/myosuite",
+      "head": "c0af9c656de2aa1807924e63d0d5320d77aa1ebd",
+      "status": "",
+      "runtime_source_status": "",
+      "metadata_difference": ""
+    },
+    "myosuite-carla": {
+      "path": "C:/Users/Mark/Desktop/myosuite-carla",
+      "head": "4b53893620857c06c0cd2e7ae55baca8fb6ac4b3",
+      "status": "M NEW_PC_SETUP.md\n M RUNTIME_STATUS.md\n M VALIDATION.md\n?? evidence/source-review/",
+      "runtime_source_status": ""
+    }
+  },
+  "test_results": {
+    "client-tests-integrated": {
+      "name": "client-tests-integrated",
+      "command": [
+        "D:\\carla-review-client-build\\Build\\ClientReview\\LibCarla\\libcarla_test_client.exe",
+        "--gtest_output=xml:D:\\carla-client-build-evidence\\client-tests-integrated.xml"
+      ],
+      "cwd": "D:\\carla-review-client-build",
+      "elapsed_seconds": 62.492413699997996,
+      "exit_code": 0,
+      "live_server_enabled": false,
+      "xml_root_attributes": {
+        "tests": "306",
+        "failures": "0",
+        "disabled": "0",
+        "errors": "0",
+        "time": "62.304",
+        "timestamp": "2026-10-23T11:58:29.449",
+        "name": "AllTests"
+      },
+      "test_cases": 306,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "python-api-tests-integrated": {
+      "name": "python-api-tests-integrated",
+      "command": [
+        "D:\\carla-client-build-evidence\\.venv-python-api\\Scripts\\python.exe",
+        "-m",
+        "nose2",
+        "-v",
+        "--config",
+        "D:\\carla-client-build-evidence\\nose2-integrated.cfg"
+      ],
+      "cwd": "D:\\carla-review-client-build\\PythonAPI\\test\\unit",
+      "elapsed_seconds": 77.10567440000159,
+      "exit_code": 0,
+      "live_server_enabled": false,
+      "xml_root_attributes": {
+        "name": "nose2-junit",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "0",
+        "tests": "92",
+        "time": "76.338"
+      },
+      "test_cases": 92,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "bridge-numpy2-tests-integrated": {
+      "name": "bridge-numpy2-tests-integrated",
+      "command": [
+        "D:\\carla-client-build-evidence\\.venv-python-api\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "-ra",
+        "--junitxml=D:\\carla-client-build-evidence\\bridge-numpy2-tests-integrated.xml"
+      ],
+      "cwd": "C:\\Users\\Mark\\Desktop\\myosuite-carla",
+      "elapsed_seconds": 5.43649490000098,
+      "exit_code": 0,
+      "live_server_enabled": false,
+      "xml_root_attributes": {
+        "name": "pytest tests"
+      },
+      "test_cases": 243,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    },
+    "bridge-numpy1-tests-integrated": {
+      "name": "bridge-numpy1-tests-integrated",
+      "command": [
+        "D:\\carla-client-build-evidence\\.venv-python-api\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "-q",
+        "-ra",
+        "--junitxml=D:\\carla-client-build-evidence\\bridge-numpy1-tests-integrated.xml"
+      ],
+      "cwd": "C:\\Users\\Mark\\Desktop\\myosuite-carla",
+      "elapsed_seconds": 6.807938699996157,
+      "exit_code": 0,
+      "live_server_enabled": false,
+      "xml_root_attributes": {
+        "name": "pytest tests"
+      },
+      "test_cases": 243,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 3
+    }
+  },
+  "runtime_smokes": {
+    "numpy2": {
+      "status": "passed",
+      "scope": "Offline real MyoSuite/MuJoCo muscle contact -> bridge mapping -> compiled CARLA VehicleControl and ApplyVehicleControl bindings",
+      "unreal_server_connected": false,
+      "module": "D:\\carla-client-build-evidence\\.venv-python-api\\Lib\\site-packages\\carla.cp312-win_amd64.pyd",
+      "myosuite_module": "C:\\Users\\Mark\\Desktop\\myosuite-carla\\test-results\\fresh-pc\\myosuite\\myosuite\\__init__.py",
+      "myosuite_carla_module": "C:\\Users\\Mark\\Desktop\\myosuite-carla\\src\\myosuite_carla\\__init__.py",
+      "client_version": "0.10.0",
+      "metadata_version": "0.10.0",
+      "versions": {
+        "numpy": "2.5.4",
+        "mujoco": "3.17.0",
+        "myosuite": "3.0.0",
+        "myo-sim": "0.2.3",
+        "myosuite-carla": "0.1.0"
+      },
+      "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+      "finite_muscle_results": true,
+      "mechanisms": [
+        {
+          "mechanism": "throttle",
+          "vehicle_command": {
+            "throttle": 1.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "native_control": "VehicleControl(throttle=1.000000, steer=0.000000, brake=0.000000, hand_brake=False, reverse=False, manual_gear_shift=False, gear=0)",
+          "peaks": {
+            "travel": 0.06121618803337044,
+            "contact_newtons": 37.75956201897303,
+            "muscle_newtons": 288.08196115810586
+          }
+        },
+        {
+          "mechanism": "brake",
+          "vehicle_command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "native_control": "VehicleControl(throttle=0.000000, steer=0.000000, brake=1.000000, hand_brake=False, reverse=False, manual_gear_shift=False, gear=0)",
+          "peaks": {
+            "travel": 0.06121618803337044,
+            "contact_newtons": 37.75956201897303,
+            "muscle_newtons": 288.08196115810586
+          }
+        },
+        {
+          "mechanism": "steering",
+          "vehicle_command": {
+            "throttle": 0.0,
+            "steer": -0.5085614355566797,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "native_control": "VehicleControl(throttle=0.000000, steer=-0.508561, brake=0.000000, hand_brake=False, reverse=False, manual_gear_shift=False, gear=0)",
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 71.71861367170277,
+            "muscle_newtons": 288.08196115810586
+          }
+        }
+      ]
+    },
+    "numpy1": {
+      "status": "passed",
+      "scope": "Offline real MyoSuite/MuJoCo muscle contact -> bridge mapping -> compiled CARLA VehicleControl and ApplyVehicleControl bindings",
+      "unreal_server_connected": false,
+      "module": "D:\\carla-client-build-evidence\\.venv-python-api\\Lib\\site-packages\\carla.cp312-win_amd64.pyd",
+      "myosuite_module": "C:\\Users\\Mark\\Desktop\\myosuite-carla\\test-results\\fresh-pc\\myosuite\\myosuite\\__init__.py",
+      "myosuite_carla_module": "C:\\Users\\Mark\\Desktop\\myosuite-carla\\src\\myosuite_carla\\__init__.py",
+      "client_version": "0.10.0",
+      "metadata_version": "0.10.0",
+      "versions": {
+        "numpy": "1.26.4",
+        "mujoco": "3.17.0",
+        "myosuite": "3.0.0",
+        "myo-sim": "0.2.3",
+        "myosuite-carla": "0.1.0"
+      },
+      "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+      "finite_muscle_results": true,
+      "mechanisms": [
+        {
+          "mechanism": "throttle",
+          "vehicle_command": {
+            "throttle": 1.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "native_control": "VehicleControl(throttle=1.000000, steer=0.000000, brake=0.000000, hand_brake=False, reverse=False, manual_gear_shift=False, gear=0)",
+          "peaks": {
+            "travel": 0.06121618803337044,
+            "contact_newtons": 37.75956201897303,
+            "muscle_newtons": 288.08196115810586
+          }
+        },
+        {
+          "mechanism": "brake",
+          "vehicle_command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "native_control": "VehicleControl(throttle=0.000000, steer=0.000000, brake=1.000000, hand_brake=False, reverse=False, manual_gear_shift=False, gear=0)",
+          "peaks": {
+            "travel": 0.06121618803337044,
+            "contact_newtons": 37.75956201897303,
+            "muscle_newtons": 288.08196115810586
+          }
+        },
+        {
+          "mechanism": "steering",
+          "vehicle_command": {
+            "throttle": 0.0,
+            "steer": -0.5085614355566797,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "native_control": "VehicleControl(throttle=0.000000, steer=-0.508561, brake=0.000000, hand_brake=False, reverse=False, manual_gear_shift=False, gear=0)",
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 71.71861367170277,
+            "muscle_newtons": 288.08196115810586
+          }
+        }
+      ]
+    }
+  }
+}

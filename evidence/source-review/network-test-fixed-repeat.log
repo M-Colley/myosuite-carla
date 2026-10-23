@@ -1,0 +1,104 @@
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+
+Repeating all tests (iteration 1) . . .
+
+Note: Google Test filter = rpc.server_bind_sync_run_on_game_thread:streaming.low_level_tcp_small_message
+[==========] Running 2 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 1 test from streaming
+[ RUN      ] streaming.low_level_tcp_small_message
+client received 168 messages
+done!
+[       OK ] streaming.low_level_tcp_small_message (2005 ms)
+[----------] 1 test from streaming (2005 ms total)
+
+[----------] 1 test from rpc
+[ RUN      ] rpc.server_bind_sync_run_on_game_thread
+game thread: run 8642024 slices.
+[       OK ] rpc.server_bind_sync_run_on_game_thread (2067 ms)
+[----------] 1 test from rpc (2067 ms total)
+
+[==========] 2 tests from 2 test suites ran. (4072 ms total)
+[  PASSED  ] 2 tests.
+
+Repeating all tests (iteration 2) . . .
+
+Note: Google Test filter = rpc.server_bind_sync_run_on_game_thread:streaming.low_level_tcp_small_message
+[==========] Running 2 tests from 2 test suites.
+[----------] 1 test from streaming
+[ RUN      ] streaming.low_level_tcp_small_message
+client received 181 messages
+done!
+[       OK ] streaming.low_level_tcp_small_message (2006 ms)
+[----------] 1 test from streaming (2007 ms total)
+
+[----------] 1 test from rpc
+[ RUN      ] rpc.server_bind_sync_run_on_game_thread
+game thread: run 7997904 slices.
+[       OK ] rpc.server_bind_sync_run_on_game_thread (2077 ms)
+[----------] 1 test from rpc (2077 ms total)
+
+[==========] 2 tests from 2 test suites ran. (4084 ms total)
+[  PASSED  ] 2 tests.
+
+Repeating all tests (iteration 3) . . .
+
+Note: Google Test filter = rpc.server_bind_sync_run_on_game_thread:streaming.low_level_tcp_small_message
+[==========] Running 2 tests from 2 test suites.
+[----------] 1 test from streaming
+[ RUN      ] streaming.low_level_tcp_small_message
+client received 148 messages
+done!
+[       OK ] streaming.low_level_tcp_small_message (2013 ms)
+[----------] 1 test from streaming (2013 ms total)
+
+[----------] 1 test from rpc
+[ RUN      ] rpc.server_bind_sync_run_on_game_thread
+game thread: run 8277589 slices.
+[       OK ] rpc.server_bind_sync_run_on_game_thread (2111 ms)
+[----------] 1 test from rpc (2111 ms total)
+
+[==========] 2 tests from 2 test suites ran. (4125 ms total)
+[  PASSED  ] 2 tests.
+
+Repeating all tests (iteration 4) . . .
+
+Note: Google Test filter = rpc.server_bind_sync_run_on_game_thread:streaming.low_level_tcp_small_message
+[==========] Running 2 tests from 2 test suites.
+[----------] 1 test from streaming
+[ RUN      ] streaming.low_level_tcp_small_message
+client received 162 messages
+done!
+[       OK ] streaming.low_level_tcp_small_message (2026 ms)
+[----------] 1 test from streaming (2026 ms total)
+
+[----------] 1 test from rpc
+[ RUN      ] rpc.server_bind_sync_run_on_game_thread
+game thread: run 7460517 slices.
+[       OK ] rpc.server_bind_sync_run_on_game_thread (2058 ms)
+[----------] 1 test from rpc (2058 ms total)
+
+[==========] 2 tests from 2 test suites ran. (4084 ms total)
+[  PASSED  ] 2 tests.
+
+Repeating all tests (iteration 5) . . .
+
+Note: Google Test filter = rpc.server_bind_sync_run_on_game_thread:streaming.low_level_tcp_small_message
+[==========] Running 2 tests from 2 test suites.
+[----------] 1 test from streaming
+[ RUN      ] streaming.low_level_tcp_small_message
+client received 146 messages
+done!
+session closed!
+[       OK ] streaming.low_level_tcp_small_message (2016 ms)
+[----------] 1 test from streaming (2016 ms total)
+
+[----------] 1 test from rpc
+[ RUN      ] rpc.server_bind_sync_run_on_game_thread
+game thread: run 8497202 slices.
+[       OK ] rpc.server_bind_sync_run_on_game_thread (2075 ms)
+[----------] 1 test from rpc (2075 ms total)
+
+[----------] Global test environment tear-down
+[==========] 2 tests from 2 test suites ran. (4092 ms total)
+[  PASSED  ] 2 tests.

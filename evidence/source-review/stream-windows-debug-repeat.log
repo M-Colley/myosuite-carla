@@ -1,0 +1,983 @@
+Start testing: Oct 23 11:41 W. Europe Daylight Time
+----------------------------------------------------------
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (2 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (17 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (31 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (31 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (49 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.17 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (11 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (26 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (26 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (38 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (5 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (4 ms)
+[----------] 9 tests from StreamListenerState (16 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (27 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (27 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (44 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (11 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (39 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (39 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (51 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (2 ms)
+[----------] 9 tests from StreamListenerState (11 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (30 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (31 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (42 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (12 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (23 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (23 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (36 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (13 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (34 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (34 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (48 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (2 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (16 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (32 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (32 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (49 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (3 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (0 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (2 ms)
+[----------] 9 tests from StreamListenerState (13 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (27 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (27 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (40 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (3 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (13 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (46 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (47 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (60 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (5 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (16 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (43 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (44 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (60 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (2 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (3 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (2 ms)
+[----------] 9 tests from StreamListenerState (15 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (32 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (32 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (48 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (2 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (14 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (38 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (38 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (54 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (17 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (34 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (34 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (52 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (3 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (14 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (30 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (30 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (44 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (12 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (34 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (35 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (48 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (5 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (16 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (32 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (33 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (49 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (15 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (22 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (22 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (37 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (5 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (1 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (3 ms)
+[----------] 9 tests from StreamListenerState (16 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (44 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (44 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (61 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: stream-listener-state
+1/1 Test: stream-listener-state
+Command: "D:/carla-review-stream/Build/StreamReview/Windows/Debug/carla-stream-listener-tests.exe"
+Directory: D:/carla-review-stream/Build/StreamReview/Windows
+"stream-listener-state" start time: Oct 23 11:41 W. Europe Daylight Time
+Output:
+----------------------------------------------------------
+Running main() from C:\Users\Mark\AppData\Local\Temp\carla-snapshot-review-deps\googletest\googletest\src\gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 9 tests from StreamListenerState
+[ RUN      ] StreamListenerState.multiple_clients_and_last_disconnect
+[       OK ] StreamListenerState.multiple_clients_and_last_disconnect (1 ms)
+[ RUN      ] StreamListenerState.last_disconnect_resets_forced_activity
+[       OK ] StreamListenerState.last_disconnect_resets_forced_activity (0 ms)
+[ RUN      ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility
+[       OK ] StreamListenerState.clear_and_disconnect_preserve_ros_visibility (0 ms)
+[ RUN      ] StreamListenerState.disabling_ros_keeps_connected_clients
+[       OK ] StreamListenerState.disabling_ros_keeps_connected_clients (0 ms)
+[ RUN      ] StreamListenerState.clear_resets_forced_activity_without_clients
+[       OK ] StreamListenerState.clear_resets_forced_activity_without_clients (0 ms)
+[ RUN      ] StreamListenerState.concurrent_session_churn_and_listener_queries
+[       OK ] StreamListenerState.concurrent_session_churn_and_listener_queries (4 ms)
+[ RUN      ] StreamListenerState.concurrent_ros_visibility_and_listener_queries
+[       OK ] StreamListenerState.concurrent_ros_visibility_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_force_clear_and_listener_queries
+[       OK ] StreamListenerState.concurrent_force_clear_and_listener_queries (2 ms)
+[ RUN      ] StreamListenerState.concurrent_clients_force_and_ros_visibility
+[       OK ] StreamListenerState.concurrent_clients_force_and_ros_visibility (4 ms)
+[----------] 9 tests from StreamListenerState (16 ms total)
+
+[----------] 2 tests from stream_listener_dispatcher
+[ RUN      ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries
+[       OK ] stream_listener_dispatcher.concurrent_stream_lifecycle_and_ros_queries (41 ms)
+[ RUN      ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides
+[       OK ] stream_listener_dispatcher.ros_defaults_and_explicit_overrides (0 ms)
+[----------] 2 tests from stream_listener_dispatcher (41 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (58 ms total)
+[  PASSED  ] 11 tests.
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"stream-listener-state" end time: Oct 23 11:41 W. Europe Daylight Time
+"stream-listener-state" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 23 11:41 W. Europe Daylight Time

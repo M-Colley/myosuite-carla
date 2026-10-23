@@ -1,0 +1,8 @@
+{
+  "test": "rpc.server_bind_sync_run_on_game_thread",
+  "observed": "done=false after1,000,000 idle synchronization slices; hung in worker cleanup",
+  "action": "terminate only this owned test process and retain original stdout",
+  "process_ids": [
+    25196
+  ]
+}

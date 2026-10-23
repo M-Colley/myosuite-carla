@@ -1,0 +1,75 @@
+{
+  "status": "passed",
+  "scope": "Offline real MyoSuite/MuJoCo muscle contact -> bridge mapping -> compiled CARLA VehicleControl and ApplyVehicleControl bindings",
+  "unreal_server_connected": false,
+  "module": "D:\\carla-client-build-evidence\\.venv-python-api\\Lib\\site-packages\\carla.cp312-win_amd64.pyd",
+  "myosuite_module": "C:\\Users\\Mark\\Desktop\\myosuite-carla\\test-results\\fresh-pc\\myosuite\\myosuite\\__init__.py",
+  "myosuite_carla_module": "C:\\Users\\Mark\\Desktop\\myosuite-carla\\src\\myosuite_carla\\__init__.py",
+  "client_version": "0.10.0",
+  "metadata_version": "0.10.0",
+  "versions": {
+    "numpy": "1.26.4",
+    "mujoco": "3.17.0",
+    "myosuite": "3.0.0",
+    "myo-sim": "0.2.3",
+    "myosuite-carla": "0.1.0"
+  },
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "finite_muscle_results": true,
+  "mechanisms": [
+    {
+      "mechanism": "throttle",
+      "vehicle_command": {
+        "throttle": 1.0,
+        "steer": 0.0,
+        "brake": 0.0,
+        "hand_brake": false,
+        "reverse": false,
+        "manual_gear_shift": false,
+        "gear": 0
+      },
+      "native_control": "VehicleControl(throttle=1.000000, steer=0.000000, brake=0.000000, hand_brake=False, reverse=False, manual_gear_shift=False, gear=0)",
+      "peaks": {
+        "travel": 0.06121618803337044,
+        "contact_newtons": 37.75956201897303,
+        "muscle_newtons": 288.08196115810586
+      }
+    },
+    {
+      "mechanism": "brake",
+      "vehicle_command": {
+        "throttle": 0.0,
+        "steer": 0.0,
+        "brake": 1.0,
+        "hand_brake": false,
+        "reverse": false,
+        "manual_gear_shift": false,
+        "gear": 0
+      },
+      "native_control": "VehicleControl(throttle=0.000000, steer=0.000000, brake=1.000000, hand_brake=False, reverse=False, manual_gear_shift=False, gear=0)",
+      "peaks": {
+        "travel": 0.06121618803337044,
+        "contact_newtons": 37.75956201897303,
+        "muscle_newtons": 288.08196115810586
+      }
+    },
+    {
+      "mechanism": "steering",
+      "vehicle_command": {
+        "throttle": 0.0,
+        "steer": -0.5085614355566797,
+        "brake": 0.0,
+        "hand_brake": false,
+        "reverse": false,
+        "manual_gear_shift": false,
+        "gear": 0
+      },
+      "native_control": "VehicleControl(throttle=0.000000, steer=-0.508561, brake=0.000000, hand_brake=False, reverse=False, manual_gear_shift=False, gear=0)",
+      "peaks": {
+        "travel": 0.511038223964661,
+        "contact_newtons": 71.71861367170277,
+        "muscle_newtons": 288.08196115810586
+      }
+    }
+  ]
+}

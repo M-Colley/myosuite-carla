@@ -1,0 +1,278 @@
+<testsuite name="nose2-junit" errors="0" failures="0" skipped="0" tests="92" time="76.338">
+  <testcase timestamp="2026-10-23T09:58:32.265590" time="0.000000" classname="unit.test_autoware_map_generation.CheckUniqueOpendriveIdTests" name="test_duplicate_numeric_id_raises">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.265590" time="0.001008" classname="unit.test_autoware_map_generation.CheckUniqueOpendriveIdTests" name="test_non_numeric_or_empty_id_returns_none_without_recording">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.266597" time="0.000000" classname="unit.test_autoware_map_generation.CheckUniqueOpendriveIdTests" name="test_numeric_id_is_accepted_and_recorded">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.266597" time="0.044864" classname="unit.test_autoware_map_generation.GenerateOfflineTests" name="test_offline_mode_removes_converter_traffic_light_elements">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.311462" time="0.018351" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_duplicate_opendrive_id_raises">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.331069" time="0.002051" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_duplicate_opendrive_id_with_leading_zeros_raises">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.333120" time="0.038348" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_every_lanelet_sharing_the_approach_gets_the_regulatory_element">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.371469" time="0.041149" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_fallback_links_a_lanelet_per_stop_waypoint">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.412618" time="0.042024" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_fallback_never_attaches_to_a_pedestrian_lanelet">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.455643" time="0.004034" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_fallback_to_affected_lane_waypoints_when_no_stop_waypoints">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.459677" time="0.020518" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_falls_back_to_lane_width_when_outside_every_lanelet">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.480194" time="0.004442" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_filter_ignores_non_stop_sign_actors">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.484636" time="0.024976" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_injection_ids_are_stable_across_runs">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.509612" time="0.006238" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_injects_stop_sign_regulatory_element_with_expected_schema">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.515850" time="0.027598" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_lanelet_containing_the_waypoint_wins_over_a_nearer_boundary_vertex">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.543448" time="0.048581" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_lanelet_ending_before_the_waypoint_is_not_matched">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.592029" time="0.048580" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_lanelet_with_an_unusable_duplicate_side_member_still_matches">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.640609" time="0.028081" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_multi_lane_stop_line_links_every_approached_lanelet">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.668690" time="0.005551" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_no_live_stop_sign_actors_leaves_existing_map_unchanged">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.674242" time="0.008824" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_non_numeric_or_empty_opendrive_id_is_skipped">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.683066" time="0.041346" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_oncoming_lanelet_on_the_same_strip_is_not_matched">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.724412" time="0.045214" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_pedestrian_lanelets_never_receive_the_stop_sign">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.769626" time="0.008921" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_rerun_with_no_live_signs_still_removes_stale_regulatory_elements">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.778546" time="0.005127" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_sign_with_no_waypoints_is_skipped">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.783674" time="0.003999" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_sign_with_non_numeric_opendrive_id_does_not_block_valid_signs">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.787673" time="0.006916" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_split_lanelet_injection_is_stable_across_runs">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.794590" time="0.054066" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_stale_stop_sign_elements_removed_but_shared_ones_kept">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.848656" time="0.006375" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_stop_line_endpoints_sit_on_the_lanelet_boundaries">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.855031" time="0.006043" classname="unit.test_autoware_map_generation.InjectStopSignsTests" name="test_stop_sign_ids_derive_from_opendrive_id">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.861074" time="0.023546" classname="unit.test_autoware_map_generation.InjectTrafficLightsTests" name="test_injects_traffic_light_regulatory_element_with_expected_schema">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.884620" time="0.041409" classname="unit.test_autoware_map_generation.InjectTrafficLightsTests" name="test_reversed_boundary_neighbor_lanelet_is_not_mislinked">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.926030" time="0.001022" classname="unit.test_boost_version.TestBoostInstallVersion" name="test_cmake_options_pins_correct_version">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.927052" time="0.000733" classname="unit.test_boost_version.TestBoostInstallVersion" name="test_no_stale_boost_version_in_options">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:32.927785" time="0.446328" classname="unit.test_boost_version.TestBoostPythonSelection" name="test_client_only_does_not_request_boost_python">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:33.374113" time="0.483042" classname="unit.test_boost_version.TestBoostPythonSelection" name="test_python_api_requests_boost_python">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:33.857154" time="0.000000" classname="unit.test_boost_version.TestCarlaImports" name="test_carla_imports">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:33.857154" time="0.050205" classname="unit.test_boost_version.TestNumpyRequirementsCeiling" name="test_no_numpy_2_ceiling_in_requirements">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:33.907360" time="0.043395" classname="unit.test_client.TestClient" name="test_client_version">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:33.950754" time="0.030260" classname="unit.test_lidar_smoke_helpers.TestLidarSmokeHelpers" name="test_get_current_detection_points_is_instance_method">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:33.981014" time="0.025745" classname="unit.test_numpy_compat.TestPropControlDvsDtype" name="test_no_bare_np_bool">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:34.006759" time="0.001009" classname="unit.test_numpy_compat.TestPropControlDvsDtype" name="test_no_np_matrix">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:34.007768" time="0.000000" classname="unit.test_numpy_compat.TestPropControlDvsDtype" name="test_uses_bool_underscore">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:34.011278" time="5.910968" classname="unit.test_python_api_packaging.TestPythonApiPackaging" name="test_legacy_backend_is_rejected_before_build">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:58:39.922246" time="36.867826" classname="unit.test_python_api_packaging.TestPythonApiPackaging" name="test_source_and_build_paths_with_spaces">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:16.790878" time="31.805694" classname="unit.test_python_api_packaging.TestPythonApiPackaging" name="test_supported_backend_builds_a_native_wheel">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.596572" time="0.001008" classname="unit.test_transform.TestLocation" name="test_default_values">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.597580" time="0.000000" classname="unit.test_transform.TestLocation" name="test_named_args">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.597580" time="0.000000" classname="unit.test_transform.TestRightHandedBoundary" name="test_engine_convention_is_untouched">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.597580" time="0.000000" classname="unit.test_transform.TestRightHandedBoundary" name="test_location_mirrors_y">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.597580" time="0.000000" classname="unit.test_transform.TestRightHandedBoundary" name="test_matrix_is_a_proper_rotation">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.597580" time="0.000000" classname="unit.test_transform.TestRightHandedBoundary" name="test_matrix_is_s_m_s">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.597580" time="0.001000" classname="unit.test_transform.TestRightHandedBoundary" name="test_quaternion_agrees_with_carla_rotation_quaternion">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.598581" time="0.000000" classname="unit.test_transform.TestRightHandedBoundary" name="test_quaternion_is_unit_norm">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.598581" time="0.000000" classname="unit.test_transform.TestRightHandedBoundary" name="test_quaternion_matches_matrix">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.598581" time="0.000000" classname="unit.test_transform.TestRightHandedBoundary" name="test_right_handed_rotation_get_quaternion_round_trip">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.598581" time="0.000000" classname="unit.test_transform.TestRightHandedBoundary" name="test_rotation_negates_pitch_and_yaw">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.598581" time="0.000000" classname="unit.test_transform.TestRightHandedBoundary" name="test_rotation_round_trip">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.598581" time="0.000000" classname="unit.test_transform.TestRightHandedBoundary" name="test_transform_round_trip">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.598581" time="0.000000" classname="unit.test_transform.TestRotation" name="test_default_values">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.598581" time="0.000000" classname="unit.test_transform.TestRotation" name="test_named_args">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.598581" time="0.000999" classname="unit.test_transform.TestTransform" name="test_geo_offset_transform">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_geo_offset_transform_and_rotation">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_geo_offset_transform_equality">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_geo_offset_transform_rotation">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_geo_offset_transform_translation">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_geo_projection_utm">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_geo_projection_utm_constructor_3_args">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_geo_projection_utm_constructor_3_args_positional">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_geo_projection_utm_equality">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_geo_projection_utm_offset_none">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_geo_projection_utm_offset_setter">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_geo_projection_utm_with_offset">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_list_rotation_and_translation_location">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_list_rotation_and_translation_vector3d">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_print">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_rotation">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_rotation_and_translation">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.599579" time="0.000999" classname="unit.test_transform.TestTransform" name="test_translation">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.600579" time="0.000000" classname="unit.test_transform.TestTransform" name="test_values">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.600579" time="0.000000" classname="unit.test_transform.TestVector" name="test_make_unit_vector_2d_epsilon_keyword">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.600579" time="0.000000" classname="unit.test_transform.TestVector" name="test_make_unit_vector_2d_no_argument">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.600579" time="0.000000" classname="unit.test_transform.TestVector" name="test_make_unit_vector_3d_epsilon_keyword">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.600579" time="0.000000" classname="unit.test_transform.TestVector" name="test_make_unit_vector_3d_no_argument">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.600579" time="0.000000" classname="unit.test_transform.TestVector" name="test_make_unit_vector_3d_zero_length">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.600579" time="0.000000" classname="unit.test_vehicle.TestVehicleControl" name="test_default_values">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.600579" time="0.000000" classname="unit.test_vehicle.TestVehicleControl" name="test_named_args">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.600579" time="0.000000" classname="unit.test_vehicle.TestVehicleGearRatios" name="test_constructor_accepts_ratio_lists">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.600579" time="0.001002" classname="unit.test_vehicle.TestVehicleGearRatios" name="test_constructor_rejects_invalid_ratios">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.601581" time="0.000000" classname="unit.test_vehicle.TestVehicleGearRatios" name="test_default_ratios_are_readable">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.601581" time="0.000000" classname="unit.test_vehicle.TestVehicleGearRatios" name="test_invalid_ratio_preserves_previous_values">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.601581" time="0.000000" classname="unit.test_vehicle.TestVehicleGearRatios" name="test_ratio_setters_accept_numbers_and_empty_lists">
+    <system-out />
+    </testcase>
+  <testcase timestamp="2026-10-23T09:59:48.602579" time="0.000998" classname="unit.test_vehicle.TestVehiclePhysicsControl" name="test_named_args">
+    <system-out />
+    </testcase>
+  </testsuite>

@@ -1,0 +1,21 @@
+test_client_version (PythonAPI.test.unit.test_client.TestClient.test_client_version) ... fatal: No names found, cannot describe anything.
+ERROR
+
+======================================================================
+ERROR: test_client_version (PythonAPI.test.unit.test_client.TestClient.test_client_version)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\carla-review-client-build\PythonAPI\test\unit\test_client.py", line 19, in test_client_version
+    out = check_output(['git', 'describe', '--tags', '--abbrev=0', ])
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Mark\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Mark\AppData\Local\Programs\Python\Python312\Lib\subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['git', 'describe', '--tags', '--abbrev=0']' returned non-zero exit status 128.
+
+----------------------------------------------------------------------
+Ran 1 test in 0.064s
+
+FAILED (errors=1)

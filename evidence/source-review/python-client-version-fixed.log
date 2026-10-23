@@ -1,0 +1,6 @@
+test_client_version (test_client.TestClient.test_client_version) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.014s
+
+OK

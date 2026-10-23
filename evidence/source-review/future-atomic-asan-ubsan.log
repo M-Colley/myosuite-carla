@@ -1,0 +1,503 @@
+Running main() from googletest/googletest/src/gtest_main.cc
+
+Repeating all tests (iteration 1) . . .
+
+[==========] Running 19 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 4 tests from atomic_shared_ptr
+[ RUN      ] atomic_shared_ptr.successful_exchange_replaces_value
+[       OK ] atomic_shared_ptr.successful_exchange_replaces_value (0 ms)
+[ RUN      ] atomic_shared_ptr.failed_exchange_acquires_current_value
+[       OK ] atomic_shared_ptr.failed_exchange_acquires_current_value (0 ms)
+[ RUN      ] atomic_shared_ptr.exchanges_null_value
+[       OK ] atomic_shared_ptr.exchanges_null_value (0 ms)
+[ RUN      ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values
+[       OK ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values (12 ms)
+[----------] 4 tests from atomic_shared_ptr (12 ms total)
+
+[----------] 15 tests from recurrent_shared_future
+[ RUN      ] recurrent_shared_future.use_case
+[       OK ] recurrent_shared_future.use_case (513 ms)
+[ RUN      ] recurrent_shared_future.timeout
+[       OK ] recurrent_shared_future.timeout (0 ms)
+[ RUN      ] recurrent_shared_future.exception
+[       OK ] recurrent_shared_future.exception (10 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions (0 ms)
+[ RUN      ] recurrent_shared_future.inactive_threads_do_not_copy_later_values
+[       OK ] recurrent_shared_future.inactive_threads_do_not_copy_later_values (5 ms)
+[ RUN      ] recurrent_shared_future.supports_monostate_values
+[       OK ] recurrent_shared_future.supports_monostate_values (2 ms)
+[ RUN      ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters
+[       OK ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters (1 ms)
+[ RUN      ] recurrent_shared_future.delivered_exception_releases_waiter
+[       OK ] recurrent_shared_future.delivered_exception_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout
+[       OK ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout (9 ms)
+[ RUN      ] recurrent_shared_future.accepts_mutable_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_mutable_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.accepts_const_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_const_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.failed_result_move_releases_waiter
+[       OK ] recurrent_shared_future.failed_result_move_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter
+[       OK ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter (501 ms)
+[----------] 15 tests from recurrent_shared_future (1053 ms total)
+
+[==========] 19 tests from 2 test suites ran. (1066 ms total)
+[  PASSED  ] 19 tests.
+
+Repeating all tests (iteration 2) . . .
+
+[==========] Running 19 tests from 2 test suites.
+[----------] 4 tests from atomic_shared_ptr
+[ RUN      ] atomic_shared_ptr.successful_exchange_replaces_value
+[       OK ] atomic_shared_ptr.successful_exchange_replaces_value (0 ms)
+[ RUN      ] atomic_shared_ptr.failed_exchange_acquires_current_value
+[       OK ] atomic_shared_ptr.failed_exchange_acquires_current_value (0 ms)
+[ RUN      ] atomic_shared_ptr.exchanges_null_value
+[       OK ] atomic_shared_ptr.exchanges_null_value (0 ms)
+[ RUN      ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values
+[       OK ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values (12 ms)
+[----------] 4 tests from atomic_shared_ptr (13 ms total)
+
+[----------] 15 tests from recurrent_shared_future
+[ RUN      ] recurrent_shared_future.use_case
+[       OK ] recurrent_shared_future.use_case (513 ms)
+[ RUN      ] recurrent_shared_future.timeout
+[       OK ] recurrent_shared_future.timeout (0 ms)
+[ RUN      ] recurrent_shared_future.exception
+[       OK ] recurrent_shared_future.exception (10 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions (0 ms)
+[ RUN      ] recurrent_shared_future.inactive_threads_do_not_copy_later_values
+[       OK ] recurrent_shared_future.inactive_threads_do_not_copy_later_values (5 ms)
+[ RUN      ] recurrent_shared_future.supports_monostate_values
+[       OK ] recurrent_shared_future.supports_monostate_values (2 ms)
+[ RUN      ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters
+[       OK ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters (1 ms)
+[ RUN      ] recurrent_shared_future.delivered_exception_releases_waiter
+[       OK ] recurrent_shared_future.delivered_exception_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout
+[       OK ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout (8 ms)
+[ RUN      ] recurrent_shared_future.accepts_mutable_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_mutable_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.accepts_const_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_const_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.failed_result_move_releases_waiter
+[       OK ] recurrent_shared_future.failed_result_move_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter
+[       OK ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter (501 ms)
+[----------] 15 tests from recurrent_shared_future (1051 ms total)
+
+[==========] 19 tests from 2 test suites ran. (1064 ms total)
+[  PASSED  ] 19 tests.
+
+Repeating all tests (iteration 3) . . .
+
+[==========] Running 19 tests from 2 test suites.
+[----------] 4 tests from atomic_shared_ptr
+[ RUN      ] atomic_shared_ptr.successful_exchange_replaces_value
+[       OK ] atomic_shared_ptr.successful_exchange_replaces_value (0 ms)
+[ RUN      ] atomic_shared_ptr.failed_exchange_acquires_current_value
+[       OK ] atomic_shared_ptr.failed_exchange_acquires_current_value (0 ms)
+[ RUN      ] atomic_shared_ptr.exchanges_null_value
+[       OK ] atomic_shared_ptr.exchanges_null_value (0 ms)
+[ RUN      ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values
+[       OK ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values (10 ms)
+[----------] 4 tests from atomic_shared_ptr (10 ms total)
+
+[----------] 15 tests from recurrent_shared_future
+[ RUN      ] recurrent_shared_future.use_case
+[       OK ] recurrent_shared_future.use_case (511 ms)
+[ RUN      ] recurrent_shared_future.timeout
+[       OK ] recurrent_shared_future.timeout (0 ms)
+[ RUN      ] recurrent_shared_future.exception
+[       OK ] recurrent_shared_future.exception (10 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions (0 ms)
+[ RUN      ] recurrent_shared_future.inactive_threads_do_not_copy_later_values
+[       OK ] recurrent_shared_future.inactive_threads_do_not_copy_later_values (5 ms)
+[ RUN      ] recurrent_shared_future.supports_monostate_values
+[       OK ] recurrent_shared_future.supports_monostate_values (2 ms)
+[ RUN      ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters
+[       OK ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters (1 ms)
+[ RUN      ] recurrent_shared_future.delivered_exception_releases_waiter
+[       OK ] recurrent_shared_future.delivered_exception_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout
+[       OK ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout (9 ms)
+[ RUN      ] recurrent_shared_future.accepts_mutable_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_mutable_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.accepts_const_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_const_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.failed_result_move_releases_waiter
+[       OK ] recurrent_shared_future.failed_result_move_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter
+[       OK ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter (501 ms)
+[----------] 15 tests from recurrent_shared_future (1051 ms total)
+
+[==========] 19 tests from 2 test suites ran. (1062 ms total)
+[  PASSED  ] 19 tests.
+
+Repeating all tests (iteration 4) . . .
+
+[==========] Running 19 tests from 2 test suites.
+[----------] 4 tests from atomic_shared_ptr
+[ RUN      ] atomic_shared_ptr.successful_exchange_replaces_value
+[       OK ] atomic_shared_ptr.successful_exchange_replaces_value (0 ms)
+[ RUN      ] atomic_shared_ptr.failed_exchange_acquires_current_value
+[       OK ] atomic_shared_ptr.failed_exchange_acquires_current_value (0 ms)
+[ RUN      ] atomic_shared_ptr.exchanges_null_value
+[       OK ] atomic_shared_ptr.exchanges_null_value (0 ms)
+[ RUN      ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values
+[       OK ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values (13 ms)
+[----------] 4 tests from atomic_shared_ptr (13 ms total)
+
+[----------] 15 tests from recurrent_shared_future
+[ RUN      ] recurrent_shared_future.use_case
+[       OK ] recurrent_shared_future.use_case (513 ms)
+[ RUN      ] recurrent_shared_future.timeout
+[       OK ] recurrent_shared_future.timeout (0 ms)
+[ RUN      ] recurrent_shared_future.exception
+[       OK ] recurrent_shared_future.exception (10 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions (0 ms)
+[ RUN      ] recurrent_shared_future.inactive_threads_do_not_copy_later_values
+[       OK ] recurrent_shared_future.inactive_threads_do_not_copy_later_values (5 ms)
+[ RUN      ] recurrent_shared_future.supports_monostate_values
+[       OK ] recurrent_shared_future.supports_monostate_values (2 ms)
+[ RUN      ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters
+[       OK ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters (1 ms)
+[ RUN      ] recurrent_shared_future.delivered_exception_releases_waiter
+[       OK ] recurrent_shared_future.delivered_exception_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout
+[       OK ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout (9 ms)
+[ RUN      ] recurrent_shared_future.accepts_mutable_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_mutable_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.accepts_const_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_const_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.failed_result_move_releases_waiter
+[       OK ] recurrent_shared_future.failed_result_move_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter
+[       OK ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter (501 ms)
+[----------] 15 tests from recurrent_shared_future (1052 ms total)
+
+[==========] 19 tests from 2 test suites ran. (1066 ms total)
+[  PASSED  ] 19 tests.
+
+Repeating all tests (iteration 5) . . .
+
+[==========] Running 19 tests from 2 test suites.
+[----------] 4 tests from atomic_shared_ptr
+[ RUN      ] atomic_shared_ptr.successful_exchange_replaces_value
+[       OK ] atomic_shared_ptr.successful_exchange_replaces_value (0 ms)
+[ RUN      ] atomic_shared_ptr.failed_exchange_acquires_current_value
+[       OK ] atomic_shared_ptr.failed_exchange_acquires_current_value (0 ms)
+[ RUN      ] atomic_shared_ptr.exchanges_null_value
+[       OK ] atomic_shared_ptr.exchanges_null_value (0 ms)
+[ RUN      ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values
+[       OK ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values (10 ms)
+[----------] 4 tests from atomic_shared_ptr (10 ms total)
+
+[----------] 15 tests from recurrent_shared_future
+[ RUN      ] recurrent_shared_future.use_case
+[       OK ] recurrent_shared_future.use_case (512 ms)
+[ RUN      ] recurrent_shared_future.timeout
+[       OK ] recurrent_shared_future.timeout (0 ms)
+[ RUN      ] recurrent_shared_future.exception
+[       OK ] recurrent_shared_future.exception (10 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions (0 ms)
+[ RUN      ] recurrent_shared_future.inactive_threads_do_not_copy_later_values
+[       OK ] recurrent_shared_future.inactive_threads_do_not_copy_later_values (5 ms)
+[ RUN      ] recurrent_shared_future.supports_monostate_values
+[       OK ] recurrent_shared_future.supports_monostate_values (2 ms)
+[ RUN      ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters
+[       OK ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters (2 ms)
+[ RUN      ] recurrent_shared_future.delivered_exception_releases_waiter
+[       OK ] recurrent_shared_future.delivered_exception_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout
+[       OK ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout (9 ms)
+[ RUN      ] recurrent_shared_future.accepts_mutable_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_mutable_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.accepts_const_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_const_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.failed_result_move_releases_waiter
+[       OK ] recurrent_shared_future.failed_result_move_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter
+[       OK ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter (501 ms)
+[----------] 15 tests from recurrent_shared_future (1053 ms total)
+
+[==========] 19 tests from 2 test suites ran. (1064 ms total)
+[  PASSED  ] 19 tests.
+
+Repeating all tests (iteration 6) . . .
+
+[==========] Running 19 tests from 2 test suites.
+[----------] 4 tests from atomic_shared_ptr
+[ RUN      ] atomic_shared_ptr.successful_exchange_replaces_value
+[       OK ] atomic_shared_ptr.successful_exchange_replaces_value (0 ms)
+[ RUN      ] atomic_shared_ptr.failed_exchange_acquires_current_value
+[       OK ] atomic_shared_ptr.failed_exchange_acquires_current_value (0 ms)
+[ RUN      ] atomic_shared_ptr.exchanges_null_value
+[       OK ] atomic_shared_ptr.exchanges_null_value (0 ms)
+[ RUN      ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values
+[       OK ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values (12 ms)
+[----------] 4 tests from atomic_shared_ptr (12 ms total)
+
+[----------] 15 tests from recurrent_shared_future
+[ RUN      ] recurrent_shared_future.use_case
+[       OK ] recurrent_shared_future.use_case (513 ms)
+[ RUN      ] recurrent_shared_future.timeout
+[       OK ] recurrent_shared_future.timeout (0 ms)
+[ RUN      ] recurrent_shared_future.exception
+[       OK ] recurrent_shared_future.exception (10 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions (0 ms)
+[ RUN      ] recurrent_shared_future.inactive_threads_do_not_copy_later_values
+[       OK ] recurrent_shared_future.inactive_threads_do_not_copy_later_values (5 ms)
+[ RUN      ] recurrent_shared_future.supports_monostate_values
+[       OK ] recurrent_shared_future.supports_monostate_values (2 ms)
+[ RUN      ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters
+[       OK ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters (2 ms)
+[ RUN      ] recurrent_shared_future.delivered_exception_releases_waiter
+[       OK ] recurrent_shared_future.delivered_exception_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout
+[       OK ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout (8 ms)
+[ RUN      ] recurrent_shared_future.accepts_mutable_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_mutable_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.accepts_const_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_const_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.failed_result_move_releases_waiter
+[       OK ] recurrent_shared_future.failed_result_move_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter
+[       OK ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter (501 ms)
+[----------] 15 tests from recurrent_shared_future (1053 ms total)
+
+[==========] 19 tests from 2 test suites ran. (1066 ms total)
+[  PASSED  ] 19 tests.
+
+Repeating all tests (iteration 7) . . .
+
+[==========] Running 19 tests from 2 test suites.
+[----------] 4 tests from atomic_shared_ptr
+[ RUN      ] atomic_shared_ptr.successful_exchange_replaces_value
+[       OK ] atomic_shared_ptr.successful_exchange_replaces_value (0 ms)
+[ RUN      ] atomic_shared_ptr.failed_exchange_acquires_current_value
+[       OK ] atomic_shared_ptr.failed_exchange_acquires_current_value (0 ms)
+[ RUN      ] atomic_shared_ptr.exchanges_null_value
+[       OK ] atomic_shared_ptr.exchanges_null_value (0 ms)
+[ RUN      ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values
+[       OK ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values (12 ms)
+[----------] 4 tests from atomic_shared_ptr (12 ms total)
+
+[----------] 15 tests from recurrent_shared_future
+[ RUN      ] recurrent_shared_future.use_case
+[       OK ] recurrent_shared_future.use_case (513 ms)
+[ RUN      ] recurrent_shared_future.timeout
+[       OK ] recurrent_shared_future.timeout (0 ms)
+[ RUN      ] recurrent_shared_future.exception
+[       OK ] recurrent_shared_future.exception (10 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions (0 ms)
+[ RUN      ] recurrent_shared_future.inactive_threads_do_not_copy_later_values
+[       OK ] recurrent_shared_future.inactive_threads_do_not_copy_later_values (6 ms)
+[ RUN      ] recurrent_shared_future.supports_monostate_values
+[       OK ] recurrent_shared_future.supports_monostate_values (2 ms)
+[ RUN      ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters
+[       OK ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters (1 ms)
+[ RUN      ] recurrent_shared_future.delivered_exception_releases_waiter
+[       OK ] recurrent_shared_future.delivered_exception_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout
+[       OK ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout (8 ms)
+[ RUN      ] recurrent_shared_future.accepts_mutable_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_mutable_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.accepts_const_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_const_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.failed_result_move_releases_waiter
+[       OK ] recurrent_shared_future.failed_result_move_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter
+[       OK ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter (501 ms)
+[----------] 15 tests from recurrent_shared_future (1053 ms total)
+
+[==========] 19 tests from 2 test suites ran. (1065 ms total)
+[  PASSED  ] 19 tests.
+
+Repeating all tests (iteration 8) . . .
+
+[==========] Running 19 tests from 2 test suites.
+[----------] 4 tests from atomic_shared_ptr
+[ RUN      ] atomic_shared_ptr.successful_exchange_replaces_value
+[       OK ] atomic_shared_ptr.successful_exchange_replaces_value (0 ms)
+[ RUN      ] atomic_shared_ptr.failed_exchange_acquires_current_value
+[       OK ] atomic_shared_ptr.failed_exchange_acquires_current_value (0 ms)
+[ RUN      ] atomic_shared_ptr.exchanges_null_value
+[       OK ] atomic_shared_ptr.exchanges_null_value (0 ms)
+[ RUN      ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values
+[       OK ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values (12 ms)
+[----------] 4 tests from atomic_shared_ptr (12 ms total)
+
+[----------] 15 tests from recurrent_shared_future
+[ RUN      ] recurrent_shared_future.use_case
+[       OK ] recurrent_shared_future.use_case (514 ms)
+[ RUN      ] recurrent_shared_future.timeout
+[       OK ] recurrent_shared_future.timeout (0 ms)
+[ RUN      ] recurrent_shared_future.exception
+[       OK ] recurrent_shared_future.exception (10 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions (0 ms)
+[ RUN      ] recurrent_shared_future.inactive_threads_do_not_copy_later_values
+[       OK ] recurrent_shared_future.inactive_threads_do_not_copy_later_values (5 ms)
+[ RUN      ] recurrent_shared_future.supports_monostate_values
+[       OK ] recurrent_shared_future.supports_monostate_values (2 ms)
+[ RUN      ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters
+[       OK ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters (1 ms)
+[ RUN      ] recurrent_shared_future.delivered_exception_releases_waiter
+[       OK ] recurrent_shared_future.delivered_exception_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout
+[       OK ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout (8 ms)
+[ RUN      ] recurrent_shared_future.accepts_mutable_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_mutable_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.accepts_const_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_const_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.failed_result_move_releases_waiter
+[       OK ] recurrent_shared_future.failed_result_move_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter
+[       OK ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter (501 ms)
+[----------] 15 tests from recurrent_shared_future (1053 ms total)
+
+[==========] 19 tests from 2 test suites ran. (1066 ms total)
+[  PASSED  ] 19 tests.
+
+Repeating all tests (iteration 9) . . .
+
+[==========] Running 19 tests from 2 test suites.
+[----------] 4 tests from atomic_shared_ptr
+[ RUN      ] atomic_shared_ptr.successful_exchange_replaces_value
+[       OK ] atomic_shared_ptr.successful_exchange_replaces_value (0 ms)
+[ RUN      ] atomic_shared_ptr.failed_exchange_acquires_current_value
+[       OK ] atomic_shared_ptr.failed_exchange_acquires_current_value (0 ms)
+[ RUN      ] atomic_shared_ptr.exchanges_null_value
+[       OK ] atomic_shared_ptr.exchanges_null_value (0 ms)
+[ RUN      ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values
+[       OK ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values (14 ms)
+[----------] 4 tests from atomic_shared_ptr (14 ms total)
+
+[----------] 15 tests from recurrent_shared_future
+[ RUN      ] recurrent_shared_future.use_case
+[       OK ] recurrent_shared_future.use_case (511 ms)
+[ RUN      ] recurrent_shared_future.timeout
+[       OK ] recurrent_shared_future.timeout (0 ms)
+[ RUN      ] recurrent_shared_future.exception
+[       OK ] recurrent_shared_future.exception (10 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions (0 ms)
+[ RUN      ] recurrent_shared_future.inactive_threads_do_not_copy_later_values
+[       OK ] recurrent_shared_future.inactive_threads_do_not_copy_later_values (4 ms)
+[ RUN      ] recurrent_shared_future.supports_monostate_values
+[       OK ] recurrent_shared_future.supports_monostate_values (2 ms)
+[ RUN      ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters
+[       OK ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters (1 ms)
+[ RUN      ] recurrent_shared_future.delivered_exception_releases_waiter
+[       OK ] recurrent_shared_future.delivered_exception_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout
+[       OK ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout (8 ms)
+[ RUN      ] recurrent_shared_future.accepts_mutable_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_mutable_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.accepts_const_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_const_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.failed_result_move_releases_waiter
+[       OK ] recurrent_shared_future.failed_result_move_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter
+[       OK ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter (501 ms)
+[----------] 15 tests from recurrent_shared_future (1049 ms total)
+
+[==========] 19 tests from 2 test suites ran. (1063 ms total)
+[  PASSED  ] 19 tests.
+
+Repeating all tests (iteration 10) . . .
+
+[==========] Running 19 tests from 2 test suites.
+[----------] 4 tests from atomic_shared_ptr
+[ RUN      ] atomic_shared_ptr.successful_exchange_replaces_value
+[       OK ] atomic_shared_ptr.successful_exchange_replaces_value (0 ms)
+[ RUN      ] atomic_shared_ptr.failed_exchange_acquires_current_value
+[       OK ] atomic_shared_ptr.failed_exchange_acquires_current_value (0 ms)
+[ RUN      ] atomic_shared_ptr.exchanges_null_value
+[       OK ] atomic_shared_ptr.exchanges_null_value (0 ms)
+[ RUN      ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values
+[       OK ] atomic_shared_ptr.concurrent_compare_exchange_publishes_values (12 ms)
+[----------] 4 tests from atomic_shared_ptr (12 ms total)
+
+[----------] 15 tests from recurrent_shared_future
+[ RUN      ] recurrent_shared_future.use_case
+[       OK ] recurrent_shared_future.use_case (521 ms)
+[ RUN      ] recurrent_shared_future.timeout
+[       OK ] recurrent_shared_future.timeout (0 ms)
+[ RUN      ] recurrent_shared_future.exception
+[       OK ] recurrent_shared_future.exception (10 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_copy_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_later_values (0 ms)
+[ RUN      ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions
+[       OK ] recurrent_shared_future.timed_out_waiter_does_not_retain_exceptions (0 ms)
+[ RUN      ] recurrent_shared_future.inactive_threads_do_not_copy_later_values
+[       OK ] recurrent_shared_future.inactive_threads_do_not_copy_later_values (5 ms)
+[ RUN      ] recurrent_shared_future.supports_monostate_values
+[       OK ] recurrent_shared_future.supports_monostate_values (2 ms)
+[ RUN      ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters
+[       OK ] recurrent_shared_future.concurrent_delivery_releases_completed_waiters (2 ms)
+[ RUN      ] recurrent_shared_future.delivered_exception_releases_waiter
+[       OK ] recurrent_shared_future.delivered_exception_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout
+[       OK ] recurrent_shared_future.repeated_waits_race_delivery_and_timeout (8 ms)
+[ RUN      ] recurrent_shared_future.accepts_mutable_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_mutable_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.accepts_const_lvalue_exception
+[       OK ] recurrent_shared_future.accepts_const_lvalue_exception (2 ms)
+[ RUN      ] recurrent_shared_future.failed_result_move_releases_waiter
+[       OK ] recurrent_shared_future.failed_result_move_releases_waiter (2 ms)
+[ RUN      ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter
+[       OK ] recurrent_shared_future.failed_value_copy_does_not_complete_waiter (501 ms)
+[----------] 15 tests from recurrent_shared_future (1062 ms total)
+
+[----------] Global test environment tear-down
+[==========] 19 tests from 2 test suites ran. (1074 ms total)
+[  PASSED  ] 19 tests.

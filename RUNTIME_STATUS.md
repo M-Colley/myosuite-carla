@@ -3,8 +3,16 @@
 Checked on **2026-10-23 (Europe/Berlin)**. The requested `ue58-dev` source has
 been downloaded, and actual simulator validation passes on the available
 official **CARLA 0.10.0 / UE5.5** Windows release. **No UE5.8 runtime pass is
-claimed.** See [VALIDATION.md](VALIDATION.md) for the 170-test fresh-environment live result
+claimed.** See [VALIDATION.md](VALIDATION.md) for the 243-test fresh-environment live result
 and measured acceleration, braking and steering.
+
+The complete `ue58-dev` native client and Python extension have since been
+built from the [reviewed source snapshot](https://github.com/M-Colley/carla/tree/ee5859b4e63a4b79c69b02e381c95fb5727e0874).
+Its 306 native tests and 92 Python API tests pass without a simulator. The
+wheel also passes offline bridge checks with NumPy 1.26.4 and 2.5.4. This
+advances client validation; the engine/project/server remain unbuilt here.
+The [new-PC guide](NEW_PC_SETUP.md#10-optional-reproduce-the-ue58-client-source-checks-without-the-engine)
+includes the separate client-only reproduction path.
 
 ## Downloads performed
 

@@ -1,0 +1,73 @@
+Episode synchronization review evidence
+Date: 2026-10-23
+Worktree: D:/carla-review-episode
+Branch: codex/ue58-episode-races
+Commit: 33c94d510df742e081179cfaf2ecc3f9c65c7f8f
+Fork branch: M-Colley/carla codex/ue58-episode-races (pushed)
+Base: origin/ue58-dev defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5
+
+Production changes:
+  LibCarla/source/carla/client/detail/Episode.h
+  LibCarla/source/carla/client/detail/Episode.cpp
+Tests and reproducible entry point:
+  LibCarla/source/test/client/EpisodeTestServer.h
+  LibCarla/source/test/client/test_episode_concurrency.cpp
+  Util/Tests/EpisodeConcurrency/CMakeLists.txt
+  Util/Tests/EpisodeConcurrency/README.md
+
+Host: Spark, Linux 7.0.0-1019-nvidia aarch64 GNU/Linux
+Compiler: g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+CMake: 3.28.3
+Source mirror: /tmp/carla-episode-review/source
+Builds: /tmp/carla-episode-review/build-make-{tsan,asan}
+Each archive contains the full actual carla-client production sources, including
+Episode.cpp, Simulator.cpp, Client.cpp and real streaming/RPC implementations.
+The client and source-built dependencies were instrumented together, rather than
+linking an unsanitized client archive into an instrumented test-only binary.
+
+Configuration exception:
+The mirror's CMake/Dependencies.cmake contains only the separate PR9994 fix
+selecting Boost.Python only when BUILD_PYTHON_API is enabled. This worktree and
+Episode commit do not include that independent fix. On the original base,
+Boost1.90 refuses configuration with BUILD_PYTHON_API=OFF until it is applied.
+No engine or simulator-content download/build was performed.
+
+Build flags: See tracked README exact configure/build recipe, plus:
+TSAN: CMAKE_{CXX,C}_FLAGS=-fsanitize=thread -fno-omit-frame-pointer
+      CMAKE_EXE_LINKER_FLAGS=-fsanitize=thread
+ASAN: CMAKE_{CXX,C}_FLAGS=-fsanitize=address,undefined -fno-omit-frame-pointer
+      CMAKE_EXE_LINKER_FLAGS=-fsanitize=address,undefined
+All builds use RelWithDebInfo and --parallel 8. CMake generator Unix Makefiles.
+Dependencies were reused from the TSAN build using FETCHCONTENT_SOURCE_DIR_*
+for the ASAN build, with separate instrumented object files/archives.
+
+Baseline (original Episode sources):
+  Smoke real-RPC+TCP state delivery passed (smoke-before.log).
+  Each focused race filter exited66 under TSAN halt_on_error=1:
+    map_change_has_one_consumer: actual Episode.cpp163 read vs164 write
+    map_change_publication_races_consumers: Episode.cpp113 stream write vs163 read
+    pending_exception_publication_races_streaming: Episode.h96 write vsEpisode.cpp71 read
+  baseline-pending-all.log used halt_on_error=0 (exit66) and also records
+  concurrent std::string copy/read and producer mutation, in addition to flags.
+  Baseline traces retain the original source line numbers.
+
+Fixed final sources (same tracked CMake entry point):
+  TSAN_OPTIONS=halt_on_error=1 setarch aarch64 -R ctest --test-dir build-make-tsan
+    --output-on-failure --repeat until-fail:20
+  Passed 7 cases x20 repeats =140 executions, zero sanitizer reports (8.06s).
+  ASAN_OPTIONS=halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1 ctest
+    --test-dir build-make-asan --output-on-failure --repeat until-fail:20
+  Passed 7 cases x20 repeats =140 executions, zero sanitizer reports (9.20s).
+  setarch disables ASLR only for the TSAN process tree to avoid GCC TSAN startup
+  unexpected-memory-mapping failures on this AArch64 host.
+  Both CTest runs impose a60s test-process timeout. The fixture additionally
+  terminates after5s if a callback fails to release its final Episode ownership.
+  No detached test threads. No rewritten or mocked production state methods.
+
+Pre-existing build warnings: GCC unknown -Wno-4005/-Wno-macro-redefined,
+Boost.Asio atomic_thread_fence unsupported warning under GCC TSAN, and existing
+Episode member initialization order warning. They also appear on the baseline.
+
+Validation scope: Real CARLA client, real loopback transports and genuine
+serialized EpisodeState packets. No Unreal Engine server or vehicle physics
+was started by these regression tests. No FPS/performance claim is made.

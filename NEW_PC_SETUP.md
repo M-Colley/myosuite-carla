@@ -10,7 +10,7 @@ different server choices; keep their results separate:
 
 A shared CARLA `0.10.0` version string does **not** distinguish UE5.5 from
 UE5.8. Preserve the server's engine version and source/build identity.
-No successful UE5.8 source build or live run is claimed by this guide. The
+No successful UE5.8 engine/simulator build or live run is claimed by this guide. The
 Windows build commands below were checked against the pinned upstream source
 and its [official Windows guide](https://github.com/carla-simulator/carla/blob/defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5/Docs/build_windows_ue5.md).
 
@@ -162,6 +162,9 @@ git lfs install
 git config --global core.longpaths true
 git clone --branch ue58-dev --single-branch https://github.com/carla-simulator/carla.git carla-ue58
 git -C carla-ue58 checkout --detach defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5
+git -C carla-ue58 remote add colley https://github.com/M-Colley/carla.git
+git -C carla-ue58 fetch colley codex/ue58-client-validation
+git -C carla-ue58 checkout --detach ee5859b4e63a4b79c69b02e381c95fb5727e0874
 git ls-remote https://github.com/CarlaUnreal/UnrealEngine.git refs/heads/ue58-dev-carla
 git clone --branch ue58-dev-carla --single-branch https://github.com/CarlaUnreal/UnrealEngine.git UnrealEngine5_carla
 git -C UnrealEngine5_carla checkout --detach 0703595a065dee51538720027ce9cc05bd464517
@@ -179,6 +182,14 @@ to download.
 These engine/content commits were checked on the date above; the engine's
 `Build.version` identifies 5.8.0. Pinning them makes the intended source inputs
 explicit, but does not turn this reviewed recipe into a verified UE5.8 build.
+
+The pinned CARLA revision includes the source and regression tests from
+[PRs #9991–#9999](https://github.com/M-Colley/carla/blob/ee5859b4e63a4b79c69b02e381c95fb5727e0874/VALIDATION_CLIENT.md),
+which remain unmerged upstream. All 35 changed source/build/test files were
+checked against their individual PR revisions. The actual client and complete
+Python extension built from this snapshot; **306 native tests and 92 Python
+API tests passed**, including the native wheel fixtures. This validates the
+client portion. The full engine/simulator procedure below remains unexecuted.
 
 The upstream `CarlaSetup.bat` automates much of this but also selects Python,
 installs prerequisites and checks existing folders. The explicit sequence here
@@ -445,6 +456,62 @@ Get-NetTCPConnection -LocalPort 2000 -State Listen | Select-Object OwningProcess
 After verifying the owning PID belongs to your selected `$runtime`, use
 `Stop-Process -Id ACTUAL_VERIFIED_SERVER_PID`. Confirm port 2000 is no longer
 listening. Stop the Zen process you started after packaging as well.
+
+## 10. Optional: reproduce the UE5.8 client source checks without the engine
+
+This builds the client library, full Python extension and offline source tests.
+It needs a C++20 x64 MSVC developer command prompt and the build tools from 5A,
+but needs neither Epic engine access nor simulator content. The recorded local
+compiler was MSVC 19.51; this was an isolated build on the existing Windows PC.
+Use a separate environment from the bridge's live-server environment.
+
+In the x64 developer **cmd.exe** prompt, with `C:\sim` adjusted consistently:
+
+```bat
+cd /d C:\sim
+git clone --branch codex/ue58-client-validation --single-branch https://github.com/M-Colley/carla.git carla-client-check
+git -C carla-client-check checkout --detach ee5859b4e63a4b79c69b02e381c95fb5727e0874
+git clone --depth 1 --branch carla https://github.com/carla-simulator/rpclib.git client-deps/rpclib
+git -C client-deps/rpclib fetch --depth 1 origin bbfe141f4b5c1396cedb91071f8a839a6fa9de35
+git -C client-deps/rpclib checkout --detach bbfe141f4b5c1396cedb91071f8a839a6fa9de35
+git clone --depth 1 --branch v1.17.0 https://github.com/google/googletest.git client-deps/googletest
+git -C client-deps/googletest checkout --detach 52eb8108c5bdec04579160ae17225d66034bd723
+py -3.12 -m venv ue58-client-env
+set "CLIENT_PYTHON=C:\sim\ue58-client-env\Scripts\python.exe"
+set "PATH=C:\sim\ue58-client-env\Scripts;%PATH%"
+set "CMAKE_BUILD_PARALLEL_LEVEL=2"
+"%CLIENT_PYTHON%" -m pip install --upgrade pip
+"%CLIENT_PYTHON%" -m pip install "cmake>=3.28" ninja
+"%CLIENT_PYTHON%" -m pip install -r carla-client-check\requirements.txt -r carla-client-check\PythonAPI\test\requirements.txt "numpy==2.5.4"
+cd /d C:\sim\carla-client-check
+git clone --depth 1 --branch 0.1.4 https://github.com/carla-simulator/opendrive-test-files.git Build/test-content
+git -C Build/test-content checkout --detach 5929b67cc414b611b701ad251fe1e6d30f465bba
+cmake -S . -B Build/ClientReview -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_CARLA_UNREAL=OFF -DBUILD_CARLA_SERVER=OFF -DBUILD_CARLA_CLIENT=ON -DBUILD_PYTHON_API=ON -DBUILD_EXAMPLES=OFF -DBUILD_LIBCARLA_TESTS=ON -DBUILD_OSM_WORLD_RENDERER=OFF -DENABLE_ROS2=OFF -DENABLE_ROS2_DEMO=OFF -DENABLE_RSS=OFF -DENABLE_OSM2ODR=OFF -DENABLE_PYTORCH=OFF -DINSTALL_LIBCARLA=OFF -DFETCHCONTENT_SOURCE_DIR_RPCLIB=C:/sim/client-deps/rpclib -DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=C:/sim/client-deps/googletest -DPython_EXECUTABLE="%CLIENT_PYTHON%" -DPython3_EXECUTABLE="%CLIENT_PYTHON%"
+cmake --build Build/ClientReview --target carla-client libcarla_test_client carla-python-api --parallel 2
+Build\ClientReview\LibCarla\libcarla_test_client.exe --gtest_output=xml:Build/native-client.xml
+"%CLIENT_PYTHON%" -m pip install --force-reinstall --no-deps Build\ClientReview\PythonAPI\dist\carla-0.10.0-cp312-cp312-win_amd64.whl
+cd PythonAPI\test\unit
+"%CLIENT_PYTHON%" -m nose2 -v
+cd /d C:\sim\myosuite-carla
+"%CLIENT_PYTHON%" -m pip install -c constraints/windows-py312-live.txt -e ../myosuite -e ".[test,lint]"
+"%CLIENT_PYTHON%" -m pip check
+"%CLIENT_PYTHON%" -m pytest tests -q --junitxml=artifacts/ue58-client-offline.xml
+```
+
+Stop on nonzero exit codes. The original source's client-only Boost selection,
+two native network tests and Git-tag-dependent Python version test failed
+during this review; the pinned snapshot includes their fixes. The full source
+suite passed 306 native cases and 92 Python cases with no skips. Keep the
+configure/build output, source/dependency SHAs, XML and wheel hash with the run.
+Use this client wheel with a server built from the same source when performing
+live UE5.8 acceptance. These offline checks do not provide that server.
+
+The final three commands reuse the clean MyoSuite clone from section 3 and
+select the guide's NumPy 1.26.4/OpenCV versions in this isolated environment.
+The new native wheel passed **240 bridge tests with 3 live-server skips** under
+both NumPy 1.26.4 and 2.5.4. Real MyoSuite muscle/contact outputs also converted
+successfully to the compiled CARLA control and command classes for all three
+mechanisms; see [the source validation evidence](VALIDATION.md#complete-ue58-client-build-and-source-suites).
 
 ## Troubleshooting
 

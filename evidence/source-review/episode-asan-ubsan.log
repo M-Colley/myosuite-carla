@@ -1,0 +1,763 @@
+Start testing: Oct 23 09:47 UTC
+----------------------------------------------------------
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (8 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (9 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (6 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (328 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (7 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (20 ms)
+[----------] 7 tests from episode_concurrency (387 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (387 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.50 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (8 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (5 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (329 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (20 ms)
+[----------] 7 tests from episode_concurrency (382 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (382 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.47 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (7 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (6 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (329 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (7 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (11 ms)
+[----------] 7 tests from episode_concurrency (374 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (374 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (7 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (6 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (327 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (4 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (18 ms)
+[----------] 7 tests from episode_concurrency (376 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (376 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.45 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (8 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (6 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (328 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (7 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (19 ms)
+[----------] 7 tests from episode_concurrency (382 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (383 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.47 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (8 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (6 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (328 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (11 ms)
+[----------] 7 tests from episode_concurrency (372 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (372 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (8 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (5 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (325 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (19 ms)
+[----------] 7 tests from episode_concurrency (376 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (376 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (8 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (6 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (324 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (18 ms)
+[----------] 7 tests from episode_concurrency (376 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (376 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.44 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (8 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (6 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (330 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (18 ms)
+[----------] 7 tests from episode_concurrency (381 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (381 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.47 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (8 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (5 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (327 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (20 ms)
+[----------] 7 tests from episode_concurrency (380 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (380 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (8 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (6 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (328 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (20 ms)
+[----------] 7 tests from episode_concurrency (380 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (380 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (6 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (8 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (5 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (326 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (19 ms)
+[----------] 7 tests from episode_concurrency (377 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (377 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (8 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (5 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (327 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (20 ms)
+[----------] 7 tests from episode_concurrency (380 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (380 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.45 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (8 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (6 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (328 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (20 ms)
+[----------] 7 tests from episode_concurrency (382 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (382 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (9 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (6 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (329 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (21 ms)
+[----------] 7 tests from episode_concurrency (383 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (383 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (8 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (6 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (327 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (20 ms)
+[----------] 7 tests from episode_concurrency (381 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (381 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (9 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (6 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (326 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (19 ms)
+[----------] 7 tests from episode_concurrency (378 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (378 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.45 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (7 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (6 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (325 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (19 ms)
+[----------] 7 tests from episode_concurrency (376 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (376 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (8 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (5 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (324 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (18 ms)
+[----------] 7 tests from episode_concurrency (376 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (376 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.46 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+1/1 Testing: episode_concurrency
+1/1 Test: episode_concurrency
+Command: "/tmp/carla-episode-review/build-make-asan/carla-episode-tests"
+Directory: /tmp/carla-episode-review/build-make-asan
+"episode_concurrency" start time: Oct 23 09:47 UTC
+Output:
+----------------------------------------------------------
+Running main() from /tmp/carla-sync-review/googletest/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from episode_concurrency
+[ RUN      ] episode_concurrency.receives_real_streamed_world_state
+[       OK ] episode_concurrency.receives_real_streamed_world_state (5 ms)
+[ RUN      ] episode_concurrency.map_change_has_one_consumer
+[       OK ] episode_concurrency.map_change_has_one_consumer (9 ms)
+[ RUN      ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible
+[       OK ] episode_concurrency.new_episode_marks_map_dirty_before_state_is_visible (5 ms)
+[ RUN      ] episode_concurrency.map_change_publication_races_consumers
+[       OK ] episode_concurrency.map_change_publication_races_consumers (324 ms)
+[ RUN      ] episode_concurrency.most_recent_pending_exception_is_delivered
+[       OK ] episode_concurrency.most_recent_pending_exception_is_delivered (5 ms)
+[ RUN      ] episode_concurrency.empty_pending_exception_is_delivered
+[       OK ] episode_concurrency.empty_pending_exception_is_delivered (6 ms)
+[ RUN      ] episode_concurrency.pending_exception_publication_races_streaming
+[       OK ] episode_concurrency.pending_exception_publication_races_streaming (20 ms)
+[----------] 7 tests from episode_concurrency (377 ms total)
+
+[----------] Global test environment tear-down
+[==========] 7 tests from 1 test suite ran. (377 ms total)
+[  PASSED  ] 7 tests.
+<end of output>
+Test time =   0.45 sec
+----------------------------------------------------------
+Test Passed.
+"episode_concurrency" end time: Oct 23 09:47 UTC
+"episode_concurrency" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 23 09:47 UTC
