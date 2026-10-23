@@ -5,7 +5,8 @@ from __future__ import annotations
 import importlib
 import math
 import warnings
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
+from numbers import Real
 from typing import Any
 
 from .controls import VehicleCommand
@@ -36,20 +37,31 @@ class SessionConfig:
     no_rendering_mode: bool = False
 
     def __post_init__(self) -> None:
+        for name in ("allow_existing_synchronous", "no_rendering_mode"):
+            if not isinstance(getattr(self, name), bool):
+                raise TypeError(f"{name} must be a bool")
         for name in (
             "fixed_delta_seconds",
             "timeout_seconds",
             "max_substep_delta_time",
         ):
             value = getattr(self, name)
+            if isinstance(value, bool) or not isinstance(value, Real):
+                raise TypeError(f"{name} must be a real number")
+            value = float(value)
             if not math.isfinite(value) or value <= 0:
                 raise ValueError(f"{name} must be finite and positive")
+            object.__setattr__(self, name, value)
         if isinstance(self.max_substeps, bool) or not isinstance(
             self.max_substeps, int
         ):
             raise ValueError("max_substeps must be an integer")
         if self.max_substeps <= 0:
             raise ValueError("max_substeps must be positive")
+        if self.max_substeps >= 2**31:
+            raise ValueError(
+                "max_substeps must fit CARLA's signed 32-bit integer field"
+            )
         if self.fixed_delta_seconds > self.max_substep_delta_time * self.max_substeps:
             raise ValueError("CARLA fixed delta exceeds its physics substep budget")
 
@@ -70,14 +82,36 @@ class VehicleTelemetry:
     acceleration: tuple[float, float, float]
     angular_velocity: tuple[float, float, float]
 
+    def __post_init__(self) -> None:
+        for name in (
+            "location",
+            "rotation",
+            "velocity",
+            "acceleration",
+            "angular_velocity",
+        ):
+            values = tuple(float(value) for value in getattr(self, name))
+            if len(values) != 3:
+                raise ValueError(f"{name} must contain three components")
+            object.__setattr__(self, name, values)
+
     @property
     def speed(self) -> float:
         """Return world linear speed in metres/second."""
-        return math.sqrt(sum(value * value for value in self.velocity))
+        return math.hypot(*self.velocity)
 
     def as_dict(self) -> dict[str, Any]:
         """Return serializable feedback with explicit frame and speed."""
-        return {**asdict(self), "speed": self.speed}
+        return {
+            "frame": self.frame,
+            "elapsed_seconds": self.elapsed_seconds,
+            "location": self.location,
+            "rotation": self.rotation,
+            "velocity": self.velocity,
+            "acceleration": self.acceleration,
+            "angular_velocity": self.angular_velocity,
+            "speed": self.speed,
+        }
 
 
 def _vector(value: Any) -> tuple[float, float, float]:
@@ -104,11 +138,12 @@ class CarlaSession:
         api: Any | None = None,
         own_vehicle: bool = False,
     ) -> None:
+        if not isinstance(own_vehicle, bool):
+            raise TypeError("own_vehicle must be a bool")
         self.client = client
         self.vehicle = vehicle
         self.config = config
-        self.client.set_timeout(config.timeout_seconds)
-        self.world = client.get_world()
+        self.world: Any = None
         self._api = api
         self._own_vehicle = own_vehicle
         self._original_settings: Any = None
@@ -119,6 +154,19 @@ class CarlaSession:
         self._telemetry: VehicleTelemetry | None = None
         self.client_version = ""
         self.server_version = ""
+        try:
+            self.client.set_timeout(config.timeout_seconds)
+            self.world = client.get_world()
+        except Exception:
+            self._close_after_start_failure()
+            raise
+
+    def _close_after_start_failure(self) -> None:
+        self._failed = True
+        try:
+            self.close()
+        except Exception as error:
+            warnings.warn(str(error), stacklevel=3)
 
     @property
     def active(self) -> bool:
@@ -165,11 +213,7 @@ class CarlaSession:
             self._telemetry = self._read_snapshot()
             return self
         except Exception:
-            self._failed = True
-            try:
-                self.close()
-            except Exception as error:
-                warnings.warn(str(error), stacklevel=2)
+            self._close_after_start_failure()
             raise
 
     def _read_snapshot(self, expected_frame: int | None = None) -> VehicleTelemetry:
@@ -180,7 +224,7 @@ class CarlaSession:
         if actor is None:
             raise SynchronizationError("Vehicle disappeared from the CARLA snapshot")
         transform = actor.get_transform()
-        return VehicleTelemetry(
+        telemetry = VehicleTelemetry(
             frame=int(snapshot.frame),
             elapsed_seconds=float(snapshot.timestamp.elapsed_seconds),
             location=_vector(transform.location),
@@ -193,14 +237,32 @@ class CarlaSession:
             acceleration=_vector(actor.get_acceleration()),
             angular_velocity=_vector(actor.get_angular_velocity()),
         )
+        if not all(
+            math.isfinite(value)
+            for value in (
+                telemetry.elapsed_seconds,
+                *telemetry.location,
+                *telemetry.rotation,
+                *telemetry.velocity,
+                *telemetry.acceleration,
+                *telemetry.angular_velocity,
+            )
+        ):
+            raise SynchronizationError("CARLA snapshot contains nonfinite feedback")
+        return telemetry
 
     def snapshot(self) -> VehicleTelemetry:
         """Read frame-aligned feedback without advancing either simulator."""
         if not self.active or self._telemetry is None:
             raise RuntimeError("Start the CARLA session before reading feedback")
-        current = self._read_snapshot(self._telemetry.frame)
-        self._telemetry = current
-        return current
+        try:
+            current = self._read_snapshot(self._telemetry.frame)
+            self._telemetry = current
+            return current
+        except Exception:
+            self._failed = True
+            self._stop_after_failure()
+            raise
 
     def _apply(self, command: VehicleCommand) -> None:
         if self._api is None:
@@ -220,7 +282,7 @@ class CarlaSession:
         if not self.active or self._telemetry is None:
             raise RuntimeError("Start a healthy CARLA session before stepping")
         try:
-            self.snapshot()
+            self._read_snapshot(self._telemetry.frame)
             self._apply(command)
             previous = self._telemetry
             frame = self.world.tick(self.config.timeout_seconds)

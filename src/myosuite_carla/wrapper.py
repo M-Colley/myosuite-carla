@@ -22,6 +22,8 @@ class CarlaWrapper(gym.Wrapper):
     def __init__(
         self, env: gym.Env, bridge: CarlaBridge, *, close_session: bool = False
     ) -> None:
+        if not isinstance(close_session, bool):
+            raise TypeError("close_session must be a bool")
         super().__init__(env)
         driver = env.unwrapped
         if getattr(driver, "model", None) is not bridge.mapper.model:
@@ -45,8 +47,9 @@ class CarlaWrapper(gym.Wrapper):
         try:
             observation, info = self.env.reset(seed=seed, options=options)
             frame = self.bridge.reset(self.env.unwrapped.data)
+            feedback = {**info, "carla": frame.as_dict()}
             self._needs_reset = False
-            return observation, {**info, "carla": frame.as_dict()}
+            return observation, feedback
         except Exception:
             self.bridge.session._stop_after_failure()
             raise
@@ -81,6 +84,13 @@ class CarlaWrapper(gym.Wrapper):
         finally:
             try:
                 self.env.close()
-            finally:
+            except Exception as driver_error:
+                if self.close_session:
+                    try:
+                        self.bridge.session.close()
+                    except Exception as session_error:
+                        raise driver_error from session_error
+                raise
+            else:
                 if self.close_session:
                     self.bridge.session.close()

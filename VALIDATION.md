@@ -8,17 +8,17 @@ This record accompanies Mark Colley's standalone `myosuite-carla` repository.
 The initial offline results below were obtained before extraction from the
 MyoSuite worktree; the commands use the equivalent standalone root layout.
 
-**Current result: 170 passed, no skips, 97% statement coverage**, including an
+**Current result: 243 passed, no skips, 97% statement coverage**, including an
 actual CARLA **0.10.0 / Unreal Engine 5.5** server. Python 3.12.10, NumPy 1.26.4,
 MuJoCo 3.17.0 and the server package's `cp312-win_amd64` wheel were used. This is
 supplementary live validation; **UE5.8 runtime compatibility is still unproven**.
-See [fresh-environment test output](evidence/fresh-pc-suite.txt),
-[JUnit results](evidence/fresh-pc-suite.xml), and
+See [current JUnit results](evidence/deep-full-suite.xml),
+[extended live checks](evidence/deep-live-session.json), and
 [runtime acquisition](RUNTIME_STATUS.md).
 
-The final offline suite also passes **169 tests, 1 live test skipped** on the
+The final offline suite also passes **240 tests, 3 live tests skipped** on the
 minimum supported MuJoCo 3.6.0; see
-[minimum-version output](evidence/offline-audit-mujoco-3.6.txt). Ruff lint and
+[minimum-version results](evidence/deep-minimum.xml). Ruff lint and
 format checks, mypy and wheel/sdist builds pass.
 
 Before the live-delivery fixes, the standalone suite passed **142 tests** under
@@ -28,6 +28,87 @@ The [MuJoCo 3.6 output](evidence/offline-mujoco-3.6.txt) records the minimum-ver
 Focused input and bridge tests also pass on local Python 3.14.6. A regression
 test reproduces and guards against the NumPy/pybind enum equality failure found
 by Linux Python 3.14 CI; joint-type validation now compares builtin integers.
+
+## Deeper review, fault testing and performance
+
+The same fresh Python 3.12 environment was used for a further independent audit.
+The full live-enabled suite passed **243 tests with zero skips and 97% coverage**
+in 65.07 seconds. The minimum-version environment (Python 3.13, MuJoCo 3.6.0)
+passed **240 tests**, with the three explicit live-server tests skipped.
+Ruff lint/format, source mypy and wheel/sdist builds also pass.
+
+Confirmed fixes include:
+
+- An inherited MuJoCo joint margin generated **46.1% brake input at rest**,
+  without muscle excitation/contact. Cockpit joints now explicitly use zero
+  margin, preserving the host model's own joint settings.
+- NumPy integer quaternion arithmetic could overflow and accept a non-unit
+  quaternion. Configuration values now become finite builtin floats and
+  immutable tuples before arithmetic; later caller mutations cannot alter them.
+- Bound input readers now reject data from a different compiled model before
+  accessing arrays or native contact-force functions. Contact sums also reject
+  overflow, even when individual contact values are finite.
+- Nonfinite CARLA feedback is rejected before controls/ticking. Failed public
+  snapshot reads brake and invalidate the session. Initial world-RPC failures
+  release only explicitly owned vehicles and preserve the original error.
+- Boolean ownership/ticking flags and CARLA's signed 32-bit substep field are
+  checked before use. Failed reset feedback export leaves the wrapper guarded;
+  cleanup preserves driver failures while retaining session cleanup errors.
+- Telemetry vectors are detached immutable tuples. Primitive serializers avoid
+  recursive dataclass copying, and speed uses overflow-resistant `math.hypot`.
+
+The [extended actual-server report](evidence/deep-live-session.json) records
+**1,200 consecutive real MyoSuite muscle/contact frames**, or 24 simulated
+seconds, twice during this review. Maximum accumulated clock drift was
+**0.536 microseconds**, and maximum requested/applied control error was
+**2.96e-8**. The second-client test advanced the world independently, verified
+that public `snapshot()` detected the frame gap and invalidated the session,
+then observed full emergency braking in a subsequent streamed frame. Each
+test destroyed its vehicle and restored all recorded settings and actor IDs.
+This stress test checks timing, command delivery and finite state; it does not
+assess collision avoidance or driving policy quality.
+
+The independent [physical acceptance report](evidence/deep-live-physical.json)
+also passes acceleration, braking and steering. The [final server probe](evidence/deep-runtime-final-probe.json)
+shows no remaining vehicles and restored asynchronous settings. The server
+processes started for this review were stopped. These live runs used the
+downloaded **CARLA 0.10.0 / UE5.5** package; **UE5.8 remains untested live**.
+
+Run the repeatable CPU serialization benchmark with:
+
+```powershell
+python benchmarks/serialization.py --output artifacts/serialization.json
+```
+
+Its [recorded interleaved measurements](evidence/serialization-benchmark.json)
+alternate current functions and the previous recursive implementation under
+the same machine load, seven repetitions of 20,000 calls. Complete frame
+payload serialization measured **12.05 -> 1.02 microseconds**, approximately
+**11.8x faster**, with equal payloads. This measures serialization CPU time;
+CARLA rendering/network/physics performance is outside that measurement.
+
+Further CARLA `ue58-dev` fixes were submitted under M-Colley:
+
+- [PR #9994](https://github.com/carla-simulator/carla/pull/9994): successful
+  metadata-only wheels and generated paths with spaces. Actual CMake templates
+  build/import native fixture wheels; all three tests and Linux/Windows CI pass.
+- [PR #9995](https://github.com/carla-simulator/carla/pull/9995): invalid atomic
+  compare-exchange failure ordering, corrected without changing object layout.
+- [PR #9996](https://github.com/carla-simulator/carla/pull/9996): completed and
+  timed-out future waiters retained objects and received redundant publications.
+  Registration now lasts only for an active wait. The private class layout
+  changes, so LibCarla and consumers must be rebuilt together.
+
+Actual source-header tests passed on native MSVC and GCC. The combined future
+and atomic suites passed **170 repetitions under ThreadSanitizer** and **170
+under AddressSanitizer/UndefinedBehaviorSanitizer**, with no reports. These
+counts mean 17 tests repeated ten times per sanitizer configuration. The
+no-exception build passed 36 tests (12 repeated three times). A repeatable
+`WorldSnapshot` publication benchmark is included in PR #9996: with 256
+inactive waiters, publication measured **8.50-9.10 microseconds before** and
+**23-30 nanoseconds after**; the zero-waiter case changed from 22-23 to 26-28 ns.
+These are native primitive measurements, not end-to-end simulator FPS results.
+No full Unreal/CARLA build is claimed for these source patches.
 
 ## Fresh-PC rehearsal and independent code audit
 

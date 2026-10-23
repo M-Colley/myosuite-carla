@@ -5,7 +5,8 @@ from __future__ import annotations
 import math
 import re
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
+from numbers import Real
+from typing import TYPE_CHECKING, cast
 
 if TYPE_CHECKING:
     import mujoco
@@ -15,22 +16,35 @@ Vec3 = tuple[float, float, float]
 Quat = tuple[float, float, float, float]
 
 
-def _vector(value: tuple[float, ...], length: int, name: str) -> None:
-    if len(value) != length or not all(math.isfinite(v) for v in value):
+def _number(value: float, name: str) -> float:
+    if isinstance(value, bool) or not isinstance(value, Real):
+        raise TypeError(f"{name} must be a real number")
+    result = float(value)
+    if not math.isfinite(result):
+        raise ValueError(f"{name} must be finite")
+    return result
+
+
+def _vector(value: tuple[float, ...], length: int, name: str) -> tuple[float, ...]:
+    if len(value) != length:
         raise ValueError(f"{name} must contain {length} finite numbers")
+    return tuple(_number(component, name) for component in value)
 
 
-def _positive(value: float, name: str, *, allow_zero: bool = False) -> None:
-    if not math.isfinite(value) or value < 0 or (value == 0 and not allow_zero):
+def _positive(value: float, name: str, *, allow_zero: bool = False) -> float:
+    value = _number(value, name)
+    if value < 0 or (value == 0 and not allow_zero):
         requirement = "non-negative" if allow_zero else "positive"
         raise ValueError(f"{name} must be finite and {requirement}")
+    return value
 
 
-def _placement(position: Vec3, quaternion: Quat) -> None:
-    _vector(position, 3, "position")
-    _vector(quaternion, 4, "quaternion")
+def _placement(position: Vec3, quaternion: Quat) -> tuple[Vec3, Quat]:
+    position = cast(Vec3, _vector(position, 3, "position"))
+    quaternion = cast(Quat, _vector(quaternion, 4, "quaternion"))
     if not math.isclose(sum(v * v for v in quaternion), 1.0, abs_tol=1e-6):
         raise ValueError("quaternion must have unit length (w, x, y, z)")
+    return position, quaternion
 
 
 @dataclass(frozen=True)
@@ -58,16 +72,20 @@ class PedalConfig:
     friction: Vec3 = (1.0, 0.005, 0.0001)
 
     def __post_init__(self) -> None:
-        _placement(self.position, self.quaternion)
-        _vector(self.half_size, 3, "half_size")
-        _vector(self.friction, 3, "friction")
+        position, quaternion = _placement(self.position, self.quaternion)
+        object.__setattr__(self, "position", position)
+        object.__setattr__(self, "quaternion", quaternion)
+        object.__setattr__(self, "half_size", _vector(self.half_size, 3, "half_size"))
+        object.__setattr__(self, "friction", _vector(self.friction, 3, "friction"))
         for i, value in enumerate(self.half_size):
             _positive(value, f"half_size[{i}]")
         for i, value in enumerate(self.friction):
             _positive(value, f"friction[{i}]", allow_zero=True)
         for name in ("travel", "stiffness", "mass"):
-            _positive(getattr(self, name), name)
-        _positive(self.damping, "damping", allow_zero=True)
+            object.__setattr__(self, name, _positive(getattr(self, name), name))
+        object.__setattr__(
+            self, "damping", _positive(self.damping, "damping", allow_zero=True)
+        )
 
 
 @dataclass(frozen=True)
@@ -102,12 +120,16 @@ class SteeringConfig:
     friction: Vec3 = (1.0, 0.005, 0.0001)
 
     def __post_init__(self) -> None:
-        _placement(self.position, self.quaternion)
-        _vector(self.friction, 3, "friction")
+        position, quaternion = _placement(self.position, self.quaternion)
+        object.__setattr__(self, "position", position)
+        object.__setattr__(self, "quaternion", quaternion)
+        object.__setattr__(self, "friction", _vector(self.friction, 3, "friction"))
         for name in ("radius", "grip_radius", "angle_limit", "mass"):
-            _positive(getattr(self, name), name)
+            object.__setattr__(self, name, _positive(getattr(self, name), name))
         for name in ("stiffness", "damping"):
-            _positive(getattr(self, name), name, allow_zero=True)
+            object.__setattr__(
+                self, name, _positive(getattr(self, name), name, allow_zero=True)
+            )
         for i, value in enumerate(self.friction):
             _positive(value, f"friction[{i}]", allow_zero=True)
         if isinstance(self.segments, bool) or not isinstance(self.segments, int):
@@ -225,7 +247,9 @@ class CockpitConfig:
 
     def __post_init__(self) -> None:
         CockpitNames(self.prefix)
-        _placement(self.position, self.quaternion)
+        position, quaternion = _placement(self.position, self.quaternion)
+        object.__setattr__(self, "position", position)
+        object.__setattr__(self, "quaternion", quaternion)
         if not isinstance(self.parent_body, str) or not self.parent_body:
             raise ValueError("parent_body must be a nonempty body name")
         if not isinstance(self.throttle, PedalConfig) or not isinstance(
@@ -395,6 +419,7 @@ def add_cockpit(
                 pos=(0, 0, 0),
                 axis=(0, 1, 0),
                 limited=True,
+                margin=0,
                 range=(0, pedal.travel),
                 ref=0,
                 springref=0,
@@ -446,6 +471,7 @@ def add_cockpit(
             pos=(0, 0, 0),
             axis=(0, 1, 0),
             limited=True,
+            margin=0,
             range=(-angle, angle),
             ref=0,
             springref=0,

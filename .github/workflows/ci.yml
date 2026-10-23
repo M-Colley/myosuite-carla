@@ -46,10 +46,10 @@ jobs:
         run: python -m pytest tests --cov=myosuite_carla --cov-report=xml -q
       - name: Lint
         working-directory: bridge
-        run: python -m ruff check src tests examples
+        run: python -m ruff check src tests examples benchmarks
       - name: Check formatting
         working-directory: bridge
-        run: python -m ruff format --check src tests examples
+        run: python -m ruff format --check src tests examples benchmarks
       - name: Check package types
         working-directory: bridge
         run: python -m mypy src/myosuite_carla --ignore-missing-imports --follow-imports=skip
@@ -75,7 +75,8 @@ jobs:
         env:
           CARLA_BRIDGE_LIVE: "1"
           CARLA_LIVE_OUTPUT: artifacts/carla-live.json
-        run: python -m pytest tests/test_live_server.py -v --junitxml=live-results.xml
+          CARLA_SESSION_OUTPUT: artifacts/carla-session.json
+        run: python -m pytest tests/test_live_server.py tests/test_live_session.py -v --junitxml=live-results.xml
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -83,3 +84,4 @@ jobs:
           path: |
             live-results.xml
             artifacts/carla-live.json
+            artifacts/carla-session.json

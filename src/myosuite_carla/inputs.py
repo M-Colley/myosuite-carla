@@ -174,6 +174,11 @@ def _named_id(model: mujoco.MjModel, kind: mujoco.mjtObj, name: str) -> int:
     return index
 
 
+def _require_model(model: mujoco.MjModel, data: mujoco.MjData) -> None:
+    if data.model is not model:
+        raise ValueError("MuJoCo data must belong to the source's compiled model")
+
+
 @dataclass(frozen=True)
 class JointPosition:
     """Read the qpos address of a named scalar hinge or slide joint."""
@@ -193,6 +198,7 @@ class JointPosition:
         address = int(model.jnt_qposadr[index])
 
         def read(data: mujoco.MjData) -> float:
+            _require_model(model, data)
             return float(data.qpos[address])
 
         return read
@@ -219,6 +225,7 @@ class SensorValue:
         address = int(model.sensor_adr[index]) + self.component
 
         def read(data: mujoco.MjData) -> float:
+            _require_model(model, data)
             return float(data.sensordata[address])
 
         return read
@@ -244,6 +251,7 @@ class ContactForce:
             raise ValueError("contact-force geoms must be distinct")
 
         def read(data: mujoco.MjData) -> float:
+            _require_model(model, data)
             force: NDArray[np.float64] = np.zeros(6, dtype=np.float64)
             total = 0.0
             for index in range(data.ncon):
@@ -256,7 +264,7 @@ class ContactForce:
                 mujoco.mj_contactForce(model, data, index, force)
                 normal = _finite(float(force[0]), "contact normal force")
                 total += max(0.0, normal)
-            return total
+            return _finite(total, "total contact normal force")
 
         return read
 
@@ -273,6 +281,7 @@ class CallbackSource:
             raise TypeError("callback must be callable")
 
         def read(data: mujoco.MjData) -> float:
+            _require_model(model, data)
             return self.callback(model, data)
 
         return read

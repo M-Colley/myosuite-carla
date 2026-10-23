@@ -376,3 +376,71 @@ def test_composes_with_real_muscle_models(
     for _ in range(10):
         mujoco.mj_step(model, data)
     assert np.all(np.isfinite(data.qpos))
+
+
+@pytest.mark.parametrize("config", [PedalConfig, SteeringConfig, CockpitConfig])
+def test_numpy_integer_quaternion_cannot_overflow_to_unit_length(
+    config: type[Any],
+) -> None:
+    quaternion = tuple(np.int8(value) for value in (127, 0, 0, 0))
+    with np.errstate(over="raise"), pytest.raises(ValueError, match="unit length"):
+        config(quaternion=quaternion)
+
+
+@pytest.mark.parametrize(
+    "config, field",
+    [
+        (PedalConfig, "mass"),
+        (PedalConfig, "travel"),
+        (PedalConfig, "damping"),
+        (SteeringConfig, "radius"),
+        (SteeringConfig, "stiffness"),
+    ],
+)
+def test_boolean_mechanical_parameters_are_rejected(
+    config: type[Any], field: str
+) -> None:
+    with pytest.raises(TypeError, match="real number"):
+        config(**{field: True})
+
+
+def test_cockpit_configuration_copies_mutable_input_vectors(
+    builder_class: type[Any],
+) -> None:
+    position = [0.2, 0.3, 0.4]
+    half_size = [0.05, 0.02, 0.08]
+    config = CockpitConfig(position=position, throttle=PedalConfig(half_size=half_size))
+    builder = add_cockpit(builder_class(), config)
+    position[0] = 9.0
+    half_size[0] = 0.5
+    model, _ = builder.build()
+    np.testing.assert_allclose(model.body(config.names.root_body).pos, (0.2, 0.3, 0.4))
+    np.testing.assert_allclose(
+        model.geom("cockpit_throttle_surface").size, (0.05, 0.02, 0.08)
+    )
+
+
+def test_host_joint_limit_margin_cannot_press_released_pedals(
+    builder_class: type[Any], mujoco_module: ModuleType
+) -> None:
+    from myosuite_carla.presets import cockpit_mapper
+
+    mujoco = mujoco_module
+    source = mujoco.MjSpec.from_string(
+        '<mujoco><option timestep=".001" gravity="0 0 0"/>'
+        '<default><joint margin=".03"/></default><worldbody>'
+        '<body pos="3 0 0"><joint name="host_joint" limited="true" range="-1 1"/>'
+        '<geom size=".1" mass="1"/></body></worldbody></mujoco>'
+    )
+    config = CockpitConfig()
+    model, _ = add_cockpit(builder_class.from_spec(source), config).build()
+    data = mujoco.MjData(model)
+    for _ in range(2000):
+        mujoco.mj_step(model, data)
+    mujoco.mj_forward(model, data)
+    command = cockpit_mapper(model, config).sample(data).command
+    assert command.throttle == command.brake == command.steer == 0.0
+    assert model.joint("host_joint").margin[0] == pytest.approx(0.03)
+    for control in ("throttle", "brake", "steering"):
+        joint = model.joint(f"cockpit_{control}_joint")
+        assert joint.margin[0] == 0.0

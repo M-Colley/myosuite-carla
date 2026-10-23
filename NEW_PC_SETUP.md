@@ -16,7 +16,8 @@ and its [official Windows guide](https://github.com/carla-simulator/carla/blob/d
 
 The Python install procedure was rehearsed in a new normal virtual environment
 with a fresh MyoSuite clone on the existing PC. The updated CLI and full suite
-passed against the actual UE5.5 release: **170 tests, zero skips, 97% coverage**.
+passed against the actual UE5.5 release: **243 tests, zero skips, 97% coverage**,
+including 1,200 consecutive muscle/contact frames and competing-client checks.
 This verifies dependency isolation; it is not a claim of testing a second PC
 or performing a clean Windows installation. See [the audit record](VALIDATION.md).
 
@@ -126,7 +127,7 @@ Remove-Item Env:CARLA_BRIDGE_LIVE -ErrorAction SilentlyContinue
 
 The dependency probe must import `ModelBuilder` and `myo_sim`. The offline
 example should show pedal/wheel contact and return to released controls.
-There should be exactly **one skipped live-server test**, with every other
+There should be exactly **three skipped live-server tests**, with every other
 test passing. Extra skips can indicate missing MyoSuite/model dependencies.
 Offline success alone is not a CARLA runtime pass.
 

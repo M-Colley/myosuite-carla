@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import math
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from numbers import Integral, Real
 
 
@@ -43,4 +43,12 @@ class VehicleCommand:
 
     def as_dict(self) -> dict[str, float | bool | int]:
         """Return keyword arguments for ``carla.VehicleControl``."""
-        return asdict(self)
+        return {
+            "throttle": self.throttle,
+            "steer": self.steer,
+            "brake": self.brake,
+            "hand_brake": self.hand_brake,
+            "reverse": self.reverse,
+            "manual_gear_shift": self.manual_gear_shift,
+            "gear": self.gear,
+        }

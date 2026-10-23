@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import math
 from collections.abc import Callable
+from copy import copy
 from types import SimpleNamespace
 
 import mujoco
@@ -443,3 +444,72 @@ def test_contact_force_invalid_geoms(
 ) -> None:
     with pytest.raises(ValueError):
         ContactForce(*geoms).bind(mechanism[0])
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        JointPosition("steering"),
+        SensorValue("pedal_position"),
+        ContactForce("wheel_geom", "pedal_geom"),
+        CallbackSource(lambda model, data: 0.0),
+    ],
+)
+def test_bound_readers_reject_data_from_another_model(
+    mechanism: tuple[mujoco.MjModel, mujoco.MjData], source: object
+) -> None:
+    model, data = mechanism
+    reader = source.bind(model)
+    assert math.isfinite(reader(data))
+    unrelated = mujoco.MjData(copy(model))
+    with pytest.raises(ValueError, match="compiled model"):
+        reader(unrelated)
+
+
+@pytest.mark.parametrize("normal", [math.nan, math.inf, -math.inf, 1e308])
+def test_contact_force_rejects_nonfinite_normals_and_total_overflow(
+    monkeypatch: pytest.MonkeyPatch, normal: float
+) -> None:
+    model = mujoco.MjModel.from_xml_string(
+        '<mujoco><worldbody><geom name="floor" type="plane" size="1 1 .1"/>'
+        '<body pos="0 0 .019"><freejoint/>'
+        '<geom name="foot" type="box" size=".05 .04 .02" mass="1"/>'
+        "</body></worldbody></mujoco>"
+    )
+    data = mujoco.MjData(model)
+    mujoco.mj_forward(model, data)
+    assert data.ncon == 4
+
+    def fault(
+        model: mujoco.MjModel, data: mujoco.MjData, index: int, force: np.ndarray
+    ) -> None:
+        force[:] = 0.0
+        force[0] = normal
+
+    monkeypatch.setattr(mujoco, "mj_contactForce", fault)
+    with pytest.raises(ValueError, match="finite"):
+        ContactForce("foot", "floor").bind(model)(data)
+
+
+@pytest.mark.parametrize("gear", [-(2**31), 2**31 - 1])
+def test_signed_gear_boundaries_survive_mapping_and_export(
+    mechanism: tuple[mujoco.MjModel, mujoco.MjData], gear: int
+) -> None:
+    model, data = mechanism
+    command = (
+        ControlMapper(model, [Binding("gear", constant(gear))]).sample(data).command
+    )
+    assert command.gear == gear
+    assert command.as_dict()["gear"] == gear
+
+
+def test_calibrations_remain_finite_monotonic_at_extreme_readings() -> None:
+    readings = [-1.7e308, -1e308, -2.0, -1.0, 0.0, 1.0, 2.0, 1e308, 1.7e308]
+    for calibration in (
+        UnipolarCalibration(-1e308, 0.0),
+        UnipolarCalibration(0.0, 1e-308, exponent=1e308),
+        BipolarCalibration(-1.0, 0.0, 1.0, deadzone=0.9999999999999999),
+    ):
+        values = [calibration(reading) for reading in readings]
+        assert all(math.isfinite(value) and -1.0 <= value <= 1.0 for value in values)
+        assert values == sorted(values)
