@@ -107,6 +107,7 @@ class CarlaSession:
         self.client = client
         self.vehicle = vehicle
         self.config = config
+        self.client.set_timeout(config.timeout_seconds)
         self.world = client.get_world()
         self._api = api
         self._own_vehicle = own_vehicle

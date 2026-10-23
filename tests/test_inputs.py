@@ -78,6 +78,25 @@ def test_unipolar_deadzone_and_exponent() -> None:
     assert calibration(10.0) == 1.0
 
 
+def test_numpy_calibration_endpoints_do_not_overflow_before_saturation() -> None:
+    unipolar = UnipolarCalibration(np.int64(-(2**62)), np.int64(2**62))
+    assert unipolar(-(2**62)) == 0.0
+    assert unipolar(0) == 0.5
+    assert unipolar(2**62) == 1.0
+
+    bipolar = BipolarCalibration(
+        np.int64(-(2**62)), np.int64(2**62), np.int64(3 * 2**61)
+    )
+    assert bipolar(-(2**62)) == -1.0
+    assert bipolar(0) == -0.5
+    assert bipolar(2**62) == 0.0
+    assert bipolar(3 * 2**61) == 1.0
+
+    single_precision = UnipolarCalibration(np.float32(-3e38), np.float32(3e38))
+    assert single_precision(0) == 0.5
+    assert single_precision(single_precision.pressed) == 1.0
+
+
 def test_bipolar_asymmetry_direction_and_deadzone() -> None:
     calibration = BipolarCalibration(-2.0, 1.0, 5.0, deadzone=0.2, exponent=2.0)
     assert calibration(-20.0) == -1.0

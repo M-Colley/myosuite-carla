@@ -347,12 +347,16 @@ def add_cockpit(
         def add_sensors(
             control: str, body: mujoco.MjsBody, size: Vec3, site_type: int
         ) -> None:
-            body.add_site(
+            site = body.add_site(
                 name=names.contact_site(control),
                 type=site_type,
                 size=size,
+                pos=(0, 0, 0),
+                quat=(1, 0, 0, 0),
+                fromto=(math.nan,) * 6,
                 rgba=(0.0, 0.0, 0.0, 0.0),
             )
+            site.alt.type = mujoco.mjtOrientation.mjORIENTATION_QUAT
             for suffix, sensor_type, object_type, object_name in (
                 (
                     "position",
@@ -388,6 +392,7 @@ def add_cockpit(
             body.add_joint(
                 name=f"{config.prefix}{control}_joint",
                 type=mujoco.mjtJoint.mjJNT_SLIDE,
+                pos=(0, 0, 0),
                 axis=(0, 1, 0),
                 limited=True,
                 range=(0, pedal.travel),
@@ -399,10 +404,13 @@ def add_cockpit(
                 armature=0,
                 frictionloss=0,
             )
-            body.add_geom(
+            surface = body.add_geom(
                 name=f"{config.prefix}{control}_surface",
                 type=mujoco.mjtGeom.mjGEOM_BOX,
                 size=pedal.half_size,
+                pos=(0, 0, 0),
+                quat=(1, 0, 0, 0),
+                fromto=(math.nan,) * 6,
                 mass=pedal.mass,
                 friction=pedal.friction,
                 contype=1,
@@ -410,6 +418,7 @@ def add_cockpit(
                 condim=3,
                 rgba=(0.22, 0.24, 0.26, 1),
             )
+            surface.alt.type = mujoco.mjtOrientation.mjORIENTATION_QUAT
             add_sensors(
                 control,
                 body,
@@ -434,6 +443,7 @@ def add_cockpit(
         body.add_joint(
             name=names.steering_joint,
             type=mujoco.mjtJoint.mjJNT_HINGE,
+            pos=(0, 0, 0),
             axis=(0, 1, 0),
             limited=True,
             range=(-angle, angle),
@@ -447,6 +457,8 @@ def add_cockpit(
         )
         geom_common = dict(
             type=mujoco.mjtGeom.mjGEOM_CAPSULE,
+            pos=(0, 0, 0),
+            quat=(1, 0, 0, 0),
             friction=wheel.friction,
             contype=1,
             conaffinity=1,
@@ -455,7 +467,7 @@ def add_cockpit(
         for i in range(wheel.segments):
             a0 = 2 * math.pi * i / wheel.segments
             a1 = 2 * math.pi * (i + 1) / wheel.segments
-            body.add_geom(
+            rim = body.add_geom(
                 name=f"{config.prefix}steering_rim_{i:02d}",
                 fromto=(
                     wheel.radius * math.cos(a0),
@@ -470,9 +482,10 @@ def add_cockpit(
                 rgba=(0.12, 0.13, 0.14, 1),
                 **geom_common,
             )
+            rim.alt.type = mujoco.mjtOrientation.mjORIENTATION_QUAT
         for i in range(3):
             angle = 2 * math.pi * i / 3
-            body.add_geom(
+            spoke = body.add_geom(
                 name=f"{config.prefix}steering_spoke_{i}",
                 fromto=(
                     0,
@@ -487,6 +500,7 @@ def add_cockpit(
                 rgba=(0.4, 0.42, 0.44, 1),
                 **geom_common,
             )
+            spoke.alt.type = mujoco.mjtOrientation.mjORIENTATION_QUAT
         add_sensors(
             "steering",
             body,

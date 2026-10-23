@@ -1,0 +1,15 @@
+WARNING: Attach conflict when attaching 'MyoElbow_v0.1.7', policy is 'warning'
+njmax: parent has -1 (default), child has 1000, keeping parent value
+nconmax: parent has -1 (default), child has 400, keeping parent value
+nuser_jnt: parent has -1 (default), child has 1, keeping parent value
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+C:\Users\Mark\Desktop\myosuite-carla\test-results\fresh-pc\myosuite\myosuite\core\model_builder.py:820: UserWarning: Attach conflict when attaching 'MyoElbow_v0.1.7', policy is 'warning'
+njmax: parent has -1 (default), child has 1000, keeping parent value
+nconmax: parent has -1 (default), child has 400, keeping parent value
+nuser_jnt: parent has -1 (default), child has 1, keeping parent value
+  return spec.compile(), spec
+C:\Users\Mark\Desktop\myosuite-carla\test-results\fresh-pc\myosuite\myosuite\core\model_builder.py:820: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  return spec.compile(), spec
+{"driver": "scripted_contact_probe", "muscle_actuators": 6, "phases": [{"phase": "throttle", "command": {"throttle": 0.6907094281059163, "steer": -0.0, "brake": 0.0, "hand_brake": false, "reverse": false, "manual_gear_shift": false, "gear": 0}, "values": {"throttle": 0.6907094281059163, "brake": 0.0, "steer": -0.0}, "peak_touch_newtons": 22.535446803400212, "peak_contact_count": 1}, {"phase": "steering", "command": {"throttle": 0.0, "steer": 0.17590312111516357, "brake": 0.0, "hand_brake": false, "reverse": false, "manual_gear_shift": false, "gear": 0}, "values": {"throttle": 0.0, "brake": 0.0, "steer": 0.17590312111516357}, "peak_touch_newtons": 25.035529205297276, "peak_contact_count": 1}, {"phase": "released", "command": {"throttle": 0.0, "steer": -0.0, "brake": 0.0, "hand_brake": false, "reverse": false, "manual_gear_shift": false, "gear": 0}, "values": {"throttle": 0.0, "brake": 0.0, "steer": -0.0}}]}

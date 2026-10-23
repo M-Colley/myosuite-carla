@@ -6,7 +6,7 @@ driver to a CARLA **Unreal Engine 5.8 `ue58-dev`** vehicle. Muscles move the lim
 limbs contact passive pedals and a steering wheel; measured mechanism travel or
 contact force becomes `carla.VehicleControl`. CARLA simulates the vehicle.
 
-**Validation status:** 158 tests pass with a real CARLA 0.10.0 / UE5.5 server,
+**Validation status:** 170 tests pass with a real CARLA 0.10.0 / UE5.5 server,
 including muscle-driven acceleration, braking and steering (97% statement
 coverage). Actual **UE5.8** validation remains pending a runnable build; see
 [measured results](VALIDATION.md) and [runtime status](RUNTIME_STATUS.md).
@@ -26,6 +26,10 @@ The package provides:
   spaces, rewards and termination; feedback is added to `info["carla"]`.
 
 ## Install
+
+For a clean Windows PC, follow [NEW_PC_SETUP.md](NEW_PC_SETUP.md): prerequisites,
+private-repository authentication, pinned dependencies, UE5.8 source building
+or the tested UE5.5 download, server startup, live tests and troubleshooting.
 
 Use the Python minor version supported by your CARLA UE5.8 build. Clone this
 package and MyoSuite into separate directories. MyoSuite's **`dev` branch** is
@@ -206,7 +210,7 @@ settings on close. `own_vehicle=True` opts into actor destruction. Wrapper
 `close_session=True` transfers session cleanup to that wrapper. Context managers
 are recommended; cleanup failures are reported and failed resources can be
 retried with `close()`. Startup/frame/time/RPC/input/hook failures prevent further
-healthy stepping and queue zero throttle/full brake. Queuing a brake does not
+healthy stepping and submit zero throttle/full brake. Acknowledging a brake does not
 guarantee an immediate physical stop in a paused or unreachable server. A failed
 CARLA session must be replaced; a driver/mapper failure requires a successful
 reset. Each terminated/truncated driver episode queues braking.

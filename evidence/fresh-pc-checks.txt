@@ -1,0 +1,4 @@
+No broken requirements found.
+All checks passed!
+24 files already formatted
+Success: no issues found in 9 source files

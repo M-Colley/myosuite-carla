@@ -1,6 +1,8 @@
 include COMPATIBILITY.md
 include VALIDATION.md
 include RUNTIME_STATUS.md
+include NEW_PC_SETUP.md
+recursive-include constraints *.txt
 recursive-include examples *.py
 recursive-include tests *.py
-recursive-include evidence *.json *.txt
+recursive-include evidence *.json *.txt *.xml

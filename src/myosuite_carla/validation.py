@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib
 import importlib.metadata
 import math
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any
@@ -23,7 +24,7 @@ from .inputs import (
     SensorValue,
     UnipolarCalibration,
 )
-from .session import CarlaSession, SessionConfig
+from .session import CarlaSession, SessionConfig, VehicleTelemetry
 
 
 @dataclass
@@ -220,6 +221,27 @@ def _spawn(world: Any, blueprint_id: str) -> Any:
     raise RuntimeError("Map needs an unoccupied 35 m straight road spawn")
 
 
+def _settle_vehicle(
+    session: CarlaSession,
+    record: Callable[[str, VehicleCommand, VehicleTelemetry], None],
+) -> int:
+    command = VehicleCommand(brake=1, hand_brake=True)
+    resting_frames = 0
+    for frame in range(250):
+        telemetry = session.step(command)
+        record("settle_scalar_setup", command, telemetry)
+        if frame >= 25 and telemetry.speed < 0.05:
+            resting_frames += 1
+        else:
+            resting_frames = 0
+        if resting_frames == 10:
+            return frame + 1
+    raise RuntimeError(
+        "Validation vehicle did not settle below 0.05 m/s for 10 consecutive "
+        "frames after its initial 0.5 s within the 5 s setup limit"
+    )
+
+
 def _trial(
     client: Any,
     carla: Any,
@@ -238,6 +260,7 @@ def _trial(
     ]
     evidence["mechanism"] = getattr(driver.config.names, f"{control}_joint")
     vehicle = None
+    trial_error: Exception | None = None
     try:
         vehicle = _spawn(world, blueprint)
         evidence.update(vehicle_id=vehicle.id, blueprint=vehicle.type_id)
@@ -280,14 +303,12 @@ def _trial(
                     f"applied={actual}",
                 )
 
-            for _ in range(25):
-                command = VehicleCommand(brake=1, hand_brake=True)
-                record("settle_scalar_setup", command, session.step(command))
+            evidence["settling_frames"] = _settle_vehicle(session, record)
             if control != "throttle":
                 for _ in range(150):
                     command = VehicleCommand(throttle=0.6)
                     record("accelerate_scalar_setup", command, session.step(command))
-            excitation = 0.05 if control == "steering" else 0.01
+            excitation = {"throttle": 0.015, "brake": 0.01, "steering": 0.05}[control]
             evidence.update(
                 excitation=excitation,
                 cruising_throttle=0.3 if control == "steering" else 0,
@@ -337,16 +358,36 @@ def _trial(
                     end.speed > 1 and yaw < -2,
                     "Physical negative steering did not turn the moving car left",
                 )
-            evidence["passed"] = True
+    except Exception as error:
+        trial_error = error
+        evidence["error"] = {"type": type(error).__name__, "message": str(error)}
+        raise
     finally:
+        cleanup_errors: list[str] = []
         if vehicle is not None:
-            evidence["vehicle_destroyed"] = bool(vehicle.destroy())
-            _require(
-                evidence["vehicle_destroyed"], "Could not destroy validation vehicle"
-            )
-        evidence["settings_after"] = _settings(world)
-        evidence["settings_restored"] = evidence["settings_after"] == original
-        _require(evidence["settings_restored"], "CARLA settings were not restored")
+            evidence["vehicle_destroyed"] = False
+            try:
+                evidence["vehicle_destroyed"] = bool(vehicle.destroy())
+                _require(
+                    evidence["vehicle_destroyed"],
+                    "Could not destroy validation vehicle",
+                )
+            except Exception as error:
+                cleanup_errors.append(str(error))
+        evidence["settings_restored"] = False
+        try:
+            evidence["settings_after"] = _settings(world)
+            evidence["settings_restored"] = evidence["settings_after"] == original
+            _require(evidence["settings_restored"], "CARLA settings were not restored")
+        except Exception as error:
+            cleanup_errors.append(str(error))
+        if cleanup_errors:
+            evidence["cleanup_errors"] = cleanup_errors
+            if trial_error is None:
+                raise RuntimeError(
+                    "Validation cleanup failed: " + "; ".join(cleanup_errors)
+                )
+    evidence["passed"] = True
 
 
 def run_live_validation(

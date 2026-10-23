@@ -1,0 +1,7 @@
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.26300.
+-- Found Python3: C:/Users/Mark/Desktop/myosuite-carla/test-results/fresh-pc/.venv/Scripts/python.exe (found version "3.12.10") found components: Interpreter Development Development.SABIModule Development.Module Development.Embed
+-- Python=C:/Users/Mark/Desktop/myosuite-carla/test-results/fresh-pc/.venv/Scripts/python.exe version=3.12.10
+-- Python3=C:/Users/Mark/Desktop/myosuite-carla/test-results/fresh-pc/.venv/Scripts/python.exe version=3.12.10
+-- Configuring done (1.0s)
+-- Generating done (0.1s)
+-- Build files have been written to: C:/Users/Mark/Desktop/myosuite-carla/test-results/python-finder/build

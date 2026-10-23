@@ -8,17 +8,17 @@ This record accompanies Mark Colley's standalone `myosuite-carla` repository.
 The initial offline results below were obtained before extraction from the
 MyoSuite worktree; the commands use the equivalent standalone root layout.
 
-**Current result: 158 passed, no skips, 97% statement coverage**, including an
+**Current result: 170 passed, no skips, 97% statement coverage**, including an
 actual CARLA **0.10.0 / Unreal Engine 5.5** server. Python 3.12.10, NumPy 1.26.4,
 MuJoCo 3.17.0 and the server package's `cp312-win_amd64` wheel were used. This is
 supplementary live validation; **UE5.8 runtime compatibility is still unproven**.
-See [full test output](evidence/carla-0.10.0-suite.txt),
-[JUnit results](evidence/carla-0.10.0-suite.xml), and
+See [fresh-environment test output](evidence/fresh-pc-suite.txt),
+[JUnit results](evidence/fresh-pc-suite.xml), and
 [runtime acquisition](RUNTIME_STATUS.md).
 
-The final offline suite also passes **157 tests, 1 live test skipped** on the
+The final offline suite also passes **169 tests, 1 live test skipped** on the
 minimum supported MuJoCo 3.6.0; see
-[minimum-version output](evidence/offline-final-mujoco-3.6.txt). Ruff lint and
+[minimum-version output](evidence/offline-audit-mujoco-3.6.txt). Ruff lint and
 format checks, mypy and wheel/sdist builds pass.
 
 Before the live-delivery fixes, the standalone suite passed **142 tests** under
@@ -28,6 +28,71 @@ The [MuJoCo 3.6 output](evidence/offline-mujoco-3.6.txt) records the minimum-ver
 Focused input and bridge tests also pass on local Python 3.14.6. A regression
 test reproduces and guards against the NumPy/pybind enum equality failure found
 by Linux Python 3.14 CI; joint-type validation now compares builtin integers.
+
+## Fresh-PC rehearsal and independent code audit
+
+The [new-PC guide](NEW_PC_SETUP.md) was rehearsed in a **new standard Python
+3.12 virtual environment**, using normal `python -m pip` and a freshly cloned,
+separate MyoSuite repository at `c0af9c6`. This was dependency isolation on the
+existing Windows PC, not a separate physical PC or a clean Windows installation.
+No previous MyoSuite worktree supplied the fresh environment's imports.
+
+[constraints/windows-py312-live.txt](constraints/windows-py312-live.txt) records
+the 91 installed dependency/tool versions, excluding the two editable projects,
+the separately installed CARLA wheel and pip. The base environment uses NumPy
+1.26.4, MuJoCo 3.17.0 and Gymnasium 1.2.3. The fresh install resolved Ruff
+0.17.2 and mypy 2.4.0, and both pass. `pip check` reports no broken requirements.
+
+Independent reviews found and fixed:
+
+- `CarlaSession` configured its RPC timeout after its first `get_world` call;
+  the configured timeout now covers that initial RPC.
+- Valid NumPy calibration endpoints could retain NumPy integer arithmetic and
+  overflow for large spans; stored endpoints and shaping parameters are now
+  validated Python floats.
+- Host MJCF default joint positions, geom/site poses and alternative orientations
+  could shift cockpit pivots/surfaces/sensors or prevent composition. Generated
+  mechanisms now explicitly set their local placements and orientation mode,
+  without modifying the host's elements.
+- Vehicle destruction failures in acceptance cleanup could mask the original
+  trial exception and omit settings evidence. Both errors and cleanup outcomes
+  are retained, and successful measurements cannot pass failed cleanup.
+
+The fresh live run additionally exposed a setup assumption: a newly spawned
+car can still be bouncing after 0.5 s. Setup now waits an initial 25 frames,
+then requires 10 consecutive frames below 0.05 m/s, bounded to 250 frames / 5 s.
+The throttle fixture's previous excitation produced a marginal acceleration
+signal for a fully settled car. Excitation is now 0.015 for throttle, 0.01 for
+brake and 0.05 for steering. Real MuJoCo checks on 3.6/3.17 establish sustained
+throttle contact at that stimulus; excessive excitation that lets the finger
+bypass the pedal is excluded. Vehicle acceptance thresholds were unchanged.
+
+Regressions cover NumPy span overflow, host defaults, timeout ordering, cleanup
+error preservation, successful measurements with failed cleanup, interrupted
+rest and a bounded settling failure. The composition/calibration cases fail
+against their previous implementations.
+
+The final fresh-environment CLI [report](evidence/fresh-pc-cli.json) passes all
+three scenarios. Its measured outcomes:
+
+| Control | Actual vehicle result | Setup settling frames |
+| --- | --- | --- |
+| Throttle | 0 → 2.249 m/s; moved 2.473 m in 3 s | 35 |
+| Brake | 2.964 → 0.0002 m/s in 2 s | 75 |
+| Steering | −25.77° yaw; moved 6.727 m in 2 s | 75 |
+
+The independent full [pytest live report](evidence/fresh-pc-live.json) also
+passes all three controls. All 170 tests passed in 25.52 s; statement coverage
+was 928/960 = 97%. No tests were skipped. The final
+[server probe](evidence/fresh-pc-final-probe.json) shows zero remaining vehicles
+and restored asynchronous settings. The specific server process started for
+this rehearsal was stopped. Installation, checks, demo and CMake Python-finder
+outputs are saved alongside the reports. The finder check confirms the chosen
+Python interpreter/development components; it is not a UE5.8 engine build.
+
+This rehearsal validates the published **UE5.5** binary and the guide's Python
+setup. The UE5.8 source-build procedure was reviewed against upstream source,
+including the engine's DLSS-disabled mode; it remains unexecuted locally.
 
 ## Package verification
 
@@ -95,7 +160,7 @@ baseline is changed by this standalone package.
 indentation formatting in `myosuite/utils/examine_sim.py`; that unrelated
 automatic edit was reverted. The changed-file hooks are checked separately.
 
-## Actual live simulator results
+## Initial live simulator results before the fresh-PC audit
 
 The official release was downloaded using the `ue58-dev` repository's included
 download procedure, then started with:

@@ -26,11 +26,14 @@ def _finite(value: float, name: str) -> float:
     return result
 
 
-def _shape_parameters(deadzone: float, exponent: float) -> None:
-    if not 0.0 <= _finite(deadzone, "deadzone") < 1.0:
+def _shape_parameters(deadzone: float, exponent: float) -> tuple[float, float]:
+    deadzone = _finite(deadzone, "deadzone")
+    exponent = _finite(exponent, "exponent")
+    if not 0.0 <= deadzone < 1.0:
         raise ValueError("deadzone must be in [0, 1)")
-    if _finite(exponent, "exponent") <= 0.0:
+    if exponent <= 0.0:
         raise ValueError("exponent must be positive")
+    return deadzone, exponent
 
 
 def _shape(value: float, deadzone: float, exponent: float) -> float:
@@ -75,7 +78,14 @@ class UnipolarCalibration:
         pressed = _finite(self.pressed, "pressed")
         if released == pressed or not math.isfinite(pressed - released):
             raise ValueError("released and pressed must have a finite nonzero span")
-        _shape_parameters(self.deadzone, self.exponent)
+        deadzone, exponent = _shape_parameters(self.deadzone, self.exponent)
+        for name, value in (
+            ("released", released),
+            ("pressed", pressed),
+            ("deadzone", deadzone),
+            ("exponent", exponent),
+        ):
+            object.__setattr__(self, name, value)
 
     def __call__(self, value: float) -> float:
         """Return a saturated, calibrated reading in [0, 1]."""
@@ -117,7 +127,15 @@ class BipolarCalibration:
             raise ValueError("steering endpoint spans must be finite")
         if not isinstance(self.invert, bool):
             raise TypeError("invert must be a bool")
-        _shape_parameters(self.deadzone, self.exponent)
+        deadzone, exponent = _shape_parameters(self.deadzone, self.exponent)
+        for name, value in (
+            ("lower", lower),
+            ("neutral", neutral),
+            ("upper", upper),
+            ("deadzone", deadzone),
+            ("exponent", exponent),
+        ):
+            object.__setattr__(self, name, value)
 
     def __call__(self, value: float) -> float:
         """Return saturated steering in [-1, 1]."""

@@ -152,6 +152,52 @@ def test_independent_namespaces_compose(builder_class: type[Any]) -> None:
     assert model.nsensor == 18
 
 
+@pytest.mark.parametrize(
+    "defaults",
+    [
+        '<joint pos="1 2 3"/>',
+        '<geom pos="2 3 4" euler="10 20 30"/><site pos="3 4 5" euler="30 20 10"/>',
+        '<geom type="capsule" fromto="1 2 3 4 5 6" size=".1"/>'
+        '<site type="capsule" fromto="2 3 4 5 6 7" size=".1"/>',
+    ],
+)
+def test_host_default_placements_do_not_shift_cockpit_mechanisms(
+    builder_class: type[Any],
+    mujoco_module: ModuleType,
+    defaults: str,
+) -> None:
+    mujoco = mujoco_module
+    source = mujoco.MjSpec.from_string(
+        f"<mujoco><default>{defaults}</default><worldbody>"
+        '<body name="host"><joint name="host_joint"/>'
+        '<geom name="host_geom" size=".1 .1 .1" mass="1"/>'
+        '<site name="host_site" size=".1 .1 .1"/>'
+        "</body></worldbody></mujoco>"
+    )
+    original = source.compile()
+    reference, _ = add_cockpit(builder_class()).build()
+    model, _ = add_cockpit(builder_class.from_spec(source)).build()
+    for kind, count, fields in (
+        ("joint", reference.njnt, ("pos", "axis")),
+        ("geom", reference.ngeom, ("pos", "quat")),
+        ("site", reference.nsite, ("pos", "quat")),
+        ("body", reference.nbody, ("mass", "ipos", "iquat", "inertia")),
+    ):
+        for index in range(1 if kind == "body" else 0, count):
+            expected = getattr(reference, kind)(index)
+            actual = getattr(model, kind)(expected.name)
+            for field in fields:
+                np.testing.assert_allclose(
+                    getattr(actual, field), getattr(expected, field), atol=1e-14
+                )
+    for kind in ("joint", "geom", "site"):
+        for field in ("pos", "axis") if kind == "joint" else ("pos", "quat"):
+            np.testing.assert_array_equal(
+                getattr(getattr(model, kind)(f"host_{kind}"), field),
+                getattr(getattr(original, kind)(f"host_{kind}"), field),
+            )
+
+
 @pytest.mark.parametrize("inference", ["false", "auto", "true"])
 @pytest.mark.parametrize("groups", [(0, 5), (1, 5)])
 def test_physical_inertias_preserve_host_compiler_settings(

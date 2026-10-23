@@ -3,7 +3,7 @@
 Checked on **2026-10-23 (Europe/Berlin)**. The requested `ue58-dev` source has
 been downloaded, and actual simulator validation passes on the available
 official **CARLA 0.10.0 / UE5.5** Windows release. **No UE5.8 runtime pass is
-claimed.** See [VALIDATION.md](VALIDATION.md) for the 158-test live-enabled result
+claimed.** See [VALIDATION.md](VALIDATION.md) for the 170-test fresh-environment live result
 and measured acceleration, braking and steering.
 
 ## Downloads performed

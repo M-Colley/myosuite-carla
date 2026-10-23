@@ -53,6 +53,20 @@ def test_control_before_tick_and_coherent_feedback(simulation: Any) -> None:
     session.close()
 
 
+def test_configured_timeout_applies_to_initial_world_rpc(simulation: Any) -> None:
+    get_world = simulation.client.get_world
+    timeouts: list[float] = []
+
+    def record_world_timeout() -> Any:
+        timeouts.append(simulation.client.timeout)
+        return get_world()
+
+    simulation.client.get_world = record_world_timeout
+    session = simulation.session(SessionConfig(timeout_seconds=37.0))
+    assert timeouts == [37.0]
+    session.close()
+
+
 def test_capture_anchor_after_apply_settings_ticks(simulation: Any) -> None:
     simulation.world.settings_ticks = 3
     with simulation.session() as session:

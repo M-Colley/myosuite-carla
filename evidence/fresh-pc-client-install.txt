@@ -1,0 +1,3 @@
+Processing D:\carla-downloads\Carla-0.10.0-Win64-Shipping\Carla-0.10.0-Win64-Shipping\PythonAPI\carla\dist\carla-0.10.0-cp312-cp312-win_amd64.whl
+Installing collected packages: carla
+Successfully installed carla-0.10.0
