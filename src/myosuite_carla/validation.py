@@ -166,13 +166,33 @@ def _yaw_delta(start: float, end: float) -> float:
     return (end - start + 180) % 360 - 180
 
 
+def _select_blueprint(world: Any, blueprint_id: str | None) -> str:
+    library = world.get_blueprint_library()
+    if blueprint_id is None:
+        candidates = sorted(
+            blueprint.id
+            for blueprint in library.filter("vehicle.*")
+            if blueprint.has_attribute("number_of_wheels")
+            and int(blueprint.get_attribute("number_of_wheels")) == 4
+        )
+        _require(candidates, "CARLA has no four-wheeled vehicle blueprints")
+        return (
+            "vehicle.nissan.patrol"
+            if "vehicle.nissan.patrol" in candidates
+            else candidates[0]
+        )
+    blueprint = library.find(blueprint_id)
+    _require(
+        blueprint.id.startswith("vehicle.")
+        and blueprint.has_attribute("number_of_wheels")
+        and int(blueprint.get_attribute("number_of_wheels")) == 4,
+        "Use a four-wheeled vehicle blueprint",
+    )
+    return str(blueprint.id)
+
+
 def _spawn(world: Any, blueprint_id: str) -> Any:
     blueprint = world.get_blueprint_library().find(blueprint_id)
-    _require(
-        blueprint.has_attribute("number_of_wheels")
-        and int(blueprint.get_attribute("number_of_wheels")) == 4,
-        "Use a four-wheeled passenger vehicle blueprint",
-    )
     road_map = world.get_map()
     candidates = sorted(
         road_map.get_spawn_points(),
@@ -240,13 +260,6 @@ def _trial(
                         "steer",
                     )
                 }
-                _require(
-                    all(
-                        math.isclose(actual[name], getattr(command, name), abs_tol=1e-5)
-                        for name in actual
-                    ),
-                    "CARLA did not apply the measured controls",
-                )
                 evidence["samples"].append(
                     {
                         "phase": phase,
@@ -256,6 +269,15 @@ def _trial(
                         "mujoco_time": float(driver.data.time),
                         "physical": driver.measurement(),
                     }
+                )
+                _require(
+                    all(
+                        math.isclose(actual[name], getattr(command, name), abs_tol=1e-5)
+                        for name in actual
+                    ),
+                    "CARLA did not apply the measured controls at frame "
+                    f"{telemetry.frame}: requested={command.as_dict()}, "
+                    f"applied={actual}",
                 )
 
             for _ in range(25):
@@ -332,7 +354,8 @@ def run_live_validation(
     port: int = 2000,
     *,
     timeout: float = 15,
-    blueprint: str = "vehicle.tesla.model3",
+    blueprint: str | None = None,
+    target_ref: str = "ue58-dev",
     build_ref: str | None = None,
     build_commit: str | None = None,
 ) -> dict[str, Any]:
@@ -340,6 +363,23 @@ def run_live_validation(
 
     Build ref and commit are caller assertions. RPC version equality establishes
     a matching client/server pair, but cannot independently prove a Git branch.
+    The default blueprint is discovered from the server, preferring the Nissan
+    Patrol shared by UE5 releases. An explicit blueprint never falls back.
+
+    Args:
+        host: CARLA server hostname.
+        port: CARLA RPC port.
+        timeout: RPC and tick timeout in seconds.
+        blueprint: Explicit vehicle ID, or None to discover a four-wheel vehicle.
+        target_ref: Actual validation target; use "0.10.0" for a release trial.
+        build_ref: Caller-declared source ref; any target mismatch is recorded.
+        build_commit: Caller-declared source commit.
+
+    Returns:
+        Measured evidence for the declared target, without source verification.
+
+    Raises:
+        LiveValidationError: Validation failed; the exception retains evidence.
     """
     report: dict[str, Any] = {
         "status": "failed",
@@ -348,14 +388,19 @@ def run_live_validation(
         "port": port,
         "mujoco_version": mujoco.__version__,
         "provenance": {
-            "expected_ref": "ue58-dev",
+            "expected_ref": target_ref,
             "asserted_ref": build_ref,
+            "asserted_ref_matches_target": (
+                None if build_ref is None else build_ref == target_ref
+            ),
             "asserted_commit": build_commit,
             "source_verified": False,
         },
+        "requested_blueprint": blueprint,
         "scenarios": [],
     }
     try:
+        _require(bool(target_ref.strip()), "Validation target ref must not be empty")
         carla = importlib.import_module("carla")
         report["carla_module"] = str(getattr(carla, "__file__", None))
         try:
@@ -370,11 +415,14 @@ def run_live_validation(
             report["client_version"] == report["server_version"],
             "CARLA client/server versions differ",
         )
-        report["map"] = client.get_world().get_map().name
+        world = client.get_world()
+        report["map"] = world.get_map().name
+        selected_blueprint = _select_blueprint(world, blueprint)
+        report["selected_blueprint"] = selected_blueprint
         for control in ("throttle", "brake", "steering"):
             evidence: dict[str, Any] = {}
             report["scenarios"].append(evidence)
-            _trial(client, carla, control, blueprint, timeout, evidence)
+            _trial(client, carla, control, selected_blueprint, timeout, evidence)
         report["status"] = "passed"
         return report
     except Exception as error:

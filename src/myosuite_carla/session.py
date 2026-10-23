@@ -204,7 +204,15 @@ class CarlaSession:
     def _apply(self, command: VehicleCommand) -> None:
         if self._api is None:
             raise RuntimeError("Start the CARLA session before applying controls")
-        self.vehicle.apply_control(self._api.VehicleControl(**command.as_dict()))
+        control = self._api.VehicleControl(**command.as_dict())
+        batch_command = self._api.command.ApplyVehicleControl(self.vehicle.id, control)
+        responses = self.client.apply_batch_sync([batch_command], False)
+        if len(responses) != 1:
+            raise RuntimeError(
+                f"CARLA control batch returned {len(responses)} responses; expected one"
+            )
+        if responses[0].has_error():
+            raise RuntimeError(f"CARLA control command failed: {responses[0].error}")
 
     def step(self, command: VehicleCommand) -> VehicleTelemetry:
         """Apply a measured command, tick once, and return that frame's feedback."""
@@ -236,7 +244,7 @@ class CarlaSession:
             raise
 
     def stop(self) -> None:
-        """Queue zero throttle and full braking without consuming a simulation tick."""
+        """Submit zero throttle and full braking without consuming a simulation tick."""
         if self._api is not None:
             self._apply(VehicleCommand(brake=1.0, hand_brake=True))
 

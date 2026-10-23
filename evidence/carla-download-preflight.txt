@@ -1,0 +1,17 @@
+
+[1;36m>> using skill: download-carla[0m
+== Tools ==
+PASS  curl (resumable downloads, redirect resolution)
+PASS  tar
+PASS  git (needed only for the 'git' mode)
+PASS  docker (needed only for the 'docker' mode)
+PASS  /c/Users/Mark/miniconda3/python.exe has urllib/tarfile/zipfile
+== Network ==
+PASS  GitHub API reachable (release list + download URLs)
+PASS  downloads.carlasim.com reachable (0.9.16 + nightly)
+PASS  carla-releases Backblaze mirror reachable (all versions)
+== Destination and disk ==
+PASS  writable: /d
+PASS  62G free (enough for a release + extraction)
+== Result ==
+prerequisites OK (warnings are non-blocking)

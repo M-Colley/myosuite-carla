@@ -1,9 +1,39 @@
-# Actual CARLA UE5.8 runtime status
+# CARLA runtime acquisition and UE5.8 status
 
-Checked on **2026-10-23 (Europe/Berlin)**. No real CARLA server was started during
-this investigation, and no live CARLA UE5.8 pass is claimed. Offline MuJoCo tests,
-test doubles, an importable client, and skipped integration tests do not establish
-that the bridge works against a running simulator.
+Checked on **2026-10-23 (Europe/Berlin)**. The requested `ue58-dev` source has
+been downloaded, and actual simulator validation passes on the available
+official **CARLA 0.10.0 / UE5.5** Windows release. **No UE5.8 runtime pass is
+claimed.** See [VALIDATION.md](VALIDATION.md) for the 158-test live-enabled result
+and measured acceleration, braking and steering.
+
+## Downloads performed
+
+- Source: `D:/carla-ue58-dev`, branch `ue58-dev`, commit
+  `defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5`. Obtained with
+  `git clone --depth 1 --branch ue58-dev --filter=blob:none` from the user's
+  [CARLA repository link](https://github.com/carla-simulator/carla).
+- Runtime: [official Windows CARLA 0.10.0 ZIP](https://downloads.carlasim.com/Windows/Carla-0.10.0-Win64-Shipping.zip),
+  **10,203,028,286 bytes** compressed; 21,892,413,359 bytes expanded. Retained at
+  `D:/carla-downloads/Carla-0.10.0-Win64-Shipping.zip`.
+- Extracted package root:
+  `D:/carla-downloads/Carla-0.10.0-Win64-Shipping/Carla-0.10.0-Win64-Shipping`.
+  Its `CHANGELOG` explicitly identifies the UE5.5 migration. The matching
+  CPython 3.12 Windows wheel from that package was installed into the isolated
+  bridge environment `.venv-carla`; no client was substituted from PyPI.
+- [Download manifest](evidence/carla-download-manifest.json) preserves paths,
+  SHA-256 hashes, exact commands and the distinction between target source and
+  supplementary runtime.
+
+The repository's bundled [download procedure](https://github.com/carla-simulator/carla/blob/defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5/Skills/setup/download-carla/SKILL.md)
+was used after its preflight passed:
+
+```powershell
+python Skills/setup/download-carla/scripts/download_carla.py release --version 0.10.0 --dest D:/carla-downloads --keep-archive
+```
+
+The download script printed a Linux-launcher detection warning after extraction
+because it looks for `CarlaUE4.sh`; the Windows `CarlaUnreal.exe`, matching wheel
+and complete extracted ZIP contents were present and successfully used.
 
 ## Published runtimes checked
 
@@ -45,10 +75,10 @@ origin and naming conventions are documented in the upstream
 
 ## Available machines checked
 
-- The local Windows 11 machine had no CARLA/Unreal process or listener on TCP
+- Before downloading, the local Windows 11 machine had no CARLA/Unreal process or listener on TCP
   2000/2001. No existing simulator or engine installation was found in the
   inspected project, download, and common engine directories.
-- Its two local disks had approximately **60 GB and 66 GB free**. The official
+- Initially its two local disks had approximately **60 GB and 66 GB free**. The official
   [Windows source-build guide](https://github.com/carla-simulator/carla/blob/defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5/Docs/build_windows_ue5.md)
   says the engine alone needs about **225 GB**, before CARLA content and build
   outputs. A normal local source build does not fit the available space.
@@ -63,15 +93,24 @@ origin and naming conventions are documented in the upstream
 - Local Docker Desktop was stopped; the remote Docker socket was unavailable to
   the current account. Starting Docker would not supply a missing UE5.8 image.
 
-No large simulator download, engine build, system installation, or cloud resource
-creation was performed during this investigation.
+The downloaded `ue58-dev` tree's build preflight confirms the engine and
+`Content/Carla` assets are missing. Its bundled build guide budgets about
+**400 GB** for a full build/package, versus about **61 GB** free on D: before
+the supplementary runtime download. The Windows guide budgets **225 GB** for
+the engine alone. The setup scripts were checked directly: they select the
+correct `ue58-dev-carla` engine/content branches. Disk capacity prevents a
+normal local source build; this is not an engine-access or branch-selection
+problem. Saved [build preflight](evidence/carla-build-preflight.txt) and
+[download preflight](evidence/carla-download-preflight.txt) retain the outputs.
+The Linux-oriented preflight's D: device-class warning is not evidence that the
+Windows drive is remote. No UE engine build or cloud resource was started.
 
 ## What is needed to complete the live test
 
-Provide either an existing **UE5.8 `ue58-dev` server build** that can run on the
-local x64 machine, or the **host and RPC port of an existing running server**.
-Also provide the client wheel produced by that exact build, compatible with the
-Python version and operating system used to run the validation client. The
+Completing the target-specific test needs a runnable **UE5.8 `ue58-dev` server
+build**, or sufficient x64 build storage for its engine, content and outputs,
+plus the matching client wheel. The wheel must be compatible with the Python
+version and operating system used to run the validation client. The
 [official quick start](https://github.com/carla-simulator/carla/blob/defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5/Docs/start_quickstart.md)
 requires matching client and server builds. A shared version string alone does
 not prove a shared commit or engine version.

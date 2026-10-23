@@ -1,0 +1,27 @@
+
+[1;36m>> using skill: build-carla-ue58[0m
+== CARLA checkout ==
+  PASS checkout at /d/carla-ue58-dev (branch ue58-dev)
+  PASS flavor ue58-dev (UE 5.8): CMake build, Autoware + DLSS present
+  PASS no Makefile / Util/BuildTools (expected: CMake-only build)
+  FAIL Content/Carla missing — clone carla-content branch ue58-dev-carla into Unreal/CarlaUnreal/Content/Carla
+== Unreal Engine ==
+  FAIL CARLA_UNREAL_ENGINE_PATH unset and no engine found — needs the CarlaUnreal fork, branch ue58-dev-carla
+== Toolchain ==
+  PASS cmake 4.4.2 (>= 3.28 required)
+  PASS ninja 1.13.0.git.kitware.jobserver-pipe-1
+  PASS git-lfs present
+  WARN Python 3.13 is outside the documented 3.8-3.12 range
+== Never run the build under sudo ==
+  PASS ~/.nuget, ~/.epic, ~/.lldbinit are user-owned
+== Configure state (preset Release) ==
+  WARN not configured for preset Release — run: cmake --preset Release
+== Large maps (World Partition) ==
+  PASS OFPA mount patch present (MountExternalPackageRoots in Carla.cpp)
+== Artifacts ==
+  WARN no package built yet (target: package)
+  WARN no Python API wheel (target: carla-python-api-install)
+  WARN only 61 GB free — a full build + package needs ~400 GB
+  WARN D: — never build on network or external storage
+== Result ==
+  HARD BLOCKERS present — fix FAIL items.

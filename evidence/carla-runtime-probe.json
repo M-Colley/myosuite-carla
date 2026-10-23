@@ -1,0 +1,28 @@
+{
+  "client_version": "0.10.0",
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "spawn_points": 155,
+  "vehicle_blueprints": [
+    "vehicle.ambulance.ford",
+    "vehicle.carlacola.actors",
+    "vehicle.dodge.charger",
+    "vehicle.dodgecop.charger",
+    "vehicle.firetruck.actors",
+    "vehicle.fuso.mitsubishi",
+    "vehicle.lincoln.mkz",
+    "vehicle.mini.cooper",
+    "vehicle.nissan.patrol",
+    "vehicle.sprinter.mercedes",
+    "vehicle.taxi.ford"
+  ],
+  "settings": {
+    "synchronous_mode": false,
+    "fixed_delta_seconds": null,
+    "substepping": true,
+    "max_substeps": 10,
+    "max_substep_delta_time": 0.01,
+    "no_rendering_mode": false
+  },
+  "remaining_vehicle_ids": []
+}

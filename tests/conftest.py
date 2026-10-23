@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+from dataclasses import dataclass
 from types import SimpleNamespace
 from typing import Any
 
@@ -94,6 +95,9 @@ class FakeVehicle:
         return self.world
 
     def apply_control(self, control: Any) -> None:
+        raise AssertionError("Controls must use the synchronous command batch")
+
+    def receive_control(self, control: Any) -> None:
         self.world.events.append(("control", control.throttle, control.brake))
         self.controls.append(control)
         if self.fail_control:
@@ -104,9 +108,18 @@ class FakeVehicle:
         return True
 
 
+@dataclass
+class FakeResponse:
+    error: str = ""
+
+    def has_error(self) -> bool:
+        return bool(self.error)
+
+
 class FakeClient:
-    def __init__(self, world: FakeWorld) -> None:
+    def __init__(self, world: FakeWorld, vehicle: FakeVehicle) -> None:
         self.world = world
+        self.vehicle = vehicle
         self.client_version = "0.10.0-dev"
         self.server_version = "0.10.0-dev"
         self.timeout = 0.0
@@ -123,13 +136,36 @@ class FakeClient:
     def get_server_version(self) -> str:
         return self.server_version
 
+    def apply_batch_sync(
+        self, commands: list[Any], do_tick: bool
+    ) -> list[FakeResponse]:
+        assert do_tick is False
+        self.world.events.append(("batch", len(commands), do_tick))
+        responses = []
+        for command in commands:
+            assert command.actor_id == self.vehicle.id
+            try:
+                self.vehicle.receive_control(command.control)
+                responses.append(FakeResponse())
+            except RuntimeError as error:
+                responses.append(FakeResponse(str(error)))
+        self.world.events.append(("batch_complete", len(responses)))
+        return responses
+
 
 @pytest.fixture
 def simulation() -> Any:
     world = FakeWorld()
     vehicle = FakeVehicle(world)
-    client = FakeClient(world)
-    api = SimpleNamespace(VehicleControl=lambda **kwargs: SimpleNamespace(**kwargs))
+    client = FakeClient(world, vehicle)
+    api = SimpleNamespace(
+        VehicleControl=lambda **kwargs: SimpleNamespace(**kwargs),
+        command=SimpleNamespace(
+            ApplyVehicleControl=lambda actor_id, control: SimpleNamespace(
+                actor_id=actor_id, control=control
+            )
+        ),
+    )
 
     def session(config: SessionConfig = SessionConfig(), **kwargs: Any) -> CarlaSession:
         return CarlaSession(client, vehicle, config, api=api, **kwargs)

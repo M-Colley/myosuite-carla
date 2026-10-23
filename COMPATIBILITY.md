@@ -7,8 +7,9 @@ on MyoSuite and CARLA without modifying either project's package layout.
 The integration targets CARLA's **`ue58-dev`** branch for Unreal Engine 5.8.
 The API review was made against commit
 [`defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5`](https://github.com/carla-simulator/carla/tree/defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5)
-(2026-10-22). This records the source contract; it does not imply that a live
-CARLA server has been validated by the package's offline tests.
+(2026-10-22). Actual live validation has passed against the published CARLA
+0.10.0 / UE5.5 release; UE5.8 runtime validation remains pending. See
+[VALIDATION.md](VALIDATION.md) for measurements and build provenance.
 
 ## MyoSuite dependency
 
@@ -70,6 +71,13 @@ is discrete, sequential coupling rather than a shared continuous physics solve.
 The wrapper preserves the muscle task's action, observation, reward, and
 termination contract, adding vehicle feedback to `info["carla"]`.
 
+Controls use `client.apply_batch_sync([ApplyVehicleControl(...)], False)` and
+check the response before the single explicit `world.tick`. The acknowledged
+batch prevents asynchronous `vehicle.apply_control` delivery from racing the
+tick. The batch itself requests no tick. This ordering is supported by the
+pinned [client implementation](https://github.com/carla-simulator/carla/blob/defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5/LibCarla/source/carla/client/detail/Client.cpp)
+and was necessary to pass actual fast-loop control equality checks.
+
 Only one client may tick the CARLA world. Stop other ticking applications and
 disable the controlled vehicle's autopilot. If a Traffic Manager is in use,
 configure it for synchronous operation too. The session enables synchronous
@@ -84,6 +92,13 @@ anchors its frame/time after this call. Restoring a previous fixed delta on
 close can likewise advance frames. A queued emergency brake takes effect when
 CARLA processes the control; `stop()` does not tick or guarantee an immediate
 physical stop.
+
+Do not interleave external `vehicle.apply_control` calls while a session owns
+the vehicle. Batches bypass the Python vehicle handle's private sticky-control
+cache. After handing back a borrowed vehicle, send its first external command
+with `client.apply_batch_sync(..., False)` as well; a cached identical command
+sent with `vehicle.apply_control` can otherwise be suppressed while the final
+brake remains active.
 
 Driver `reset(seed=...)` resets the MyoSuite episode and re-anchors the clocks.
 It does not reload CARLA, reposition its vehicle, reset traffic, or seed CARLA.

@@ -6,8 +6,10 @@ driver to a CARLA **Unreal Engine 5.8 `ue58-dev`** vehicle. Muscles move the lim
 limbs contact passive pedals and a steering wheel; measured mechanism travel or
 contact force becomes `carla.VehicleControl`. CARLA simulates the vehicle.
 
-**Validation status:** the offline physics tests pass. Actual UE5.8 server
-validation remains pending a compatible runtime; see [runtime status](RUNTIME_STATUS.md).
+**Validation status:** 158 tests pass with a real CARLA 0.10.0 / UE5.5 server,
+including muscle-driven acceleration, braking and steering (97% statement
+coverage). Actual **UE5.8** validation remains pending a runnable build; see
+[measured results](VALIDATION.md) and [runtime status](RUNTIME_STATUS.md).
 
 The package provides:
 
@@ -17,7 +19,8 @@ The package provides:
   asymmetric steering calibration, deadzones, nonlinear response and saturation.
 - Throttle, brake, steering, handbrake, reverse, manual shifting and gear support;
   additional measured channels for application hooks such as lights and doors.
-- An exclusive synchronous session with matched clocks, frame-gap detection,
+- An exclusive synchronous session with acknowledged controls, matched clocks,
+  frame-gap detection,
   frame-aligned feedback, emergency-brake commands and retryable cleanup.
 - A Gymnasium wrapper preserving the muscle environment's action/observation
   spaces, rewards and termination; feedback is added to `info["carla"]`.
@@ -241,12 +244,17 @@ these are acceptance fixtures, not a trained full-body driver. Scalar setup
 commands settle/accelerate the vehicle, and the steering trial holds scalar
 cruising throttle. The tested control comes from muscle/contact motion.
 
+The runner discovers an available four-wheel vehicle, preferring the Nissan
+Patrol; `--blueprint` selects an explicit vehicle. For supplementary testing of
+the published UE5.5 release, use `--target-ref 0.10.0 --build-ref 0.10.0` and a
+separate output file. Such a pass does not establish UE5.8 compatibility.
+
 The JSON retains build declarations, client/server versions and measured
 telemetry on success or failure. A missing `carla` module writes a **failed**
 report and exits nonzero. RPC version equality does not independently prove the
 server's source branch; keep build provenance alongside the report. See
-[RUNTIME_STATUS.md](RUNTIME_STATUS.md) for the unavailable runtime investigated
-locally and [VALIDATION.md](VALIDATION.md) for actual results.
+[RUNTIME_STATUS.md](RUNTIME_STATUS.md) for the downloaded source/runtime and
+UE5.8 build constraints, and [VALIDATION.md](VALIDATION.md) for actual results.
 
 The same checks are available through explicitly enabled pytest. PowerShell:
 
@@ -259,7 +267,8 @@ python -m pytest tests/test_live_server.py -v
 ```
 
 On POSIX set the equivalent environment variables before running pytest.
-Optional `CARLA_HOST` and `CARLA_PORT` select the server. The test spawns and
+Optional `CARLA_HOST` and `CARLA_PORT` select the server; `CARLA_TARGET_REF`
+selects the report's validation target (default `ue58-dev`). The test spawns and
 destroys its own vehicles and requires an unoccupied straight road spawn with
 35 m of road ahead. Offline success does not establish live-server validation.
 

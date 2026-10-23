@@ -1,0 +1,43 @@
+........................................................................ [ 45%]
+........................................................................ [ 91%]
+..............                                                           [100%]
+============================== warnings summary ===============================
+tests/test_cockpit.py::test_composes_with_real_muscle_models[elbow]
+  C:\Users\Mark\Desktop\myosuite-carla-bridge\myosuite\core\model_builder.py:820: UserWarning: Attach conflict when attaching 'MyoElbow_v0.1.7', policy is 'warning'
+  njmax: parent has -1 (default), child has 1000, keeping parent value
+  nconmax: parent has -1 (default), child has 400, keeping parent value
+  nuser_jnt: parent has -1 (default), child has 1, keeping parent value
+    return spec.compile(), spec
+
+tests/test_cockpit.py: 3 warnings
+tests/test_live_server.py: 1 warning
+tests/test_muscle_contact.py: 9 warnings
+tests/test_validation.py: 4 warnings
+  C:\Users\Mark\Desktop\myosuite-carla-bridge\myosuite\core\model_builder.py:820: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    return spec.compile(), spec
+
+tests/test_cockpit.py::test_composes_with_real_muscle_models[arm]
+  C:\Users\Mark\Desktop\myosuite-carla-bridge\myosuite\core\model_builder.py:820: UserWarning: Attach conflict when attaching 'MyoArm_v0.01', policy is 'warning'
+  njmax: parent has -1 (default), child has 1000, keeping parent value
+  nconmax: parent has -1 (default), child has 400, keeping parent value
+  nuser_jnt: parent has -1 (default), child has 1, keeping parent value
+    return spec.compile(), spec
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+______________ coverage: platform win32, python 3.12.10-final-0 _______________
+
+Name                               Stmts   Miss  Cover   Missing
+----------------------------------------------------------------
+src\myosuite_carla\__init__.py         9      0   100%
+src\myosuite_carla\bridge.py          68      2    97%   55, 114
+src\myosuite_carla\cockpit.py        193      4    98%   186, 234, 236, 295
+src\myosuite_carla\controls.py        32      1    97%   30
+src\myosuite_carla\inputs.py         183      9    95%   22, 119, 150, 255, 273, 275, 277, 303, 312
+src\myosuite_carla\presets.py          8      0   100%
+src\myosuite_carla\session.py        192      5    97%   135, 206, 254-255, 306
+src\myosuite_carla\validation.py     183      5    97%   84, 209, 220, 408-409
+src\myosuite_carla\wrapper.py         51      4    92%   30, 50-52
+----------------------------------------------------------------
+TOTAL                                919     30    97%
+158 passed, 19 warnings in 11.18s

@@ -1,4 +1,9 @@
-"""Run actual CARLA acceptance checks and retain measured JSON evidence."""
+"""Run actual CARLA acceptance checks and retain measured JSON evidence.
+
+The default target is ue58-dev. For supplementary UE5.5 release testing, use
+--target-ref 0.10.0 --build-ref 0.10.0 and keep that evidence separate.
+Vehicle selection queries the running server; --blueprint overrides discovery.
+"""
 
 from __future__ import annotations
 
@@ -18,7 +23,16 @@ def main() -> int:
         "--port", type=int, default=int(os.environ.get("CARLA_PORT", 2000))
     )
     parser.add_argument("--timeout", type=float, default=15)
-    parser.add_argument("--blueprint", default="vehicle.tesla.model3")
+    parser.add_argument(
+        "--blueprint",
+        default=os.environ.get("CARLA_BLUEPRINT"),
+        help="Vehicle ID; default discovers a four-wheel vehicle on the server",
+    )
+    parser.add_argument(
+        "--target-ref",
+        default=os.environ.get("CARLA_TARGET_REF", "ue58-dev"),
+        help="Actual validation target, e.g. ue58-dev or 0.10.0 (UE5.5)",
+    )
     parser.add_argument("--build-ref", default=os.environ.get("CARLA_BUILD_REF"))
     parser.add_argument("--build-commit", default=os.environ.get("CARLA_BUILD_COMMIT"))
     parser.add_argument(
@@ -31,6 +45,7 @@ def main() -> int:
             args.port,
             timeout=args.timeout,
             blueprint=args.blueprint,
+            target_ref=args.target_ref,
             build_ref=args.build_ref,
             build_commit=args.build_commit,
         )

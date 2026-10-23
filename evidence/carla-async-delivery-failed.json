@@ -1,0 +1,3561 @@
+{
+  "status": "failed",
+  "started_utc": "2026-10-23T06:23:45.391694+00:00",
+  "host": "127.0.0.1",
+  "port": 2000,
+  "mujoco_version": "3.17.0",
+  "provenance": {
+    "expected_ref": "0.10.0",
+    "asserted_ref": "0.10.0",
+    "asserted_ref_matches_target": true,
+    "asserted_commit": null,
+    "source_verified": false
+  },
+  "requested_blueprint": null,
+  "scenarios": [
+    {
+      "control": "throttle",
+      "settings_before": {
+        "synchronous_mode": false,
+        "fixed_delta_seconds": null,
+        "substepping": true,
+        "max_substeps": 10,
+        "max_substep_delta_time": 0.01,
+        "no_rendering_mode": false
+      },
+      "samples": [
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687171,
+            "elapsed_seconds": 105.80478510633111,
+            "location": [
+              -114.23443603515625,
+              43.82329177856445,
+              0.03945065662264824
+            ],
+            "rotation": [
+              0.2613878846168518,
+              90.6416015625,
+              -0.08931765705347061
+            ],
+            "velocity": [
+              -0.0004934886237606406,
+              0.00032118576928041875,
+              -0.06663612276315689
+            ],
+            "acceleration": [
+              -4.898197948932648e-05,
+              0.004809214733541012,
+              -0.6828341484069824
+            ],
+            "angular_velocity": [
+              0.05793769657611847,
+              0.015332140028476715,
+              -0.0004120454250369221
+            ],
+            "speed": 0.06663872408912618
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687172,
+            "elapsed_seconds": 105.82478510588408,
+            "location": [
+              -114.23445129394531,
+              43.823307037353516,
+              0.03796340897679329
+            ],
+            "rotation": [
+              0.2628394365310669,
+              90.64159393310547,
+              -0.08962560445070267
+            ],
+            "velocity": [
+              -0.0004945113323628902,
+              0.000421214965172112,
+              -0.07654748111963272
+            ],
+            "acceleration": [
+              -5.1137059926986694e-05,
+              0.0050014592707157135,
+              -0.49556779861450195
+            ],
+            "angular_velocity": [
+              0.07744494080543518,
+              0.01638876460492611,
+              -0.00034682112163864076
+            ],
+            "speed": 0.0765502372907181
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687173,
+            "elapsed_seconds": 105.84478510543704,
+            "location": [
+              -114.23445892333984,
+              43.823326110839844,
+              0.03633204847574234
+            ],
+            "rotation": [
+              0.2647111415863037,
+              90.64158630371094,
+              -0.08993134647607803
+            ],
+            "velocity": [
+              -0.0004954890464432538,
+              0.0005172269884496927,
+              -0.08284278959035873
+            ],
+            "acceleration": [
+              -4.888512194156647e-05,
+              0.0048006027936935425,
+              -0.31476545333862305
+            ],
+            "angular_velocity": [
+              0.09881716221570969,
+              0.01622614823281765,
+              -0.00024938301066868007
+            ],
+            "speed": 0.0828458859585989
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687174,
+            "elapsed_seconds": 105.86478510499,
+            "location": [
+              -114.2344741821289,
+              43.82334899902344,
+              0.03462555631995201
+            ],
+            "rotation": [
+              0.2670155167579651,
+              90.6415786743164,
+              -0.09021420776844025
+            ],
+            "velocity": [
+              -0.0004963652463629842,
+              0.0006041770102456212,
+              -0.08575126528739929
+            ],
+            "acceleration": [
+              -4.381127655506134e-05,
+              0.004347499459981918,
+              -0.14542388916015625
+            ],
+            "angular_velocity": [
+              0.12042038887739182,
+              0.01510016992688179,
+              -0.0001434065925423056
+            ],
+            "speed": 0.08575483022376895
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687175,
+            "elapsed_seconds": 105.88478510454297,
+            "location": [
+              -114.23448181152344,
+              43.8233757019043,
+              0.03290712460875511
+            ],
+            "rotation": [
+              0.2697332799434662,
+              90.6415786743164,
+              -0.09045938402414322
+            ],
+            "velocity": [
+              -0.0004970968002453446,
+              0.0006782115087844431,
+              -0.08558307588100433
+            ],
+            "acceleration": [
+              -3.65767627954483e-05,
+              0.0037017259746789932,
+              0.008409500122070312
+            ],
+            "angular_velocity": [
+              0.14067624509334564,
+              0.013291003182530403,
+              -4.6262084651971236e-05
+            ],
+            "speed": 0.08558720671533339
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687176,
+            "elapsed_seconds": 105.90478510409594,
+            "location": [
+              -114.2344970703125,
+              43.82340621948242,
+              0.031232822686433792
+            ],
+            "rotation": [
+              0.2728158235549927,
+              90.64157104492188,
+              -0.09065742790699005
+            ],
+            "velocity": [
+              -0.0004976483178324997,
+              0.0007361736497841775,
+              -0.08270947635173798
+            ],
+            "acceleration": [
+              -2.7574598789215088e-05,
+              0.0028981082141399384,
+              0.14368009567260742
+            ],
+            "angular_velocity": [
+              0.15816539525985718,
+              0.01104340422898531,
+              3.2226365874521434e-05
+            ],
+            "speed": 0.0827142495817352
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687177,
+            "elapsed_seconds": 105.9247851036489,
+            "location": [
+              -114.23450469970703,
+              43.82344055175781,
+              0.029650665819644928
+            ],
+            "rotation": [
+              0.27618956565856934,
+              90.6415786743164,
+              -0.09080373495817184
+            ],
+            "velocity": [
+              -0.0004979917430318892,
+              0.0007755637634545565,
+              -0.0775437206029892
+            ],
+            "acceleration": [
+              -1.7171725630760193e-05,
+              0.001969505101442337,
+              0.2582874298095703
+            ],
+            "angular_velocity": [
+              0.17170053720474243,
+              0.008581969887018204,
+              8.684535714564845e-05
+            ],
+            "speed": 0.0775491979319049
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687178,
+            "elapsed_seconds": 105.94478510320187,
+            "location": [
+              -114.2345199584961,
+              43.8234748840332,
+              0.02820003777742386
+            ],
+            "rotation": [
+              0.2797614634037018,
+              90.6415786743164,
+              -0.0908980518579483
+            ],
+            "velocity": [
+              -0.0004981072270311415,
+              0.0007946081459522247,
+              -0.07052292674779892
+            ],
+            "acceleration": [
+              -5.776062607765198e-06,
+              0.0009522177278995514,
+              0.3510398864746094
+            ],
+            "angular_velocity": [
+              0.18037185072898865,
+              0.0060976846143603325,
+              0.00011633509711828083
+            ],
+            "speed": 0.07052916212454709
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687179,
+            "elapsed_seconds": 105.96478510275483,
+            "location": [
+              -114.23452758789062,
+              43.823509216308594,
+              0.02691146358847618
+            ],
+            "rotation": [
+              0.28342491388320923,
+              90.64158630371094,
+              -0.09094348549842834
+            ],
+            "velocity": [
+              -0.0004979841760359704,
+              0.0007923548691906035,
+              -0.06209130212664604
+            ],
+            "acceleration": [
+              6.154179573059082e-06,
+              -0.00011266395449638367,
+              0.4215812683105469
+            ],
+            "angular_velocity": [
+              0.18358516693115234,
+              0.0037470681127160788,
+              0.0001222098944708705
+            ],
+            "speed": 0.06209835436032707
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687180,
+            "elapsed_seconds": 105.9847851023078,
+            "location": [
+              -114.23453521728516,
+              43.823543548583984,
+              0.025806697085499763
+            ],
+            "rotation": [
+              0.28706634044647217,
+              90.64159393310547,
+              -0.09094573557376862
+            ],
+            "velocity": [
+              -0.0004976218333467841,
+              0.0007687477627769113,
+              -0.05268493667244911
+            ],
+            "acceleration": [
+              1.8116086721420288e-05,
+              -0.001180354505777359,
+              0.4703183174133301
+            ],
+            "angular_velocity": [
+              0.18106800317764282,
+              0.0016447631642222404,
+              0.00010804566409206018
+            ],
+            "speed": 0.05269289470879135
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687181,
+            "elapsed_seconds": 106.00478510186076,
+            "location": [
+              -114.23455047607422,
+              43.823577880859375,
+              0.024899067357182503
+            ],
+            "rotation": [
+              0.29057151079177856,
+              90.6416015625,
+              -0.09091238677501678
+            ],
+            "velocity": [
+              -0.0004970298032276332,
+              0.0007246366003528237,
+              -0.042719125747680664
+            ],
+            "acceleration": [
+              2.960115671157837e-05,
+              -0.0022055581212043762,
+              0.4982905387878418
+            ],
+            "angular_velocity": [
+              0.17286594212055206,
+              -0.0001282403973164037,
+              7.854017894715071e-05
+            ],
+            "speed": 0.04272816215886216
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687182,
+            "elapsed_seconds": 106.02478510141373,
+            "location": [
+              -114.23455810546875,
+              43.8236083984375,
+              0.024194058030843735
+            ],
+            "rotation": [
+              0.293831467628479,
+              90.64159393310547,
+              -0.09085185825824738
+            ],
+            "velocity": [
+              -0.0004962274106219411,
+              0.0006617449689656496,
+              -0.03257739916443825
+            ],
+            "acceleration": [
+              4.0121376514434814e-05,
+              -0.0031445808708667755,
+              0.5070862770080566
+            ],
+            "angular_velocity": [
+              0.1593143343925476,
+              -0.0015284096589311957,
+              3.897757414961234e-05
+            ],
+            "speed": 0.03258789782060429
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687183,
+            "elapsed_seconds": 106.04478510096669,
+            "location": [
+              -114.23456573486328,
+              43.82363510131836,
+              0.023690061643719673
+            ],
+            "rotation": [
+              0.29674777388572693,
+              90.6416015625,
+              -0.0907728523015976
+            ],
+            "velocity": [
+              -0.0004952424787916243,
+              0.000582568405661732,
+              -0.022603310644626617
+            ],
+            "acceleration": [
+              4.924647510051727e-05,
+              -0.0039588287472724915,
+              0.4987044334411621
+            ],
+            "angular_velocity": [
+              0.14099694788455963,
+              -0.0025477700401097536,
+              -5.107754532218678e-06
+            ],
+            "speed": 0.022616239810312543
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687184,
+            "elapsed_seconds": 106.06478510051966,
+            "location": [
+              -114.23457336425781,
+              43.82365798950195,
+              0.02337927743792534
+            ],
+            "rotation": [
+              0.2992369532585144,
+              90.64159393310547,
+              -0.09068385511636734
+            ],
+            "velocity": [
+              -0.0004941101069562137,
+              0.0004902325454168022,
+              -0.01309401448816061
+            ],
+            "acceleration": [
+              5.661696195602417e-05,
+              -0.004616793245077133,
+              0.4754648208618164
+            ],
+            "angular_velocity": [
+              0.1187099739909172,
+              -0.0031976953614503145,
+              -4.897146936855279e-05
+            ],
+            "speed": 0.01311250121687476
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687185,
+            "elapsed_seconds": 106.08478510007262,
+            "location": [
+              -114.23458862304688,
+              43.82367706298828,
+              0.023248692974448204
+            ],
+            "rotation": [
+              0.3012337386608124,
+              90.6416015625,
+              -0.09059266000986099
+            ],
+            "velocity": [
+              -0.0004928706330247223,
+              0.000388328597182408,
+              -0.0042966268956661224
+            ],
+            "acceleration": [
+              6.197579205036163e-05,
+              -0.005095196887850761,
+              0.43986940383911133
+            ],
+            "angular_velocity": [
+              0.0933983325958252,
+              -0.003495994955301285,
+              -8.91729214345105e-05
+            ],
+            "speed": 0.004342202579434698
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687186,
+            "elapsed_seconds": 106.10478509962559,
+            "location": [
+              -114.2345962524414,
+              43.823692321777344,
+              0.023281119763851166
+            ],
+            "rotation": [
+              0.3026931881904602,
+              90.64155578613281,
+              -0.09048273414373398
+            ],
+            "velocity": [
+              -0.0003914521657861769,
+              0.00028182112146168947,
+              0.003593921661376953
+            ],
+            "acceleration": [
+              0.005070922896265984,
+              -0.005325375124812126,
+              0.3945274353027344
+            ],
+            "angular_velocity": [
+              0.06613097339868546,
+              -0.005824495572596788,
+              -0.004301552660763264
+            ],
+            "speed": 0.003626145453607052
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687187,
+            "elapsed_seconds": 106.12478509917855,
+            "location": [
+              -114.2345962524414,
+              43.823699951171875,
+              0.023456230759620667
+            ],
+            "rotation": [
+              0.303591787815094,
+              90.64156341552734,
+              -0.09028445929288864
+            ],
+            "velocity": [
+              -0.0002855092170648277,
+              0.00017354864394292235,
+              0.01043467503041029
+            ],
+            "acceleration": [
+              0.005297146737575531,
+              -0.0054136235266923904,
+              0.3420376777648926
+            ],
+            "angular_velocity": [
+              0.037959326058626175,
+              -0.00893467292189598,
+              0.00037854776019230485
+            ],
+            "speed": 0.010440022875219737
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687188,
+            "elapsed_seconds": 106.14478509873152,
+            "location": [
+              -114.2345962524414,
+              43.823699951171875,
+              0.023456230759620667
+            ],
+            "rotation": [
+              0.303591787815094,
+              90.64156341552734,
+              -0.09028445929288864
+            ],
+            "velocity": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "acceleration": [
+              0.014275461435317993,
+              -0.00867743231356144,
+              -0.5217337608337402
+            ],
+            "angular_velocity": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "speed": 0.0
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687189,
+            "elapsed_seconds": 106.16478509828448,
+            "location": [
+              -114.23460388183594,
+              43.82370376586914,
+              0.0238512996584177
+            ],
+            "rotation": [
+              0.3036203384399414,
+              90.6415786743164,
+              -0.09014200419187546
+            ],
+            "velocity": [
+              1.984404036647902e-07,
+              -1.77107795025222e-05,
+              0.006552362348884344
+            ],
+            "acceleration": [
+              9.922020581143443e-06,
+              -0.0008855389896780252,
+              0.3276181221008301
+            ],
+            "angular_velocity": [
+              -0.02041126973927021,
+              0.00044731638627126813,
+              -2.723620673350524e-05
+            ],
+            "speed": 0.006552386287618148
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687190,
+            "elapsed_seconds": 106.18478509783745,
+            "location": [
+              -114.23460388183594,
+              43.82369613647461,
+              0.024067755788564682
+            ],
+            "rotation": [
+              0.3029242157936096,
+              90.6415786743164,
+              -0.09016439318656921
+            ],
+            "velocity": [
+              8.734907055440999e-07,
+              -7.795904093654826e-05,
+              0.012122048996388912
+            ],
+            "acceleration": [
+              3.375251617399044e-05,
+              -0.0030124131590127945,
+              0.2784843444824219
+            ],
+            "angular_velocity": [
+              -0.03947753086686134,
+              0.0008148347260430455,
+              -3.3852462365757674e-05
+            ],
+            "speed": 0.01212229970945708
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687191,
+            "elapsed_seconds": 106.20478509739041,
+            "location": [
+              -114.23460388183594,
+              43.82368850708008,
+              0.02438030205667019
+            ],
+            "rotation": [
+              0.3018761873245239,
+              90.64157104492188,
+              -0.09019671380519867
+            ],
+            "velocity": [
+              1.6519012433491298e-06,
+              -0.0001474324963055551,
+              0.016648273915052414
+            ],
+            "acceleration": [
+              3.892052700393833e-05,
+              -0.0034736727830022573,
+              0.22631120681762695
+            ],
+            "angular_velocity": [
+              -0.05654090270400047,
+              0.001094060717150569,
+              -2.509342084522359e-05
+            ],
+            "speed": 0.01664892679485255
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687192,
+            "elapsed_seconds": 106.22478509694338,
+            "location": [
+              -114.23460388183594,
+              43.82367706298828,
+              0.02476767636835575
+            ],
+            "rotation": [
+              0.300523042678833,
+              90.64157104492188,
+              -0.09023680537939072
+            ],
+            "velocity": [
+              2.3866714400355704e-06,
+              -0.00021301140077412128,
+              0.020110663026571274
+            ],
+            "acceleration": [
+              3.6738514609169215e-05,
+              -0.0032789455726742744,
+              0.17311954498291016
+            ],
+            "angular_velocity": [
+              -0.07117141783237457,
+              0.0012907402124255896,
+              -6.114619736763416e-06
+            ],
+            "speed": 0.02011179124099495
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687193,
+            "elapsed_seconds": 106.24478509649634,
+            "location": [
+              -114.23460388183594,
+              43.823665618896484,
+              0.02520875073969364
+            ],
+            "rotation": [
+              0.2989179491996765,
+              90.6415786743164,
+              -0.09028247743844986
+            ],
+            "velocity": [
+              3.0176170184859075e-06,
+              -0.00026932425680570304,
+              0.02252516709268093
+            ],
+            "acceleration": [
+              3.154727164655924e-05,
+              -0.002815643325448036,
+              0.12072515487670898
+            ],
+            "angular_velocity": [
+              -0.08307616412639618,
+              0.0014107112074270844,
+              1.9003782654181123e-05
+            ],
+            "speed": 0.02252677733752683
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687194,
+            "elapsed_seconds": 106.26478509604931,
+            "location": [
+              -114.23460388183594,
+              43.82365036010742,
+              0.025683194398880005
+            ],
+            "rotation": [
+              0.29711827635765076,
+              90.64157104492188,
+              -0.09033161401748657
+            ],
+            "velocity": [
+              3.5196978842577664e-06,
+              -0.0003141355118714273,
+              0.023939022794365883
+            ],
+            "acceleration": [
+              2.5104047381319106e-05,
+              -0.002240561880171299,
+              0.07069277763366699
+            ],
+            "angular_velocity": [
+              -0.09206429123878479,
+              0.0014573236694559455,
+              4.7243331209756434e-05
+            ],
+            "speed": 0.023941084057687554
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "settle_scalar_setup",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 1.0,
+            "hand_brake": true,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 1.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687195,
+            "elapsed_seconds": 106.28478509560227,
+            "location": [
+              -114.23460388183594,
+              43.823631286621094,
+              0.026172015815973282
+            ],
+            "rotation": [
+              0.2951839864253998,
+              90.6415786743164,
+              -0.09038230776786804
+            ],
+            "velocity": [
+              3.883666067849845e-06,
+              -0.00034662033431231976,
+              0.02442576363682747
+            ],
+            "acceleration": [
+              1.819840690586716e-05,
+              -0.0016242414712905884,
+              0.024337053298950195
+            ],
+            "angular_velocity": [
+              -0.09804095327854156,
+              0.001444617286324501,
+              7.572556933155283e-05
+            ],
+            "speed": 0.02442822322603885
+          },
+          "mujoco_time": 0.0,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 247.13957673032394
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687196,
+            "elapsed_seconds": 106.30478509515524,
+            "location": [
+              -114.23460388183594,
+              43.823612213134766,
+              0.026658013463020325
+            ],
+            "rotation": [
+              0.2931753695011139,
+              90.6415786743164,
+              -0.09043280780315399
+            ],
+            "velocity": [
+              4.108772827748908e-06,
+              -0.00036671137786470354,
+              0.024079579859972
+            ],
+            "acceleration": [
+              1.1255338904447854e-05,
+              -0.0010045524686574936,
+              -0.017309188842773438
+            ],
+            "angular_velocity": [
+              -0.10100739449262619,
+              0.0013825605856254697,
+              0.00010251557250740007
+            ],
+            "speed": 0.024082372398695248
+          },
+          "mujoco_time": 0.020000000000000014,
+          "physical": {
+            "travel": 0.0,
+            "contact_newtons": 0.0,
+            "muscle_newtons": 33.0277377211971
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.0393983691505791,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.03939836844801903,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687197,
+            "elapsed_seconds": 106.3247850947082,
+            "location": [
+              -114.23460388183594,
+              43.8235969543457,
+              0.02712610550224781
+            ],
+            "rotation": [
+              0.2911514639854431,
+              90.6415786743164,
+              -0.09048151969909668
+            ],
+            "velocity": [
+              4.199696832074551e-06,
+              -0.0003748265444301069,
+              0.023010091856122017
+            ],
+            "acceleration": [
+              4.546192940324545e-06,
+              -0.0004057586193084717,
+              -0.05347442626953125
+            ],
+            "angular_velocity": [
+              -0.10104965418577194,
+              0.0012723300606012344,
+              0.00012659082130994648
+            ],
+            "speed": 0.02301314493508081
+          },
+          "mujoco_time": 0.04000000000000003,
+          "physical": {
+            "travel": 0.002363902149034746,
+            "contact_newtons": 8.572441731734774,
+            "muscle_newtons": 34.3865147864323
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.14395326198910358,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.14395326375961304,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687198,
+            "elapsed_seconds": 106.34478509426117,
+            "location": [
+              -114.23460388183594,
+              43.823577880859375,
+              0.027563562616705894
+            ],
+            "rotation": [
+              0.28916817903518677,
+              90.6415786743164,
+              -0.09052705764770508
+            ],
+            "velocity": [
+              4.165124209976057e-06,
+              -0.00037174089811742306,
+              0.021336698904633522
+            ],
+            "acceleration": [
+              -1.7286220099776983e-06,
+              0.00015428289771080017,
+              -0.08366966247558594
+            ],
+            "angular_velocity": [
+              -0.09833696484565735,
+              0.0011297253658995032,
+              0.00014650417142547667
+            ],
+            "speed": 0.0213399374129959
+          },
+          "mujoco_time": 0.060000000000000046,
+          "physical": {
+            "travel": 0.008637195719346215,
+            "contact_newtons": 6.664490234011422,
+            "muscle_newtons": 40.44905695557666
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24047977814719942,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24047978222370148,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687199,
+            "elapsed_seconds": 106.36478509381413,
+            "location": [
+              -114.23460388183594,
+              43.82356262207031,
+              0.02796012908220291
+            ],
+            "rotation": [
+              0.2872771918773651,
+              90.64158630371094,
+              -0.090568408370018
+            ],
+            "velocity": [
+              4.01671286454075e-06,
+              -0.0003584947844501585,
+              0.01918407343327999
+            ],
+            "acceleration": [
+              -7.420574547722936e-06,
+              0.0006623063236474991,
+              -0.10763120651245117
+            ],
+            "angular_velocity": [
+              -0.09311580657958984,
+              0.0009664994431659579,
+              0.00016150115698110312
+            ],
+            "speed": 0.019187423176079153
+          },
+          "mujoco_time": 0.08000000000000006,
+          "physical": {
+            "travel": 0.014428786688831964,
+            "contact_newtons": 6.741571433123482,
+            "muscle_newtons": 41.1263717417258
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.30097640289909455,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.30097639560699463,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687200,
+            "elapsed_seconds": 106.3847850933671,
+            "location": [
+              -114.23460388183594,
+              43.823543548583984,
+              0.02830805815756321
+            ],
+            "rotation": [
+              0.2855238914489746,
+              90.6415786743164,
+              -0.0906047597527504
+            ],
+            "velocity": [
+              3.768556325667305e-06,
+              -0.0003363462456036359,
+              0.016677187755703926
+            ],
+            "acceleration": [
+              -1.2407821486704051e-05,
+              0.0011074263602495193,
+              -0.12534427642822266
+            ],
+            "angular_velocity": [
+              -0.08569654822349548,
+              0.0007909830892458558,
+              0.00017127985483966768
+            ],
+            "speed": 0.016680579559414276
+          },
+          "mujoco_time": 0.10000000000000007,
+          "physical": {
+            "travel": 0.018058584173945673,
+            "contact_newtons": 7.409875284929084,
+            "muscle_newtons": 42.01044383912838
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.32491298592469625,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.32491299510002136,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687201,
+            "elapsed_seconds": 106.40478509292006,
+            "location": [
+              -114.23460388183594,
+              43.8236198425293,
+              0.028601529076695442
+            ],
+            "rotation": [
+              0.28457891941070557,
+              90.64158630371094,
+              -0.09063427150249481
+            ],
+            "velocity": [
+              -6.0754686273867264e-05,
+              0.0054224394261837006,
+              0.013937082141637802
+            ],
+            "acceleration": [
+              -0.0032261621672660112,
+              0.28793928027153015,
+              -0.13700532913208008
+            ],
+            "angular_velocity": [
+              -0.03493307903409004,
+              0.0009933692635968328,
+              0.0002701224002521485
+            ],
+            "speed": 0.014954892145558757
+          },
+          "mujoco_time": 0.12000000000000009,
+          "physical": {
+            "travel": 0.019494779155481774,
+            "contact_newtons": 8.212787830982876,
+            "muscle_newtons": 43.033114204853256
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.3244744470295988,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.3244744539260864,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687202,
+            "elapsed_seconds": 106.42478509247303,
+            "location": [
+              -114.23461151123047,
+              43.823814392089844,
+              0.028837377205491066
+            ],
+            "rotation": [
+              0.28457891941070557,
+              90.64158630371094,
+              -0.09063427150249481
+            ],
+            "velocity": [
+              -0.00012509171210695058,
+              0.011164539493620396,
+              0.011070298962295055
+            ],
+            "acceleration": [
+              -0.0032168515026569366,
+              0.2871050238609314,
+              -0.1433391571044922
+            ],
+            "angular_velocity": [
+              0.009503936395049095,
+              0.0011349065462127328,
+              0.00036883787834085524
+            ],
+            "speed": 0.015723043889642945
+          },
+          "mujoco_time": 0.1400000000000001,
+          "physical": {
+            "travel": 0.01946846682177593,
+            "contact_newtons": 8.578100441464944,
+            "muscle_newtons": 43.647348886633985
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.311640754167667,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.31164073944091797,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687203,
+            "elapsed_seconds": 106.444785092026,
+            "location": [
+              -114.23461151123047,
+              43.824119567871094,
+              0.0290148314088583
+            ],
+            "rotation": [
+              0.28526926040649414,
+              90.6416015625,
+              -0.09067215025424957
+            ],
+            "velocity": [
+              -0.00018442670989315957,
+              0.01646016165614128,
+              0.008182897232472897
+            ],
+            "acceleration": [
+              -0.0029667499475181103,
+              0.26478111743927,
+              -0.14437007904052734
+            ],
+            "angular_velocity": [
+              0.04387691244482994,
+              0.001186382258310914,
+              0.000460620824014768
+            ],
+            "speed": 0.018382892647100954
+          },
+          "mujoco_time": 0.16000000000000011,
+          "physical": {
+            "travel": 0.01869844525006002,
+            "contact_newtons": 8.552874911618648,
+            "muscle_newtons": 43.82234210700942
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.29435372922326725,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.294353723526001,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687204,
+            "elapsed_seconds": 106.46478509157896,
+            "location": [
+              -114.234619140625,
+              43.824527740478516,
+              0.029135094955563545
+            ],
+            "rotation": [
+              0.28650957345962524,
+              90.64160919189453,
+              -0.09068145602941513
+            ],
+            "velocity": [
+              -0.00023734799469821155,
+              0.02118327096104622,
+              0.005369739606976509
+            ],
+            "acceleration": [
+              -0.0026460643857717514,
+              0.2361554503440857,
+              -0.14065790176391602
+            ],
+            "angular_velocity": [
+              0.067562036216259,
+              0.0011476143263280392,
+              0.0005433107144199312
+            ],
+            "speed": 0.02185455115362527
+          },
+          "mujoco_time": 0.18000000000000013,
+          "physical": {
+            "travel": 0.017661223753396033,
+            "contact_newtons": 8.322360156194506,
+            "muscle_newtons": 43.67187374686108
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.2772059672495554,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.2772059738636017,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687205,
+            "elapsed_seconds": 106.48478509113193,
+            "location": [
+              -114.234619140625,
+              43.82502365112305,
+              0.029201067984104156
+            ],
+            "rotation": [
+              0.28807777166366577,
+              90.64163208007812,
+              -0.09068512171506882
+            ],
+            "velocity": [
+              -0.0002842692192643881,
+              0.025370793417096138,
+              0.00271295546554029
+            ],
+            "acceleration": [
+              -0.0023460611701011658,
+              0.20937609672546387,
+              -0.13283920288085938
+            ],
+            "angular_velocity": [
+              0.08160153776407242,
+              0.0010313598904758692,
+              0.0006178414914757013
+            ],
+            "speed": 0.02551701579260386
+          },
+          "mujoco_time": 0.20000000000000015,
+          "physical": {
+            "travel": 0.016632358034973323,
+            "contact_newtons": 8.02432081900372,
+            "muscle_newtons": 43.34146922668696
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.26249431027952147,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.262494295835495,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687206,
+            "elapsed_seconds": 106.50478509068489,
+            "location": [
+              -114.23462677001953,
+              43.82559585571289,
+              0.029217053204774857
+            ],
+            "rotation": [
+              0.2898065149784088,
+              90.64164733886719,
+              -0.09068387746810913
+            ],
+            "velocity": [
+              -0.0003263292892370373,
+              0.02912435680627823,
+              0.00028001784812659025
+            ],
+            "acceleration": [
+              -0.002103002741932869,
+              0.18767821788787842,
+              -0.12164688110351562
+            ],
+            "angular_velocity": [
+              0.08770589530467987,
+              0.0008611192461103201,
+              0.0006846547476015985
+            ],
+            "speed": 0.02912753096607552
+          },
+          "mujoco_time": 0.22000000000000017,
+          "physical": {
+            "travel": 0.015749658616771287,
+            "contact_newtons": 7.728760600797319,
+            "muscle_newtons": 42.944560352973916
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.2512141832504547,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.2512141764163971,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687207,
+            "elapsed_seconds": 106.52478509023786,
+            "location": [
+              -114.23463439941406,
+              43.826236724853516,
+              0.02918844297528267
+            ],
+            "rotation": [
+              0.2915650010108948,
+              90.64166259765625,
+              -0.09067821502685547
+            ],
+            "velocity": [
+              -0.0003648398269433528,
+              0.03256107121706009,
+              -0.0018767928704619408
+            ],
+            "acceleration": [
+              -0.0019255280494689941,
+              0.17183566093444824,
+              -0.10784053802490234
+            ],
+            "angular_velocity": [
+              0.0877319723367691,
+              0.0006475614500232041,
+              0.0007462496287189424
+            ],
+            "speed": 0.03261715527725249
+          },
+          "mujoco_time": 0.24000000000000019,
+          "physical": {
+            "travel": 0.01507285099502728,
+            "contact_newtons": 7.5684883870346065,
+            "muscle_newtons": 42.51128082295675
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24394315789238177,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24394315481185913,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687208,
+            "elapsed_seconds": 106.54478508979082,
+            "location": [
+              -114.2346420288086,
+              43.82694625854492,
+              0.029121415689587593
+            ],
+            "rotation": [
+              0.29325902462005615,
+              90.64167022705078,
+              -0.09066876024007797
+            ],
+            "velocity": [
+              -0.0004011431010439992,
+              0.03580070286989212,
+              -0.003720092587172985
+            ],
+            "acceleration": [
+              -0.0018151625990867615,
+              0.16198158264160156,
+              -0.09216499328613281
+            ],
+            "angular_velocity": [
+              0.08349964767694473,
+              0.0004193265922367573,
+              0.0008037608931772411
+            ],
+            "speed": 0.03599569877947859
+          },
+          "mujoco_time": 0.2600000000000002,
+          "physical": {
+            "travel": 0.014636589473542906,
+            "contact_newtons": 7.429969036547302,
+            "muscle_newtons": 42.065009701053675
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24023970257559174,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.2402397096157074,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687209,
+            "elapsed_seconds": 106.56478508934379,
+            "location": [
+              -114.23464965820312,
+              43.82771682739258,
+              0.02902265079319477
+            ],
+            "rotation": [
+              0.29482656717300415,
+              90.64169311523438,
+              -0.09065615385770798
+            ],
+            "velocity": [
+              -0.00043634380563162267,
+              0.038941867649555206,
+              -0.0052271937020123005
+            ],
+            "acceleration": [
+              -0.001760035753250122,
+              0.1570582389831543,
+              -0.07535505294799805
+            ],
+            "angular_velocity": [
+              0.07654333859682083,
+              0.0001943034294527024,
+              0.0008583521703258157
+            ],
+            "speed": 0.03929354916459627
+          },
+          "mujoco_time": 0.2800000000000002,
+          "physical": {
+            "travel": 0.014414382154535504,
+            "contact_newtons": 7.33443291212857,
+            "muscle_newtons": 41.6618146298018
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.2391111892228434,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.23911118507385254,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687210,
+            "elapsed_seconds": 106.58478508889675,
+            "location": [
+              -114.23465728759766,
+              43.82855224609375,
+              0.028899062424898148
+            ],
+            "rotation": [
+              0.29623109102249146,
+              90.64170837402344,
+              -0.09064099937677383
+            ],
+            "velocity": [
+              -0.00047120783710852265,
+              0.04205289110541344,
+              -0.006388883572071791
+            ],
+            "acceleration": [
+              -0.0017432011663913727,
+              0.15555131435394287,
+              -0.05808448791503906
+            ],
+            "angular_velocity": [
+              0.06803824752569199,
+              -2.560147004260216e-05,
+              0.0009115105494856834
+            ],
+            "speed": 0.04253804791533107
+          },
+          "mujoco_time": 0.3000000000000002,
+          "physical": {
+            "travel": 0.014346671353370604,
+            "contact_newtons": 7.280663413378287,
+            "muscle_newtons": 41.330331083940386
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.2395040746289006,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.23950406908988953,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687211,
+            "elapsed_seconds": 106.60478508844972,
+            "location": [
+              -114.23467254638672,
+              43.829444885253906,
+              0.02875753678381443
+            ],
+            "rotation": [
+              0.2974541187286377,
+              90.64173126220703,
+              -0.09062372893095016
+            ],
+            "velocity": [
+              -0.0005061808624304831,
+              0.04517354816198349,
+              -0.007208280265331268
+            ],
+            "acceleration": [
+              -0.0017486512660980225,
+              0.15603280067443848,
+              -0.0409698486328125
+            ],
+            "angular_velocity": [
+              0.05881552770733833,
+              -0.00022863008780404925,
+              0.0009636111790314317
+            ],
+            "speed": 0.045747841227669936
+          },
+          "mujoco_time": 0.32000000000000023,
+          "physical": {
+            "travel": 0.014370244477734035,
+            "contact_newtons": 7.257635415112222,
+            "muscle_newtons": 41.07241767724866
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24054777789616813,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.240547776222229,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687212,
+            "elapsed_seconds": 106.62478508800268,
+            "location": [
+              -114.23468017578125,
+              43.83040237426758,
+              0.02860473468899727
+            ],
+            "rotation": [
+              0.29848968982696533,
+              90.64175415039062,
+              -0.09060487151145935
+            ],
+            "velocity": [
+              -0.0005414544721134007,
+              0.04832091182470322,
+              -0.00769913662225008
+            ],
+            "acceleration": [
+              -0.001763680949807167,
+              0.15736818313598633,
+              -0.024542808532714844
+            ],
+            "angular_velocity": [
+              0.049428023397922516,
+              -0.00040415560943074524,
+              0.0010146640706807375
+            ],
+            "speed": 0.048933428218797294
+          },
+          "mujoco_time": 0.34000000000000025,
+          "physical": {
+            "travel": 0.014432866673770087,
+            "contact_newtons": 7.253113694214396,
+            "muscle_newtons": 40.87217699114898
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24164489975791809,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24164490401744843,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687213,
+            "elapsed_seconds": 106.64478508755565,
+            "location": [
+              -114.23469543457031,
+              43.8314208984375,
+              0.028446892276406288
+            ],
+            "rotation": [
+              0.2993398606777191,
+              90.64176940917969,
+              -0.09058508276939392
+            ],
+            "velocity": [
+              -0.0005770456627942622,
+              0.05149649828672409,
+              -0.007884206250309944
+            ],
+            "acceleration": [
+              -0.001779559999704361,
+              0.15877938270568848,
+              -0.009253501892089844
+            ],
+            "angular_velocity": [
+              0.040222641080617905,
+              -0.0005487822345457971,
+              0.001064569572918117
+            ],
+            "speed": 0.0520997411288094
+          },
+          "mujoco_time": 0.36000000000000026,
+          "physical": {
+            "travel": 0.014498693985475085,
+            "contact_newtons": 7.257115640384056,
+            "muscle_newtons": 40.70760508724764
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24246732046654407,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24246731400489807,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687214,
+            "elapsed_seconds": 106.66478508710861,
+            "location": [
+              -114.23470306396484,
+              43.83250045776367,
+              0.028289681300520897
+            ],
+            "rotation": [
+              0.3000114858150482,
+              90.64179229736328,
+              -0.09056475013494492
+            ],
+            "velocity": [
+              -0.0006128743989393115,
+              0.05469316989183426,
+              -0.007793273776769638
+            ],
+            "acceleration": [
+              -0.0017914362251758575,
+              0.15983343124389648,
+              0.004546642303466797
+            ],
+            "angular_velocity": [
+              0.03140968456864357,
+              -0.0006682139937765896,
+              0.0011138663394376636
+            ],
+            "speed": 0.055249014145101326
+          },
+          "mujoco_time": 0.3800000000000003,
+          "physical": {
+            "travel": 0.014548039227992644,
+            "contact_newtons": 7.2627850505665075,
+            "muscle_newtons": 40.559004193907384
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.2429003783217613,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24290037155151367,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687215,
+            "elapsed_seconds": 106.68478508666158,
+            "location": [
+              -114.2347183227539,
+              43.83364486694336,
+              0.028138088062405586
+            ],
+            "rotation": [
+              0.30051448941230774,
+              90.64181518554688,
+              -0.09054441004991531
+            ],
+            "velocity": [
+              -0.0006488256040029228,
+              0.05790065973997116,
+              -0.007461595349013805
+            ],
+            "acceleration": [
+              -0.001797560602426529,
+              0.16037464141845703,
+              0.016583919525146484
+            ],
+            "angular_velocity": [
+              0.023121533915400505,
+              -0.0007573353359475732,
+              0.0011619587894529104
+            ],
+            "speed": 0.05838306927646705
+          },
+          "mujoco_time": 0.4000000000000003,
+          "physical": {
+            "travel": 0.014574022699305678,
+            "contact_newtons": 7.266251473237237,
+            "muscle_newtons": 40.412466908616494
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.2429686530499714,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24296864867210388,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687216,
+            "elapsed_seconds": 106.70478508621454,
+            "location": [
+              -114.23473358154297,
+              43.83485412597656,
+              0.02799634076654911
+            ],
+            "rotation": [
+              0.30086082220077515,
+              90.64183044433594,
+              -0.0905243530869484
+            ],
+            "velocity": [
+              -0.0006847910699434578,
+              0.06110931560397148,
+              -0.00692795729264617
+            ],
+            "acceleration": [
+              -0.0017982721328735352,
+              0.1604328155517578,
+              0.026681900024414062
+            ],
+            "angular_velocity": [
+              0.015452448278665543,
+              -0.0008222098113037646,
+              0.0012090246891602874
+            ],
+            "speed": 0.061504585070090476
+          },
+          "mujoco_time": 0.4200000000000003,
+          "physical": {
+            "travel": 0.014578119182998284,
+            "contact_newtons": 7.2660415605419795,
+            "muscle_newtons": 40.26010571818083
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24276684351451558,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.2427668422460556,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687217,
+            "elapsed_seconds": 106.72478508576751,
+            "location": [
+              -114.23474884033203,
+              43.836124420166016,
+              0.027867857366800308
+            ],
+            "rotation": [
+              0.3010638952255249,
+              90.64185333251953,
+              -0.0905049666762352
+            ],
+            "velocity": [
+              -0.0007206904701888561,
+              0.06431198120117188,
+              -0.006232957821339369
+            ],
+            "acceleration": [
+              -0.001794971525669098,
+              0.16013336181640625,
+              0.03474998474121094
+            ],
+            "angular_velocity": [
+              0.008467471227049828,
+              -0.0008642436587251723,
+              0.0012553951237350702
+            ],
+            "speed": 0.06461733578519235
+          },
+          "mujoco_time": 0.44000000000000034,
+          "physical": {
+            "travel": 0.014566010610870934,
+            "contact_newtons": 7.2622970483079134,
+            "muscle_newtons": 40.09886199493987
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24240790578670596,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.2424079030752182,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687218,
+            "elapsed_seconds": 106.74478508532047,
+            "location": [
+              -114.23475646972656,
+              43.837459564208984,
+              0.027755239978432655
+            ],
+            "rotation": [
+              0.3010638952255249,
+              90.64185333251953,
+              -0.0905049666762352
+            ],
+            "velocity": [
+              -0.0007564776460640132,
+              0.06750450283288956,
+              -0.00541765196248889
+            ],
+            "acceleration": [
+              -0.0017893575131893158,
+              0.15962600708007812,
+              0.04076528549194336
+            ],
+            "angular_velocity": [
+              0.002214820357039571,
+              -0.000879008905030787,
+              0.0013003910426050425
+            ],
+            "speed": 0.06772577879900127
+          },
+          "mujoco_time": 0.46000000000000035,
+          "physical": {
+            "travel": 0.014544474347202357,
+            "contact_newtons": 7.256010698711465,
+            "muscle_newtons": 39.92891380309807
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24199133991516153,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.2419913411140442,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687219,
+            "elapsed_seconds": 106.76478508487344,
+            "location": [
+              -114.23477172851562,
+              43.8388557434082,
+              0.027660276740789413
+            ],
+            "rotation": [
+              0.3010638952255249,
+              90.64185333251953,
+              -0.0905049666762352
+            ],
+            "velocity": [
+              -0.0007921357173472643,
+              0.07068537920713425,
+              -0.004522113595157862
+            ],
+            "acceleration": [
+              -0.0017829053103923798,
+              0.159043550491333,
+              0.04477691650390625
+            ],
+            "angular_velocity": [
+              -0.0032616553362458944,
+              -0.000880557403434068,
+              0.0013450339902192354
+            ],
+            "speed": 0.07083431247650093
+          },
+          "mujoco_time": 0.48000000000000037,
+          "physical": {
+            "travel": 0.014519480394909691,
+            "contact_newtons": 7.248429269937798,
+            "muscle_newtons": 39.75217744947163
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24158888202325776,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24158887565135956,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687220,
+            "elapsed_seconds": 106.7847850844264,
+            "location": [
+              -114.23479461669922,
+              43.84031677246094,
+              0.02758398838341236
+            ],
+            "rotation": [
+              0.30096229910850525,
+              90.64193725585938,
+              -0.09045349806547165
+            ],
+            "velocity": [
+              -0.0008276692824438214,
+              0.07385499030351639,
+              -0.0035842321813106537
+            ],
+            "acceleration": [
+              -0.0017766766250133514,
+              0.15848064422607422,
+              0.046894073486328125
+            ],
+            "angular_velocity": [
+              -0.007946999743580818,
+              -0.0008673645206727087,
+              0.0013891779817640781
+            ],
+            "speed": 0.07394654386449136
+          },
+          "mujoco_time": 0.5000000000000003,
+          "physical": {
+            "travel": 0.014495332921395465,
+            "contact_newtons": 7.240677775727297,
+            "muscle_newtons": 39.57114352582128
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24124250956155477,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24124251306056976,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687221,
+            "elapsed_seconds": 106.80478508397937,
+            "location": [
+              -114.23480987548828,
+              43.84184265136719,
+              0.027526680380105972
+            ],
+            "rotation": [
+              0.3007437288761139,
+              90.6419677734375,
+              -0.09043893963098526
+            ],
+            "velocity": [
+              -0.0008630949887447059,
+              0.07701484113931656,
+              -0.0026387786492705345
+            ],
+            "acceleration": [
+              -0.001771286129951477,
+              0.15799260139465332,
+              0.047272682189941406
+            ],
+            "angular_velocity": [
+              -0.011839170008897781,
+              -0.0008424170082435012,
+              0.0014332006685435772
+            ],
+            "speed": 0.07706486775070472
+          },
+          "mujoco_time": 0.5199999999999981,
+          "physical": {
+            "travel": 0.014474550573693285,
+            "contact_newtons": 7.233584067447058,
+            "muscle_newtons": 39.388125894460785
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24096950264436598,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24096950888633728,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687222,
+            "elapsed_seconds": 106.82478508353233,
+            "location": [
+              -114.23482513427734,
+              43.84342575073242,
+              0.027488023042678833
+            ],
+            "rotation": [
+              0.30045902729034424,
+              90.64199829101562,
+              -0.09042582660913467
+            ],
+            "velocity": [
+              -0.0008984346641227603,
+              0.08016688376665115,
+              -0.0017167567275464535
+            ],
+            "acceleration": [
+              -0.0017669834196567535,
+              0.15760207176208496,
+              0.04610109329223633
+            ],
+            "angular_velocity": [
+              -0.014957946725189686,
+              -0.0008059973479248583,
+              0.0014767422107979655
+            ],
+            "speed": 0.0801902967407094
+          },
+          "mujoco_time": 0.5399999999999959,
+          "physical": {
+            "travel": 0.014458170158661958,
+            "contact_newtons": 7.227647174543277,
+            "muscle_newtons": 39.20488867062349
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24077028628413177,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24077028036117554,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687223,
+            "elapsed_seconds": 106.8447850830853,
+            "location": [
+              -114.23484802246094,
+              43.84507751464844,
+              0.02746712975203991
+            ],
+            "rotation": [
+              0.30012309551239014,
+              90.64203643798828,
+              -0.0904141217470169
+            ],
+            "velocity": [
+              -0.0009337100782431662,
+              0.08331304043531418,
+              -0.0008446788415312767
+            ],
+            "acceleration": [
+              -0.0017637722194194794,
+              0.15730810165405273,
+              0.04360389709472656
+            ],
+            "angular_velocity": [
+              -0.017338426783680916,
+              -0.000762022624257952,
+              0.0015200512716546655
+            ],
+            "speed": 0.08332255399009225
+          },
+          "mujoco_time": 0.5599999999999937,
+          "physical": {
+            "travel": 0.014446217177047907,
+            "contact_newtons": 7.223088402959087,
+            "muscle_newtons": 39.02255556396098
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24063616591284148,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.2406361699104309,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687224,
+            "elapsed_seconds": 106.86478508263826,
+            "location": [
+              -114.23486328125,
+              43.84678649902344,
+              0.027462657541036606
+            ],
+            "rotation": [
+              0.29974988102912903,
+              90.64207458496094,
+              -0.09040359407663345
+            ],
+            "velocity": [
+              -0.0009689409635029733,
+              0.08645505458116531,
+              -4.447936953511089e-05
+            ],
+            "acceleration": [
+              -0.0017615444958209991,
+              0.15710067749023438,
+              0.04000997543334961
+            ],
+            "angular_velocity": [
+              -0.019035430625081062,
+              -0.0007231521885842085,
+              0.0015638323966413736
+            ],
+            "speed": 0.08646049553199045
+          },
+          "mujoco_time": 0.5799999999999915,
+          "physical": {
+            "travel": 0.014438169954770489,
+            "contact_newtons": 7.21993578688363,
+            "muscle_newtons": 38.841691378770726
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24055540410609413,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24055540561676025,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687225,
+            "elapsed_seconds": 106.88478508219123,
+            "location": [
+              -114.2348861694336,
+              43.84856033325195,
+              0.02747289650142193
+            ],
+            "rotation": [
+              0.2993521988391876,
+              90.6421127319336,
+              -0.09039420634508133
+            ],
+            "velocity": [
+              -0.00100414315238595,
+              0.08959431201219559,
+              0.0006670570001006126
+            ],
+            "acceleration": [
+              -0.0017601065337657928,
+              0.15696287155151367,
+              0.035576820373535156
+            ],
+            "angular_velocity": [
+              -0.02011006698012352,
+              -0.0006819888949394226,
+              0.001607858925126493
+            ],
+            "speed": 0.0896024219173261
+          },
+          "mujoco_time": 0.5999999999999893,
+          "physical": {
+            "travel": 0.014433324246365647,
+            "contact_newtons": 7.218108940363173,
+            "muscle_newtons": 38.662460265075126
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24051713215268017,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24051713943481445,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687226,
+            "elapsed_seconds": 106.9047850817442,
+            "location": [
+              -114.23490142822266,
+              43.850399017333984,
+              0.02749587595462799
+            ],
+            "rotation": [
+              0.29894137382507324,
+              90.64215087890625,
+              -0.0903857871890068
+            ],
+            "velocity": [
+              -0.0010393288685008883,
+              0.09273193031549454,
+              0.0012776660732924938
+            ],
+            "acceleration": [
+              -0.0017592869699001312,
+              0.15688085556030273,
+              0.030530452728271484
+            ],
+            "angular_velocity": [
+              -0.02063511125743389,
+              -0.0006395929958671331,
+              0.0016521052457392216
+            ],
+            "speed": 0.09274655538147752
+          },
+          "mujoco_time": 0.6199999999999871,
+          "physical": {
+            "travel": 0.01443102792916081,
+            "contact_newtons": 7.217486665810058,
+            "muscle_newtons": 38.48479296422155
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24051325866156498,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24051713943481445,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687227,
+            "elapsed_seconds": 106.92478508129716,
+            "location": [
+              -114.23492431640625,
+              43.852298736572266,
+              0.02752945013344288
+            ],
+            "rotation": [
+              0.2985272705554962,
+              90.6421890258789,
+              -0.09037819504737854
+            ],
+            "velocity": [
+              -0.001074509578756988,
+              0.09586892277002335,
+              0.0017798995831981301
+            ],
+            "acceleration": [
+              -0.0017590373754501343,
+              0.15684938430786133,
+              0.025111675262451172
+            ],
+            "angular_velocity": [
+              -0.02068481408059597,
+              -0.0006037587882019579,
+              0.0016967819537967443
+            ],
+            "speed": 0.0958914645129889
+          },
+          "mujoco_time": 0.6399999999999849,
+          "physical": {
+            "travel": 0.014430795519693899,
+            "contact_newtons": 7.217932674743018,
+            "muscle_newtons": 38.30856089054998
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24053865669062116,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24053865671157837,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687228,
+            "elapsed_seconds": 106.94478508085012,
+            "location": [
+              -114.23494720458984,
+              43.8542594909668,
+              0.02757139317691326
+            ],
+            "rotation": [
+              0.29811832308769226,
+              90.64222717285156,
+              -0.09037110954523087
+            ],
+            "velocity": [
+              -0.0011096915695816278,
+              0.09900584071874619,
+              0.0021705341059714556
+            ],
+            "acceleration": [
+              -0.0017591007053852081,
+              0.1568460464477539,
+              0.019531726837158203
+            ],
+            "angular_velocity": [
+              -0.020329173654317856,
+              -0.0005756904720328748,
+              0.0017421413213014603
+            ],
+            "speed": 0.0990358477022867
+          },
+          "mujoco_time": 0.6599999999999827,
+          "physical": {
+            "travel": 0.01443231940143727,
+            "contact_newtons": 7.219307818496191,
+            "muscle_newtons": 38.1338094051714
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.2405904937208701,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24059049785137177,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687229,
+            "elapsed_seconds": 106.96478508040309,
+            "location": [
+              -114.23497009277344,
+              43.856285095214844,
+              0.02761947363615036
+            ],
+            "rotation": [
+              0.29772159457206726,
+              90.64226531982422,
+              -0.09036432951688766
+            ],
+            "velocity": [
+              -0.0011448839213699102,
+              0.10214348882436752,
+              0.002450342057272792
+            ],
+            "acceleration": [
+              -0.0017596147954463959,
+              0.15688228607177734,
+              0.013990402221679688
+            ],
+            "angular_velocity": [
+              -0.019640568643808365,
+              -0.0005573547095991671,
+              0.0017882732208818197
+            ],
+            "speed": 0.10217928970493358
+          },
+          "mujoco_time": 0.6799999999999805,
+          "physical": {
+            "travel": 0.014435429623252206,
+            "contact_newtons": 7.22156684229191,
+            "muscle_newtons": 37.96035907518307
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.2406678288704341,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24066783487796783,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687230,
+            "elapsed_seconds": 106.98478507995605,
+            "location": [
+              -114.23499298095703,
+              43.85837173461914,
+              0.027671530842781067
+            ],
+            "rotation": [
+              0.2973427474498749,
+              90.64230346679688,
+              -0.09035760909318924
+            ],
+            "velocity": [
+              -0.0011800939682871103,
+              0.10528253018856049,
+              0.0026237391866743565
+            ],
+            "acceleration": [
+              -0.0017605014145374298,
+              0.1569523811340332,
+              0.008669853210449219
+            ],
+            "angular_velocity": [
+              -0.0186853539198637,
+              -0.0005469098687171936,
+              0.0018349287565797567
+            ],
+            "speed": 0.1053218296081056
+          },
+          "mujoco_time": 0.6999999999999783,
+          "physical": {
+            "travel": 0.014440069732226045,
+            "contact_newtons": 7.224684116437807,
+            "muscle_newtons": 37.78804177401858
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24077102292017022,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24077102541923523,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687231,
+            "elapsed_seconds": 107.00478507950902,
+            "location": [
+              -114.23501586914062,
+              43.86052322387695,
+              0.02772553451359272
+            ],
+            "rotation": [
+              0.2969861626625061,
+              90.64234161376953,
+              -0.09035073965787888
+            ],
+            "velocity": [
+              -0.0012153292773291469,
+              0.10842365026473999,
+              0.0026976871304214
+            ],
+            "acceleration": [
+              -0.0017617680132389069,
+              0.15705585479736328,
+              0.0036973953247070312
+            ],
+            "angular_velocity": [
+              -0.01752491295337677,
+              -0.0005423012189567089,
+              0.0018821681151166558
+            ],
+            "speed": 0.1084640146677073
+          },
+          "mujoco_time": 0.7199999999999761,
+          "physical": {
+            "travel": 0.014446261375210212,
+            "contact_newtons": 7.2286468939516935,
+            "muscle_newtons": 37.616816341845634
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.2409010660530543,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24090106785297394,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687232,
+            "elapsed_seconds": 107.02478507906199,
+            "location": [
+              -114.23503875732422,
+              43.86273956298828,
+              0.027779635041952133
+            ],
+            "rotation": [
+              0.2966550886631012,
+              90.64237976074219,
+              -0.09034352004528046
+            ],
+            "velocity": [
+              -0.0012505979975685477,
+              0.11156754940748215,
+              0.002681741723790765
+            ],
+            "acceleration": [
+              -0.0017634332180023193,
+              0.1571950912475586,
+              -0.000797271728515625
+            ],
+            "angular_velocity": [
+              -0.016216004267334938,
+              -0.0005498551181517541,
+              0.0019299393752589822
+            ],
+            "speed": 0.11160678211836238
+          },
+          "mujoco_time": 0.7399999999999739,
+          "physical": {
+            "travel": 0.014454063963183258,
+            "contact_newtons": 7.2334550463431135,
+            "muscle_newtons": 37.44669446346665
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.24105905347811893,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.2410590499639511,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687233,
+            "elapsed_seconds": 107.04478507861495,
+            "location": [
+              -114.23506927490234,
+              43.865013122558594,
+              0.02783219888806343
+            ],
+            "rotation": [
+              0.2963517904281616,
+              90.64241790771484,
+              -0.09033572673797607
+            ],
+            "velocity": [
+              -0.001285908161662519,
+              0.11471497267484665,
+              0.0025871277321130037
+            ],
+            "acceleration": [
+              -0.001765511929988861,
+              0.15737104415893555,
+              -0.004730701446533203
+            ],
+            "angular_velocity": [
+              -0.014806515537202358,
+              -0.0005625481717288494,
+              0.0019782050512731075
+            ],
+            "speed": 0.114751347467005
+          },
+          "mujoco_time": 0.7599999999999717,
+          "physical": {
+            "travel": 0.014463543208687136,
+            "contact_newtons": 7.239115379144407,
+            "muscle_newtons": 37.27770226640811
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.2425470554663149,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.24254705011844635,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687234,
+            "elapsed_seconds": 107.06478507816792,
+            "location": [
+              -114.23509216308594,
+              43.86735534667969,
+              0.02788183093070984
+            ],
+            "rotation": [
+              0.2960813045501709,
+              90.6424560546875,
+              -0.09032725542783737
+            ],
+            "velocity": [
+              -0.0013216538354754448,
+              0.1179010197520256,
+              0.002426214050501585
+            ],
+            "acceleration": [
+              -0.0017872825264930725,
+              0.1593022346496582,
+              -0.008045673370361328
+            ],
+            "angular_velocity": [
+              -0.01309509389102459,
+              -0.0005804243846796453,
+              0.002027292735874653
+            ],
+            "speed": 0.11793338688449174
+          },
+          "mujoco_time": 0.7799999999999695,
+          "physical": {
+            "travel": 0.014552823327978893,
+            "contact_newtons": 9.985508900215612,
+            "muscle_newtons": 37.05238322819698
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.26368439634984076,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.26368439197540283,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687235,
+            "elapsed_seconds": 107.08478507772088,
+            "location": [
+              -114.23512268066406,
+              43.86977005004883,
+              0.027927346527576447
+            ],
+            "rotation": [
+              0.2959083318710327,
+              90.64249420166016,
+              -0.09031786769628525
+            ],
+            "velocity": [
+              -0.0013639434473589063,
+              0.12167011201381683,
+              0.002211933024227619
+            ],
+            "acceleration": [
+              -0.0021144822239875793,
+              0.18845462799072266,
+              -0.010714054107666016
+            ],
+            "angular_velocity": [
+              -0.007229224778711796,
+              -0.0005629329825751483,
+              0.0020852708257734776
+            ],
+            "speed": 0.12169786007521248
+          },
+          "mujoco_time": 0.7999999999999673,
+          "physical": {
+            "travel": 0.015821063780990446,
+            "contact_newtons": 9.345258371499591,
+            "muscle_newtons": 36.83746016760156
+          }
+        },
+        {
+          "phase": "muscle_contact",
+          "command": {
+            "throttle": 0.2936903492469312,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.26368439197540283,
+            "brake": 0.0,
+            "steer": 0.0
+          },
+          "vehicle": {
+            "frame": 687236,
+            "elapsed_seconds": 107.10478507727385,
+            "location": [
+              -114.23514556884766,
+              43.872257232666016,
+              0.02796785719692707
+            ],
+            "rotation": [
+              0.2959083318710327,
+              90.64249420166016,
+              -0.09031786769628525
+            ],
+            "velocity": [
+              -0.0014062273548915982,
+              0.12543843686580658,
+              0.001956729916855693
+            ],
+            "acceleration": [
+              -0.0021141916513442993,
+              0.1884164810180664,
+              -0.012760162353515625
+            ],
+            "angular_velocity": [
+              -0.0022434417624026537,
+              -0.0005588417989201844,
+              0.0021435345988720655
+            ],
+            "speed": 0.12546157862341006
+          },
+          "mujoco_time": 0.8199999999999651,
+          "physical": {
+            "travel": 0.01762142095481587,
+            "contact_newtons": 9.461110613004973,
+            "muscle_newtons": 36.955021530948166
+          }
+        }
+      ],
+      "muscles": [
+        "extn",
+        "adabR",
+        "adabL",
+        "mflx",
+        "dflx"
+      ],
+      "mechanism": "cockpit_throttle_joint",
+      "vehicle_id": 28,
+      "blueprint": "vehicle.nissan.patrol",
+      "excitation": 0.01,
+      "cruising_throttle": 0,
+      "vehicle_destroyed": true,
+      "settings_after": {
+        "synchronous_mode": false,
+        "fixed_delta_seconds": null,
+        "substepping": true,
+        "max_substeps": 10,
+        "max_substep_delta_time": 0.01,
+        "no_rendering_mode": false
+      },
+      "settings_restored": true
+    }
+  ],
+  "carla_module": "C:\\Users\\Mark\\Desktop\\myosuite-carla\\.venv-carla\\Lib\\site-packages\\carla.cp312-win_amd64.pyd",
+  "carla_distribution": "0.10.0",
+  "client_version": "0.10.0",
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "selected_blueprint": "vehicle.nissan.patrol",
+  "error": {
+    "type": "RuntimeError",
+    "message": "CARLA did not apply the measured controls at frame 687236: requested={'throttle': 0.2936903492469312, 'steer': 0.0, 'brake': 0.0, 'hand_brake': False, 'reverse': False, 'manual_gear_shift': False, 'gear': 0}, applied={'throttle': 0.26368439197540283, 'brake': 0.0, 'steer': 0.0}"
+  },
+  "finished_utc": "2026-10-23T06:23:47.941402+00:00"
+}

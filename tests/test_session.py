@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from types import SimpleNamespace
 from typing import Any
 
 import pytest
@@ -38,7 +39,12 @@ def test_control_before_tick_and_coherent_feedback(simulation: Any) -> None:
         assert state.speed == 5
         assert state.rotation == (4, 5, 6)
         assert state.angular_velocity == (0, 0, 90)
-        assert simulation.world.events[1:3] == [("control", 0.4, 0), ("tick", 10)]
+        assert simulation.world.events[1:5] == [
+            ("batch", 1, False),
+            ("control", 0.4, 0),
+            ("batch_complete", 1),
+            ("tick", 10),
+        ]
         assert simulation.vehicle.controls[-1].steer == -0.5
         assert state.as_dict()["speed"] == 5
     assert vars(simulation.world.settings) == vars(original)
@@ -52,6 +58,69 @@ def test_capture_anchor_after_apply_settings_ticks(simulation: Any) -> None:
     with simulation.session() as session:
         assert session.snapshot().frame == 103
         assert session.step(VehicleCommand()).frame == 104
+
+
+@pytest.mark.parametrize(
+    ("fault", "message"),
+    [
+        ("error", "control command failed: actor unavailable"),
+        ("missing", "returned 0 responses"),
+        ("extra", "returned 2 responses"),
+        ("timeout", "batch timeout"),
+    ],
+)
+def test_rejected_batch_brakes_without_ticking_and_cleans_up(
+    simulation: Any, fault: str, message: str
+) -> None:
+    session = simulation.session(own_vehicle=True).start()
+    submit = simulation.client.apply_batch_sync
+    attempts = 0
+
+    def reject_once(commands: list[Any], do_tick: bool) -> list[Any]:
+        nonlocal attempts
+        attempts += 1
+        if attempts == 1:
+            if fault == "timeout":
+                raise TimeoutError("batch timeout")
+            if fault == "missing":
+                return []
+            response = SimpleNamespace(
+                error="actor unavailable", has_error=lambda: fault == "error"
+            )
+            return [response, response] if fault == "extra" else [response]
+        return submit(commands, do_tick)
+
+    simulation.client.apply_batch_sync = reject_once
+    with pytest.raises((RuntimeError, TimeoutError), match=message):
+        session.step(VehicleCommand(throttle=0.7))
+    assert attempts == 2
+    assert not session.active
+    assert not any(event[0] == "tick" for event in simulation.world.events)
+    assert simulation.vehicle.controls[-1].brake == 1
+    assert simulation.vehicle.controls[-1].throttle == 0
+    session.close()
+    assert simulation.vehicle.destroy_count == 1
+    assert not simulation.world.settings.synchronous_mode
+
+
+def test_close_retries_rejected_stop_without_ticking_or_repeating_restoration(
+    simulation: Any,
+) -> None:
+    session = simulation.session().start()
+    submit = simulation.client.apply_batch_sync
+    simulation.client.apply_batch_sync = lambda commands, do_tick: [
+        SimpleNamespace(error="stop rejected", has_error=lambda: True)
+    ]
+    with pytest.raises(RuntimeError, match="cleanup failed.*stop rejected"):
+        session.close()
+    assert not simulation.world.settings.synchronous_mode
+    assert simulation.vehicle.destroy_count == 0
+    simulation.client.apply_batch_sync = submit
+    session.close()
+    assert simulation.vehicle.controls[-1].brake == 1
+    assert simulation.vehicle.controls[-1].hand_brake
+    assert not any(event[0] == "tick" for event in simulation.world.events)
+    assert simulation.world.events.count(("settings", False)) == 1
 
 
 def test_reject_build_mismatch_before_world_mutation(simulation: Any) -> None:

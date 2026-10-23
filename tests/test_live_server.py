@@ -26,7 +26,8 @@ def test_real_muscles_accelerate_brake_and_turn_a_real_carla_vehicle() -> None:
             os.environ.get("CARLA_HOST", "localhost"),
             int(os.environ.get("CARLA_PORT", 2000)),
             timeout=float(os.environ.get("CARLA_TIMEOUT", 15)),
-            blueprint=os.environ.get("CARLA_BLUEPRINT", "vehicle.tesla.model3"),
+            blueprint=os.environ.get("CARLA_BLUEPRINT"),
+            target_ref=os.environ.get("CARLA_TARGET_REF", "ue58-dev"),
             build_ref=os.environ.get("CARLA_BUILD_REF"),
             build_commit=os.environ.get("CARLA_BUILD_COMMIT"),
         )
