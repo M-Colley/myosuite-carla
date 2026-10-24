@@ -1,0 +1,283 @@
+{
+ "lead_vehicle_braking/policy": {
+  "started_utc": "2026-10-24T14:36:52.706162+00:00",
+  "scenario": "lead_vehicle_braking",
+  "backend": "carla",
+  "fast": true,
+  "duration_s": 20.0,
+  "takeover_time_s": null,
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "blueprint": "vehicle.nissan.patrol",
+  "spawn_index": 105,
+  "lane_length_m": 349.02982655929736,
+  "policy": "artifacts\\runs\\demand_ppo_pilot3",
+  "summary": {
+   "frames": 1000,
+   "seconds": 19.999999999999662,
+   "collision": false,
+   "off_road": false,
+   "min_gap_m": 2.2279626369515144,
+   "min_ttc_s": 1.9537510432736884,
+   "lane_offset_rms_m": 0.02318657218956034,
+   "lane_offset_max_m": 0.07837543950581001,
+   "final_speed_mps": 0.007713188910416263,
+   "max_brake": 0.29256092823719154,
+   "takeover_time_s": null,
+   "events": [
+    {
+     "time": 0.0,
+     "type": "scenario_start",
+     "scenario": "lead_vehicle_braking"
+    },
+    {
+     "time": 8.02,
+     "type": "lead_brake",
+     "deceleration": 4.0
+    }
+   ],
+   "return": -132.12599419366026,
+   "carla_collisions": []
+  },
+  "status": "completed",
+  "finished_utc": "2026-10-24T14:37:10.389260+00:00",
+  "command": "examples/drive_scenario.py --backend carla --host 127.0.0.1 --fast --scenario lead_vehicle_braking --policy artifacts/runs/demand_ppo_pilot3 --output artifacts/scenario-lead_vehicle_braking-carla-policy-fast.json"
+ },
+ "lead_vehicle_braking/reflex": {
+  "started_utc": "2026-10-24T14:37:15.567794+00:00",
+  "scenario": "lead_vehicle_braking",
+  "backend": "carla",
+  "fast": true,
+  "duration_s": 20.0,
+  "takeover_time_s": null,
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "blueprint": "vehicle.nissan.patrol",
+  "spawn_index": 105,
+  "lane_length_m": 349.02982655929736,
+  "summary": {
+   "frames": 1000,
+   "seconds": 19.999999999999662,
+   "collision": false,
+   "off_road": false,
+   "min_gap_m": 1.9132213290040285,
+   "min_ttc_s": 2.7088408041460745,
+   "lane_offset_rms_m": 0.018632515273171477,
+   "lane_offset_max_m": 0.031167514000784678,
+   "final_speed_mps": 0.03504872691705614,
+   "max_brake": 0.24954271113652396,
+   "takeover_time_s": null,
+   "events": [
+    {
+     "time": 0.0,
+     "type": "scenario_start",
+     "scenario": "lead_vehicle_braking"
+    },
+    {
+     "time": 8.02,
+     "type": "lead_brake",
+     "deceleration": 4.0
+    }
+   ],
+   "return": -60.61852576209002,
+   "carla_collisions": []
+  },
+  "status": "completed",
+  "finished_utc": "2026-10-24T14:37:21.687324+00:00",
+  "command": "examples/drive_scenario.py --backend carla --host 127.0.0.1 --fast --scenario lead_vehicle_braking --output artifacts/scenario-lead_vehicle_braking-carla-reflex-fast.json"
+ },
+ "takeover_request/policy": {
+  "started_utc": "2026-10-24T14:37:26.371436+00:00",
+  "scenario": "takeover_request",
+  "backend": "carla",
+  "fast": true,
+  "duration_s": 12.0,
+  "takeover_time_s": 5.0,
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "blueprint": "vehicle.nissan.patrol",
+  "spawn_index": 105,
+  "lane_length_m": 255.5172406736222,
+  "policy": "artifacts\\runs\\demand_ppo_pilot3",
+  "summary": {
+   "frames": 600,
+   "seconds": 11.999999999999833,
+   "collision": false,
+   "off_road": false,
+   "min_gap_m": null,
+   "min_ttc_s": null,
+   "lane_offset_rms_m": 0.03457875544661378,
+   "lane_offset_max_m": 0.07252599531359315,
+   "final_speed_mps": 12.599188297382721,
+   "max_brake": 0.0,
+   "takeover_time_s": 2.9999999999999174,
+   "events": [
+    {
+     "time": 0.0,
+     "type": "scenario_start",
+     "scenario": "takeover_request"
+    },
+    {
+     "time": 0.0,
+     "type": "automation_engaged"
+    },
+    {
+     "time": 5.02,
+     "type": "takeover_request",
+     "modality": "visual-auditory"
+    },
+    {
+     "time": 8.0,
+     "type": "driver_takeover",
+     "reaction_time": 2.9999999999999174,
+     "input": "pedal"
+    }
+   ],
+   "return": -217.17849445608078,
+   "carla_collisions": []
+  },
+  "status": "completed",
+  "finished_utc": "2026-10-24T14:37:37.054730+00:00",
+  "command": "examples/drive_scenario.py --backend carla --host 127.0.0.1 --fast --scenario takeover_request --duration 12 --takeover-time 5 --policy artifacts/runs/demand_ppo_pilot3 --output artifacts/scenario-takeover_request-carla-policy-fast.json"
+ },
+ "takeover_request/reflex": {
+  "started_utc": "2026-10-24T14:37:42.198433+00:00",
+  "scenario": "takeover_request",
+  "backend": "carla",
+  "fast": true,
+  "duration_s": 12.0,
+  "takeover_time_s": 5.0,
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "blueprint": "vehicle.nissan.patrol",
+  "spawn_index": 105,
+  "lane_length_m": 255.5172406736222,
+  "summary": {
+   "frames": 600,
+   "seconds": 11.999999999999833,
+   "collision": false,
+   "off_road": false,
+   "min_gap_m": null,
+   "min_ttc_s": null,
+   "lane_offset_rms_m": 0.0354627814964643,
+   "lane_offset_max_m": 0.04440556437972667,
+   "final_speed_mps": 12.947590701458315,
+   "max_brake": 0.0,
+   "takeover_time_s": 2.9999999999999174,
+   "events": [
+    {
+     "time": 0.0,
+     "type": "scenario_start",
+     "scenario": "takeover_request"
+    },
+    {
+     "time": 0.0,
+     "type": "automation_engaged"
+    },
+    {
+     "time": 5.02,
+     "type": "takeover_request",
+     "modality": "visual-auditory"
+    },
+    {
+     "time": 8.0,
+     "type": "driver_takeover",
+     "reaction_time": 2.9999999999999174,
+     "input": "pedal"
+    }
+   ],
+   "return": -216.84512608945914,
+   "carla_collisions": []
+  },
+  "status": "completed",
+  "finished_utc": "2026-10-24T14:37:45.733241+00:00",
+  "command": "examples/drive_scenario.py --backend carla --host 127.0.0.1 --fast --scenario takeover_request --duration 12 --takeover-time 5 --output artifacts/scenario-takeover_request-carla-reflex-fast.json"
+ },
+ "lane_change/policy": {
+  "started_utc": "2026-10-24T14:37:50.429112+00:00",
+  "scenario": "lane_change",
+  "backend": "carla",
+  "fast": true,
+  "duration_s": 15.0,
+  "takeover_time_s": null,
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "blueprint": "vehicle.nissan.patrol",
+  "spawn_index": 105,
+  "lane_length_m": 260.61067934458214,
+  "policy": "artifacts\\runs\\demand_ppo_pilot3",
+  "summary": {
+   "frames": 750,
+   "seconds": 14.999999999999769,
+   "collision": false,
+   "off_road": false,
+   "min_gap_m": null,
+   "min_ttc_s": null,
+   "lane_offset_rms_m": 0.49481780852237456,
+   "lane_offset_max_m": 1.3431554154643808,
+   "final_speed_mps": 10.461959121891226,
+   "max_brake": 0.08584152819295363,
+   "takeover_time_s": null,
+   "events": [
+    {
+     "time": 0.0,
+     "type": "scenario_start",
+     "scenario": "lane_change"
+    },
+    {
+     "time": 5.02,
+     "type": "lane_change_request",
+     "offset": -3.5
+    }
+   ],
+   "return": -114.1748119803201,
+   "carla_collisions": []
+  },
+  "status": "completed",
+  "finished_utc": "2026-10-24T14:38:02.912596+00:00",
+  "command": "examples/drive_scenario.py --backend carla --host 127.0.0.1 --fast --scenario lane_change --policy artifacts/runs/demand_ppo_pilot3 --output artifacts/scenario-lane_change-carla-policy-fast.json"
+ },
+ "lane_change/reflex": {
+  "started_utc": "2026-10-24T14:38:08.064417+00:00",
+  "scenario": "lane_change",
+  "backend": "carla",
+  "fast": true,
+  "duration_s": 15.0,
+  "takeover_time_s": null,
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "blueprint": "vehicle.nissan.patrol",
+  "spawn_index": 105,
+  "lane_length_m": 260.61067934458214,
+  "summary": {
+   "frames": 750,
+   "seconds": 14.999999999999769,
+   "collision": false,
+   "off_road": false,
+   "min_gap_m": null,
+   "min_ttc_s": null,
+   "lane_offset_rms_m": 0.5349764394922425,
+   "lane_offset_max_m": 1.4136977131291106,
+   "final_speed_mps": 10.849258710614459,
+   "max_brake": 0.04985170155439511,
+   "takeover_time_s": null,
+   "events": [
+    {
+     "time": 0.0,
+     "type": "scenario_start",
+     "scenario": "lane_change"
+    },
+    {
+     "time": 5.02,
+     "type": "lane_change_request",
+     "offset": -3.5
+    }
+   ],
+   "return": -124.0128225147326,
+   "carla_collisions": []
+  },
+  "status": "completed",
+  "finished_utc": "2026-10-24T14:38:12.515504+00:00",
+  "command": "examples/drive_scenario.py --backend carla --host 127.0.0.1 --fast --scenario lane_change --output artifacts/scenario-lane_change-carla-reflex-fast.json"
+ }
+}

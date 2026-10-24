@@ -1,0 +1,889 @@
+{
+ "config": {
+  "created_utc": "2026-10-24T13:20:27.250072+00:00",
+  "args": {
+   "mode": "demand",
+   "algo": "ppo",
+   "timesteps": "1000000",
+   "n_envs": "6",
+   "seed": "0",
+   "stages": "None",
+   "start_stage": "0",
+   "curriculum_threshold": "0.8",
+   "curriculum_window": "40",
+   "ngsim": "artifacts\\ngsim\\ngsim-i80-cars.csv",
+   "style_weight": "2.0",
+   "style_window": "5.0",
+   "motor_noise": "0.0",
+   "vehicle_spread": "0.1",
+   "bc_steps": "20000",
+   "dagger_rounds": "2",
+   "torch_threads": "4",
+   "output_dir": "artifacts\\runs\\demand_ppo_pilot2"
+  },
+  "stages": [
+   "free",
+   "follow",
+   "lead_brake",
+   "lane_change",
+   "takeover"
+  ],
+  "commit": "743e3d8ffc6630f930648891a0cd7fd6c167f037",
+  "versions": {
+   "python": "3.12.13",
+   "torch": "2.14.1+cpu",
+   "stable_baselines3": "2.9.0"
+  },
+  "seconds": 1790.6832573999418,
+  "timesteps": 1001472,
+  "final_stage": 4
+ },
+ "curriculum": [
+  {
+   "timesteps": 42000,
+   "stage": 1,
+   "rate": 1.0
+  },
+  {
+   "timesteps": 84000,
+   "stage": 2,
+   "rate": 1.0
+  },
+  {
+   "timesteps": 126000,
+   "stage": 3,
+   "rate": 1.0
+  },
+  {
+   "timesteps": 168000,
+   "stage": 4,
+   "rate": 0.875
+  }
+ ],
+ "episodes": 996,
+ "final_progress": {
+  "curriculum/success_rate": "0.975",
+  "episode/free_lane_rms_m": "0.05291483278763638",
+  "time/iterations": "163",
+  "curriculum/stage": "4",
+  "rollout/ep_rew_mean": "-70.97814178466797",
+  "time/fps": "559",
+  "time/time_elapsed": "1790",
+  "episode/free_success": "1.0",
+  "rollout/ep_len_mean": "1000.0",
+  "time/total_timesteps": "1001472",
+  "train/entropy_loss": "1.9279461741447448",
+  "train/loss": "0.2295774221420288",
+  "train/explained_variance": "0.9593791961669922",
+  "train/approx_kl": "0.043262",
+  "train/policy_gradient_loss": "-0.017731390786745276",
+  "train/clip_fraction": "0.3314290364583333",
+  "train/n_updates": "1620",
+  "train/value_loss": "0.9085402183234692",
+  "train/clip_range": "0.2",
+  "train/std": "0.09339761734008789",
+  "train/learning_rate": "0.0003",
+  "episode/follow_lane_rms_m": "0.08499348304024697",
+  "episode/follow_success": "1.0",
+  "style/log_odds": "-2.796896930661862",
+  "episode/lane_change_success": "1.0",
+  "episode/lane_change_lane_rms_m": "0.4632996954812323",
+  "episode/takeover_lane_rms_m": "0.13726926162780623",
+  "episode/takeover_success": "1.0"
+ },
+ "learning_curve": [
+  {
+   "timesteps_from": 0,
+   "stage": "follow",
+   "episodes": 22,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -58.56441749225963,
+   "mean_lane_rms_m": 0.07275561973208768,
+   "mean_style_log_odds": -1.512670139788606
+  },
+  {
+   "timesteps_from": 0,
+   "stage": "free",
+   "episodes": 73,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -75.42764857043959,
+   "mean_lane_rms_m": 0.12602061753104188,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 0,
+   "stage": "lead_brake",
+   "episodes": 1,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -53.62960433959961,
+   "mean_lane_rms_m": 0.07863530819242404,
+   "mean_style_log_odds": 1.392281650359441
+  },
+  {
+   "timesteps_from": 100000,
+   "stage": "follow",
+   "episodes": 29,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -50.750683093893116,
+   "mean_lane_rms_m": 0.0502729251201032,
+   "mean_style_log_odds": -1.5545969350908737
+  },
+  {
+   "timesteps_from": 100000,
+   "stage": "free",
+   "episodes": 23,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -55.12027939506199,
+   "mean_lane_rms_m": 0.1322384117448492,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 100000,
+   "stage": "lane_change",
+   "episodes": 20,
+   "success_rate": 0.55,
+   "collisions": 0,
+   "mean_return": -128.47672271728516,
+   "mean_lane_rms_m": 0.4828096548952952,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 100000,
+   "stage": "lead_brake",
+   "episodes": 24,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -90.2726092338562,
+   "mean_lane_rms_m": 0.09467957662487929,
+   "mean_style_log_odds": -0.4361165989991527
+  },
+  {
+   "timesteps_from": 100000,
+   "stage": "takeover",
+   "episodes": 6,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -60.609612782796226,
+   "mean_lane_rms_m": 0.1061758468279253,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 200000,
+   "stage": "follow",
+   "episodes": 18,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -48.33666801452637,
+   "mean_lane_rms_m": 0.06206876449948636,
+   "mean_style_log_odds": -1.7389126268732438
+  },
+  {
+   "timesteps_from": 200000,
+   "stage": "free",
+   "episodes": 15,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -50.30871480305989,
+   "mean_lane_rms_m": 0.1359605110100295,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 200000,
+   "stage": "lane_change",
+   "episodes": 16,
+   "success_rate": 0.6875,
+   "collisions": 0,
+   "mean_return": -118.99461603164673,
+   "mean_lane_rms_m": 0.45523038027320556,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 200000,
+   "stage": "lead_brake",
+   "episodes": 23,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -94.55455713686736,
+   "mean_lane_rms_m": 0.0947695291800512,
+   "mean_style_log_odds": -1.0522998192134925
+  },
+  {
+   "timesteps_from": 200000,
+   "stage": "takeover",
+   "episodes": 24,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -64.6110390027364,
+   "mean_lane_rms_m": 0.15513402875046164,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 300000,
+   "stage": "follow",
+   "episodes": 20,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -64.92798519134521,
+   "mean_lane_rms_m": 0.07534818441890433,
+   "mean_style_log_odds": -2.9235454277864212
+  },
+  {
+   "timesteps_from": 300000,
+   "stage": "free",
+   "episodes": 26,
+   "success_rate": 0.9615384615384616,
+   "collisions": 0,
+   "mean_return": -50.175358258760895,
+   "mean_lane_rms_m": 0.09098969594267617,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 300000,
+   "stage": "lane_change",
+   "episodes": 12,
+   "success_rate": 0.9166666666666666,
+   "collisions": 0,
+   "mean_return": -105.72568766276042,
+   "mean_lane_rms_m": 0.4105683132590549,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 300000,
+   "stage": "lead_brake",
+   "episodes": 16,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -103.59546375274658,
+   "mean_lane_rms_m": 0.06308385392581908,
+   "mean_style_log_odds": -2.346827081516646
+  },
+  {
+   "timesteps_from": 300000,
+   "stage": "takeover",
+   "episodes": 28,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -65.31170613425118,
+   "mean_lane_rms_m": 0.11878723556725672,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 400000,
+   "stage": "follow",
+   "episodes": 25,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -71.45018951416016,
+   "mean_lane_rms_m": 0.05954339612934918,
+   "mean_style_log_odds": -3.279638599816895
+  },
+  {
+   "timesteps_from": 400000,
+   "stage": "free",
+   "episodes": 22,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -49.48656324906783,
+   "mean_lane_rms_m": 0.10298817689473107,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 400000,
+   "stage": "lane_change",
+   "episodes": 21,
+   "success_rate": 0.9047619047619048,
+   "collisions": 0,
+   "mean_return": -111.2843980335054,
+   "mean_lane_rms_m": 0.43535477999439753,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 400000,
+   "stage": "lead_brake",
+   "episodes": 20,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -107.5277271270752,
+   "mean_lane_rms_m": 0.07835998451679274,
+   "mean_style_log_odds": -2.3745926672222475
+  },
+  {
+   "timesteps_from": 400000,
+   "stage": "takeover",
+   "episodes": 14,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -59.324065344674246,
+   "mean_lane_rms_m": 0.12295308032747358,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 500000,
+   "stage": "follow",
+   "episodes": 19,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -67.98820314909283,
+   "mean_lane_rms_m": 0.06237569504504665,
+   "mean_style_log_odds": -2.652150788834653
+  },
+  {
+   "timesteps_from": 500000,
+   "stage": "free",
+   "episodes": 24,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -50.11646842956543,
+   "mean_lane_rms_m": 0.10951575619697435,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 500000,
+   "stage": "lane_change",
+   "episodes": 17,
+   "success_rate": 0.6470588235294118,
+   "collisions": 0,
+   "mean_return": -121.97698256548713,
+   "mean_lane_rms_m": 0.4774885989012656,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 500000,
+   "stage": "lead_brake",
+   "episodes": 18,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -100.57832484775119,
+   "mean_lane_rms_m": 0.0826031243609849,
+   "mean_style_log_odds": -1.6944045073569174
+  },
+  {
+   "timesteps_from": 500000,
+   "stage": "takeover",
+   "episodes": 18,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -62.379709243774414,
+   "mean_lane_rms_m": 0.13035959853858833,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 600000,
+   "stage": "follow",
+   "episodes": 18,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -52.30398718516032,
+   "mean_lane_rms_m": 0.06790368215822744,
+   "mean_style_log_odds": -2.6521652448577733
+  },
+  {
+   "timesteps_from": 600000,
+   "stage": "free",
+   "episodes": 17,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -44.454842286951404,
+   "mean_lane_rms_m": 0.09617644991111905,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 600000,
+   "stage": "lane_change",
+   "episodes": 24,
+   "success_rate": 0.7916666666666666,
+   "collisions": 0,
+   "mean_return": -113.80656846364339,
+   "mean_lane_rms_m": 0.4413408749214234,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 600000,
+   "stage": "lead_brake",
+   "episodes": 20,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -90.51576499938965,
+   "mean_lane_rms_m": 0.08513535695516837,
+   "mean_style_log_odds": -2.664251358074937
+  },
+  {
+   "timesteps_from": 600000,
+   "stage": "takeover",
+   "episodes": 23,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -64.14921221525773,
+   "mean_lane_rms_m": 0.15794094825622548,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 700000,
+   "stage": "follow",
+   "episodes": 26,
+   "success_rate": 0.9615384615384616,
+   "collisions": 0,
+   "mean_return": -114.55763075901912,
+   "mean_lane_rms_m": 0.05706691169772553,
+   "mean_style_log_odds": -2.2574224428420533
+  },
+  {
+   "timesteps_from": 700000,
+   "stage": "free",
+   "episodes": 16,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -44.82274913787842,
+   "mean_lane_rms_m": 0.09213848044400356,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 700000,
+   "stage": "lane_change",
+   "episodes": 19,
+   "success_rate": 0.3157894736842105,
+   "collisions": 0,
+   "mean_return": -139.87729363692435,
+   "mean_lane_rms_m": 0.526648599653245,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 700000,
+   "stage": "lead_brake",
+   "episodes": 21,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -74.47667294456845,
+   "mean_lane_rms_m": 0.07984669048925472,
+   "mean_style_log_odds": -2.162461187776733
+  },
+  {
+   "timesteps_from": 700000,
+   "stage": "takeover",
+   "episodes": 20,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -65.96018600463867,
+   "mean_lane_rms_m": 0.09960754090748541,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 800000,
+   "stage": "follow",
+   "episodes": 20,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -86.21658267974854,
+   "mean_lane_rms_m": 0.0643331808681267,
+   "mean_style_log_odds": -2.775404118121045
+  },
+  {
+   "timesteps_from": 800000,
+   "stage": "free",
+   "episodes": 19,
+   "success_rate": 0.9473684210526315,
+   "collisions": 0,
+   "mean_return": -43.15989183124743,
+   "mean_lane_rms_m": 0.08425800564461505,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 800000,
+   "stage": "lane_change",
+   "episodes": 25,
+   "success_rate": 0.76,
+   "collisions": 0,
+   "mean_return": -117.41088836669923,
+   "mean_lane_rms_m": 0.46723531578833083,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 800000,
+   "stage": "lead_brake",
+   "episodes": 16,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -77.04028367996216,
+   "mean_lane_rms_m": 0.08102036285089431,
+   "mean_style_log_odds": -2.0795414876382563
+  },
+  {
+   "timesteps_from": 800000,
+   "stage": "takeover",
+   "episodes": 16,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -56.45822286605835,
+   "mean_lane_rms_m": 0.1352424872282848,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 900000,
+   "stage": "follow",
+   "episodes": 15,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -55.143745803833006,
+   "mean_lane_rms_m": 0.051861130744779826,
+   "mean_style_log_odds": -1.9427215173208778
+  },
+  {
+   "timesteps_from": 900000,
+   "stage": "free",
+   "episodes": 21,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -41.37246631440662,
+   "mean_lane_rms_m": 0.08086506284436665,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 900000,
+   "stage": "lane_change",
+   "episodes": 28,
+   "success_rate": 0.7142857142857143,
+   "collisions": 0,
+   "mean_return": -114.77592631748745,
+   "mean_lane_rms_m": 0.45382751823221573,
+   "mean_style_log_odds": null
+  },
+  {
+   "timesteps_from": 900000,
+   "stage": "lead_brake",
+   "episodes": 17,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -74.34364027135513,
+   "mean_lane_rms_m": 0.07636400903633665,
+   "mean_style_log_odds": -1.581925584013899
+  },
+  {
+   "timesteps_from": 900000,
+   "stage": "takeover",
+   "episodes": 21,
+   "success_rate": 1.0,
+   "collisions": 0,
+   "mean_return": -57.24769846598307,
+   "mean_lane_rms_m": 0.10346637858615367,
+   "mean_style_log_odds": null
+  }
+ ],
+ "evaluation": {
+  "run": "artifacts\\runs\\demand_ppo_pilot2",
+  "stages": {
+   "free": {
+    "policy": {
+     "episodes": 10,
+     "success_rate": 1.0,
+     "collisions": 0,
+     "off_road": 0,
+     "lane_rms_m": 0.0882657896867455,
+     "min_gap_m": null,
+     "return": -28.535301816205646,
+     "task_return": -25.371866270932987
+    },
+    "reflex": {
+     "episodes": 10,
+     "success_rate": 1.0,
+     "collisions": 0,
+     "off_road": 0,
+     "lane_rms_m": 0.11627242850813505,
+     "min_gap_m": null,
+     "return": -18.265843681634557,
+     "task_return": -18.265843681634557
+    },
+    "task_return_difference": {
+     "mean": -7.106022589298428,
+     "ci95": [
+      -9.203821959829554,
+      -3.954596371625861
+     ]
+    }
+   },
+   "follow": {
+    "policy": {
+     "episodes": 10,
+     "success_rate": 1.0,
+     "collisions": 0,
+     "off_road": 0,
+     "lane_rms_m": 0.11651659615245882,
+     "min_gap_m": 14.867054229945193,
+     "return": -85.38365203158699,
+     "task_return": -81.07261162846382
+    },
+    "reflex": {
+     "episodes": 10,
+     "success_rate": 1.0,
+     "collisions": 0,
+     "off_road": 0,
+     "lane_rms_m": 0.14195504748811644,
+     "min_gap_m": 10.407056045027002,
+     "return": -37.98935787901496,
+     "task_return": -37.98935787901496
+    },
+    "task_return_difference": {
+     "mean": -43.08325374944887,
+     "ci95": [
+      -50.18073094631397,
+      -35.962463320206695
+     ]
+    }
+   },
+   "lead_brake": {
+    "policy": {
+     "episodes": 10,
+     "success_rate": 1.0,
+     "collisions": 0,
+     "off_road": 0,
+     "lane_rms_m": 0.06774712348742098,
+     "min_gap_m": 10.128042425196991,
+     "return": -70.04487233418108,
+     "task_return": -66.24421163739058
+    },
+    "reflex": {
+     "episodes": 10,
+     "success_rate": 1.0,
+     "collisions": 0,
+     "off_road": 0,
+     "lane_rms_m": 0.07268840349101743,
+     "min_gap_m": 6.038667092477977,
+     "return": -26.82644194917301,
+     "task_return": -26.82644194917301
+    },
+    "task_return_difference": {
+     "mean": -39.417769688217575,
+     "ci95": [
+      -46.18002898956893,
+      -32.053447341753845
+     ]
+    }
+   },
+   "lane_change": {
+    "policy": {
+     "episodes": 10,
+     "success_rate": 0.9,
+     "collisions": 0,
+     "off_road": 0,
+     "lane_rms_m": 0.46136255883652294,
+     "min_gap_m": null,
+     "return": -102.68964845809145,
+     "task_return": -98.79936587922934
+    },
+    "reflex": {
+     "episodes": 10,
+     "success_rate": 0.6,
+     "collisions": 0,
+     "off_road": 0,
+     "lane_rms_m": 0.4924607196172923,
+     "min_gap_m": null,
+     "return": -93.9194022339149,
+     "task_return": -93.9194022339149
+    },
+    "task_return_difference": {
+     "mean": -4.879963645314456,
+     "ci95": [
+      -10.775399186881542,
+      5.086818624103825
+     ]
+    }
+   },
+   "takeover": {
+    "policy": {
+     "episodes": 10,
+     "success_rate": 1.0,
+     "collisions": 0,
+     "off_road": 0,
+     "lane_rms_m": 0.10595399943947496,
+     "min_gap_m": null,
+     "return": -49.57016010805629,
+     "task_return": -47.47963305553718
+    },
+    "reflex": {
+     "episodes": 10,
+     "success_rate": 1.0,
+     "collisions": 0,
+     "off_road": 0,
+     "lane_rms_m": 0.12808420886080674,
+     "min_gap_m": null,
+     "return": -40.812351820195886,
+     "task_return": -40.812351820195886
+    },
+    "task_return_difference": {
+     "mean": -6.667281235341292,
+     "ci95": [
+      -8.01846733565764,
+      -5.04502512233574
+     ]
+    }
+   },
+   "ngsim": {
+    "policy": {
+     "episodes": 120,
+     "success_rate": 0.9916666666666667,
+     "collisions": 0,
+     "off_road": 0,
+     "lane_rms_m": 0.028172925444423787,
+     "min_gap_m": 0.7794352500644885,
+     "return": -45.587706224509944,
+     "task_return": -40.336171359573854
+    },
+    "reflex": {
+     "episodes": 120,
+     "success_rate": 0.9916666666666667,
+     "collisions": 0,
+     "off_road": 0,
+     "lane_rms_m": 0.008721937691627334,
+     "min_gap_m": 0.7794352500644885,
+     "return": -17.59434174367583,
+     "task_return": -17.59434174367583
+    },
+    "task_return_difference": {
+     "mean": -22.741829615898027,
+     "ci95": [
+      -27.268932929870033,
+      -19.286091457363575
+     ]
+    }
+   }
+  },
+  "human_floor_auc": 0.45500000000000007,
+  "human_likeness": {
+   "trials": 120,
+   "policy": {
+    "gap_rmse_m": {
+     "mean": 4.712170490154949,
+     "median": 4.041166540101149
+    },
+    "judge_auc": 0.9847222222222223,
+    "scoreboard": {
+     "features": {
+      "thw_mean_s": {
+       "human_median": 1.982973097674716,
+       "agent_median": 2.676351705302836,
+       "ovl": 0.4083333333333334,
+       "passed": false
+      },
+      "thw_sd_s": {
+       "human_median": 0.483850246360505,
+       "agent_median": 0.5633439227343224,
+       "ovl": 0.7583333333333333,
+       "passed": true
+      },
+      "thw_p10_s": {
+       "human_median": 1.424895398378871,
+       "agent_median": 1.9678528066969583,
+       "ovl": 0.30000000000000004,
+       "passed": false
+      },
+      "gap_p10_m": {
+       "human_median": 6.524224483184213,
+       "agent_median": 10.255551046207604,
+       "ovl": 0.5666666666666667,
+       "passed": false
+      },
+      "accel_sd_mps2": {
+       "human_median": 0.7576120503077137,
+       "agent_median": 1.1681268518350887,
+       "ovl": 0.375,
+       "passed": false
+      },
+      "jerk_rms_mps3": {
+       "human_median": 1.2772561733325505,
+       "agent_median": 1.705626516661967,
+       "ovl": 0.5333333333333333,
+       "passed": false
+      },
+      "relative_speed_abs_mps": {
+       "human_median": 0.9192545250977534,
+       "agent_median": 0.9350131149204881,
+       "ovl": 0.7749999999999999,
+       "passed": true
+      },
+      "brake_fraction": {
+       "human_median": 0.19402985074626866,
+       "agent_median": 0.3582089552238806,
+       "ovl": 0.34166666666666673,
+       "passed": false
+      }
+     },
+     "passed": 2,
+     "total": 8
+    }
+   },
+   "reflex": {
+    "gap_rmse_m": {
+     "mean": 3.1736546518369124,
+     "median": 2.7311601693671967
+    },
+    "judge_auc": 0.9322916666666667,
+    "scoreboard": {
+     "features": {
+      "thw_mean_s": {
+       "human_median": 1.982973097674716,
+       "agent_median": 1.871876130109936,
+       "ovl": 0.5166666666666667,
+       "passed": false
+      },
+      "thw_sd_s": {
+       "human_median": 0.483850246360505,
+       "agent_median": 0.2270898575032483,
+       "ovl": 0.6083333333333334,
+       "passed": true
+      },
+      "thw_p10_s": {
+       "human_median": 1.424895398378871,
+       "agent_median": 1.6511292282282335,
+       "ovl": 0.3916666666666666,
+       "passed": false
+      },
+      "gap_p10_m": {
+       "human_median": 6.524224483184213,
+       "agent_median": 7.67327497996591,
+       "ovl": 0.7083333333333334,
+       "passed": true
+      },
+      "accel_sd_mps2": {
+       "human_median": 0.7576120503077137,
+       "agent_median": 0.6828984915370783,
+       "ovl": 0.8333333333333333,
+       "passed": true
+      },
+      "jerk_rms_mps3": {
+       "human_median": 1.2772561733325505,
+       "agent_median": 1.0136444165397769,
+       "ovl": 0.6833333333333333,
+       "passed": true
+      },
+      "relative_speed_abs_mps": {
+       "human_median": 0.9192545250977534,
+       "agent_median": 0.5545716667875993,
+       "ovl": 0.5416666666666666,
+       "passed": false
+      },
+      "brake_fraction": {
+       "human_median": 0.19402985074626866,
+       "agent_median": 0.17412935323383086,
+       "ovl": 0.7583333333333333,
+       "passed": true
+      }
+     },
+     "passed": 5,
+     "total": 8
+    }
+   },
+   "gap_rmse_difference_m": {
+    "mean": 1.538515838318036,
+    "ci95": [
+     1.1484331951602036,
+     1.9491019365600972
+    ]
+   }
+  }
+ },
+ "note": "Model weights, VecNormalize statistics and NGSIM-derived banks stay in artifacts/ (git-ignored); NGSIM is CC BY-SA 3.0."
+}

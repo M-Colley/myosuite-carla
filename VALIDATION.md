@@ -170,6 +170,113 @@ reports no feature-based AUC. A first run without the adequacy check gave a
 model-vs-human AUC of 0.995 that would have been misleading. The toolkit's
 features and AUCs are verified on synthetic data in `tests/test_human_comparison.py`.
 
+## Policy training pilots
+
+Run on 2026-10-24 on the first PC with Stable-Baselines3 2.9.0, PyTorch
+2.14.1 (CPU build), Gymnasium 1.2.3 and NumPy 2.5.4, while an unrelated
+TD-MPC2 job used the GPU.
+
+**Human data.** `examples/download_ngsim.py` downloaded the NGSIM I-80 car
+trajectories (US DOT FHWA, CC BY-SA 3.0, https://doi.org/10.21949/1504477;
+4,377,903 rows, query and SHA-256 in
+[the aggregate summary](evidence/ngsim-i80-following-summary.json)). The data
+stay in `artifacts/`. Smoothed with a Savitzky-Golay filter, they give 8,878
+car-following trials of 20 s from 4,346 drivers (speeds 1.7-10.8 m/s, 5th-95th
+percentile; median time headway 1.98 s), split 70/30 by driver. Simulated
+drives pass through the identical 10 Hz processing. Pilot 1 used an earlier
+time grid that dropped the last sample of some windows (8,891 trials); its
+held-out bank therefore differs slightly from pilots 2 and 3.
+
+**Setup common to all pilots.** `examples/train_policy.py` trained PPO for
+1,001,472 steps with 6 workers in about 30 minutes each. The policy adds a
+residual to the reflex driver's desired acceleration (up to 2 m/s^2) and steer
+(up to 0.2), executed by its proprioceptive loops and the muscles of the fast
+preset on the vehicle surrogate. Other settings:
+
+- curriculum over curved free roads, NGSIM-leader following, lead braking,
+  lane changes and takeovers; every stage was unlocked by 168,000 steps;
+- surrogate parameters perturbed by up to 10% per episode;
+- per-episode takeover times from the meta-analytic lognormal;
+- the trial-level style reward from training drivers only.
+
+`examples/evaluate_policy.py` ran 10 paired episodes per stage, with policy
+and reflex driver on the same seed, plus 120 held-out NGSIM drivers.
+
+**What changed between pilots.**
+
+- Pilot 1: its car-following speed term aimed at the 16 m/s free-road target,
+  and the style reward (weight 0.5) came once per 20 s episode, nearly
+  discounted away at gamma 0.995.
+- Pilot 2: the desired speed behind a lead became `min(target, (gap - 2 m) /
+  1.6 s)`, as in the Intelligent Driver Model equilibrium, and the style
+  reward is paid every 5 s with weight 2.
+- Pilot 3: additionally, the action passes a first-order low-pass filter
+  (0.3 s), with the filter state in the observation.
+
+All three pilots completed every evaluation episode without collision or
+leaving the road. Task-return difference, policy minus reflex driver, with
+paired-bootstrap 95% intervals (evaluated under pilot 2's corrected reward;
+training penalties excluded):
+
+| Stage | Pilot 1 | Pilot 2 | Pilot 3 |
+| --- | --- | --- | --- |
+| Free road, curved | -22.3 [-25.4, -19.3] | -7.1 [-9.2, -4.0] | -0.1 [-5.2, +3.1] |
+| Following a random leader | -9.1 [-15.7, -0.8] | -43.1 [-50.2, -36.0] | +0.5 [-3.1, +4.3] |
+| Lead brakes | -13.5 [-15.5, -10.2] | -39.4 [-46.2, -32.1] | +1.3 [-1.2, +3.1] |
+| Lane change | -2.2 [-12.9, +7.3] | -4.9 [-10.8, +5.1] | +3.6 [-1.6, +10.6] |
+| Takeover | -11.5 [-13.3, -9.8] | -6.7 [-8.0, -5.0] | +3.6 [+2.0, +5.7] |
+| Held-out NGSIM leaders | -10.9 [-12.3, -9.6] | -22.7 [-27.3, -19.3] | -1.6 [-4.8, +0.2] |
+
+Human-likeness on 120 held-out drivers following their own recorded leaders
+(policy / reflex driver):
+
+| Run | Judge AUC | Human floor | Features with overlap >= 0.60 | Gap RMSE vs. the human | Gap RMSE difference [95% CI] |
+| --- | --- | --- | --- | --- | --- |
+| Pilot 1 | 0.983 / 0.957 | 0.491 | 3 / 4 of 8 | 4.20 / 3.96 m | +0.25 [+0.16, +0.35] m |
+| Pilot 2 | 0.985 / 0.932 | 0.455 | 2 / 5 of 8 | 4.71 / 3.17 m | +1.54 [+1.15, +1.95] m |
+| Pilot 3 | 0.937 / 0.932 | 0.455 | 6 / 5 of 8 | 3.47 / 3.17 m | +0.30 [+0.15, +0.55] m |
+
+Findings:
+
+- **Pilots 1 and 2 were worse than the reflex driver.** The unfiltered 50 Hz
+  residual made car following jerky: acceleration SD 1.21 and 1.17 m/s^2
+  against 0.76 for humans. The style reward's log-odds stayed between -2 and
+  -4 throughout pilot 2.
+- **Pilot 3 matches the reflex driver.** Low-pass filtering brought the
+  acceleration SD to 0.75 m/s^2. Task return does not differ significantly
+  from the reflex driver's in five stages, is better on takeovers, and lane
+  error falls in four of six.
+- **Human-likeness did not improve beyond the reflex driver.** Judge AUC is
+  0.94 against a 0.46 floor, and the gap error against the matched human is
+  0.30 m larger.
+- **Limits of the evidence.** These are single-seed pilots of 1 M steps;
+  claims about learned human-likeness need longer training, several seeds and
+  a reward-weight study.
+
+**Transfer to CARLA.** With the CARLA 0.10.0 / UE5.5 server on `-nullrhi`,
+`examples/drive_scenario.py --policy artifacts/runs/demand_ppo_pilot3 --fast`
+drove the three scenarios on Town10HD_Opt spawn 105 through the muscles, with
+the reflex driver on the same preset for comparison
+([evidence](evidence/ue55-policy-scenarios.json)). There was no collision and
+no off-road event, and the world was restored each time:
+
+| Scenario | Metric | Policy | Reflex driver |
+| --- | --- | --- | --- |
+| Lead brakes 12 to 0 m/s | Minimum gap / TTC | 2.23 m / 1.95 s | 1.91 m / 2.71 s |
+| Takeover request at 5 s | Takeover time | 3.00 s | 3.00 s |
+| Lane change 3.5 m left | Lateral error RMS / maximum | 0.50 / 1.34 m | 0.54 / 1.41 m |
+
+Learning curves, curricula and full evaluations:
+[pilot 1](evidence/training-pilot1.json), [pilot 2](evidence/training-pilot2.json),
+[pilot 3](evidence/training-pilot3.json). Model weights stay in `artifacts/`.
+
+With the training code the offline suite passes **326 tests, 4 live tests
+skipped** (MuJoCo 3.17) and **319 tests, 7 skipped** on MuJoCo 3.6.0, where
+Stable-Baselines3 and the optional exporters are not installed. Ruff, mypy and
+the wheel/sdist build pass. The live suite was not re-run after the training
+code was added; its 312-test result above predates it, and its live tests do
+not exercise the training modules.
+
 ## Deeper review, fault testing and performance
 
 The same fresh Python 3.12 environment was used for a further independent audit.

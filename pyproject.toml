@@ -25,6 +25,8 @@ lint = ["mypy>=1.15", "ruff>=0.11"]
 data = ["pandas>=2", "pyarrow>=14", "mcap>=1.2"]
 # Vehicle surrogate fitting and human-data comparison.
 analysis = ["scipy>=1.10", "scikit-learn>=1.3", "pandas>=2"]
+# Policy training with Stable-Baselines3 (training_sb3.py), as in arm_force_driving.
+rl = ["stable-baselines3>=2.8,<3", "scipy>=1.10", "scikit-learn>=1.3", "pandas>=2"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

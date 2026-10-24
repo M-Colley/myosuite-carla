@@ -125,6 +125,10 @@ class LeadVehicle:
         brake_to: Speed it brakes down to, m/s.
         resume_time: Time after which it accelerates back to ``speed``, s.
         acceleration: Re-acceleration, m/s^2.
+        profile: ``(time, speed)`` samples of a recorded leader, e.g. from
+            NGSIM. When given, the lead follows them by linear interpolation
+            (holding the last speed) instead of the cruise-brake profile, and
+            starts at the first sample's speed.
     """
 
     gap: float = 30.0
@@ -134,6 +138,7 @@ class LeadVehicle:
     brake_to: float = 0.0
     resume_time: float | None = None
     acceleration: float = 1.5
+    profile: tuple[tuple[float, float], ...] = ()
 
     def __post_init__(self) -> None:
         for name in ("gap", "speed", "deceleration", "brake_to", "acceleration"):
@@ -142,6 +147,22 @@ class LeadVehicle:
                 raise ValueError(f"{name} must be finite and non-negative")
         if self.brake_to > self.speed:
             raise ValueError("brake_to must not exceed speed")
+        profile = tuple((float(time), float(speed)) for time, speed in self.profile)
+        times = np.asarray([time for time, _ in profile])
+        speeds = np.asarray([speed for _, speed in profile])
+        if profile and (
+            not np.all(np.isfinite(times))
+            or not np.all(np.isfinite(speeds))
+            or np.any(speeds < 0)
+            or np.any(np.diff(times) <= 0)
+        ):
+            raise ValueError("profile needs increasing times and non-negative speeds")
+        object.__setattr__(self, "profile", profile)
+
+    def profile_speed(self, time: float) -> float:
+        """Return the recorded speed at ``time``; requires a profile."""
+        times, speeds = zip(*self.profile)
+        return float(np.interp(time, times, speeds))
 
 
 @dataclass(frozen=True)
@@ -305,7 +326,11 @@ class ScenarioMonitor:
         s, _, _ = scenario.lane.project(*telemetry.location[:2])
         if scenario.lead is not None:
             self._lead_s = s + VEHICLE_LENGTH + scenario.lead.gap
-            self._lead_speed = scenario.lead.speed
+            self._lead_speed = (
+                scenario.lead.profile_speed(0.0)
+                if scenario.lead.profile
+                else scenario.lead.speed
+            )
         self._event("scenario_start", scenario=scenario.name)
         if self.automation:
             self._event("automation_engaged")
@@ -315,6 +340,11 @@ class ScenarioMonitor:
     def _advance_lead(self, dt: float) -> None:
         lead = self.scenario.lead
         if lead is None:
+            return
+        if lead.profile:
+            speed = lead.profile_speed(self.time)
+            self._lead_s += 0.5 * (self._lead_speed + speed) * dt
+            self._lead_speed = speed
             return
         braking = lead.brake_time is not None and self.time >= lead.brake_time
         resumed = lead.resume_time is not None and self.time >= lead.resume_time

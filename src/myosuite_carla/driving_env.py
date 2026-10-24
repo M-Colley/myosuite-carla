@@ -111,6 +111,11 @@ class TaskConfig:
         collision: Terminal penalty for hitting the lead vehicle.
         off_road: Terminal penalty for leaving the road.
         safe_headway: Time headway below which the headway term acts, s.
+        follow_headway: Time gap that limits the desired speed behind a lead
+            vehicle, s; the speed term then rewards ``min(target, (gap -
+            follow_gap) / follow_headway)`` as the Intelligent Driver Model's
+            equilibrium does, instead of the free-road target.
+        follow_gap: Standstill gap behind a lead vehicle, m.
         near_distance: Near-point distance for the observation, m.
         far_preview: Far-point preview time for the observation, s.
         gap_clip: Gap observed when no lead vehicle is close, m.
@@ -126,6 +131,8 @@ class TaskConfig:
     collision: float = 100.0
     off_road: float = 50.0
     safe_headway: float = 1.0
+    follow_headway: float = 1.6
+    follow_gap: float = 2.0
     near_distance: float = 8.0
     far_preview: float = 2.0
     gap_clip: float = 100.0
@@ -305,6 +312,14 @@ class FullBodyDrivingEnv(gym.Env[NDArray[np.float32], NDArray[np.float32]]):
             "events": list(self.monitor.events),
         }
 
+    def set_scenario(self, scenario: Scenario) -> None:
+        """Use another scenario from the next reset, with a fresh monitor."""
+        if not isinstance(scenario, Scenario):
+            raise TypeError("scenario must be a Scenario")
+        self.scenario = scenario
+        self.monitor = ScenarioMonitor(scenario)
+        self._needs_reset = True
+
     def intent(self, action: Any) -> DriverIntent:
         """Convert an action vector into a validated driver intent."""
         values = np.clip(
@@ -382,13 +397,19 @@ class FullBodyDrivingEnv(gym.Env[NDArray[np.float32], NDArray[np.float32]]):
         headway = state["time_headway_s"]
         activation = self.driver.data.act[self._actadr]
         target = max(scenario.target_speed, 1.0)
+        desired = scenario.target_speed
+        if state["lead_present"] and math.isfinite(state["gap_m"]):
+            spacing = (state["gap_m"] - task.follow_gap) / max(
+                task.follow_headway, 1e-6
+            )
+            desired = min(desired, max(spacing, 0.0))
         terms = {
             "lane": -task.lane * (state["lane_offset_m"] / half_lane) ** 2 * driving,
             "heading": -task.heading
             * math.radians(state["heading_error_deg"]) ** 2
             * driving,
             "speed": -task.speed
-            * ((state["speed_mps"] - target) / target) ** 2
+            * ((state["speed_mps"] - desired) / target) ** 2
             * driving,
             "headway": -task.headway
             * max(0.0, (task.safe_headway - headway) / task.safe_headway)

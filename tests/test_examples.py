@@ -47,6 +47,9 @@ EXAMPLES = Path(__file__).resolve().parents[1] / "examples"
         "fit_vehicle_model.py",
         "compare_human.py",
         "validate_fullbody.py",
+        "download_ngsim.py",
+        "train_policy.py",
+        "evaluate_policy.py",
     ],
 )
 def test_example_scripts_document_their_options(script: str) -> None:

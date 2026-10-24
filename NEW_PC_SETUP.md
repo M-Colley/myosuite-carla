@@ -483,6 +483,20 @@ and restores the world:
 lanes, 170 m straight); it refuses a lane change toward a non-drivable lane.
 The identification takes about 10 minutes per three seeds on `-nullrhi`.
 
+Policy training needs no CARLA server. Install a CPU PyTorch and the `rl`
+extra, download the human NGSIM I-80 car-following data (about 280 MB from
+data.transportation.gov, CC BY-SA 3.0; keep it out of version control), train
+and evaluate:
+
+```powershell
+& $python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+& $python -m pip install -e '.[rl]'
+& $python examples/download_ngsim.py
+& $python examples/train_policy.py --ngsim artifacts/ngsim/ngsim-i80-cars.csv --timesteps 1000000 --n-envs 6
+& $python examples/evaluate_policy.py --run artifacts/runs/demand_ppo
+```
+
+One million steps took about 30 minutes with 6 workers on the first PC.
 ## 9. Save the reproduction record and stop only your server
 
 ```powershell

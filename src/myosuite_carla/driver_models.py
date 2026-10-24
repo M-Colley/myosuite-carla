@@ -182,9 +182,30 @@ class ReflexDriver:
         self._steer_integral = 0.0
         self._pedal_integral = 0.0
         self._engaged = True
+        #: Last desired acceleration (m/s^2) and normalized steer, offsets included.
+        self.demand = (0.0, 0.0)
 
-    def act(self, state: Mapping[str, float]) -> DriverIntent:
-        """Return the next intent from the current named state."""
+    @property
+    def engaged(self) -> bool:
+        """Return whether the driver is in the loop (not awaiting a takeover)."""
+        return self._engaged
+
+    def act(
+        self,
+        state: Mapping[str, float],
+        *,
+        acceleration_offset: float = 0.0,
+        steer_offset: float = 0.0,
+    ) -> DriverIntent:
+        """Return the next intent from the current named state.
+
+        Args:
+            state: Named observations, e.g. ``FullBodyDrivingEnv.state``.
+            acceleration_offset: Added to the desired acceleration, m/s^2.
+            steer_offset: Added to the desired normalized steer (not
+                integrated), so a learned residual acts on the demand and is
+                executed by the proprioceptive loops and the muscles.
+        """
         config = self.config
         self._history.append(dict(state))
         perceived = self._history[0]
@@ -200,6 +221,7 @@ class ReflexDriver:
         if not self._engaged:
             self._previous = perceived
             self._steer = current.get("input_steer", 0.0)
+            self.demand = (0.0, 0.0)
             return DriverIntent()
         steering = config.steering
         previous = self._previous or perceived
@@ -215,18 +237,19 @@ class ReflexDriver:
         self._previous = perceived
         rate = float(np.clip(rate, -config.max_steer_rate, config.max_steer_rate))
         self._steer = float(np.clip(self._steer + rate * self.dt, -1.0, 1.0))
+        desired = float(np.clip(self._steer + steer_offset, -1.0, 1.0))
         measured = current.get("input_steer", 0.0)
         self._steer_integral = float(
             np.clip(
                 self._steer_integral
-                + config.steer_integral * (self._steer - measured) * self.dt,
+                + config.steer_integral * (desired - measured) * self.dt,
                 -0.3,
                 0.3,
             )
         )
         offset = float(
             np.clip(
-                _inverse(config.steer_map, self._steer) + self._steer_integral,
+                _inverse(config.steer_map, desired) + self._steer_integral,
                 -0.5,
                 0.5,
             )
@@ -239,7 +262,8 @@ class ReflexDriver:
             gap,
             perceived.get("closing_speed_mps", 0.0),
             config.idm,
-        )
+        ) + float(acceleration_offset)
+        self.demand = (accel, desired)
         right = left = 0.0
         if accel > -config.coast_band:
             throttle = float(

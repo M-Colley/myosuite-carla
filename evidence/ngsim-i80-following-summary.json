@@ -1,0 +1,89 @@
+{
+ "attribution": "U.S. Department of Transportation Federal Highway Administration, Next Generation Simulation (NGSIM) Vehicle Trajectories and Supporting Data, https://doi.org/10.21949/1504477",
+ "license": "CC BY-SA 3.0",
+ "source": "https://data.transportation.gov/d/8ect-6jqj",
+ "query": {
+  "endpoint": "https://data.transportation.gov/resource/8ect-6jqj.csv",
+  "select": [
+   "vehicle_id",
+   "frame_id",
+   "global_time",
+   "local_x",
+   "local_y",
+   "v_length",
+   "v_vel",
+   "v_acc",
+   "lane_id",
+   "preceding",
+   "space_headway"
+  ],
+  "where": "location='i-80' AND v_class=2",
+  "order": "global_time,vehicle_id"
+ },
+ "rows": 4377903,
+ "sha256_of_rows": "bc3cff7ccc9c9fa5425f3424d5bee341dea2a35ea955328b3b221ee64c3931dc",
+ "downloaded_utc": "2026-10-24T12:30:52.284363+00:00",
+ "tracks": 5408,
+ "trials": 8878,
+ "drivers": 4346,
+ "split": {
+  "train_trials": 6164,
+  "test_trials": 2714,
+  "seed": 0,
+  "test_fraction": 0.3
+ },
+ "trial_rules": "20 s windows, one leader and lane, both tracked, gap > 0, speeds <= 16 m/s, at most 3 per driver; Savitzky-Golay (21 samples, order 3) at 10 Hz",
+ "speed_mps_q05_q50_q95": [
+  1.655,
+  5.974,
+  10.828
+ ],
+ "gap_m_q05_q50_q95": [
+  3.587,
+  10.007,
+  25.256
+ ],
+ "features": {
+  "thw_mean_s": {
+   "median": 1.9618321879678913,
+   "q25": 1.4784053964414468,
+   "q75": 2.592536118695522
+  },
+  "thw_sd_s": {
+   "median": 0.46653995608714754,
+   "q25": 0.29740406576242395,
+   "q75": 0.7524044688471294
+  },
+  "thw_p10_s": {
+   "median": 1.3564056292889173,
+   "q25": 0.98452391145497,
+   "q75": 1.8399565741260915
+  },
+  "gap_p10_m": {
+   "median": 6.653091636595718,
+   "q25": 4.480893519815638,
+   "q75": 9.868684828201523
+  },
+  "accel_sd_mps2": {
+   "median": 0.7532968226128677,
+   "q25": 0.5984108021002851,
+   "q75": 0.9613657969290499
+  },
+  "jerk_rms_mps3": {
+   "median": 1.26081529422729,
+   "q25": 0.9946552025458524,
+   "q75": 1.659016588002718
+  },
+  "relative_speed_abs_mps": {
+   "median": 0.8919075174112229,
+   "q25": 0.6893833114194172,
+   "q75": 1.1414797432086152
+  },
+  "brake_fraction": {
+   "median": 0.19402985074626866,
+   "q25": 0.12935323383084577,
+   "q75": 0.263681592039801
+  }
+ },
+ "note": "Aggregates only; no NGSIM rows are committed."
+}

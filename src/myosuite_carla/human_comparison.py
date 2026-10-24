@@ -18,6 +18,13 @@ whole groups (participants, drives or simulated episodes) held out together.
 0.5 means indistinguishable. :func:`human_floor` gives the same AUC for each
 human participant against all others, the natural between-driver spread that
 a model need not undercut. Only aggregates leave these functions.
+
+Car-following trials (:class:`~myosuite_carla.ngsim.FollowingTrial`, human or
+simulated through the same processing) become :data:`FOLLOWING_FEATURES`.
+:func:`scoreboard` compares each feature's distributions by their histogram
+overlap coefficient, passing at 0.60 or more as in arm_force_driving's judge,
+and :class:`StyleDiscriminator` turns a gradient-boosted classifier's log-odds
+into a trial-level style reward (GAIL, Ho and Ermon, 2016, at trial level).
 Requires SciPy and scikit-learn.
 """
 
@@ -42,6 +49,19 @@ SIGNAL_FEATURES = {
     "steer": FEATURES[:2],
     "acceleration": FEATURES[2:],
 }
+#: Trial-level car-following features.
+FOLLOWING_FEATURES = (
+    "thw_mean_s",
+    "thw_sd_s",
+    "thw_p10_s",
+    "gap_p10_m",
+    "accel_sd_mps2",
+    "jerk_rms_mps3",
+    "relative_speed_abs_mps",
+    "brake_fraction",
+)
+#: Overlap coefficient at or above which a feature counts as human-like.
+OVL_PASS = 0.60
 
 
 def _reversals(signal: NDArray[np.float64], gap: float) -> int:
@@ -148,6 +168,112 @@ def adequacy(
     }
 
 
+def following_features(trial: Any) -> NDArray[np.float64]:
+    """Return :data:`FOLLOWING_FEATURES` of one 10 Hz car-following trial.
+
+    Time headway is the gap over ``max(speed, 1 m/s)`` so that standstill
+    stays finite; jerk is the derivative of the smoothed acceleration.
+    """
+    speed = np.asarray(trial.speed, dtype=float)
+    gap = np.asarray(trial.gap, dtype=float)
+    accel = np.asarray(trial.acceleration, dtype=float)
+    headway = gap / np.maximum(speed, 1.0)
+    dt = float(np.median(np.diff(trial.time)))
+    return np.asarray(
+        [
+            float(np.mean(headway)),
+            float(np.std(headway)),
+            float(np.percentile(headway, 10)),
+            float(np.percentile(gap, 10)),
+            float(np.std(accel)),
+            float(np.sqrt(np.mean(np.gradient(accel, dt) ** 2))),
+            float(np.mean(np.abs(np.asarray(trial.leader_speed) - speed))),
+            float(np.mean(accel < -0.5)),
+        ]
+    )
+
+
+def overlap_coefficient(
+    first: Sequence[float], second: Sequence[float], bins: int = 20
+) -> float:
+    """Shared area of two normalized histograms on their common range."""
+    a: NDArray[np.float64] = np.asarray(first, dtype=float)
+    b: NDArray[np.float64] = np.asarray(second, dtype=float)
+    low, high = float(min(a.min(), b.min())), float(max(a.max(), b.max()))
+    if high <= low:
+        return 1.0
+    edges = np.linspace(low, high, bins + 1)
+    pa = np.histogram(a, edges)[0] / len(a)
+    pb = np.histogram(b, edges)[0] / len(b)
+    return float(np.minimum(pa, pb).sum())
+
+
+def scoreboard(
+    human: NDArray[np.float64],
+    agent: NDArray[np.float64],
+    names: Sequence[str] = FOLLOWING_FEATURES,
+) -> dict[str, Any]:
+    """Per-feature medians and overlap coefficients of two trial banks."""
+    rows = {}
+    for index, name in enumerate(names):
+        ovl = overlap_coefficient(human[:, index], agent[:, index])
+        rows[name] = {
+            "human_median": float(np.median(human[:, index])),
+            "agent_median": float(np.median(agent[:, index])),
+            "ovl": ovl,
+            "passed": ovl >= OVL_PASS,
+        }
+    return {
+        "features": rows,
+        "passed": int(sum(row["passed"] for row in rows.values())),
+        "total": len(rows),
+    }
+
+
+class StyleDiscriminator:
+    """Gradient-boosted human-vs-agent classifier for a trial-level reward.
+
+    :meth:`fit` uses human training trials and the latest agent trials with
+    balanced class weights; :meth:`log_odds` is then the evidence that a new
+    trial is human, which a policy can be paid at the end of each trial.
+
+    Args:
+        clip: Bound of the returned log-odds.
+        seed: Classifier seed.
+    """
+
+    def __init__(self, clip: float = 5.0, seed: int = 0) -> None:
+        self.clip = float(clip)
+        self.seed = int(seed)
+        self.model: Any = None
+
+    @property
+    def fitted(self) -> bool:
+        """Return whether :meth:`fit` has run."""
+        return self.model is not None
+
+    def fit(
+        self, human: NDArray[np.float64], agent: NDArray[np.float64]
+    ) -> StyleDiscriminator:
+        """Fit on human (label 1) and agent (label 0) feature rows."""
+        ensemble = importlib.import_module("sklearn.ensemble")
+        features = np.vstack([human, agent])
+        labels = np.r_[np.ones(len(human)), np.zeros(len(agent))]
+        model = ensemble.HistGradientBoostingClassifier(
+            max_iter=100, max_depth=3, class_weight="balanced", random_state=self.seed
+        )
+        self.model = model.fit(features, labels)
+        return self
+
+    def log_odds(self, features: NDArray[np.float64]) -> NDArray[np.float64]:
+        """Return the clipped log-odds that each row is human."""
+        if self.model is None:
+            raise RuntimeError("Fit the discriminator first")
+        rows = np.atleast_2d(np.asarray(features, dtype=float))
+        probability = np.clip(self.model.predict_proba(rows)[:, 1], 1e-6, 1 - 1e-6)
+        return np.clip(np.log(probability / (1 - probability)), -self.clip, self.clip)
+
+
 def discriminability(
     first: NDArray[np.float64],
     second: NDArray[np.float64],
@@ -156,11 +282,14 @@ def discriminability(
     *,
     folds: int = 5,
     seed: int = 0,
+    model: str = "logistic",
 ) -> dict[str, Any]:
     """Cross-validated AUC of a classifier separating two sets of windows.
 
     Groups are held out together (``StratifiedGroupKFold``), so the classifier
-    is always tested on drivers or episodes it has not seen.
+    is always tested on drivers or episodes it has not seen. ``model`` is
+    ``"logistic"`` (standardized logistic regression) or ``"boosting"``
+    (gradient-boosted trees, a stricter judge for nonlinear differences).
 
     Returns:
         ``auc``, window counts and the number of folds used.
@@ -170,6 +299,9 @@ def discriminability(
     pipeline = importlib.import_module("sklearn.pipeline")
     preprocessing = importlib.import_module("sklearn.preprocessing")
     linear = importlib.import_module("sklearn.linear_model")
+    ensemble = importlib.import_module("sklearn.ensemble")
+    if model not in ("logistic", "boosting"):
+        raise ValueError("model must be 'logistic' or 'boosting'")
     features = np.vstack([first, second])
     labels = np.r_[np.zeros(len(first)), np.ones(len(second))]
     groups = np.asarray(
@@ -188,9 +320,15 @@ def discriminability(
     )
     scores = np.zeros(len(labels))
     for train, test in splitter.split(features, labels, groups):
-        classifier = pipeline.make_pipeline(
-            preprocessing.StandardScaler(),
-            linear.LogisticRegression(max_iter=1000, class_weight="balanced"),
+        classifier = (
+            pipeline.make_pipeline(
+                preprocessing.StandardScaler(),
+                linear.LogisticRegression(max_iter=1000, class_weight="balanced"),
+            )
+            if model == "logistic"
+            else ensemble.HistGradientBoostingClassifier(
+                max_iter=100, max_depth=3, class_weight="balanced", random_state=seed
+            )
         )
         classifier.fit(features[train], labels[train])
         scores[test] = classifier.predict_proba(features[test])[:, 1]
@@ -236,7 +374,9 @@ def human_floor(
     }
 
 
-def summarize(features: NDArray[np.float64]) -> dict[str, dict[str, float]]:
+def summarize(
+    features: NDArray[np.float64], names: Sequence[str] = FEATURES
+) -> dict[str, dict[str, float]]:
     """Median and interquartile range of every feature."""
     return {
         name: {
@@ -244,5 +384,5 @@ def summarize(features: NDArray[np.float64]) -> dict[str, dict[str, float]]:
             "q25": float(np.percentile(features[:, index], 25)),
             "q75": float(np.percentile(features[:, index], 75)),
         }
-        for index, name in enumerate(FEATURES)
+        for index, name in enumerate(names)
     }

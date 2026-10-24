@@ -344,6 +344,56 @@ per second (4.5 times real time) and 8 processes 973 steps per second. The
 package does not register environments; registration through
 `myosuite.make_env` must follow MyoSuite's CPU/mjlab task contract.
 
+## Train a policy
+
+`training.py` and `training_sb3.py` follow arm_force_driving's conventions
+(Stable-Baselines3, `VecNormalize` saved with the policy, a residual on an
+expert controller and a judge-based trial reward) in independent code.
+
+- `DrivingTaskWrapper` maps a normalized action in one of three modes:
+  `demand` (default) adds a bounded residual to the reflex driver's desired
+  acceleration (up to 2 m/s^2) and steer (up to 0.2), which its proprioceptive
+  loops and the muscles execute; `intent` adds it to the motor program;
+  `direct` controls the motor program. A zero residual reproduces the reflex
+  driver exactly, and the residual acts only while that driver is engaged, so
+  a policy cannot take over faster than its driver. Actions pass a 0.3 s
+  low-pass filter, whose state is observed; without it, 50 Hz residuals made
+  car following unhumanly jerky. Each episode draws the
+  takeover time from a lognormal with the meta-analytic mean 2.72 s and
+  standard deviation 1.45 s (Zhang et al., 2019).
+- `ScenarioSampler` draws per episode from curriculum stages: free driving on
+  randomly curved roads, car following that replays a recorded human leader,
+  a braking lead vehicle, a lane change and a takeover. The surrogate's
+  parameters are perturbed by up to 10% per episode.
+- `CurriculumCallback` unlocks a stage at 80% recent success.
+  `StyleRewardCallback` pays, at the end of each car-following episode, the
+  log-odds of a gradient-boosted discriminator refit on human trials against
+  the latest agent trials (trial-level GAIL). `behaviour_clone` and
+  `collect_expert` warm-start a direct policy, with DAgger rounds.
+
+Human car following comes from NGSIM I-80 (US DOT FHWA, CC BY-SA 3.0,
+https://doi.org/10.21949/1504477). The data are downloaded, not committed;
+positions are smoothed with a Savitzky-Golay filter, and simulated drives go
+through the identical 10 Hz processing. Trials are split by driver, and only
+training drivers inform the reward.
+
+```shell
+python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+python -m pip install -e ".[rl]"
+python examples/download_ngsim.py
+python examples/train_policy.py --ngsim artifacts/ngsim/ngsim-i80-cars.csv --timesteps 1000000
+python examples/evaluate_policy.py --run artifacts/runs/demand_ppo
+```
+
+`evaluate_policy.py` runs every episode twice from the same seed, with the
+policy and with the reflex driver, and compares both with held-out human
+drivers following the same recorded leaders: gap error against that human,
+judge AUC and per-feature overlap.
+
+Three 1 M-step pilots are recorded in [VALIDATION.md](VALIDATION.md#policy-training-pilots).
+The third matches the reflex driver's task performance, transfers to CARLA
+without collision and is not yet more human-like than the reflex driver.
+
 ## Muscle conditions and posture
 
 `FullBodyDriverConfig` reuses MyoSuite's implementations:

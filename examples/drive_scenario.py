@@ -59,6 +59,37 @@ def _summary(
     }
 
 
+def _trained_agent(run: Path, env: FullBodyDrivingEnv) -> tuple[Any, Any]:
+    """Wrap the env for a trained policy and return (wrapper, action function)."""
+    import pickle
+
+    from stable_baselines3 import PPO, SAC
+
+    from myosuite_carla.training import DrivingTaskWrapper
+
+    config = json.loads((run / "config.json").read_text())
+    algorithm = PPO if config["args"]["algo"] == "ppo" else SAC
+    model = algorithm.load(run / "model.zip", device="cpu")
+    with (run / "vecnormalize.pkl").open("rb") as handle:
+        normalizer = pickle.load(handle)
+    normalizer.training = False
+    agent = DrivingTaskWrapper(
+        env,
+        None,
+        mode=config["args"]["mode"],
+        vehicle_spread=0.0,
+        takeover_population=False,
+    )
+
+    def act(observation: Any) -> Any:
+        action, _ = model.predict(
+            normalizer.normalize_obs(observation), deterministic=True
+        )
+        return action
+
+    return agent, act
+
+
 def main() -> int:
     """Run one scenario and write its summary."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -91,6 +122,11 @@ def main() -> int:
     )
     parser.add_argument("--record", type=Path)
     parser.add_argument("--formats", default="csv,opensim,arm_force")
+    parser.add_argument(
+        "--policy",
+        type=Path,
+        help="run directory of train_policy.py; drives with that policy",
+    )
     parser.add_argument("--output", type=Path, default=Path("artifacts/scenario.json"))
     args = parser.parse_args()
     unknown = set(args.formats.split(",")) - set(FORMATS)
@@ -197,14 +233,24 @@ def main() -> int:
                 spawn_index=args.spawn,
                 lane_length_m=scenario.lane.length,
             )
-        policy = ReflexDriver(env.dt)
-        _, reset_info = env.reset(seed=0)
-        policy.reset()
+        if args.policy:
+            agent, act = _trained_agent(args.policy, env)
+            observation, reset_info = agent.reset(seed=0)
+            report["policy"] = str(args.policy)
+        else:
+            policy = ReflexDriver(env.dt)
+            _, reset_info = env.reset(seed=0)
+            policy.reset()
         if args.backend == "carla" and scenario.lead is not None:
             lead.spawn(env.vehicle.snapshot().location[2])
         infos = []
         while True:
-            _, _, terminated, truncated, info = env.step(policy.act(env.state))
+            if args.policy:
+                observation, _, terminated, truncated, info = agent.step(
+                    act(observation)
+                )
+            else:
+                _, _, terminated, truncated, info = env.step(policy.act(env.state))
             infos.append(info)
             if terminated or truncated:
                 break
