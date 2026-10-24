@@ -1,0 +1,432 @@
+{
+  "status": "passed",
+  "started_utc": "2026-10-24T04:48:40.354268+00:00",
+  "target_ref": "0.10.0",
+  "asserted_build_ref": "0.10.0",
+  "source_verified": false,
+  "mujoco_version": "3.17.0",
+  "tests": [
+    {
+      "name": "test_1200_real_muscle_frames_remain_in_lockstep",
+      "status": "passed",
+      "frames": 1200,
+      "excitation": 0.015,
+      "control_dt": 0.02,
+      "muscles": [
+        "extn",
+        "adabR",
+        "adabL",
+        "mflx",
+        "dflx"
+      ],
+      "sampled_frames": [
+        {
+          "frame": 5256,
+          "mujoco_time": 0.020000000000000014,
+          "carla_time": 73.09913805872202,
+          "requested": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "speed_mps": 0.0051277014984582436,
+          "clock_drift_seconds": -4.4703485010955113e-10
+        },
+        {
+          "frame": 5356,
+          "mujoco_time": 2.019999999999842,
+          "carla_time": 75.09913801401854,
+          "requested": {
+            "throttle": 0.5898588229611398,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.5898588299751282,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 1
+          },
+          "speed_mps": 1.108736059461554,
+          "clock_drift_seconds": -4.515036033936326e-08
+        },
+        {
+          "frame": 5456,
+          "mujoco_time": 4.020000000000492,
+          "carla_time": 77.09913796931505,
+          "requested": {
+            "throttle": 0.8313044016279222,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.8313044309616089,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 1
+          },
+          "speed_mps": 5.081431937749697,
+          "clock_drift_seconds": -8.985449362342024e-08
+        },
+        {
+          "frame": 5556,
+          "mujoco_time": 6.019999999999383,
+          "carla_time": 79.09913792461157,
+          "requested": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 1
+          },
+          "speed_mps": 7.181612067091703,
+          "clock_drift_seconds": -1.3455686875829542e-07
+        },
+        {
+          "frame": 5656,
+          "mujoco_time": 8.01999999999831,
+          "carla_time": 81.09913787990808,
+          "requested": {
+            "throttle": 1.1076691830867335e-25,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 1.1076691793047685e-25,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 1
+          },
+          "speed_mps": 5.903717460956846,
+          "clock_drift_seconds": -1.792592794203074e-07
+        },
+        {
+          "frame": 5756,
+          "mujoco_time": 10.020000000000755,
+          "carla_time": 83.0991378352046,
+          "requested": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 1
+          },
+          "speed_mps": 4.821946459634762,
+          "clock_drift_seconds": -2.2396520726886138e-07
+        },
+        {
+          "frame": 5856,
+          "mujoco_time": 12.020000000003199,
+          "carla_time": 85.09913779050112,
+          "requested": {
+            "throttle": 1.2601882250902216e-57,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 1
+          },
+          "speed_mps": 3.85320656700743,
+          "clock_drift_seconds": -2.6867113511741536e-07
+        },
+        {
+          "frame": 5956,
+          "mujoco_time": 14.020000000005643,
+          "carla_time": 87.09913774579763,
+          "requested": {
+            "throttle": 2.174156002640073e-73,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 1
+          },
+          "speed_mps": 3.0979885910308753,
+          "clock_drift_seconds": -3.1337706296596934e-07
+        },
+        {
+          "frame": 6056,
+          "mujoco_time": 16.020000000008014,
+          "carla_time": 89.09913770109415,
+          "requested": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 1
+          },
+          "speed_mps": 2.536904310977588,
+          "clock_drift_seconds": -3.580829179838929e-07
+        },
+        {
+          "frame": 6156,
+          "mujoco_time": 18.020000000003353,
+          "carla_time": 91.09913765639067,
+          "requested": {
+            "throttle": 3.649739014618782e-104,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 1
+          },
+          "speed_mps": 1.2698050863847938,
+          "clock_drift_seconds": -4.027817404050893e-07
+        },
+        {
+          "frame": 6256,
+          "mujoco_time": 20.019999999998692,
+          "carla_time": 93.09913761168718,
+          "requested": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 1
+          },
+          "speed_mps": 0.09254705011074174,
+          "clock_drift_seconds": -4.474805628262857e-07
+        },
+        {
+          "frame": 6356,
+          "mujoco_time": 22.01999999999403,
+          "carla_time": 95.0991375669837,
+          "requested": {
+            "throttle": 1.5872322705980596e-135,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 1
+          },
+          "speed_mps": 0.0,
+          "clock_drift_seconds": -4.921793852474821e-07
+        },
+        {
+          "frame": 6455,
+          "mujoco_time": 23.999999999989416,
+          "carla_time": 97.07913752272725,
+          "requested": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 0
+          },
+          "applied": {
+            "throttle": 0.0,
+            "steer": 0.0,
+            "brake": 0.0,
+            "hand_brake": false,
+            "reverse": false,
+            "manual_gear_shift": false,
+            "gear": 1
+          },
+          "speed_mps": 0.0,
+          "clock_drift_seconds": -5.364312194444665e-07
+        }
+      ],
+      "settings_before": {
+        "synchronous_mode": false,
+        "fixed_delta_seconds": null,
+        "substepping": true,
+        "max_substeps": 10,
+        "max_substep_delta_time": 0.01,
+        "no_rendering_mode": false
+      },
+      "blueprint": "vehicle.nissan.patrol",
+      "vehicle_id": 31,
+      "settling_frames": 73,
+      "start_frame": 5255,
+      "final_frame": 6455,
+      "simulated_seconds": 24.0,
+      "wall_seconds": 10.866787099977955,
+      "achieved_frames_per_wall_second": 110.42822399662494,
+      "frame_wall_seconds": {
+        "median": 0.00870535004651174,
+        "p95": 0.013352310040500016,
+        "max": 0.015015300014056265
+      },
+      "max_clock_drift_seconds": 5.364312194444665e-07,
+      "max_applied_control_error": 2.9513554600235636e-08,
+      "physical_peaks": {
+        "travel": 0.049894132253243774,
+        "contact_newtons": 31.446977173337828,
+        "muscle_newtons": 255.55376743497288
+      },
+      "displacement_metres": 71.20014630307614,
+      "final_speed_mps": 0.0,
+      "vehicle_destroyed": true,
+      "settings_after": {
+        "synchronous_mode": false,
+        "fixed_delta_seconds": null,
+        "substepping": true,
+        "max_substeps": 10,
+        "max_substep_delta_time": 0.01,
+        "no_rendering_mode": false
+      },
+      "settings_restored": true,
+      "actor_ids_restored": true
+    },
+    {
+      "name": "test_second_client_tick_invalidates_public_snapshot_and_brakes",
+      "status": "passed",
+      "settings_before": {
+        "synchronous_mode": false,
+        "fixed_delta_seconds": null,
+        "substepping": true,
+        "max_substeps": 10,
+        "max_substep_delta_time": 0.01,
+        "no_rendering_mode": false
+      },
+      "blueprint": "vehicle.nissan.patrol",
+      "vehicle_id": 32,
+      "settling_frames": 72,
+      "original_frame": 6542,
+      "external_frame": 6543,
+      "verification_frame": 6544,
+      "detected_error": "Another client advanced CARLA during this step",
+      "session_invalidated": true,
+      "emergency_control": {
+        "throttle": 0.0,
+        "brake": 1.0,
+        "hand_brake": true
+      },
+      "vehicle_destroyed": true,
+      "settings_after": {
+        "synchronous_mode": false,
+        "fixed_delta_seconds": null,
+        "substepping": true,
+        "max_substeps": 10,
+        "max_substep_delta_time": 0.01,
+        "no_rendering_mode": false
+      },
+      "settings_restored": true,
+      "actor_ids_restored": true
+    }
+  ],
+  "client_version": "0.10.0",
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "finished_utc": "2026-10-24T04:48:52.996858+00:00"
+}

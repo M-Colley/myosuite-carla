@@ -1,0 +1,19 @@
+﻿Second physical Windows PC: live CARLA 0.10.0 / UE5.5 reproduction (2026-10-23)
+OS: Microsoft Windows 11 Pro 10.0.26300 build 26300
+CPU: Intel(R) Core(TM) i7-14700K; RAM: 63.7 GB; GPU: NVIDIA GeForce RTX 5080
+Python: 3.12.13 (uv-managed CPython, 64-bit); venv: .venv
+Bridge commit: 12bead9f2b9c35d8b416e2e46f883cefae56da08
+MyoSuite commit: c0af9c656de2aa1807924e63d0d5320d77aa1ebd (fresh dev clone)
+Server package: C:\Users\localadmin\Desktop\Carla-0.10.0-Win64-Shipping
+Package VERSION file:
+  Carla git hash:         ada75f920642e18cace0a9f85ecf9d4077ddb531
+  Content git hash:       a32a1930bc319caba3e0cde845e46e23b9136e81
+  UnrealEngine git hash:  6cf20383302899026a5e777219ba4206afe47d38
+Package CHANGELOG first line: ## CARLA 0.10.0
+Client wheel: carla-0.10.0-cp312-cp312-win_amd64.whl SHA-256 69047c3f84b083112c147d718b5627dd5a77dd83a02c049fb078e90af8b99579 (matches the previously tested release wheel)
+Server launch: CarlaUnreal.exe -nullrhi -nosound -unattended -notrace -carla-rpc-port=2000
+RPC probe: client 0.10.0, server 0.10.0, Carla/Maps/Town10HD_Opt, 155 spawn points, 11 vehicle blueprints, synchronous_mode False
+Offline suite (CARLA_BRIDGE_LIVE unset): 240 passed, 3 skipped; ruff check/format, mypy and wheel/sdist build pass
+CLI: examples/validate_carla.py --target-ref 0.10.0 --build-ref 0.10.0 -> PASSED (second-pc-0.10.0-cli.json)
+Live suite: CARLA_BRIDGE_LIVE=1 pytest tests --cov -> 243 passed, 0 skipped, 97% coverage, 14.89 s (second-pc-0.10.0-suite.xml/.txt, second-pc-0.10.0-pytest.json)
+Final probe: sync False, fixed_dt None, remaining vehicles []; started server PIDs stopped afterwards

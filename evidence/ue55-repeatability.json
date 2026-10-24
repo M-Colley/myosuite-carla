@@ -1,0 +1,288 @@
+{
+  "command": "examples/validate_carla.py --host 127.0.0.1 --port 2000 --timeout 30 --target-ref 0.10.0 --build-ref 0.10.0 (5 consecutive runs, -nullrhi server)",
+  "client_version": "0.10.0",
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "runs": [
+    {
+      "run": 1,
+      "status": "passed",
+      "started_utc": "2026-10-24T04:40:01.845088+00:00",
+      "selected_blueprint": "vehicle.nissan.patrol",
+      "scenarios": [
+        {
+          "control": "throttle",
+          "passed": true,
+          "settling_frames": 35,
+          "start_speed_mps": 0.002696431580239837,
+          "end_speed_mps": 2.2581194052892393,
+          "displacement_metres": 2.500620604253253,
+          "yaw_change_degrees": 0.003082275390625,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        },
+        {
+          "control": "brake",
+          "passed": true,
+          "settling_frames": 75,
+          "start_speed_mps": 2.9642914834749257,
+          "end_speed_mps": 0.0001967296554309087,
+          "displacement_metres": 2.2454155317934297,
+          "yaw_change_degrees": 0.00098419189453125,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        },
+        {
+          "control": "steering",
+          "passed": true,
+          "settling_frames": 75,
+          "start_speed_mps": 2.964291663588633,
+          "end_speed_mps": 3.925659063549179,
+          "displacement_metres": 6.727135976468056,
+          "yaw_change_degrees": -25.767494201660156,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        }
+      ]
+    },
+    {
+      "run": 2,
+      "status": "passed",
+      "started_utc": "2026-10-24T04:40:05.728915+00:00",
+      "selected_blueprint": "vehicle.nissan.patrol",
+      "scenarios": [
+        {
+          "control": "throttle",
+          "passed": true,
+          "settling_frames": 35,
+          "start_speed_mps": 0.0026893745424838634,
+          "end_speed_mps": 2.258119373628583,
+          "displacement_metres": 2.500620604253253,
+          "yaw_change_degrees": 0.0030975341796875,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        },
+        {
+          "control": "brake",
+          "passed": true,
+          "settling_frames": 75,
+          "start_speed_mps": 2.9642919337635227,
+          "end_speed_mps": 0.00019674743756052944,
+          "displacement_metres": 2.2454157101947545,
+          "yaw_change_degrees": 0.00167083740234375,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        },
+        {
+          "control": "steering",
+          "passed": true,
+          "settling_frames": 75,
+          "start_speed_mps": 2.964291467885245,
+          "end_speed_mps": 3.9256551759315594,
+          "displacement_metres": 6.727132330436943,
+          "yaw_change_degrees": -25.76744842529297,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        }
+      ]
+    },
+    {
+      "run": 3,
+      "status": "passed",
+      "started_utc": "2026-10-24T04:40:09.680192+00:00",
+      "selected_blueprint": "vehicle.nissan.patrol",
+      "scenarios": [
+        {
+          "control": "throttle",
+          "passed": true,
+          "settling_frames": 35,
+          "start_speed_mps": 0.005022346192577832,
+          "end_speed_mps": 2.238567705537745,
+          "displacement_metres": 2.444125206708212,
+          "yaw_change_degrees": 0.00341796875,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        },
+        {
+          "control": "brake",
+          "passed": true,
+          "settling_frames": 75,
+          "start_speed_mps": 2.9642916228439558,
+          "end_speed_mps": 0.00019675694154953197,
+          "displacement_metres": 2.2454157994342965,
+          "yaw_change_degrees": 0.00164031982421875,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        },
+        {
+          "control": "steering",
+          "passed": true,
+          "settling_frames": 75,
+          "start_speed_mps": 2.964291455358989,
+          "end_speed_mps": 3.925656922667908,
+          "displacement_metres": 6.727134524143866,
+          "yaw_change_degrees": -25.76750946044922,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        }
+      ]
+    },
+    {
+      "run": 4,
+      "status": "passed",
+      "started_utc": "2026-10-24T04:40:13.606012+00:00",
+      "selected_blueprint": "vehicle.nissan.patrol",
+      "scenarios": [
+        {
+          "control": "throttle",
+          "passed": true,
+          "settling_frames": 35,
+          "start_speed_mps": 0.00539826311511527,
+          "end_speed_mps": 2.2385677224971046,
+          "displacement_metres": 2.4441175778228326,
+          "yaw_change_degrees": 0.0034332275390625,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        },
+        {
+          "control": "brake",
+          "passed": true,
+          "settling_frames": 75,
+          "start_speed_mps": 2.964291462374515,
+          "end_speed_mps": 0.00019684380637036608,
+          "displacement_metres": 2.2454155317934297,
+          "yaw_change_degrees": 0.0009918212890625,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        },
+        {
+          "control": "steering",
+          "passed": true,
+          "settling_frames": 75,
+          "start_speed_mps": 2.9642916374479635,
+          "end_speed_mps": 3.9256587738770423,
+          "displacement_metres": 6.727138170130527,
+          "yaw_change_degrees": -25.7674560546875,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        }
+      ]
+    },
+    {
+      "run": 5,
+      "status": "passed",
+      "started_utc": "2026-10-24T04:40:17.610889+00:00",
+      "selected_blueprint": "vehicle.nissan.patrol",
+      "scenarios": [
+        {
+          "control": "throttle",
+          "passed": true,
+          "settling_frames": 35,
+          "start_speed_mps": 0.005219093434521915,
+          "end_speed_mps": 2.238567715749358,
+          "displacement_metres": 2.444121392265522,
+          "yaw_change_degrees": 0.00344085693359375,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        },
+        {
+          "control": "brake",
+          "passed": true,
+          "settling_frames": 75,
+          "start_speed_mps": 2.9642916642217565,
+          "end_speed_mps": 0.00019676506968337463,
+          "displacement_metres": 2.2454195246311333,
+          "yaw_change_degrees": 0.00091552734375,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        },
+        {
+          "control": "steering",
+          "passed": true,
+          "settling_frames": 75,
+          "start_speed_mps": 2.964291481996423,
+          "end_speed_mps": 3.925655669572151,
+          "displacement_metres": 6.727132330436943,
+          "yaw_change_degrees": -25.767425537109375,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "vehicle_destroyed": true,
+          "settings_restored": true
+        }
+      ]
+    }
+  ]
+}

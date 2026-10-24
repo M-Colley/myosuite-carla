@@ -1,0 +1,22 @@
+﻿    body = _body_spec(config).compile()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=============================== tests coverage ================================
+______________ coverage: platform win32, python 3.12.13-final-0 _______________
+
+Name                                        Stmts   Miss  Cover   Missing
+-------------------------------------------------------------------------
+src\myosuite_carla\__init__.py                 10      0   100%
+src\myosuite_carla\bridge.py                   68      2    97%   55, 114
+src\myosuite_carla\cockpit.py                 216      5    98%   34, 212, 262, 264, 323
+src\myosuite_carla\controls.py                 32      1    97%   30
+src\myosuite_carla\fullbody.py                398      4    99%   183, 322, 493, 937
+src\myosuite_carla\fullbody_validation.py     144     12    92%   289-290, 326, 406, 418-420, 423-424, 438-439, 443
+src\myosuite_carla\inputs.py                  197      9    95%   22, 129, 168, 281, 300, 302, 304, 330, 339
+src\myosuite_carla\presets.py                   8      0   100%
+src\myosuite_carla\session.py                 226      5    98%   184, 269, 317-318, 369
+src\myosuite_carla\validation.py              212      7    97%   85, 210, 221, 382-383, 449-450
+src\myosuite_carla\wrapper.py                  61      2    97%   32, 93
+-------------------------------------------------------------------------
+TOTAL                                        1572     47    97%
+262 passed, 25 warnings in 34.79s

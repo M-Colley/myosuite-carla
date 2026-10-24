@@ -14,6 +14,10 @@ if TYPE_CHECKING:
 
 Vec3 = tuple[float, float, float]
 Quat = tuple[float, float, float, float]
+# Touch sites extend this far beyond their geoms. MuJoCo places a contact
+# point midway through the penetration, so a site flush with the geom misses
+# firm contacts; a touch sensor still only counts its own body's contacts.
+_TOUCH_MARGIN = 0.002
 
 
 def _number(value: float, name: str) -> float:
@@ -448,9 +452,9 @@ def add_cockpit(
                 control,
                 body,
                 (
-                    pedal.half_size[0] + 1e-4,
-                    pedal.half_size[1] + 1e-4,
-                    pedal.half_size[2] + 1e-4,
+                    pedal.half_size[0] + _TOUCH_MARGIN,
+                    pedal.half_size[1] + _TOUCH_MARGIN,
+                    pedal.half_size[2] + _TOUCH_MARGIN,
                 ),
                 mujoco.mjtGeom.mjGEOM_BOX,
             )
@@ -530,7 +534,7 @@ def add_cockpit(
         add_sensors(
             "steering",
             body,
-            (wheel.radius + wheel.grip_radius + 1e-4, 0, 0),
+            (wheel.radius + wheel.grip_radius + _TOUCH_MARGIN, 0, 0),
             mujoco.mjtGeom.mjGEOM_SPHERE,
         )
         _set_explicit_inertias(tuple(moving_bodies))

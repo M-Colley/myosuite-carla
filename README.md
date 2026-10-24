@@ -6,9 +6,13 @@ driver to a CARLA **Unreal Engine 5.8 `ue58-dev`** vehicle. Muscles move the lim
 limbs contact passive pedals and a steering wheel; measured mechanism travel or
 contact force becomes `carla.VehicleControl`. CARLA simulates the vehicle.
 
-**Validation status:** 170 tests pass with a real CARLA 0.10.0 / UE5.5 server,
-including muscle-driven acceleration, braking and steering (97% statement
-coverage). Actual **UE5.8** validation remains pending a runnable build; see
+**Validation status:** with a real CARLA 0.10.0 / UE5.5 server, 262 tests pass
+with zero skips (97% statement coverage). One seated MyoSuite full body
+operates throttle, brake, push-pull steering, reverse, sequential gears and the
+parking brake in a single live drive, with all 12 physical checks passing. The
+single-finger acceptance fixtures pass on two Windows PCs, all 11 four-wheel
+vehicles, a rendered server and a 15,000-frame soak. Actual **UE5.8**
+validation remains pending a runnable build; see
 [measured results](VALIDATION.md) and [runtime status](RUNTIME_STATUS.md).
 
 The package provides:
@@ -189,6 +193,47 @@ clutch field or cabin steering-wheel pose/torque setter; a custom clutch signal
 needs explicit application dynamics. Road-wheel animation commands do not steer
 the vehicle's physics.
 
+## One full-body driver
+
+`build_fullbody_driver()` composes MyoSuite's `myofullbody` (416 muscles, from
+`myo_sim`) with the cockpit into one MuJoCo model. The seated body works every
+control by contact:
+
+| Body part | Mechanism | CARLA control |
+| --- | --- | --- |
+| Right forefoot (plantarflexors) | Throttle pedal | `throttle` |
+| Left forefoot (plantarflexors) | Brake pedal | `brake` |
+| Both hands (elbow flexors/extensors) | Free-spinning cradles at 3 and 9 o'clock | `steer`, push-pull |
+| Right index finger | Sequential paddle | `manual_gear_shift`, `gear` |
+| Right little finger | Reverse button, held | `reverse` |
+| Left index finger | Parking-brake button, held | `hand_brake` |
+
+```python
+from myosuite_carla import CarlaBridge, DriverIntent, build_fullbody_driver
+
+driver = build_fullbody_driver()
+bridge = CarlaBridge(driver.mapper, session, driver.config.control_dt)
+driver.reset()
+bridge.reset(driver.data)
+for _ in range(150):
+    driver.advance(DriverIntent(right_foot=0.008, steer=-0.1))
+    frame = bridge.step(driver.data)
+```
+
+`DriverIntent` holds muscle excitations and a push-pull elbow set-point offset,
+never vehicle controls. CARLA receives only what the mechanisms measure. The
+pelvis is fixed to the seat and gravity is disabled. Trunk, hips, knees,
+shoulders, forearm rotation and wrists are held by joint-equality locks; ankles,
+toes, elbows and fingers move only under muscle force. Elbows use a PID stretch
+reflex on antagonist muscles, and released limbs keep a small antagonist tone.
+Mechanisms are placed from the settled body's kinematics and simulated
+fingertip paths, each starting clear of its limb. This is a scripted motor
+program for validation and demonstration, not a trained driving policy.
+
+`examples/validate_fullbody.py` drives a real vehicle through holding, throttle,
+push-pull steering both ways, braking, reverse, three manual gears and parking
+brake stops, with 12 physical checks.
+
 ## Feedback, resets and cleanup
 
 `info["carla"]` contains `inputs`, the applied `control`, `simulation_time`, and
@@ -198,6 +243,12 @@ returned frame's actor snapshot. CARLA world coordinates are left-handed, X
 forward/Y right/Z up; rotations and angular velocities are **degrees** and
 **degrees/second**. Linear quantities use SI units. Transform feedback explicitly
 before applying biomechanical loads.
+
+CARLA 0.10.0 advances `elapsed_seconds` by the single-precision value of the
+fixed delta. With 0.02 s, CARLA's clock falls behind MuJoCo's by 4.47e-10 s per
+frame, about 80 microseconds per simulated hour. The bridge's per-step checks
+allow for this. Align long recordings by CARLA frame instead of comparing the
+two absolute clocks.
 
 `reset(seed=...)` resets the MyoSuite driver and re-anchors the bridge without
 advancing CARLA. It does not reset the vehicle, traffic, map or CARLA seeds. Reset
@@ -275,6 +326,9 @@ Optional `CARLA_HOST` and `CARLA_PORT` select the server; `CARLA_TARGET_REF`
 selects the report's validation target (default `ue58-dev`). The test spawns and
 destroys its own vehicles and requires an unoccupied straight road spawn with
 35 m of road ahead. Offline success does not establish live-server validation.
+With `CARLA_BRIDGE_LIVE=1`, `tests/test_live_fullbody.py` also runs the
+full-body drive and writes `CARLA_FULLBODY_OUTPUT`
+(default `artifacts/carla-fullbody.json`).
 
 The [CI workflow](.github/workflows/ci.yml) installs MyoSuite `dev` in a separate
 checkout and runs offline CPU tests on Linux and Windows, including the minimum

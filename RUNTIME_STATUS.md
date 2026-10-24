@@ -2,8 +2,10 @@
 
 Checked on **2026-10-23 (Europe/Berlin)**. The requested `ue58-dev` source has
 been downloaded, and actual simulator validation passes on the available
-official **CARLA 0.10.0 / UE5.5** Windows release. **No UE5.8 runtime pass is
-claimed.** See [VALIDATION.md](VALIDATION.md) for the 243-test fresh-environment live result
+official **CARLA 0.10.0 / UE5.5** Windows release, on two physical PCs.
+**No UE5.8 runtime pass is claimed.** A second-PC UE5.8 source build was
+prepared but blocked by available memory; see
+[the build attempt](#second-pc-ue58-build-attempt). See [VALIDATION.md](VALIDATION.md) for the 243-test fresh-environment live result
 and measured acceleration, braking and steering.
 
 The complete `ue58-dev` native client and Python extension have since been
@@ -112,6 +114,69 @@ problem. Saved [build preflight](evidence/carla-build-preflight.txt) and
 [download preflight](evidence/carla-download-preflight.txt) retain the outputs.
 The Linux-oriented preflight's D: device-class warning is not evidence that the
 Windows drive is remote. No UE engine build or cloud resource was started.
+
+## Second-PC UE5.8 build attempt
+
+Checked on **2026-10-23** on the second Windows PC (i7-14700K, 63.7 GB RAM,
+RTX 5080, NVMe C: plus a USB D: drive). The UE5.5 package there passed the full
+live suite; see [VALIDATION.md](VALIDATION.md#second-physical-pc-reproduction).
+**No UE5.8 runtime pass is claimed.**
+
+Found on the machine:
+
+- A built UE5.8 engine source tree, `C:/carla-ue58/UnrealEngine5_carla`, branch
+  `ue58-dev-carla`, `Build.version` 5.8.0, at `cacb25b9` (2026-08-25). It was
+  built with the VS 2022 Build Tools MSVC 14.44.35207 directory (reported as
+  toolchain 14.44.35228) and Windows SDK 10.0.26100. Its checkout carries local
+  `OptimizeCode = CodeOptimization.Never` edits in the `DumpPackageToJson` and
+  `uLangCore` `Build.cs` files, commented as MSVC 19.44 C1001 workarounds.
+- An older CARLA checkout at `de3f38e6` (`ue58-dev-carla`; an ancestor of
+  `defabe35`, 134 commits behind) with unrelated local edits. Its Unreal project
+  had never been compiled. Its sparse content checkout at `94baa607` excludes
+  `__ExternalActors__`/`__ExternalObjects__` and occupies 46.2 GB.
+  `Town10HD_Opt` has no external-actor files, so this exclusion should not
+  affect the single-map cook; that remains to be confirmed by an actual cook.
+
+The pinned CARLA source `ee5859b4` uses `FPostProcessSettings::PathTracingLensAOV`
+and the `SCS_PathTracingLensDistance`/`SCS_PathTracingLensTag` capture sources.
+Those exist in engine `0703595a` but not in `cacb25b9`, so the existing engine
+build cannot compile the pinned CARLA plugin. The engine checkout was therefore
+fast-forwarded to the pinned `0703595a` (24 files; its two local `Build.cs`
+edits were preserved). The resulting editor rebuild has **6,814 actions**,
+because `Engine/Classes/Engine/Scene.h` changes the shared PCHs.
+
+That rebuild could not progress. Unrelated training/evaluation jobs already held
+about 66 of 73 GB of system commit. Unreal Build Accelerator repeatedly killed
+the first PCH compiles at its 95% commit threshold. The machine's UBT
+configuration also records that an unrestricted editor build previously
+exhausted virtual memory and stopped the PC. The build was therefore stopped
+rather than bypassing that protection. Before stopping, UBT had deleted the
+outdated outputs of those actions, **1,907 `.pdb` and 1,906 `.lib` files**
+(about 127 GB). Editor DLLs and executables remain, but compiling any project
+against this engine now requires the rebuild to complete.
+
+Prepared for the build, without modifying the older CARLA checkout:
+
+- `C:/carla-ue58/carla-myosuite`: a Git worktree at `ee5859b4`, whose
+  `Unreal/CarlaUnreal/Content/Carla` is a junction to the content worktree below.
+- `D:/carla-ue58-content-bc499ded/Carla`: a content worktree at the pinned
+  `bc499ded`, with the same sparse exclusions and the existing LFS cache.
+  Checkout and `git lfs pull` completed: 45,105 files, 46.3 GB. Only the
+  excluded `__ExternalActors__`/`__ExternalObjects__` LFS entries remain
+  pointers. On the USB drive this took 3 h 47 min.
+- `C:/carla-ue58/ue58-build-env`: CPython 3.12.13 with CMake 4.4.4, Ninja
+  1.13.2, NumPy 1.26.4 and the source's `requirements.txt`.
+
+Completing the attempt requires enough free commit memory for the editor
+rebuild, CARLA build and Town10 cook. Then follow section 5A from the engine
+build, using `-DCARLA_UNREAL_PACKAGE_NO_COMPRESSION=ON` to avoid a second
+compressed copy of the package. The previous engine commit can be restored with
+`git -C C:/carla-ue58/UnrealEngine5_carla reset --keep cacb25b99f14`, but the
+deleted libraries and symbols still require a rebuild at either commit.
+
+On 2026-10-24 validation continued on the local **UE5.5** package instead, at
+the owner's direction. This included the single full-body driver. The UE5.8
+setup above was left in place, unbuilt.
 
 ## What is needed to complete the live test
 

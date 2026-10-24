@@ -9,6 +9,13 @@ from .cockpit import (
     add_cockpit,
 )
 from .controls import VehicleCommand
+from .fullbody import (
+    DriverIntent,
+    FullBodyDriver,
+    FullBodyDriverConfig,
+    SequentialShifter,
+    build_fullbody_driver,
+)
 from .inputs import (
     Binding,
     BipolarCalibration,
@@ -41,10 +48,14 @@ __all__ = [
     "ControlHook",
     "ControlMapper",
     "ControlSample",
+    "DriverIntent",
+    "FullBodyDriver",
+    "FullBodyDriverConfig",
     "IdentityCalibration",
     "JointPosition",
     "PedalConfig",
     "SensorValue",
+    "SequentialShifter",
     "SessionConfig",
     "SteeringConfig",
     "SynchronizationError",
@@ -52,5 +63,6 @@ __all__ = [
     "VehicleCommand",
     "VehicleTelemetry",
     "add_cockpit",
+    "build_fullbody_driver",
     "cockpit_mapper",
 ]

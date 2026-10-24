@@ -1,0 +1,737 @@
+{
+  "started_utc": "2026-10-24T04:40:48.892532+00:00",
+  "client_version": "0.10.0",
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "mujoco_version": "3.17.0",
+  "vehicles": [
+    {
+      "blueprint": "vehicle.ambulance.ford",
+      "trials": {
+        "throttle": {
+          "settling_frames": 35,
+          "excitation": 0.015,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "start_speed_mps": 0.0,
+          "end_speed_mps": 1.983612352277085,
+          "displacement_metres": 2.1809272067251086,
+          "yaw_change_degrees": 0.00916290283203125,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 185
+        },
+        "brake": {
+          "settling_frames": 63,
+          "excitation": 0.01,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "start_speed_mps": 2.5022048571966944,
+          "end_speed_mps": 5.059316140334134e-05,
+          "displacement_metres": 1.8929109432198563,
+          "yaw_change_degrees": 0.00435638427734375,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 313
+        },
+        "steering": {
+          "settling_frames": 63,
+          "excitation": 0.05,
+          "cruising_throttle": 0.3,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "start_speed_mps": 2.5022057908948176,
+          "end_speed_mps": 3.2106372062386392,
+          "displacement_metres": 5.586055744948886,
+          "yaw_change_degrees": -18.71471405029297,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 313
+        }
+      },
+      "physics": {
+        "mass_kg": 3000.0,
+        "max_rpm": 6500.0,
+        "max_steer_angle_deg": 70.0,
+        "max_brake_torque": 1500.0
+      },
+      "passed": true
+    },
+    {
+      "blueprint": "vehicle.carlacola.actors",
+      "trials": {
+        "throttle": {
+          "settling_frames": 77,
+          "excitation": 0.015,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "start_speed_mps": 0.004442232025496165,
+          "end_speed_mps": 2.7283225088748724,
+          "displacement_metres": 3.0222577115128577,
+          "yaw_change_degrees": -0.01318359375,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 227
+        },
+        "brake": {
+          "settling_frames": 77,
+          "excitation": 0.01,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "start_speed_mps": 3.4162099722844625,
+          "end_speed_mps": 0.0,
+          "displacement_metres": 3.456019318446601,
+          "yaw_change_degrees": -0.0095977783203125,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 327
+        },
+        "steering": {
+          "settling_frames": 64,
+          "excitation": 0.05,
+          "cruising_throttle": 0.3,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "start_speed_mps": 3.4293356117506066,
+          "end_speed_mps": 3.897490110403606,
+          "displacement_metres": 7.239594573966531,
+          "yaw_change_degrees": -18.708526611328125,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 314
+        }
+      },
+      "physics": {
+        "mass_kg": 3000.0,
+        "max_rpm": 4500.0,
+        "max_steer_angle_deg": 70.0,
+        "max_brake_torque": 2500.0
+      },
+      "passed": true
+    },
+    {
+      "blueprint": "vehicle.dodge.charger",
+      "trials": {
+        "throttle": {
+          "settling_frames": 54,
+          "excitation": 0.015,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "start_speed_mps": 0.0,
+          "end_speed_mps": 2.9594533906026608,
+          "displacement_metres": 3.2059519201558975,
+          "yaw_change_degrees": -0.00238800048828125,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 204
+        },
+        "brake": {
+          "settling_frames": 54,
+          "excitation": 0.01,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "start_speed_mps": 3.893944455627587,
+          "end_speed_mps": 0.0004531192920727967,
+          "displacement_metres": 3.800923017585619,
+          "yaw_change_degrees": -0.01015472412109375,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 304
+        },
+        "steering": {
+          "settling_frames": 54,
+          "excitation": 0.05,
+          "cruising_throttle": 0.3,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "start_speed_mps": 3.8939442913998867,
+          "end_speed_mps": 4.690775525977983,
+          "displacement_metres": 8.410554053823601,
+          "yaw_change_degrees": -33.562232971191406,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 304
+        }
+      },
+      "physics": {
+        "mass_kg": 1920.0,
+        "max_rpm": 8000.0,
+        "max_steer_angle_deg": 70.0,
+        "max_brake_torque": 1000.0
+      },
+      "passed": true
+    },
+    {
+      "blueprint": "vehicle.dodgecop.charger",
+      "trials": {
+        "throttle": {
+          "settling_frames": 54,
+          "excitation": 0.015,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "start_speed_mps": 0.0,
+          "end_speed_mps": 2.6014509725689847,
+          "displacement_metres": 2.8542898550872637,
+          "yaw_change_degrees": -0.0488739013671875,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 204
+        },
+        "brake": {
+          "settling_frames": 54,
+          "excitation": 0.01,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "start_speed_mps": 3.339721572953539,
+          "end_speed_mps": 0.0,
+          "displacement_metres": 2.9498164783471514,
+          "yaw_change_degrees": 0.00881195068359375,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 304
+        },
+        "steering": {
+          "settling_frames": 54,
+          "excitation": 0.05,
+          "cruising_throttle": 0.3,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "start_speed_mps": 3.339721405921842,
+          "end_speed_mps": 3.9873137919409145,
+          "displacement_metres": 7.209331771475054,
+          "yaw_change_degrees": -28.777912139892578,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 304
+        }
+      },
+      "physics": {
+        "mass_kg": 1920.0,
+        "max_rpm": 8000.0,
+        "max_steer_angle_deg": 70.0,
+        "max_brake_torque": 1000.0
+      },
+      "passed": true
+    },
+    {
+      "blueprint": "vehicle.firetruck.actors",
+      "trials": {
+        "throttle": {
+          "settling_frames": 55,
+          "excitation": 0.015,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "start_speed_mps": 0.026110887654491006,
+          "end_speed_mps": 1.930181062669752,
+          "displacement_metres": 2.1510231061334717,
+          "yaw_change_degrees": -0.01866912841796875,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 205
+        },
+        "brake": {
+          "settling_frames": 54,
+          "excitation": 0.01,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "start_speed_mps": 2.4079270500628818,
+          "end_speed_mps": 0.5491209816747956,
+          "displacement_metres": 3.13975941030531,
+          "yaw_change_degrees": -0.003814697265625,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 304
+        },
+        "steering": {
+          "settling_frames": 55,
+          "excitation": 0.05,
+          "cruising_throttle": 0.3,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "start_speed_mps": 2.4081597762482914,
+          "end_speed_mps": 2.6965062573037795,
+          "displacement_metres": 5.083028919943849,
+          "yaw_change_degrees": -12.326820373535156,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 305
+        }
+      },
+      "physics": {
+        "mass_kg": 3000.0,
+        "max_rpm": 4500.0,
+        "max_steer_angle_deg": 70.0,
+        "max_brake_torque": 1300.0
+      },
+      "passed": true
+    },
+    {
+      "blueprint": "vehicle.fuso.mitsubishi",
+      "trials": {
+        "throttle": {
+          "settling_frames": 141,
+          "excitation": 0.015,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "start_speed_mps": 0.031801106981956914,
+          "end_speed_mps": 3.3236819229457915,
+          "displacement_metres": 3.708336258824146,
+          "yaw_change_degrees": -0.01824188232421875,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 291
+        },
+        "brake": {
+          "settling_frames": 141,
+          "excitation": 0.01,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "start_speed_mps": 4.161866975556587,
+          "end_speed_mps": 2.278282808849873,
+          "displacement_metres": 6.5842525187257595,
+          "yaw_change_degrees": -0.0325164794921875,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 391
+        },
+        "steering": {
+          "settling_frames": 141,
+          "excitation": 0.05,
+          "cruising_throttle": 0.3,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "start_speed_mps": 4.151811937437186,
+          "end_speed_mps": 4.700743395847419,
+          "displacement_metres": 8.721550569752765,
+          "yaw_change_degrees": -20.214393615722656,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 391
+        }
+      },
+      "physics": {
+        "mass_kg": 3000.0,
+        "max_rpm": 5729.0,
+        "max_steer_angle_deg": 70.0,
+        "max_brake_torque": 1200.0
+      },
+      "passed": true
+    },
+    {
+      "blueprint": "vehicle.lincoln.mkz",
+      "trials": {
+        "throttle": {
+          "settling_frames": 57,
+          "excitation": 0.015,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "start_speed_mps": 0.009406496121803184,
+          "end_speed_mps": 4.706556697888944,
+          "displacement_metres": 5.036199558934201,
+          "yaw_change_degrees": -0.00670623779296875,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 207
+        },
+        "brake": {
+          "settling_frames": 57,
+          "excitation": 0.01,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "start_speed_mps": 6.534006017243338,
+          "end_speed_mps": 1.750468301747264,
+          "displacement_metres": 8.628343335971927,
+          "yaw_change_degrees": -0.00971221923828125,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 307
+        },
+        "steering": {
+          "settling_frames": 57,
+          "excitation": 0.05,
+          "cruising_throttle": 0.3,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "start_speed_mps": 6.534003917022596,
+          "end_speed_mps": 8.103714465499863,
+          "displacement_metres": 13.823661740356707,
+          "yaw_change_degrees": -55.581966400146484,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 307
+        }
+      },
+      "physics": {
+        "mass_kg": 1696.0,
+        "max_rpm": 6500.0,
+        "max_steer_angle_deg": 70.0,
+        "max_brake_torque": 1000.0
+      },
+      "passed": true
+    },
+    {
+      "blueprint": "vehicle.mini.cooper",
+      "trials": {
+        "throttle": {
+          "settling_frames": 61,
+          "excitation": 0.015,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "start_speed_mps": 0.010164969920909579,
+          "end_speed_mps": 4.215888398812453,
+          "displacement_metres": 4.620369811524259,
+          "yaw_change_degrees": 0.0015869140625,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 211
+        },
+        "brake": {
+          "settling_frames": 61,
+          "excitation": 0.01,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "start_speed_mps": 5.657553843134125,
+          "end_speed_mps": 0.6018741583137802,
+          "displacement_metres": 6.5153852365705065,
+          "yaw_change_degrees": -0.01815032958984375,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 311
+        },
+        "steering": {
+          "settling_frames": 61,
+          "excitation": 0.05,
+          "cruising_throttle": 0.3,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "start_speed_mps": 5.657863274602366,
+          "end_speed_mps": 6.746303977912817,
+          "displacement_metres": 11.884275610893416,
+          "yaw_change_degrees": -47.87394332885742,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 311
+        }
+      },
+      "physics": {
+        "mass_kg": 1130.0,
+        "max_rpm": 6500.0,
+        "max_steer_angle_deg": 70.0,
+        "max_brake_torque": 650.0
+      },
+      "passed": true
+    },
+    {
+      "blueprint": "vehicle.nissan.patrol",
+      "trials": {
+        "throttle": {
+          "settling_frames": 75,
+          "excitation": 0.015,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "start_speed_mps": 0.0,
+          "end_speed_mps": 2.248500491018566,
+          "displacement_metres": 2.47276029173224,
+          "yaw_change_degrees": 0.00331878662109375,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 225
+        },
+        "brake": {
+          "settling_frames": 75,
+          "excitation": 0.01,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "start_speed_mps": 2.964291482071386,
+          "end_speed_mps": 0.00019682640241950206,
+          "displacement_metres": 2.2454193462301113,
+          "yaw_change_degrees": 0.00098419189453125,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 325
+        },
+        "steering": {
+          "settling_frames": 75,
+          "excitation": 0.05,
+          "cruising_throttle": 0.3,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "start_speed_mps": 2.9642914682345087,
+          "end_speed_mps": 3.9256552607896595,
+          "displacement_metres": 6.727134524143866,
+          "yaw_change_degrees": -25.767417907714844,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 325
+        }
+      },
+      "physics": {
+        "mass_kg": 2355.0,
+        "max_rpm": 6000.0,
+        "max_steer_angle_deg": 70.0,
+        "max_brake_torque": 1800.0
+      },
+      "passed": true
+    },
+    {
+      "blueprint": "vehicle.sprinter.mercedes",
+      "trials": {
+        "throttle": {
+          "settling_frames": 80,
+          "excitation": 0.015,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "start_speed_mps": 0.006348354990527467,
+          "end_speed_mps": 1.8820846610505513,
+          "displacement_metres": 2.084626401595509,
+          "yaw_change_degrees": -0.0100555419921875,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 230
+        },
+        "brake": {
+          "settling_frames": 80,
+          "excitation": 0.01,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "start_speed_mps": 2.3531719435362417,
+          "end_speed_mps": 0.0,
+          "displacement_metres": 1.6113720834580796,
+          "yaw_change_degrees": -0.00140380859375,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 330
+        },
+        "steering": {
+          "settling_frames": 80,
+          "excitation": 0.05,
+          "cruising_throttle": 0.3,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "start_speed_mps": 2.353174257643641,
+          "end_speed_mps": 2.7306281164629835,
+          "displacement_metres": 5.029278618590774,
+          "yaw_change_degrees": -17.208343505859375,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 330
+        }
+      },
+      "physics": {
+        "mass_kg": 3000.0,
+        "max_rpm": 5000.0,
+        "max_steer_angle_deg": 70.0,
+        "max_brake_torque": 1700.0
+      },
+      "passed": true
+    },
+    {
+      "blueprint": "vehicle.taxi.ford",
+      "trials": {
+        "throttle": {
+          "settling_frames": 54,
+          "excitation": 0.015,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.043349203706209635,
+            "contact_newtons": 21.75674741668069,
+            "muscle_newtons": 255.55376743497288
+          },
+          "start_speed_mps": 0.0,
+          "end_speed_mps": 3.0148675751146916,
+          "displacement_metres": 3.27916818117651,
+          "yaw_change_degrees": -0.00319671630859375,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 204
+        },
+        "brake": {
+          "settling_frames": 53,
+          "excitation": 0.01,
+          "cruising_throttle": 0,
+          "peaks": {
+            "travel": 0.022406643375813523,
+            "contact_newtons": 13.822082793357167,
+            "muscle_newtons": 251.48510784882288
+          },
+          "start_speed_mps": 4.103939581295325,
+          "end_speed_mps": 0.0010591362045437194,
+          "displacement_metres": 4.018752755148806,
+          "yaw_change_degrees": -0.00737762451171875,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 303
+        },
+        "steering": {
+          "settling_frames": 53,
+          "excitation": 0.05,
+          "cruising_throttle": 0.3,
+          "peaks": {
+            "travel": 0.511038223964661,
+            "contact_newtons": 75.58633365932474,
+            "muscle_newtons": 288.08196115810586
+          },
+          "start_speed_mps": 4.103939147842266,
+          "end_speed_mps": 5.174090714680077,
+          "displacement_metres": 9.026814009077507,
+          "yaw_change_degrees": -37.6676139831543,
+          "vehicle_destroyed": true,
+          "settings_restored": true,
+          "passed": true,
+          "samples": 303
+        }
+      },
+      "physics": {
+        "mass_kg": 1920.0,
+        "max_rpm": 5300.0,
+        "max_steer_angle_deg": 70.0,
+        "max_brake_torque": 1000.0
+      },
+      "passed": true
+    }
+  ],
+  "finished_utc": "2026-10-24T04:41:06.335566+00:00",
+  "vehicles_passed": 11
+}

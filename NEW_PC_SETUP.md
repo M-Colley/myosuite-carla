@@ -18,8 +18,10 @@ The Python install procedure was rehearsed in a new normal virtual environment
 with a fresh MyoSuite clone on the existing PC. The updated CLI and full suite
 passed against the actual UE5.5 release: **243 tests, zero skips, 97% coverage**,
 including 1,200 consecutive muscle/contact frames and competing-client checks.
-This verifies dependency isolation; it is not a claim of testing a second PC
-or performing a clean Windows installation. See [the audit record](VALIDATION.md).
+This verifies dependency isolation; it is not a clean Windows installation.
+The guide was then followed on a **second physical PC** against the same UE5.5
+release: 243 tests passed with zero skips and identical vehicle outcomes. See
+[the audit record](VALIDATION.md#second-physical-pc-reproduction).
 
 ## 1. Machine, storage and accounts
 
@@ -74,6 +76,9 @@ gh auth setup-git
 
 The last Python command must report a 64-bit process. GitHub access is needed
 to clone the package; an access token is not part of the CARLA test itself.
+If Python 3.12 was installed by uv, `py -3.12` may report no suitable runtime;
+`py -0p` lists it under a tag such as `-V:Astral/CPython3.12.13`. Use that tag
+in place of `-3.12` below; the second test PC used CPython 3.12.13 this way.
 
 ## 3. Clone separate repositories and create the test environment
 
@@ -127,8 +132,10 @@ Remove-Item Env:CARLA_BRIDGE_LIVE -ErrorAction SilentlyContinue
 
 The dependency probe must import `ModelBuilder` and `myo_sim`. The offline
 example should show pedal/wheel contact and return to released controls.
-There should be exactly **three skipped live-server tests**, with every other
-test passing. Extra skips can indicate missing MyoSuite/model dependencies.
+There should be exactly **four skipped live-server tests**, with every other
+test passing (258 on the second test PC). Extra skips can indicate missing
+MyoSuite/model dependencies; the full-body tests also need `myo_sim`'s
+`myofullbody`, which myo-sim 0.2.3 provides.
 Offline success alone is not a CARLA runtime pass.
 
 ## 5A. Build the requested UE5.8 server and client
@@ -222,7 +229,18 @@ msbuild Engine\Intermediate\ProjectFiles\UE5.vcxproj /property:Configuration=Dev
 
 Check the last command succeeds and
 `Engine\Binaries\Win64\UnrealEditor.exe` exists before continuing. Engine
-source access does not imply a completed engine build. The disabled DLSS mode
+source access does not imply a completed engine build. An existing engine build
+from an older `ue58-dev-carla` commit is not sufficient: the pinned CARLA source
+uses `FPostProcessSettings::PathTracingLensAOV` and the
+`SCS_PathTracingLensDistance`/`SCS_PathTracingLensTag` capture sources, which
+the engine branch added after `cacb25b9`. Update such a checkout to the pinned
+engine commit and rebuild; the header change rebuilds most of the editor.
+
+The editor build needs substantial **commit memory**, not only physical RAM.
+Unreal Build Accelerator kills new compiles once system commit reaches 95% of
+its limit. Stop other memory-heavy jobs before building; on the second test PC,
+unrelated training jobs held about 90% of commit and the rebuild could not
+progress. The disabled DLSS mode
 is suitable for this physics test; it avoids requiring the optional NVIDIA SDK.
 
 Configure CARLA with the same Python root for both CMake Python finders, and
@@ -357,7 +375,10 @@ can throw `Bad optional access` when fixed delta is unset; inspect individual
 attributes as above. If RPC is refused, let startup finish or inspect crashes
 before retrying. `-nullrhi` performs physics/control testing without rendered
 images. **Do not spawn cameras with it.** For image-based tests, restart with a
-supported rendering configuration and adequate GPU resources instead.
+supported rendering configuration and adequate GPU resources instead. On the
+second test PC (RTX 5080), `-RenderOffScreen` in place of `-nullrhi` used about
+6 GB of VRAM and 11.4 GB of RAM at default quality; the full live suite passed
+there too and supported an attached RGB camera.
 
 If using an already running remote server, skip the local process launch and
 local TCP check. Set `CARLA_HOST`/`CARLA_PORT` to its reachable address before
@@ -373,8 +394,11 @@ if (-not $env:CARLA_PORT) { $env:CARLA_PORT = '2000' }
 $env:CARLA_TIMEOUT = '30'
 & $python examples/validate_carla.py --host $env:CARLA_HOST --port $env:CARLA_PORT --timeout 30 --target-ref $env:CARLA_TARGET_REF --build-ref $env:CARLA_BUILD_REF --output "artifacts/$($env:CARLA_TARGET_REF)-cli.json"
 if ($LASTEXITCODE) { throw 'Live CARLA acceptance failed; inspect the JSON error and samples' }
+& $python examples/validate_fullbody.py --host $env:CARLA_HOST --port $env:CARLA_PORT --timeout 60 --target-ref $env:CARLA_TARGET_REF --build-ref $env:CARLA_BUILD_REF --output "artifacts/$($env:CARLA_TARGET_REF)-fullbody.json"
+if ($LASTEXITCODE) { throw 'Live full-body drive failed; inspect the JSON checks and phases' }
 $env:CARLA_BRIDGE_LIVE = '1'
 $env:CARLA_LIVE_OUTPUT = "artifacts/$($env:CARLA_TARGET_REF)-pytest.json"
+$env:CARLA_FULLBODY_OUTPUT = "artifacts/$($env:CARLA_TARGET_REF)-pytest-fullbody.json"
 & $python -m pytest tests --cov=myosuite_carla --cov-report=term-missing --junitxml=artifacts/results.xml -q
 if ($LASTEXITCODE) { throw 'Full live-enabled suite failed' }
 ```
@@ -400,6 +424,15 @@ Pass criteria enforced in code:
 - Requested/applied control channels agree within `1e-5`; each bridge step
   advances exactly one CARLA frame with a 0.02 s interval.
 - Each trial destroys its vehicle and restores the captured world settings.
+
+The full-body CLI drives one seated MyoSuite `myofullbody` (416 muscles)
+through 23 phases, about 22 s: hold, throttle against the parking brake,
+throttle, push-pull steering left and right under throttle, braking,
+finger-held reverse, three paddle-selected manual gears and a parking-brake
+stop. It prints 12 physical checks, all of which must pass. The second test
+PC measured identical outcomes in four runs; see
+[the full-body record](VALIDATION.md#one-myosuite-full-body-operates-every-control).
+Allow about 20 s per run on `-nullrhi`; building the body takes about 3 s.
 
 Check the live-enabled suite has **zero skips** and all tests pass. Separately
 verify that the report's target/build labels describe the actual binary, using
@@ -529,6 +562,10 @@ mechanisms; see [the source validation evidence](VALIDATION.md#complete-ue58-cli
 | No 35 m straight spawn | Use Town10HD_Opt with unoccupied road spawn points; remove only vehicles belonging to your scenario. |
 | Engine clone 404 | Complete Epic/GitHub linking and accept its invitation; verify fork access with `git ls-remote`. |
 | UE build cannot find VS2022 / MSVC | Install VS2022 and the requested toolset/components; use its x64 Native Tools prompt, not an ordinary shell. |
+| `py -3.12` finds no runtime | A uv-managed Python is listed by `py -0p`; select it with its `-V:` tag or use its full path. |
+| `UbaSessionServer - Killed process ... Low on memory` repeats | Other processes hold most commit memory. Stop them or provide more commit (RAM/pagefile) before building; do not disable the protection while unrelated jobs are running. |
+| Carla plugin errors on `PathTracingLensAOV` or `SCS_PathTracingLens*` | The engine predates the pinned `ue58-dev-carla` commit; update and rebuild it. |
+| MSVC 19.44 internal compiler error C1001 in `DumpPackageToJson` or `uLangCore` | The second test PC's engine checkout carries local `OptimizeCode = CodeOptimization.Never` edits in those two `Build.cs` files for this. This was observed, not re-verified, here. |
 | Missing `DLSSRRDenoiser` plugin | Check the actual `ue58-dev-carla` engine checkout; disabling the SDK does not add a missing engine plugin. |
 | Cook/package failure | Verify content LFS objects, free disk, Town10 cook/default map, and the separate Zen server. Preserve the actual error; do not ignore cook failures. |
 | Test reports failed cleanup | Inspect `cleanup_errors`, `vehicle_destroyed` and `settings_restored`; repair the server/scenario before repeating. |

@@ -1,0 +1,497 @@
+{
+  "status": "passed",
+  "started_utc": "2026-10-24T04:45:38.879441+00:00",
+  "client_version": "0.10.0",
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "mujoco_version": "3.17.0",
+  "frames": 15000,
+  "cycle": {
+    "excite_frames": 100,
+    "release_frames": 200,
+    "flexor_excitation": 0.015,
+    "release_extensor_excitation": 0.02,
+    "abductor_coactivation": 0.05
+  },
+  "bursts_detail": [
+    {
+      "burst": 0,
+      "mean_throttle": 0.46749892854057273,
+      "max_contact_newtons": 18.85728924321986,
+      "speed_gain_mps": 1.2528423530606512
+    },
+    {
+      "burst": 1,
+      "mean_throttle": 0.5664600548650718,
+      "max_contact_newtons": 22.647485367621307,
+      "speed_gain_mps": 1.9156140209326327
+    },
+    {
+      "burst": 2,
+      "mean_throttle": 0.5664600548648483,
+      "max_contact_newtons": 22.647485367609903,
+      "speed_gain_mps": 1.934652942322136
+    },
+    {
+      "burst": 3,
+      "mean_throttle": 0.5664600548648479,
+      "max_contact_newtons": 22.647485367609907,
+      "speed_gain_mps": 1.9344626449844102
+    },
+    {
+      "burst": 4,
+      "mean_throttle": 0.5664600548648481,
+      "max_contact_newtons": 22.647485367609903,
+      "speed_gain_mps": 1.9295593664634783
+    },
+    {
+      "burst": 5,
+      "mean_throttle": 0.5664600548648481,
+      "max_contact_newtons": 22.647485367609903,
+      "speed_gain_mps": 1.9118597835640785
+    },
+    {
+      "burst": 6,
+      "mean_throttle": 0.5664600548648476,
+      "max_contact_newtons": 22.647485367609764,
+      "speed_gain_mps": 1.9122319661369376
+    },
+    {
+      "burst": 7,
+      "mean_throttle": 0.566460054864848,
+      "max_contact_newtons": 22.64748536760981,
+      "speed_gain_mps": 1.926724490850768
+    },
+    {
+      "burst": 8,
+      "mean_throttle": 0.5664600548648482,
+      "max_contact_newtons": 22.647485367609917,
+      "speed_gain_mps": 1.9396559975677867
+    },
+    {
+      "burst": 9,
+      "mean_throttle": 0.5664600548648483,
+      "max_contact_newtons": 22.647485367609775,
+      "speed_gain_mps": 1.941738432082547
+    },
+    {
+      "burst": 10,
+      "mean_throttle": 0.5664600548648484,
+      "max_contact_newtons": 22.647485367609768,
+      "speed_gain_mps": 1.9457094809157578
+    },
+    {
+      "burst": 11,
+      "mean_throttle": 0.5664600548648484,
+      "max_contact_newtons": 22.647485367609775,
+      "speed_gain_mps": 1.9439660461757116
+    },
+    {
+      "burst": 12,
+      "mean_throttle": 0.5664600548648484,
+      "max_contact_newtons": 22.647485367609757,
+      "speed_gain_mps": 1.9349533217141062
+    },
+    {
+      "burst": 13,
+      "mean_throttle": 0.5664600548648483,
+      "max_contact_newtons": 22.647485367609896,
+      "speed_gain_mps": 1.933931209532148
+    },
+    {
+      "burst": 14,
+      "mean_throttle": 0.5664600548648482,
+      "max_contact_newtons": 22.647485367609896,
+      "speed_gain_mps": 1.9270797251113545
+    },
+    {
+      "burst": 15,
+      "mean_throttle": 0.5664600548648482,
+      "max_contact_newtons": 22.647485367609747,
+      "speed_gain_mps": 1.9283371213748688
+    },
+    {
+      "burst": 16,
+      "mean_throttle": 0.5664600548648483,
+      "max_contact_newtons": 22.647485367609875,
+      "speed_gain_mps": 1.9232412071250398
+    },
+    {
+      "burst": 17,
+      "mean_throttle": 0.5664600548648485,
+      "max_contact_newtons": 22.647485367609807,
+      "speed_gain_mps": 1.9226013274563618
+    },
+    {
+      "burst": 18,
+      "mean_throttle": 0.5664600548648483,
+      "max_contact_newtons": 22.647485367609917,
+      "speed_gain_mps": 1.9282163335865468
+    },
+    {
+      "burst": 19,
+      "mean_throttle": 0.5664600548648482,
+      "max_contact_newtons": 22.64748536760988,
+      "speed_gain_mps": 1.935237163746289
+    },
+    {
+      "burst": 20,
+      "mean_throttle": 0.5664600548648483,
+      "max_contact_newtons": 22.64748536760989,
+      "speed_gain_mps": 1.9345304783040345
+    },
+    {
+      "burst": 21,
+      "mean_throttle": 0.566460054864848,
+      "max_contact_newtons": 22.647485367609796,
+      "speed_gain_mps": 1.918652600082021
+    },
+    {
+      "burst": 22,
+      "mean_throttle": 0.5664600548648479,
+      "max_contact_newtons": 22.647485367609818,
+      "speed_gain_mps": 1.9157193033014697
+    },
+    {
+      "burst": 23,
+      "mean_throttle": 0.5664600548648485,
+      "max_contact_newtons": 22.64748536760974,
+      "speed_gain_mps": 1.911266504928049
+    },
+    {
+      "burst": 24,
+      "mean_throttle": 0.5664600548648481,
+      "max_contact_newtons": 22.64748536760981,
+      "speed_gain_mps": 1.9147137188323713
+    },
+    {
+      "burst": 25,
+      "mean_throttle": 0.5664600548648484,
+      "max_contact_newtons": 22.647485367609775,
+      "speed_gain_mps": 1.8717802666626653
+    },
+    {
+      "burst": 26,
+      "mean_throttle": 0.566460054864848,
+      "max_contact_newtons": 22.64748536760981,
+      "speed_gain_mps": 1.915705901029272
+    },
+    {
+      "burst": 27,
+      "mean_throttle": 0.5664600548648484,
+      "max_contact_newtons": 22.64748536760976,
+      "speed_gain_mps": 1.8705282803900583
+    },
+    {
+      "burst": 28,
+      "mean_throttle": 0.5664600548648485,
+      "max_contact_newtons": 22.64748536760981,
+      "speed_gain_mps": 1.8706969799548014
+    },
+    {
+      "burst": 29,
+      "mean_throttle": 0.5664600548648481,
+      "max_contact_newtons": 22.647485367609818,
+      "speed_gain_mps": 1.9162150046092559
+    },
+    {
+      "burst": 30,
+      "mean_throttle": 0.5664600548648481,
+      "max_contact_newtons": 22.647485367609896,
+      "speed_gain_mps": 1.8892064537586475
+    },
+    {
+      "burst": 31,
+      "mean_throttle": 0.5664600548648476,
+      "max_contact_newtons": 22.647485367609804,
+      "speed_gain_mps": 1.9292338067539443
+    },
+    {
+      "burst": 32,
+      "mean_throttle": 0.5664600548648479,
+      "max_contact_newtons": 22.647485367609903,
+      "speed_gain_mps": 1.9292338456048204
+    },
+    {
+      "burst": 33,
+      "mean_throttle": 0.5664600548648484,
+      "max_contact_newtons": 22.647485367609768,
+      "speed_gain_mps": 1.6227636037076216
+    },
+    {
+      "burst": 34,
+      "mean_throttle": 0.5664600548648484,
+      "max_contact_newtons": 22.64748536760981,
+      "speed_gain_mps": 2.016506092745398
+    },
+    {
+      "burst": 35,
+      "mean_throttle": 0.5664600548648476,
+      "max_contact_newtons": 22.647485367609796,
+      "speed_gain_mps": 1.9148698595990976
+    },
+    {
+      "burst": 36,
+      "mean_throttle": 0.5664600548648483,
+      "max_contact_newtons": 22.64748536760988,
+      "speed_gain_mps": 1.944878985039189
+    },
+    {
+      "burst": 37,
+      "mean_throttle": 0.566460054864848,
+      "max_contact_newtons": 22.64748536760991,
+      "speed_gain_mps": 1.8386626083516528
+    },
+    {
+      "burst": 38,
+      "mean_throttle": 0.5664600548648482,
+      "max_contact_newtons": 22.647485367609903,
+      "speed_gain_mps": 1.945638783704136
+    },
+    {
+      "burst": 39,
+      "mean_throttle": 0.5664600548648481,
+      "max_contact_newtons": 22.647485367609896,
+      "speed_gain_mps": 1.9292339134058747
+    },
+    {
+      "burst": 40,
+      "mean_throttle": 0.5664600548648485,
+      "max_contact_newtons": 22.647485367609796,
+      "speed_gain_mps": 1.9467493678058665
+    },
+    {
+      "burst": 41,
+      "mean_throttle": 0.5664600548648485,
+      "max_contact_newtons": 22.647485367609804,
+      "speed_gain_mps": 1.923098136042076
+    },
+    {
+      "burst": 42,
+      "mean_throttle": 0.5664600548648481,
+      "max_contact_newtons": 22.647485367609903,
+      "speed_gain_mps": 1.9292340298444461
+    },
+    {
+      "burst": 43,
+      "mean_throttle": 0.5664600548648485,
+      "max_contact_newtons": 22.64748536760981,
+      "speed_gain_mps": 1.9292339987009306
+    },
+    {
+      "burst": 44,
+      "mean_throttle": 0.5664600548648483,
+      "max_contact_newtons": 22.647485367609903,
+      "speed_gain_mps": 1.8241576298077247
+    },
+    {
+      "burst": 45,
+      "mean_throttle": 0.5664600548648475,
+      "max_contact_newtons": 22.647485367609843,
+      "speed_gain_mps": 1.9231006549026592
+    },
+    {
+      "burst": 46,
+      "mean_throttle": 0.5664600548648479,
+      "max_contact_newtons": 22.64748536760989,
+      "speed_gain_mps": 1.9292343280632023
+    },
+    {
+      "burst": 47,
+      "mean_throttle": 0.566460054864848,
+      "max_contact_newtons": 22.647485367609832,
+      "speed_gain_mps": 1.9293111609872455
+    },
+    {
+      "burst": 48,
+      "mean_throttle": 0.5664600548648479,
+      "max_contact_newtons": 22.64748536760988,
+      "speed_gain_mps": 1.9297781365536366
+    },
+    {
+      "burst": 49,
+      "mean_throttle": 0.5664600548648482,
+      "max_contact_newtons": 22.64748536760988,
+      "speed_gain_mps": 1.930321128710568
+    }
+  ],
+  "release_brake": 0.5,
+  "memory_samples": [
+    {
+      "step": 0,
+      "frame": 3756978,
+      "server_private_bytes": 4091035648,
+      "client_private_bytes": 851136512,
+      "speed_mps": 0.0,
+      "clock_drift_seconds": -4.4703485010955113e-10
+    },
+    {
+      "step": 1000,
+      "frame": 3757978,
+      "server_private_bytes": 4091150336,
+      "client_private_bytes": 852721664,
+      "speed_mps": 1.9350476563771077,
+      "clock_drift_seconds": -4.474805628262857e-07
+    },
+    {
+      "step": 2000,
+      "frame": 3758978,
+      "server_private_bytes": 4091150336,
+      "client_private_bytes": 852725760,
+      "speed_mps": 8.333850487045718e-05,
+      "clock_drift_seconds": -8.945257690129438e-07
+    },
+    {
+      "step": 3000,
+      "frame": 3759978,
+      "server_private_bytes": 4079988736,
+      "client_private_bytes": 852725760,
+      "speed_mps": 3.179190198117508e-06,
+      "clock_drift_seconds": -1.3416561017720596e-06
+    },
+    {
+      "step": 4000,
+      "frame": 3760978,
+      "server_private_bytes": 4079988736,
+      "client_private_bytes": 852725760,
+      "speed_mps": 1.934774286649524,
+      "clock_drift_seconds": -1.7887864345311755e-06
+    },
+    {
+      "step": 5000,
+      "frame": 3761978,
+      "server_private_bytes": 4080054272,
+      "client_private_bytes": 852725760,
+      "speed_mps": 8.002062803768133e-05,
+      "clock_drift_seconds": -2.2359167672902913e-06
+    },
+    {
+      "step": 6000,
+      "frame": 3762978,
+      "server_private_bytes": 4080005120,
+      "client_private_bytes": 852725760,
+      "speed_mps": 0.0,
+      "clock_drift_seconds": -2.683047100049407e-06
+    },
+    {
+      "step": 7000,
+      "frame": 3763978,
+      "server_private_bytes": 4080009216,
+      "client_private_bytes": 852725760,
+      "speed_mps": 1.9112676226850323,
+      "clock_drift_seconds": -3.129835789650315e-06
+    },
+    {
+      "step": 8000,
+      "frame": 3764978,
+      "server_private_bytes": 4080009216,
+      "client_private_bytes": 852795392,
+      "speed_mps": 7.309813001562406e-05,
+      "clock_drift_seconds": -3.5763976882208226e-06
+    },
+    {
+      "step": 9000,
+      "frame": 3765978,
+      "server_private_bytes": 4079960064,
+      "client_private_bytes": 853024768,
+      "speed_mps": 9.766080910990599e-06,
+      "clock_drift_seconds": -4.02295958679133e-06
+    },
+    {
+      "step": 10000,
+      "frame": 3766978,
+      "server_private_bytes": 4080058368,
+      "client_private_bytes": 853180416,
+      "speed_mps": 1.611886847740988,
+      "clock_drift_seconds": -4.469521485361838e-06
+    },
+    {
+      "step": 11000,
+      "frame": 3767978,
+      "server_private_bytes": 4080062464,
+      "client_private_bytes": 853278720,
+      "speed_mps": 0.00016173888671944795,
+      "clock_drift_seconds": -4.916083383932346e-06
+    },
+    {
+      "step": 12000,
+      "frame": 3768978,
+      "server_private_bytes": 4080017408,
+      "client_private_bytes": 853278720,
+      "speed_mps": 0.0,
+      "clock_drift_seconds": -5.362645282502854e-06
+    },
+    {
+      "step": 13000,
+      "frame": 3769978,
+      "server_private_bytes": 4080013312,
+      "client_private_bytes": 853348352,
+      "speed_mps": 1.9298167462687792,
+      "clock_drift_seconds": -5.809207209495071e-06
+    },
+    {
+      "step": 14000,
+      "frame": 3770978,
+      "server_private_bytes": 4080013312,
+      "client_private_bytes": 853348352,
+      "speed_mps": 8.779380360901712e-05,
+      "clock_drift_seconds": -6.255769108065579e-06
+    },
+    {
+      "step": 14999,
+      "frame": 3771977,
+      "server_private_bytes": 4080082944,
+      "client_private_bytes": 853557248,
+      "speed_mps": 2.807534167085006e-06,
+      "clock_drift_seconds": -6.701884444737516e-06
+    }
+  ],
+  "settings_before": {
+    "synchronous_mode": false,
+    "fixed_delta_seconds": null,
+    "substepping": true,
+    "max_substeps": 10,
+    "max_substep_delta_time": 0.01,
+    "no_rendering_mode": false
+  },
+  "blueprint": "vehicle.nissan.patrol",
+  "vehicle_id": 94,
+  "settling_frames": 35,
+  "start_frame": 3756977,
+  "final_frame": 3771977,
+  "simulated_seconds": 300.0,
+  "wall_seconds": 29.055247999960557,
+  "achieved_frames_per_wall_second": 516.2578546918741,
+  "frame_wall_seconds": {
+    "median": 0.0015880499850027263,
+    "p95": 0.0021372249757405366,
+    "p99": 0.012791434075916187,
+    "max": 0.032824199995957315
+  },
+  "max_clock_drift_seconds": 6.701884444737516e-06,
+  "final_clock_drift_seconds": -6.701884444737516e-06,
+  "float32_step_error_seconds": 4.470348362317633e-10,
+  "max_clock_residual_seconds": 3.638098738933948e-09,
+  "max_applied_control_error": 2.9537104317967078e-08,
+  "max_speed_mps": 2.0278654358226005,
+  "bursts": 50,
+  "bursts_accelerating_over_half_mps": 50,
+  "physical_peaks": {
+    "travel": 0.0451836546870362,
+    "contact_newtons": 22.647485367621307,
+    "muscle_newtons": 302.94311773584565
+  },
+  "displacement_metres": 98.00875334873265,
+  "vehicle_destroyed": true,
+  "settings_after": {
+    "synchronous_mode": false,
+    "fixed_delta_seconds": null,
+    "substepping": true,
+    "max_substeps": 10,
+    "max_substep_delta_time": 0.01,
+    "no_rendering_mode": false
+  },
+  "settings_restored": true,
+  "actor_ids_restored": true,
+  "finished_utc": "2026-10-24T04:46:10.188401+00:00"
+}

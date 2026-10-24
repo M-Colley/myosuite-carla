@@ -8,17 +8,28 @@ This record accompanies Mark Colley's standalone `myosuite-carla` repository.
 The initial offline results below were obtained before extraction from the
 MyoSuite worktree; the commands use the equivalent standalone root layout.
 
-**Current result: 243 passed, no skips, 97% statement coverage**, including an
-actual CARLA **0.10.0 / Unreal Engine 5.5** server. Python 3.12.10, NumPy 1.26.4,
-MuJoCo 3.17.0 and the server package's `cp312-win_amd64` wheel were used. This is
-supplementary live validation; **UE5.8 runtime compatibility is still unproven**.
+**Current result: 262 passed, no skips, 97% statement coverage** against an
+actual CARLA **0.10.0 / Unreal Engine 5.5** server on the second PC (CPython
+3.12.13, NumPy 1.26.4, MuJoCo 3.17.0, the package's `cp312-win_amd64` wheel).
+It includes a live drive in which **one MyoSuite full body operates every
+control**; see [full-body drive](#one-myosuite-full-body-operates-every-control).
+The earlier first-PC result was **243 passed, no skips, 97% statement coverage**
+with Python 3.12.10. This is supplementary live validation; **UE5.8 runtime
+compatibility is still unproven**.
 See [current JUnit results](evidence/deep-full-suite.xml),
 [extended live checks](evidence/deep-live-session.json), and
-[runtime acquisition](RUNTIME_STATUS.md).
+[runtime acquisition](RUNTIME_STATUS.md). The same live result was reproduced
+on a **second physical Windows PC**; see
+[second-PC reproduction](#second-physical-pc-reproduction).
 
 The final offline suite also passes **240 tests, 3 live tests skipped** on the
 minimum supported MuJoCo 3.6.0; see
-[minimum-version results](evidence/deep-minimum.xml). Ruff lint and
+[minimum-version results](evidence/deep-minimum.xml). With the full-body driver,
+the second PC's offline suite passes **258 tests, 4 live tests skipped** on
+both MuJoCo 3.17.0 and the minimum 3.6.0 with NumPy 2.5.4
+([3.6.0 JUnit](evidence/ue55-min-mujoco-3.6.xml)). Checking 3.6.0 found two
+full-body incompatibilities, both now fixed: joint-equality data has 11 values
+rather than 12, and `MjSpec.body(name)` misses bodies in attached specs. Ruff lint and
 format checks, mypy and wheel/sdist builds pass.
 
 Before the live-delivery fixes, the standalone suite passed **142 tests** under
@@ -259,6 +270,253 @@ Python interpreter/development components; it is not a UE5.8 engine build.
 This rehearsal validates the published **UE5.5** binary and the guide's Python
 setup. The UE5.8 source-build procedure was reviewed against upstream source,
 including the engine's DLSS-disabled mode; it remains unexecuted locally.
+
+## Second physical PC reproduction
+
+On 2026-10-23 the [new-PC guide](NEW_PC_SETUP.md) was followed on a separate
+Windows 11 Pro machine (build 26300, Intel i7-14700K, 63.7 GB RAM, RTX 5080).
+The bridge was cloned fresh at `12bead9`, MyoSuite freshly cloned at `c0af9c6`,
+and a new virtual environment was created from uv-managed **CPython 3.12.13**
+with the guide's constraints. `pip check` reported no broken requirements.
+
+That machine already had the official CARLA 0.10.0 Windows package. Its
+`VERSION` file names CARLA `ada75f92`, content `a32a1930` and engine `6cf20383`;
+its `CHANGELOG` identifies the UE5.5 migration. Its cp312 wheel has the same
+SHA-256 as the previously tested release wheel (`69047c3f...b99579`).
+The server was started with `-nullrhi -nosound -unattended -notrace
+-carla-rpc-port=2000`. Probe: client/server `0.10.0`, `Town10HD_Opt`, 155 spawn
+points, 11 vehicle blueprints and asynchronous mode.
+
+| Check | Result |
+| --- | --- |
+| Offline suite, ruff, mypy, wheel/sdist | 240 passed, 3 live skips; all checks pass |
+| Acceptance CLI | Passed all three scenarios |
+| Live-enabled suite | **243 passed, 0 skipped, 97% coverage**, 14.89 s |
+| Final probe | No remaining vehicles; asynchronous settings restored |
+
+The CLI's measured outcomes were:
+
+| Control | Actual vehicle result | Peak contact | Peak muscle force |
+| --- | --- | --- | --- |
+| Throttle | 0 → 2.249 m/s; moved 2.473 m in 3 s | 21.76 N | 255.55 N |
+| Brake | 2.964 → 0.0002 m/s in 2 s | 13.82 N | 251.49 N |
+| Steering | −25.77° yaw; moved 6.727 m in 2 s | 75.59 N | 288.08 N |
+
+The vehicle outcomes match the first PC's fresh-environment run to the
+reported precision.
+Evidence: [environment record](evidence/second-pc-0.10.0-environment.txt),
+[CLI report](evidence/second-pc-0.10.0-cli.json),
+[live pytest report](evidence/second-pc-0.10.0-pytest.json),
+[JUnit](evidence/second-pc-0.10.0-suite.xml),
+[suite summary](evidence/second-pc-0.10.0-suite.txt) and
+[installed packages](evidence/second-pc-0.10.0-pip-freeze.txt). The server
+processes started for this run were stopped afterwards.
+
+This is a second-machine reproduction of the **UE5.5** result. It does not
+establish UE5.8 runtime compatibility. The UE5.8 build attempt on the same
+machine is recorded in [RUNTIME_STATUS.md](RUNTIME_STATUS.md#second-pc-ue58-build-attempt).
+
+## Extended UE5.5 validation on the second PC
+
+On 2026-10-24 the same package, bridge commit and environment were exercised
+further. All runs used one exclusive ticking client and `Town10HD_Opt`.
+
+**Fresh `-nullrhi` run.** The acceptance CLI passed, and the live-enabled suite
+again passed **243 tests with zero skips** (97% coverage, 11.10 s). In its
+[session report](evidence/ue55-nullrhi-session.json), 1,200 consecutive muscle
+frames ran at 452 frames per wall second, with maximum clock drift 0.536 µs and
+maximum applied-control error 2.95e-8. A competing client's tick was detected,
+the session invalidated and full braking observed. See the
+[JUnit](evidence/ue55-nullrhi-suite.xml) and [summary](evidence/ue55-nullrhi-suite.txt).
+
+**Repeatability.** Five consecutive CLI runs all passed; outcomes are in
+[ue55-repeatability.json](evidence/ue55-repeatability.json). MuJoCo contact and
+muscle peaks were bit-identical across runs. Across runs, brake and steering
+end speeds varied by less than 4e-6 m/s, displacements by less than 6e-6 m and
+steering yaw by 8.4e-5°. Throttle end speed ranged
+2.239–2.258 m/s (SD 0.0096 m/s), because each throttle trial starts from a
+slightly different residual speed after settling (0.0027–0.0054 m/s).
+
+**All four-wheel vehicles.** [ue55-vehicle-matrix.py](evidence/ue55-vehicle-matrix.py)
+runs each muscle-operated trial separately for every four-wheel blueprint on
+the server, so one failure cannot hide later results. **All 33 trials passed**
+with the unchanged thresholds, vehicles destroyed and settings restored
+([results](evidence/ue55-vehicle-matrix.json)):
+
+| Vehicle | Mass | Throttle gain / distance | Brake | Steering yaw / speed |
+| --- | --- | --- | --- | --- |
+| Ford ambulance | 3,000 kg | +1.98 m/s / 2.18 m | 2.50 → 0.0001 m/s | −18.7° / 3.21 m/s |
+| CarlaCola truck | 3,000 kg | +2.72 m/s / 3.02 m | 3.42 → 0.0000 m/s | −18.7° / 3.90 m/s |
+| Dodge Charger | 1,920 kg | +2.96 m/s / 3.21 m | 3.89 → 0.0005 m/s | −33.6° / 4.69 m/s |
+| Dodge Charger police | 1,920 kg | +2.60 m/s / 2.85 m | 3.34 → 0.0000 m/s | −28.8° / 3.99 m/s |
+| Fire truck | 3,000 kg | +1.90 m/s / 2.15 m | 2.41 → 0.549 m/s | −12.3° / 2.70 m/s |
+| Mitsubishi Fuso | 3,000 kg | +3.29 m/s / 3.71 m | 4.16 → 2.278 m/s | −20.2° / 4.70 m/s |
+| Lincoln MKZ | 1,696 kg | +4.70 m/s / 5.04 m | 6.53 → 1.751 m/s | −55.6° / 8.10 m/s |
+| Mini Cooper | 1,130 kg | +4.21 m/s / 4.62 m | 5.66 → 0.602 m/s | −47.9° / 6.75 m/s |
+| Nissan Patrol | 2,355 kg | +2.25 m/s / 2.47 m | 2.96 → 0.0002 m/s | −25.8° / 3.93 m/s |
+| Mercedes Sprinter | 3,000 kg | +1.88 m/s / 2.08 m | 2.35 → 0.0000 m/s | −17.2° / 2.73 m/s |
+| Ford taxi | 1,920 kg | +3.02 m/s / 3.28 m | 4.10 → 0.0011 m/s | −37.7° / 5.17 m/s |
+
+The identical muscle stimulus therefore produces vehicle-specific responses
+from CARLA's own dynamics. The brake trial's fixed 2 s window does not stop
+the faster or heavier vehicles completely, but every one meets the required
+deceleration.
+
+**Five-minute soak.** [ue55-soak.py](evidence/ue55-soak.py) ran **15,000
+frames (300 simulated seconds)** in 29.1 s wall time
+([report](evidence/ue55-soak.json)). Each 6 s cycle has a 2 s muscle press of
+the throttle followed by a 4 s release with a scalar 0.5 brake. Every frame
+advanced exactly one CARLA frame by 0.02 s. Maximum applied-control error was
+2.95e-8. All 50 presses accelerated the car: +1.25 m/s for the first press
+from the initial posture, then +1.62 to +2.02 m/s.
+Server and client private memory stayed at 3.9 GB and 0.81 GB throughout.
+Vehicle, settings and actor IDs were restored.
+
+The soak found two things the 1,200-frame test could not:
+
+- CARLA's elapsed time falls behind MuJoCo's by exactly
+  `n × (0.02 − float32(0.02)) = n × 4.470e-10 s`. The first soak attempt
+  stopped at frame 4,474 when this crossed the 2 µs absolute bound copied from
+  the 1,200-frame test. The 1,200-frame test's 0.536 µs matches the same
+  expression to 1e-11 s, consistent with CARLA advancing by the single-precision
+  step. The soak therefore bounds the residual after this term; it stayed
+  ≤ 3.6e-9 s, with final drift −6.70 µs. The bridge's per-step tolerance is
+  unaffected. The README now recommends aligning long recordings by frame.
+- With flexor excitation alone, the passive finger stays curled after release
+  and drifts sideways. In an offline MuJoCo-only reproduction, it pressed the
+  pedal in three bursts and missed it from the fourth on. Co-activating both
+  abductors at 0.05, plus extensor 0.02 during release, gives an identical press
+  every burst (mean throttle 0.5665, 22.65 N contact) and full release.
+  This is a property of the scripted acceptance fixture, not of the bridge.
+
+**Rendered server.** The package was restarted without `-nullrhi`, using
+`-RenderOffScreen` at default quality on the RTX 5080. It used about 6 GB of
+VRAM and 11.4 GB of RAM. The CLI passed, and the full live-enabled suite passed
+**243 tests with zero skips** in 27.09 s ([JUnit](evidence/ue55-rendered-suite.xml),
+[CLI report](evidence/ue55-rendered-cli.json),
+[session report](evidence/ue55-rendered-session.json)). Compared with the
+`-nullrhi` CLI run, end speeds agreed within 3.2e-5 m/s, displacements within
+8e-6 m and yaw within 7.3e-4°. The 1,200-frame lockstep test ran at
+110 frames per wall second, with the same 0.536 µs drift.
+
+**Rendered video.** [ue55-muscle-drive-video.py](evidence/ue55-muscle-drive-video.py)
+recorded one continuous drive with a camera attached to the vehicle. The
+muscle throttle accelerated the Nissan Patrol from rest to 4.99 m/s in 4 s.
+Muscle steering then turned it 42° left in 2 s, with a scalar 0.3 cruise
+throttle. Finally, the muscle brake stopped it from 6.47 m/s in 2.54 s. Each 1920×720 frame
+pairs the CARLA camera image from the same synchronous tick (all 475 matched)
+with an off-screen MuJoCo render of the finger and mechanism. The MP4 (11.5 s,
+50 fps, 28 MB) is kept outside Git under `artifacts/ue55/`. The
+[per-frame log](evidence/ue55-muscle-drive-video.json) records the shown
+controls, forces and camera frame numbers. The started servers were stopped
+afterwards.
+
+## One MyoSuite full body operates every control
+
+The single-finger fixtures above test one mechanism per model. On 2026-10-24
+they were superseded for whole-vehicle control by a single seated driver:
+MyoSuite's `myofullbody` from `myo_sim` 0.2.3, **416 muscles**, composed with
+the cockpit by `ModelBuilder` (`myosuite_carla.fullbody`). One model and one
+motor program operate everything in one continuous CARLA drive:
+
+| Body part and muscles | Mechanism | Control |
+| --- | --- | --- |
+| Right soleus/gastrocnemii; tibialis anterior to release | Throttle pedal | `throttle` |
+| Left soleus/gastrocnemii; tibialis anterior to release | Brake pedal | `brake` |
+| Both elbows' flexors/extensors, PID stretch reflex | Two free-spinning cradles, 3 and 9 o'clock | `steer` |
+| Right FDS2/FDP2; EIP/EDC2 to release | Sequential paddle | `gear`, `manual_gear_shift` |
+| Right FDS5/FDP5; EDM/EDC5 to release | Reverse button, held | `reverse` |
+| Left FDS2/FDP2; EIP/EDC2 to release | Parking-brake button, held | `hand_brake` |
+
+**Model.** The root joint is removed so the pelvis sits on the seat, and
+gravity is off as in the fixtures. Trunk, hips (1.35 rad flexion, 0.1 rad
+abduction), knees (1.25 rad), subtalar joints, shoulders, forearm rotation and
+wrists are held by joint-equality locks. The arm posture was solved by forward
+kinematics with the model's own joint couplings, placing both hands at chest
+height with forearms forward and thumbs up. Ankles, toes, elbows and all digits
+stay free. The body settles for 3 s with released-limb antagonist tone. Pedals
+and cradle plates are then placed along their travel directions until they are
+1.37–1.5 mm from the limb, measured with `mj_geomDistance`. Each finger button
+is placed on that digit's own simulated pad path, 6–7 mm ahead of the rest pose.
+Buttons contact only their digit through explicit MuJoCo contact pairs. The
+cradle plates bear only on the metacarpals. `driver.advance` rejects external
+forces.
+
+**Offline checks** ([tests/test_fullbody.py](tests/test_fullbody.py)):
+
+- each foot presses only its pedal and releases;
+- push-pull reaches steer ±0.36–0.40 at a ±0.14 rad offset, with no pedal or
+  button cross-talk;
+- finger buttons hold steadily and release;
+- four paddle pulls give gears 1, 2, 3, then automatic;
+- the shifter counts each edge once;
+- importing the package loads neither CARLA nor MyoSuite;
+- the real `CarlaBridge` delivers the measured controls to the CARLA test
+  double.
+
+**Live drive.** [`examples/validate_fullbody.py`](examples/validate_fullbody.py)
+and the opt-in [live test](tests/test_live_fullbody.py) run 23 scripted phases,
+about 22 s of simulated driving. Every frame verifies one-frame lockstep and
+CARLA's applied throttle, brake, steer, handbrake and manual-shift flag.
+Reverse and manual gears must be reported within 25 frames; CARLA needed 2.
+All five recorded runs passed every check. Three ran on a rendered server
+(two CLI runs and the video run), and two on `-nullrhi` (the live pytest and a
+following CLI run). The values below were identical to the reported precision
+in four of them. The last `-nullrhi` CLI run differed slightly (1.48 m, −6.9°,
+2.33 m/s):
+
+| Check | Measured |
+| --- | --- |
+| Foot throttle accelerates | 0 → 1.07 m/s over 1.50 m in 3 s |
+| Parking brake resists foot throttle | 0.01 m in 2 s at throttle 0.48, vs 1.50 m released |
+| Push-pull steers left under foot throttle | −7.0° yaw, steer −0.43 |
+| Push-pull steers right under foot throttle | +6.0° yaw, steer 0.55 |
+| Foot brake stops the car | 2.34 → 0.012 m/s |
+| Finger-held reverse drives backwards | −1.16 m along the heading |
+| Reverse released | flag cleared |
+| Paddle selects manual gears 1, 2, 3 | CARLA reported gears 1, 2, 3 |
+| Paddle returns to automatic | manual shift cleared |
+| Parking brake stops the rolling car | 1.56 → 0.01 m/s, brake pedal unused |
+
+Measured contact forces were 12–15 N at the throttle foot and 88–102 N at the
+brake foot. The hands bore 38–61 N on the cradles while steering, and the
+fingers 1–4 N on the buttons. Driving-muscle forces peaked at 104–884 N. Net
+heading after the left/right manoeuvre was −0.5°. Every vehicle was destroyed,
+and world settings and actor IDs were restored.
+Evidence: [phase summaries, checks and every tenth frame of all five runs](evidence/ue55-fullbody-drive.json),
+[final suite JUnit](evidence/ue55-final-suite.xml) and [summary](evidence/ue55-final-suite.txt).
+[ue55-fullbody-video.py](evidence/ue55-fullbody-video.py) recorded the
+rendered run with a vehicle-attached camera; all 1,097 drive frames matched
+their CARLA ticks. The 24.5 s MP4 is kept outside Git.
+
+Defects found and fixed while building the driver:
+
+- **Cockpit touch sensors under-read firm contacts.** Touch sites were 0.1 mm
+  larger than their geoms. MuJoCo places a contact point midway through the
+  penetration, so a foot pressing 0.4–0.7 mm into a pedal registered 0 N. The
+  margin is now 2 mm; a touch sensor still counts only its own body's contacts.
+  Pedal contact force now equals spring stiffness × travel. Contact values in
+  earlier sections were measured with the old margin and may under-report.
+- **Two hands on fixed cradles squeezed the wheel.** Turning the wheel tilted
+  the plates and wedged the right hand (≈185 N steady force on a right turn).
+  The cradles now spin freely on their posts, like spinner knobs: 3.9–13.6 N.
+- **Single-tendon thumb presses buckle.** Under sustained FPL load the thumb's
+  CMC joint snapped to its limits within 0.5–3 s, with or without opponens,
+  abductor or extensor co-activation. Index and little fingers held every frame
+  of a 5 s test;
+  reverse therefore uses the little finger.
+- **Fingertips sweep past small buttons.** Buttons placed on the initial
+  tangent were missed as the finger curled. Placing them on the simulated pad
+  path, with a stiffer end stop and a realistic button mass, made presses
+  reliable.
+- **Strict same-frame reverse/gear checks fail on real CARLA**, because
+  `get_control()` reports the gearbox, which lags by two frames.
+
+Limitations: this is a scripted motor program, not a learned or human-fitted
+policy. Proximal joints are locked, gravity and vehicle inertial loads do not
+act on the body, and braking uses the left foot. Buttons are a palm-strapped
+remote, and reverse is hold-to-reverse. Muscle excitations were chosen to
+produce moderate controls (throttle 0.38–0.48).
 
 ## Package verification
 

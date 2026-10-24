@@ -54,6 +54,12 @@ normalized input, not a road-wheel or cabin steering-wheel angle. Calibrate the
 MuJoCo wheel's travel and sign for the selected CARLA vehicle. CARLA's
 speed-dependent steering curve can change the resulting road-wheel angle.
 
+`vehicle.get_control()` reports the gearbox state for `reverse` and `gear`. With
+CARLA 0.10.0 a commanded reverse or manual gear appeared there two frames
+(40 ms) after it was applied; throttle, brake, steering, handbrake and the
+manual-shift flag matched on the same frame. The full-body validation therefore
+bounds reverse/gear agreement to 25 frames instead of requiring the same frame.
+
 Additional measured channels are available to application hooks. CARLA supports
 [vehicle lights and door commands](https://github.com/carla-simulator/carla/blob/defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5/PythonAPI/docs/actor.yml#L543),
 subject to the vehicle asset. These commands do not create a shared physical
