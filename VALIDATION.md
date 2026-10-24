@@ -170,6 +170,45 @@ reports no feature-based AUC. A first run without the adequacy check gave a
 model-vs-human AUC of 0.995 that would have been misleading. The toolkit's
 features and AUCs are verified on synthetic data in `tests/test_human_comparison.py`.
 
+## Mix and match with embodied-ui
+
+Run on 2026-10-24 on the first PC with embodied-ui 0.1.0 (commit `aa08385`),
+MuJoCo 3.17.0, Python 3.12.13 and the CARLA 0.10.0 / UE5.5 package started
+with `-nullrhi -nosound -unattended -notrace -carla-rpc-port=2000`.
+
+**Offline.** `tests/test_interfaces.py` (6 tests) passes:
+
+- Unity-convention telemetry converts to CARLA's frame: location, velocity,
+  acceleration, yaw, and a left turn's negative yaw rate.
+- The vehicle session detects clock slips.
+- A servo fingertip on an embodied-ui pedal drives the fitted surrogate
+  through `VehicleSessionEngine`.
+- `interface_hook` sets both blinkers for `lights.hazard` and feeds the light
+  state back to a lamp.
+- Devices compose into the fast full-body driver, mounted on
+  `cockpit_steering_body`, and are read once per period.
+- The driver's only applied forces stay the wheel feel and the devices' own
+  degrees of freedom.
+
+The full offline suite passes: 332 passed and 4 live tests skipped.
+
+**Live.** `examples/drive_with_interface.py --backend carla --seconds 6`
+([report](evidence/ue55-interface-hazard.json)) ran as follows:
+
+- **Setup:** the full-body driver (fast preset) carried an embodied-ui hazard
+  toggle switch and a lamp on its steering-wheel hub. It drove Town10HD_Opt
+  spawn 105 in `vehicle.nissan.patrol` with the reflex driver through its
+  muscles, for 300 periods in 3.18 s
+  wall time.
+- **The switch:** it was flipped by setting its joint at 2.0 s, because no
+  motor program reaches it. Its debounced state read 1 from
+  2.02 s.
+- **CARLA's lights:** the bridge hook set the hazard lights. CARLA reported
+  light state 48 (left and right blinkers) at the end, and the lamp showed
+  its on colour from that reported state.
+- **Driving:** the vehicle reached 8.143 m/s with no
+  collision or off-road termination.
+
 ## Policy training pilots
 
 Run on 2026-10-24 on the first PC with Stable-Baselines3 2.9.0, PyTorch

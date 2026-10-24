@@ -1,0 +1,382 @@
+{
+  "backend": "carla",
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "wall_seconds": 3.18,
+  "periods": 300,
+  "hazard_on_at": 2.02,
+  "rows": [
+    {
+      "time": 0.02,
+      "speed": 0.003,
+      "hazard_switch": 0.0,
+      "lamp_rgba": [
+        0.15,
+        0.05,
+        0.02,
+        1.0
+      ],
+      "carla_light_state": 0
+    },
+    {
+      "time": 0.22,
+      "speed": 0.085,
+      "hazard_switch": 0.0,
+      "lamp_rgba": [
+        0.15,
+        0.05,
+        0.02,
+        1.0
+      ],
+      "carla_light_state": 0
+    },
+    {
+      "time": 0.42,
+      "speed": 0.287,
+      "hazard_switch": 0.0,
+      "lamp_rgba": [
+        0.15,
+        0.05,
+        0.02,
+        1.0
+      ],
+      "carla_light_state": 0
+    },
+    {
+      "time": 0.62,
+      "speed": 0.495,
+      "hazard_switch": 0.0,
+      "lamp_rgba": [
+        0.15,
+        0.05,
+        0.02,
+        1.0
+      ],
+      "carla_light_state": 0
+    },
+    {
+      "time": 0.82,
+      "speed": 0.696,
+      "hazard_switch": 0.0,
+      "lamp_rgba": [
+        0.15,
+        0.05,
+        0.02,
+        1.0
+      ],
+      "carla_light_state": 0
+    },
+    {
+      "time": 1.02,
+      "speed": 0.886,
+      "hazard_switch": 0.0,
+      "lamp_rgba": [
+        0.15,
+        0.05,
+        0.02,
+        1.0
+      ],
+      "carla_light_state": 0
+    },
+    {
+      "time": 1.22,
+      "speed": 1.066,
+      "hazard_switch": 0.0,
+      "lamp_rgba": [
+        0.15,
+        0.05,
+        0.02,
+        1.0
+      ],
+      "carla_light_state": 0
+    },
+    {
+      "time": 1.42,
+      "speed": 1.239,
+      "hazard_switch": 0.0,
+      "lamp_rgba": [
+        0.15,
+        0.05,
+        0.02,
+        1.0
+      ],
+      "carla_light_state": 0
+    },
+    {
+      "time": 1.62,
+      "speed": 1.408,
+      "hazard_switch": 0.0,
+      "lamp_rgba": [
+        0.15,
+        0.05,
+        0.02,
+        1.0
+      ],
+      "carla_light_state": 0
+    },
+    {
+      "time": 1.82,
+      "speed": 1.573,
+      "hazard_switch": 0.0,
+      "lamp_rgba": [
+        0.15,
+        0.05,
+        0.02,
+        1.0
+      ],
+      "carla_light_state": 0
+    },
+    {
+      "time": 2.02,
+      "speed": 1.735,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        0.15,
+        0.05,
+        0.02,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 2.22,
+      "speed": 1.878,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 2.42,
+      "speed": 2.02,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 2.62,
+      "speed": 2.161,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 2.82,
+      "speed": 2.317,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 3.02,
+      "speed": 2.486,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 3.22,
+      "speed": 2.678,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 3.42,
+      "speed": 2.889,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 3.62,
+      "speed": 3.127,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 3.82,
+      "speed": 3.401,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 4.02,
+      "speed": 3.714,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 4.22,
+      "speed": 4.058,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 4.42,
+      "speed": 4.434,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 4.62,
+      "speed": 4.845,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 4.82,
+      "speed": 5.289,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 5.02,
+      "speed": 5.764,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 5.22,
+      "speed": 6.265,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 5.42,
+      "speed": 6.771,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 5.62,
+      "speed": 7.27,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 5.82,
+      "speed": 7.747,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    },
+    {
+      "time": 6.0,
+      "speed": 8.143,
+      "hazard_switch": 1.0,
+      "lamp_rgba": [
+        1.0,
+        0.55,
+        0.0,
+        1.0
+      ],
+      "carla_light_state": 48
+    }
+  ]
+}

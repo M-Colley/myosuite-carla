@@ -385,6 +385,9 @@ class FullBodyDrivingEnv(gym.Env[NDArray[np.float32], NDArray[np.float32]]):
             "collision": collided,
             "off_road": off_road,
         }
+        reading = self.driver.interface_reading()
+        if reading is not None:
+            info["interface"] = reading.as_dict()
         return observation, float(sum(terms.values())), terminated, truncated, info
 
     def _reward_terms(self, state: dict[str, float]) -> dict[str, float]:

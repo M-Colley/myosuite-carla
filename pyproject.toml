@@ -27,6 +27,9 @@ data = ["pandas>=2", "pyarrow>=14", "mcap>=1.2"]
 analysis = ["scipy>=1.10", "scikit-learn>=1.3", "pandas>=2"]
 # Policy training with Stable-Baselines3 (training_sb3.py), as in arm_force_driving.
 rl = ["stable-baselines3>=2.8,<3", "scipy>=1.10", "scikit-learn>=1.3", "pandas>=2"]
+# embodied-ui devices and engines (myosuite_carla.interfaces); embodied-ui is
+# installed from its repository and needs MuJoCo 3.7 or newer.
+ui = ["embodied-ui>=0.1", "mujoco>=3.7"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

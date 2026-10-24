@@ -451,6 +451,45 @@ guarantee an immediate physical stop in a paused or unreachable server. A failed
 CARLA session must be replaced; a driver/mapper failure requires a successful
 reset. Each terminated/truncated driver episode queues braking.
 
+## Mix and match with embodied-ui
+
+[embodied-ui](https://github.com/M-Colley/embodied-ui) is the engine-independent
+package for physical interfaces: buttons, switches, knobs, levers,
+touchscreens, displays and lamps operated through contact, bridged in
+lockstep to Unity, CARLA and other engines. It plugs in three ways
+(`pip install -e ../embodied-ui`; needs MuJoCo 3.7 or newer):
+
+- **More devices for the driver.** `FullBodyDriverConfig(interfaces=(dash,))`
+  composes embodied-ui interfaces into the driver model through the same
+  `ModelBuilder` recipe. Mount devices on any body (for example
+  `cockpit_steering_body`) or place them in the seated frame
+  (`embodied_ui.MYOSUITE_SEATED`). Their feel acts every physics step;
+  `driver.interface_reading()` and the environment's `info["interface"]`
+  report their channels and events.
+  `myosuite_carla.interfaces.interface_hook(driver, routes)` is a
+  `CarlaBridge` hook. It routes channels to CARLA's lights, including
+  `lights.hazard`, and the reported light state back to lamps.
+- **Unity vehicles.** `EngineVehicleSession(engine)` implements the vehicle
+  session protocol on any embodied-ui engine, for example a Unity car through
+  `RemoteEngine` with the Unity package's `EmbodiedVehicleOutput`. It converts
+  that engine's telemetry to CARLA's frame, so `CarlaBridge`,
+  `FullBodyDrivingEnv` and the scenarios run unchanged.
+- **Any body, these vehicles.** `VehicleSessionEngine(session)` exposes a
+  `CarlaSession` or the fitted `SurrogateVehicle` as an embodied-ui engine.
+  Any MuJoCo body with embodied-ui pedals and wheels can drive it.
+
+```shell
+python examples/drive_with_interface.py --backend surrogate
+python examples/drive_with_interface.py --backend carla
+python examples/drive_with_interface.py --backend unity --port 47474
+```
+
+The full-body driver's scripted motor programs operate only its own controls.
+The example flips the hazard switch by hand, and operating new devices
+through the muscles is future work. The live CARLA run is recorded in
+[VALIDATION.md](VALIDATION.md#mix-and-match-with-embodied-ui). The Unity
+backend has not been run, because no Unity Editor was available.
+
 ## Test
 
 Run the offline contact demonstration and tests from the repository root:

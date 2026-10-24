@@ -196,6 +196,13 @@ class FullBodyDriverConfig:
         motor_noise_constant: Additive excitation noise standard deviation.
         posture: ``(joint, angle)`` overrides of the seated posture, e.g. a
             reclined trunk; mechanisms are placed for the resulting body.
+        interfaces: ``embodied_ui.Interface`` objects composed into the
+            driver model with MyoSuite's ``ModelBuilder`` (dashboard
+            buttons, stalks, touchscreens, displays, lamps). Their feel acts
+            every physics step and :meth:`FullBodyDriver.interface_reading`
+            reads them once per control period. Poses are in the seated
+            body's frame (``embodied_ui.MYOSUITE_SEATED``: x left, y
+            backward, z up) or relative to a mount body such as the wheel.
     """
 
     timestep: float = 0.001
@@ -228,6 +235,7 @@ class FullBodyDriverConfig:
     motor_noise_signal: float = 0.0
     motor_noise_constant: float = 0.0
     posture: tuple[tuple[str, float], ...] = ()
+    interfaces: tuple[Any, ...] = ()
 
     @classmethod
     def fast(cls, **overrides: Any) -> FullBodyDriverConfig:
@@ -285,6 +293,14 @@ class FullBodyDriverConfig:
         if any(not math.isfinite(angle) for _, angle in posture):
             raise ValueError("posture angles must be finite")
         object.__setattr__(self, "posture", posture)
+        interfaces = tuple(self.interfaces)
+        for interface in interfaces:
+            if not (
+                callable(getattr(interface, "attach", None))
+                and callable(getattr(interface, "bind", None))
+            ):
+                raise TypeError("interfaces must be embodied_ui.Interface objects")
+        object.__setattr__(self, "interfaces", interfaces)
 
 
 @dataclass(frozen=True)
@@ -1024,8 +1040,11 @@ def _build(
                         )
         return spec
 
-    builder = ModelBuilder.from_spec(_body_spec(config))
-    model, _ = add_cockpit(builder, cockpit).apply_transform(mechanisms).build()
+    builder = add_cockpit(ModelBuilder.from_spec(_body_spec(config)), cockpit)
+    builder = builder.apply_transform(mechanisms)
+    for interface in config.interfaces:
+        builder = builder.apply_transform(interface.transform)
+    model, _ = builder.build()
     return model, cockpit
 
 
@@ -1187,6 +1206,10 @@ class FullBodyDriver:
 
             self.fatigue = CumulativeFatigue(model, sex=config.fatigue_sex)
         self.np_random = np.random.default_rng()
+        self.interfaces = tuple(
+            interface.bind(model) for interface in config.interfaces
+        )
+        self._interface_reading: tuple[float, Any] | None = None
         self.reset()
 
     def reset(self, seed: int | None = None) -> mujoco.MjData:
@@ -1212,6 +1235,9 @@ class FullBodyDriver:
         self.shifter.reset()
         self.parking_brake.reset()
         self.reverse_switch.reset()
+        for runtime in self.interfaces:
+            runtime.reset()
+        self._interface_reading = None
         self.motion = AT_REST
         self._expected_xfrc = np.zeros_like(self.data.xfrc_applied)
         self._expected_qfrc = np.zeros_like(self.data.qfrc_applied)
@@ -1258,9 +1284,31 @@ class FullBodyDriver:
                 self._loads.apply(self.data, self.motion)
             self.data.qfrc_applied[:] = 0.0
             self.data.qfrc_applied[self._steering_dof] = feel
+            for runtime in self.interfaces:
+                runtime.apply(self.data)
             mujoco.mj_step(self.model, self.data)
         self._expected_xfrc = self.data.xfrc_applied.copy()
         self._expected_qfrc = self.data.qfrc_applied.copy()
+
+    def interface_reading(self) -> Any:
+        """Read the composed embodied-ui interfaces at the current time.
+
+        Device state machines advance once per control period, so repeated
+        calls at the same MuJoCo time return the same reading (a bridge hook
+        and the environment may both ask). Returns ``None`` without
+        interfaces.
+        """
+        if not self.interfaces:
+            return None
+        time = float(self.data.time)
+        if self._interface_reading is None or self._interface_reading[0] != time:
+            from embodied_ui import merge_readings
+
+            reading = merge_readings(
+                [runtime.read(self.data) for runtime in self.interfaces]
+            )
+            self._interface_reading = (time, reading)
+        return self._interface_reading[1]
 
     def _condition(self, normals: np.ndarray | None) -> None:
         """Apply motor noise, then fatigue, to this physics step's excitations."""
@@ -1395,7 +1443,11 @@ def summary(driver: FullBodyDriver) -> dict[str, Any]:
         "control_dt": driver.config.control_dt,
         "initial_gaps_metres": dict(driver.initial_gaps),
         "config": {
-            key: value
+            key: (
+                [interface.to_manifest() for interface in value]
+                if key == "interfaces"
+                else value
+            )
             for key, value in vars(replace(driver.config)).items()
             if not key.startswith("_")
         },
