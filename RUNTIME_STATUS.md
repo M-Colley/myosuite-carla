@@ -175,8 +175,9 @@ compressed copy of the package. The previous engine commit can be restored with
 deleted libraries and symbols still require a rebuild at either commit.
 
 On 2026-10-24 validation continued on the local **UE5.5** package instead, at
-the owner's direction. This included the single full-body driver. The UE5.8
-setup above was left in place, unbuilt.
+the owner's direction. This included the single full-body driver, its vehicle
+loads, recordings, the fitted vehicle surrogate and the driving scenarios; all
+live runs used `-nullrhi`. The UE5.8 setup above was left in place, unbuilt.
 
 ## What is needed to complete the live test
 

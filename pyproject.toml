@@ -21,6 +21,10 @@ Issues = "https://github.com/M-Colley/myosuite-carla/issues"
 [project.optional-dependencies]
 test = ["pytest>=8", "pytest-cov>=5", "build>=1"]
 lint = ["mypy>=1.15", "ruff>=0.11"]
+# Parquet and MCAP exports (myosuite_carla.recording).
+data = ["pandas>=2", "pyarrow>=14", "mcap>=1.2"]
+# Vehicle surrogate fitting and human-data comparison.
+analysis = ["scipy>=1.10", "scikit-learn>=1.3", "pandas>=2"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

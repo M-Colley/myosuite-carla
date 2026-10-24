@@ -1,6 +1,7 @@
 # Validation record
 
-Validated locally on Windows on 2026-10-23. The CARLA source
+Validated locally on Windows on 2026-10-23, with the researcher features below
+validated on 2026-10-24. The CARLA source
 contract is `ue58-dev` commit `defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5`;
 see [COMPATIBILITY.md](COMPATIBILITY.md).
 
@@ -8,9 +9,12 @@ This record accompanies Mark Colley's standalone `myosuite-carla` repository.
 The initial offline results below were obtained before extraction from the
 MyoSuite worktree; the commands use the equivalent standalone root layout.
 
-**Current result: 262 passed, no skips, 97% statement coverage** against an
-actual CARLA **0.10.0 / Unreal Engine 5.5** server on the second PC (CPython
-3.12.13, NumPy 1.26.4, MuJoCo 3.17.0, the package's `cp312-win_amd64` wheel).
+**Current result: 312 passed, no skips, 94% statement coverage** against an
+actual CARLA **0.10.0 / Unreal Engine 5.5** server (CPython 3.12.13, NumPy
+2.5.4, MuJoCo 3.17.0); see
+[researcher features](#researcher-features-loads-recording-surrogate-task-and-conditions).
+The previous result was **262 passed, no skips, 97% statement coverage** on the
+second PC (NumPy 1.26.4, the package's `cp312-win_amd64` wheel).
 It includes a live drive in which **one MyoSuite full body operates every
 control**; see [full-body drive](#one-myosuite-full-body-operates-every-control).
 The earlier first-PC result was **243 passed, no skips, 97% statement coverage**
@@ -39,6 +43,132 @@ The [MuJoCo 3.6 output](evidence/offline-mujoco-3.6.txt) records the minimum-ver
 Focused input and bridge tests also pass on local Python 3.14.6. A regression
 test reproduces and guards against the NumPy/pybind enum equality failure found
 by Linux Python 3.14 CI; joint-type validation now compares builtin integers.
+
+## Researcher features: loads, recording, surrogate, task and conditions
+
+Validated on 2026-10-24 on the first PC against the downloaded **CARLA 0.10.0
+/ UE5.5** package started with `-nullrhi -nosound -unattended -notrace
+-carla-rpc-port=2000` (Town10HD_Opt, `vehicle.nissan.patrol`). Installing
+`opensim==4.6`, `mcap` and `pyarrow` upgraded NumPy from 1.26.4 to 2.5.4;
+`pip check` reported no conflicts and the suite passed before and after. An
+unrelated TD-MPC2 training job ran on the same machine throughout, so timings
+are conservative.
+
+**Live full-body drive with vehicle loads.** All **13 checks** pass for the
+default configuration and for `--fast`, and again inside the live suite
+([compact evidence](evidence/ue55-fullbody-loads.json), every tenth frame). The
+new check is that a second switch press releases the parking brake. Every run
+restored world settings and actors; CARLA's gearbox reported reverse and gear
+changes at most 3 and 2 frames late. Commands:
+
+```powershell
+python examples/validate_fullbody.py --host 127.0.0.1 --timeout 30 --target-ref 0.10.0 --build-ref 0.10.0 --output artifacts/ue55-fullbody-loads.json --record artifacts/ue55-fullbody-loads --formats csv,opensim,arm_force,parquet,mcap
+python examples/validate_fullbody.py --host 127.0.0.1 --timeout 30 --target-ref 0.10.0 --build-ref 0.10.0 --fast --output artifacts/ue55-fullbody-fast.json
+```
+
+**Live suite.** With the environment variables of the earlier live runs
+(`CARLA_BRIDGE_LIVE=1`, host `127.0.0.1`, target and build ref `0.10.0`),
+`python -m pytest tests --cov=myosuite_carla` passed **312 tests with zero
+skips and 94% statement coverage**
+([JUnit](evidence/ue55-loads-live-suite.xml), [output](evidence/ue55-loads-live-suite.txt)).
+`carla_scenario.py` is exercised only by the live scenario runs below. On the
+minimum MuJoCo **3.6.0** (`.venv-min`, NumPy 2.5.4) the offline suite passed
+**306 tests, 6 skipped**: the 4 live tests and the Parquet/MCAP and OpenSim
+round trips, whose optional packages are not installed there
+([JUnit](evidence/ue55-loads-mujoco-3.6.xml)).
+Ruff lint and format, mypy and wheel/sdist builds pass.
+
+**Recording interoperability on the live drive.** The 1,149-frame recording
+was read back with each format's own reader: OpenSim 4.6 `TimeSeriesTable`
+(122 coordinates in degrees, 416 muscle forces equal to the CSV), pandas
+Parquet (1,149 x 1,020), the `mcap` reader (four topics of 1,149 messages) and
+the arm_force_driving manifest (schema 1, its eight columns, CARLA geolocation).
+File sizes and SHA-256 are in the evidence.
+
+**Vehicle surrogate.** `examples/identify_vehicle.py` drove 97 designed
+segments (launches, pedal and hand-brake stops, reverse, steering sweeps at
+2-10 and 8-14 m/s) from rest on straight roads; 8 steering segments with a
+collision or curb strike were discarded. `examples/fit_vehicle_model.py`
+fitted seeds 0 and 3 (319 s) and evaluated open-loop rollouts on seeds 1, 2 and
+4 (526 s), compared with constant-velocity extrapolation
+([report](evidence/ue55-vehicle-surrogate.json), [data](evidence/ue55-vehicle-sysid.zip)):
+
+| Held-out set | Speed RMSE | Yaw-rate RMSE (peak) | Position error at 3 s | Constant velocity at 3 s |
+| --- | --- | --- | --- | --- |
+| All 60 segments | 0.53 m/s | 0.76 deg/s (5.6) | 0.45 m | 5.99 m |
+| Launches | 0.74 m/s | 0.04 deg/s | 0.52 m | 3.51 m |
+| Steering 2-10 m/s | 0.29 m/s | 2.23 deg/s (18.1) | 0.28 m | 8.09 m |
+| Steering 8-14 m/s | 0.51 m/s | 0.69 deg/s (2.9) | 0.62 m | 10.37 m |
+| Reverse | 0.04 m/s | 0.00 deg/s | 0.06 m | 0.86 m |
+
+Steering is identified from 2.4 to 13.6 m/s (5th-95th percentile) and reverse
+up to throttle 0.53; table knots without data hold the nearest identified
+value. On the muscle-driven CARLA drives (scenarios and every full-body phase)
+the 3 s error is 0.20 m against 1.74 m for the lane change and 0.19 m against
+0.51 m for the takeover. It is worse than the baseline (1.27 m against 0.22 m)
+for lead-vehicle braking, which starts at a steady 12 m/s right after CARLA's
+teleport-to-speed transient. Launches from rest at light throttle are the
+weakest case (full-body `throttle` phase: 0.59 m/s RMSE at 1.1 m/s peak),
+because CARLA engages the drive with a delay below 1 m/s.
+
+**Scenarios on both backends.** The reflex driver drove each scenario through
+the muscles on the surrogate and on CARLA (spawn 105, two same-direction
+lanes, 170 m straight), with no collision and no off-road event
+([evidence](evidence/ue55-scenarios.json)):
+
+| Scenario | Metric | CARLA | Surrogate |
+| --- | --- | --- | --- |
+| Lead vehicle brakes 12 to 0 m/s at 4 m/s^2 | Minimum gap / TTC | 1.91 m / 2.71 s | 2.08 m / 2.69 s |
+| Takeover request at 5 s | Driver takeover time | 3.00 s | 3.00 s |
+| Lane change, 3.5 m left | Lateral error RMS / maximum | 0.53 / 1.42 m | 0.52 / 1.38 m |
+
+Two scenario defects were found only live and fixed: a lane change at a spawn
+with no drivable left lane mounted the curb (the script now refuses such
+spawns), and CARLA reports the teleport-to-speed velocity jump as a 594 m/s^2
+one-frame acceleration, which the body loads turned into a 1,000 N reflex
+event; `teleport` now ticks once more before the episode starts.
+
+**Defects found while adding vehicle loads.**
+
+- Under gravity a fingertip pressing a bottomed button rolls off it after 1 to
+  7 s; neither intrinsic co-activation nor friction removed this, so reverse
+  and the parking brake became latched switches pressed briefly, as in
+  production cars.
+- Large steering motions pushed the left index into the parking-brake switch,
+  and in the fast preset the right index into the gear paddle, so CARLA
+  selected manual gear 1 early and refused reverse. Switches now need a 0.2 s
+  hold (reverse also the brake pedal) and paddle pulls a 0.1 s hold.
+- The reflex driver's lane keeping keeps a 0.57 Hz steering oscillation of
+  0.0027 normalized steer (2.8 cm lane-position SD); it is negligible
+  physically but present without any noise.
+
+**Performance.** The fast preset keeps 114 of 416 muscles and steps at 2 ms
+([parity](evidence/fullbody-parity.json), 400 control periods):
+
+| Variant | Real-time factor | Speed-up | Largest continuous control difference |
+| --- | --- | --- | --- |
+| 416 muscles, 1 ms (reference) | 2.33 | 1.00 | - |
+| 114 muscles, 1 ms | 2.94 | 1.26 | 0.029 steer |
+| 416 muscles, 2 ms | 4.61 | 1.98 | 0.020 brake |
+| 114 muscles, 2 ms (`fast()`) | 5.76 | 2.47 | 0.030 steer |
+
+Boolean and gear channels are identical in every variant. Converting the
+vehicle motion once per control period and precomputing excitation indices
+raised the reference from 1.93 to 2.33 times real time with identical results.
+Batched rollouts of `make_driving_env` in `AsyncVectorEnv` reach 226 steps per
+second in one process and 380, 774 and 973 with 2, 4 and 8 workers
+([scaling](evidence/vector-rollout.json)).
+
+**Human data.** `examples/compare_human.py` read
+`combined_eye_and_driving_df.csv` (10 participants, 3 drives each) and wrote
+aggregates only ([report](evidence/human-comparison.json)). The data cannot
+support a control comparison: logged steering has 174 distinct values, and in
+98.3% of 10 s lane-keeping windows steering and acceleration are constant;
+the front-vehicle distance is held for long stretches; human speeds are 20-36
+m/s (5-95%), above the surrogate's identified range. The script therefore
+reports no feature-based AUC. A first run without the adequacy check gave a
+model-vs-human AUC of 0.995 that would have been misleading. The toolkit's
+features and AUCs are verified on synthetic data in `tests/test_human_comparison.py`.
 
 ## Deeper review, fault testing and performance
 

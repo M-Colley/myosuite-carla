@@ -1,0 +1,167 @@
+{
+ "created_utc": "2026-10-24T08:13:27.591515+00:00",
+ "features": [
+  "steer_frequency_hz",
+  "reversal_rate_per_min",
+  "accel_sd_mps2",
+  "jerk_rms_mps3"
+ ],
+ "compared_features": [],
+ "max_constant_window_fraction": 0.5,
+ "window_s": 10.0,
+ "human": {
+  "participants": 10,
+  "windows": 1733,
+  "speed_mps": {
+   "q05": 20.211694444444447,
+   "q25": 22.95513888888889,
+   "median": 26.017027777777777,
+   "q75": 29.496916666666667,
+   "q95": 36.02019444444444
+  },
+  "adequacy": {
+   "steer": {
+    "distinct_values": 174,
+    "resolution": 0.006,
+    "constant_window_fraction": 0.983266012694749
+   },
+   "acceleration": {
+    "distinct_values": 9914,
+    "resolution": 9.999999999998899e-05,
+    "constant_window_fraction": 0.983266012694749
+   }
+  },
+  "features": {
+   "steer_frequency_hz": {
+    "median": 0.0,
+    "q25": 0.0,
+    "q75": 0.0
+   },
+   "reversal_rate_per_min": {
+    "median": 0.0,
+    "q25": 0.0,
+    "q75": 0.0
+   },
+   "accel_sd_mps2": {
+    "median": 1.3877787807814457e-17,
+    "q25": 6.938893903907228e-18,
+    "q75": 1.1102230246251565e-16
+   },
+   "jerk_rms_mps3": {
+    "median": 0.0,
+    "q25": 0.0,
+    "q75": 0.0
+   }
+  },
+  "floor": null
+ },
+ "model": {
+  "0": {
+   "motor_noise_signal": 0.0,
+   "episodes": 5,
+   "windows": 25,
+   "speed_mps": {
+    "q05": 13.51856978596011,
+    "q25": 13.51922659525406,
+    "median": 13.519300131546938,
+    "q75": 13.519368683687286,
+    "q95": 13.519541841015023
+   },
+   "features": {
+    "steer_frequency_hz": {
+     "median": 0.5660875949981278,
+     "q25": 0.5652210191943903,
+     "q75": 0.5664468172447109
+    },
+    "reversal_rate_per_min": {
+     "median": 12.0,
+     "q25": 12.0,
+     "q75": 12.0
+    },
+    "accel_sd_mps2": {
+     "median": 0.00015569757480403672,
+     "q25": 0.00015563042555988515,
+     "q75": 0.00015575418208369589
+    },
+    "jerk_rms_mps3": {
+     "median": 0.0005481696767154521,
+     "q25": 0.0005471499023371769,
+     "q75": 0.0005504503083183005
+    }
+   },
+   "versus_human": null
+  },
+  "0.1": {
+   "motor_noise_signal": 0.1,
+   "episodes": 5,
+   "windows": 25,
+   "speed_mps": {
+    "q05": 13.51596562940587,
+    "q25": 13.517984927201347,
+    "median": 13.519285741035002,
+    "q75": 13.52058775924482,
+    "q95": 13.522751116737236
+   },
+   "features": {
+    "steer_frequency_hz": {
+     "median": 0.5674972325587597,
+     "q25": 0.5621267244500565,
+     "q75": 0.5766109928202958
+    },
+    "reversal_rate_per_min": {
+     "median": 12.0,
+     "q25": 12.0,
+     "q75": 12.0
+    },
+    "accel_sd_mps2": {
+     "median": 0.003355109394984212,
+     "q25": 0.0032214563133922494,
+     "q75": 0.0035335333996742023
+    },
+    "jerk_rms_mps3": {
+     "median": 0.015816587431323664,
+     "q25": 0.014039214215513837,
+     "q75": 0.016599523462149757
+    }
+   },
+   "versus_human": null
+  },
+  "0.2": {
+   "motor_noise_signal": 0.2,
+   "episodes": 5,
+   "windows": 25,
+   "speed_mps": {
+    "q05": 13.513229805666212,
+    "q25": 13.516965591706684,
+    "median": 13.519362126291023,
+    "q75": 13.521694210519232,
+    "q95": 13.525634397151022
+   },
+   "features": {
+    "steer_frequency_hz": {
+     "median": 0.5700294760189599,
+     "q25": 0.5546427826943714,
+     "q75": 0.5846960662145488
+    },
+    "reversal_rate_per_min": {
+     "median": 12.0,
+     "q25": 12.0,
+     "q75": 24.0
+    },
+    "accel_sd_mps2": {
+     "median": 0.006448261145155294,
+     "q25": 0.006203620350417693,
+     "q75": 0.006930964326414918
+    },
+    "jerk_rms_mps3": {
+     "median": 0.029723020959668705,
+     "q25": 0.02711199713809623,
+     "q75": 0.03240164483786307
+    }
+   },
+   "versus_human": null
+  }
+ },
+ "command": "examples/compare_human.py --human <path to combined_eye_and_driving_df.csv>",
+ "data_note": "Aggregates only; no rows and no participant identifiers. The dataset was built for lane-change intention from eye tracking: in 98.3% of 10 s lane-keeping windows the logged steering and acceleration are constant, so no window feature is valid and no model-vs-human AUC is reported. Human driving is 20-36 m/s (5-95%), above the surrogate's identified range."
+}

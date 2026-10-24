@@ -97,14 +97,15 @@ Set-Location "$workRoot\myosuite-carla"
 py -3.12 -m venv .venv
 $python = (Resolve-Path '.venv\Scripts\python.exe').Path
 & $python -m pip install --upgrade pip
-& $python -m pip install -c constraints/windows-py312-live.txt -e ../myosuite -e '.[test,lint]'
+& $python -m pip install -c constraints/windows-py312-live.txt -e ../myosuite -e '.[test,lint,data,analysis]'
 & $python -m pip check
 ```
 
 The pinned MyoSuite commit is from **`dev`** and supplies the required
 `ModelBuilder`. Do not replace it with the PyPI MyoSuite package for this
 reproduction. The two repositories remain siblings. The constraints file
-records the tested Windows/Python 3.12 dependency versions; it deliberately
+records the tested Windows/Python 3.12 dependency versions (NumPy 2.5.4 since
+the 2026-10-24 validation; earlier records used 1.26.4); it deliberately
 does not install CARLA, MyoSuite or this bridge from PyPI. It is a reproduction
 snapshot, not a universal constraint set for other Python versions/platforms.
 
@@ -132,10 +133,11 @@ Remove-Item Env:CARLA_BRIDGE_LIVE -ErrorAction SilentlyContinue
 
 The dependency probe must import `ModelBuilder` and `myo_sim`. The offline
 example should show pedal/wheel contact and return to released controls.
-There should be exactly **four skipped live-server tests**, with every other
-test passing (258 on the second test PC). Extra skips can indicate missing
-MyoSuite/model dependencies; the full-body tests also need `myo_sim`'s
-`myofullbody`, which myo-sim 0.2.3 provides.
+There should be exactly **four skipped live-server tests**, plus one if the
+optional `opensim` package is not installed, with every other test passing
+(308 on the first PC on 2026-10-24). Extra skips can indicate missing
+MyoSuite/model dependencies or extras; the full-body tests also need
+`myo_sim`'s `myofullbody`, which myo-sim 0.2.3 provides.
 Offline success alone is not a CARLA runtime pass.
 
 ## 5A. Build the requested UE5.8 server and client
@@ -426,12 +428,14 @@ Pass criteria enforced in code:
 - Each trial destroys its vehicle and restores the captured world settings.
 
 The full-body CLI drives one seated MyoSuite `myofullbody` (416 muscles)
-through 23 phases, about 22 s: hold, throttle against the parking brake,
-throttle, push-pull steering left and right under throttle, braking,
-finger-held reverse, three paddle-selected manual gears and a parking-brake
-stop. It prints 12 physical checks, all of which must pass. The second test
-PC measured identical outcomes in four runs; see
-[the full-body record](VALIDATION.md#one-myosuite-full-body-operates-every-control).
+through 26 phases, about 23 s, loaded by gravity and the measured vehicle
+motion: hold, a parking-brake switch press, throttle against the parking
+brake, a second press that releases it, throttle, push-pull steering left and
+right under throttle, braking, a reverse button press with the brake held,
+reversing, three paddle-selected manual gears and a rolling parking-brake
+stop. It prints 13 physical checks, all of which must pass; add `--fast` to
+repeat it with the fast preset. See
+[the researcher-feature record](VALIDATION.md#researcher-features-loads-recording-surrogate-task-and-conditions).
 Allow about 20 s per run on `-nullrhi`; building the body takes about 3 s.
 
 Check the live-enabled suite has **zero skips** and all tests pass. Separately
@@ -462,6 +466,22 @@ $env:CARLA_PORT = '2000'
 
 Replace the example IP with the actual server address. The defaults in section
 8 preserve these values rather than resetting them to localhost.
+
+### Optional: researcher features on the live server
+
+These runs need the `data` and `analysis` extras. Each drives its own vehicle
+and restores the world:
+
+```powershell
+& $python examples/validate_fullbody.py --host $env:CARLA_HOST --port $env:CARLA_PORT --timeout 60 --target-ref $env:CARLA_TARGET_REF --build-ref $env:CARLA_BUILD_REF --output artifacts/fullbody-recorded.json --record artifacts/fullbody-recorded --formats csv,opensim,arm_force,parquet,mcap
+& $python examples/drive_scenario.py --backend carla --host $env:CARLA_HOST --scenario lead_vehicle_braking --record artifacts/scenario-lead
+& $python examples/identify_vehicle.py --host $env:CARLA_HOST --seeds 0 1 2
+& $python examples/fit_vehicle_model.py --train artifacts/vehicle-sysid/seed0 --test artifacts/vehicle-sysid/seed1 artifacts/vehicle-sysid/seed2
+```
+
+`drive_scenario.py --backend carla` uses Town10HD_Opt spawn 105 by default (two
+lanes, 170 m straight); it refuses a lane change toward a non-drivable lane.
+The identification takes about 10 minutes per three seeds on `-nullrhi`.
 
 ## 9. Save the reproduction record and stop only your server
 

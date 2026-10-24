@@ -40,6 +40,6 @@ def test_one_full_body_operates_every_control_of_a_real_vehicle() -> None:
         raise
     output.write_text(json.dumps(report), encoding="utf-8")
     assert report["status"] == "passed"
-    assert len(report["checks"]) == 12
+    assert len(report["checks"]) == 13
     assert all(check["passed"] for check in report["checks"])
     assert report["settings_restored"] and report["actor_ids_restored"]

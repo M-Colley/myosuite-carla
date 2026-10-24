@@ -44,8 +44,10 @@ motion. The mapper reads those mechanisms and sends the resulting scalar inputs
 to CARLA, which simulates the vehicle and road. CARLA does not share a contact
 solver with MuJoCo. Its Python vehicle API provides no pedal reaction force,
 clutch input, or steering-wheel force feedback. Any return force model must be
-implemented explicitly in MuJoCo; vehicle acceleration in `info` is feedback
-data, not an automatically applied inertial load.
+implemented explicitly in MuJoCo. The bridge applies no inertial load by itself;
+the full-body driver applies gravity, the d'Alembert loads of the measured
+vehicle motion and a steering-feel torque when the caller passes
+`VehicleMotion.from_telemetry(...)` to `set_vehicle_motion` (`vehicle_loads.py`).
 
 The reviewed [VehicleControl contract](https://github.com/carla-simulator/carla/blob/defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5/PythonAPI/docs/control.yml#L6)
 supports throttle/brake in `[0, 1]`, steering in `[-1, 1]` (positive right),
@@ -56,9 +58,19 @@ speed-dependent steering curve can change the resulting road-wheel angle.
 
 `vehicle.get_control()` reports the gearbox state for `reverse` and `gear`. With
 CARLA 0.10.0 a commanded reverse or manual gear appeared there two frames
-(40 ms) after it was applied; throttle, brake, steering, handbrake and the
-manual-shift flag matched on the same frame. The full-body validation therefore
-bounds reverse/gear agreement to 25 frames instead of requiring the same frame.
+(40 ms) after it was applied, and up to three frames in the 2026-10-24 runs;
+throttle, brake, steering, handbrake and the manual-shift flag matched on the
+same frame. The full-body validation therefore bounds reverse/gear agreement to
+25 frames instead of requiring the same frame.
+
+In CARLA 0.10.0 `get_physics_control()` returns zero `wheels[i].location`
+values, and its `forward_gear_ratios`/`reverse_gear_ratios` cannot be read
+from Python (no converter for `std::vector<float>`). The vehicle surrogate
+therefore uses a published wheelbase and fits effective drive and steering
+tables instead of using CARLA's drivetrain parameters. Setting a speed with
+`set_target_velocity` right after `set_transform` appears in the next frame's
+`get_acceleration()` as a one-frame spike (594 m/s^2 for 0 to 12 m/s);
+`carla_scenario.teleport` ticks once more so that spike never reaches the body.
 
 Additional measured channels are available to application hooks. CARLA supports
 [vehicle lights and door commands](https://github.com/carla-simulator/carla/blob/defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5/PythonAPI/docs/actor.yml#L543),

@@ -24,18 +24,20 @@ from myosuite_carla.fullbody_validation import run_fullbody_validation
 from myosuite_carla.validation import LiveValidationError
 
 TITLES = {
-    "hold": "Left foot brakes, left index holds the parking brake",
+    "hold": "Left foot brakes",
+    "engage_handbrake": "Left index presses the parking-brake switch: on",
+    "release_park_switch": "Switch released; the parking brake stays latched",
     "handbrake_hold_throttle": "Right foot presses throttle; parking brake holds car",
-    "release_handbrake": "Left index releases the parking brake",
+    "release_handbrake": "Second press releases the parking brake",
     "throttle": "Right foot presses the throttle",
     "steer_left": "Hands push-pull the wheel left; foot keeps throttle",
     "steer_right": "Hands push-pull the wheel right; foot keeps throttle",
     "straighten": "Hands return the wheel",
     "brake": "Left foot presses the brake",
-    "select_reverse": "Right little finger holds reverse",
+    "select_reverse": "Right little finger presses R: reverse latched",
     "reverse_throttle": "Reverse: right foot presses the throttle",
     "reverse_brake": "Reverse: left foot brakes",
-    "leave_reverse": "Little finger releases reverse",
+    "leave_reverse": "Second press of R leaves reverse",
     "shift_1": "Right index pulls the paddle: manual gear 1",
     "release_paddle_1": "Paddle released",
     "gear_1_throttle": "Gear 1: right foot presses the throttle",
@@ -45,7 +47,8 @@ TITLES = {
     "gear_3_throttle": "Gear 3",
     "shift_automatic": "Fourth pull returns to automatic",
     "coast": "Coasting",
-    "handbrake_stop": "Left index applies the parking brake; no pedal",
+    "pull_handbrake": "Left index presses the parking-brake switch while rolling",
+    "handbrake_stop": "Parking brake stops the car; no pedal",
     "park": "Parked",
 }
 

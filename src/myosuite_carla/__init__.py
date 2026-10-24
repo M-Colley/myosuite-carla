@@ -29,6 +29,7 @@ from .inputs import (
     UnipolarCalibration,
 )
 from .presets import cockpit_mapper
+from .recording import DriveRecorder, Recording
 from .session import CarlaSession, SessionConfig, SynchronizationError, VehicleTelemetry
 from .wrapper import CarlaWrapper
 
@@ -48,12 +49,14 @@ __all__ = [
     "ControlHook",
     "ControlMapper",
     "ControlSample",
+    "DriveRecorder",
     "DriverIntent",
     "FullBodyDriver",
     "FullBodyDriverConfig",
     "IdentityCalibration",
     "JointPosition",
     "PedalConfig",
+    "Recording",
     "SensorValue",
     "SequentialShifter",
     "SessionConfig",

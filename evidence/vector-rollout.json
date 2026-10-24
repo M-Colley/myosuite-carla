@@ -1,0 +1,45 @@
+{
+ "scenario": "lead_vehicle_braking",
+ "steps_per_worker": 500,
+ "driver": "FullBodyDriverConfig.fast() with the fitted surrogate",
+ "machine": {
+  "processor": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+  "logical_cpus": 28,
+  "python": "3.12.13",
+  "mujoco": "3.17.0"
+ },
+ "results": [
+  {
+   "workers": 1,
+   "vectorized": false,
+   "steps_per_second": 226.27432268511373,
+   "real_time_factor_per_worker": 4.525486453702275
+  },
+  {
+   "workers": 1,
+   "vectorized": true,
+   "steps_per_second": 208.27248305555312,
+   "real_time_factor_per_worker": 4.1654496611110625
+  },
+  {
+   "workers": 2,
+   "vectorized": true,
+   "steps_per_second": 401.3805242193285,
+   "real_time_factor_per_worker": 4.013805242193285
+  },
+  {
+   "workers": 4,
+   "vectorized": true,
+   "steps_per_second": 774.0670508392885,
+   "real_time_factor_per_worker": 3.870335254196443
+  },
+  {
+   "workers": 8,
+   "vectorized": true,
+   "steps_per_second": 972.9556043908276,
+   "real_time_factor_per_worker": 2.432389010977069
+  }
+ ],
+ "command": "benchmarks/vector_rollout.py (workers 1 2 4 8, 500 steps)",
+ "note": "Measured while an unrelated TD-MPC2 training job shared the CPU and GPU."
+}

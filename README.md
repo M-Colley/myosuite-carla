@@ -6,14 +6,16 @@ driver to a CARLA **Unreal Engine 5.8 `ue58-dev`** vehicle. Muscles move the lim
 limbs contact passive pedals and a steering wheel; measured mechanism travel or
 contact force becomes `carla.VehicleControl`. CARLA simulates the vehicle.
 
-**Validation status:** with a real CARLA 0.10.0 / UE5.5 server, 262 tests pass
-with zero skips (97% statement coverage). One seated MyoSuite full body
-operates throttle, brake, push-pull steering, reverse, sequential gears and the
-parking brake in a single live drive, with all 12 physical checks passing. The
-single-finger acceptance fixtures pass on two Windows PCs, all 11 four-wheel
-vehicles, a rendered server and a 15,000-frame soak. Actual **UE5.8**
-validation remains pending a runnable build; see
-[measured results](VALIDATION.md) and [runtime status](RUNTIME_STATUS.md).
+**Validation status:** with a real CARLA 0.10.0 / UE5.5 server, 312 tests pass
+with zero skips (94% statement coverage). One seated MyoSuite full body, loaded
+by gravity and the measured vehicle motion, operates throttle, brake,
+push-pull steering, reverse, sequential gears and the parking brake in a
+single live drive, with all 13 physical checks passing in both the default and
+the fast configuration. The same body drives lead-vehicle braking, takeover and
+lane-change scenarios in CARLA without collision. The single-finger acceptance
+fixtures pass on two Windows PCs, all 11 four-wheel vehicles, a rendered server
+and a 15,000-frame soak. Actual **UE5.8** validation remains pending a runnable
+build; see [measured results](VALIDATION.md) and [runtime status](RUNTIME_STATUS.md).
 
 The package provides:
 
@@ -28,6 +30,18 @@ The package provides:
   frame-aligned feedback, emergency-brake commands and retryable cleanup.
 - A Gymnasium wrapper preserving the muscle environment's action/observation
   spaces, rewards and termination; feedback is added to `info["carla"]`.
+- A full-body driver (`myofullbody`, 416 muscles) that feels gravity, the
+  vehicle's acceleration and rotation, and steering feel.
+- Per-frame recordings exported as a Frictionless data package (CSV), OpenSim
+  `.mot`/`.sto`, an arm_force_driving CARLA recording, Parquet and MCAP.
+- A single-track vehicle surrogate fitted to CARLA drives, usable wherever a
+  `CarlaSession` is, for training and batched rollouts without CARLA.
+- An unregistered Gymnasium driving task with lead-vehicle, takeover and lane
+  change scenarios, and a classical human driver model as a baseline policy.
+- Muscle conditions and variability from MyoSuite (sarcopenia, selective
+  weakness, 3CC-r fatigue, motor noise) and posture variants.
+- An aggregate-only comparison with human driving data, with data-adequacy
+  checks and human-vs-human floors.
 
 ## Install
 
@@ -43,9 +57,14 @@ alone does not establish compatibility with that API.
 ```shell
 git clone --branch dev https://github.com/MyoHub/myosuite.git ../myosuite
 python -m pip install -e ../myosuite
-python -m pip install -e ".[test]"
+python -m pip install -e ".[test,data,analysis]"
 python -m pip install /path/to/your/ue58-build/PythonAPI/carla/dist/<matching-wheel>.whl
 ```
+
+The `data` extra (pandas, pyarrow, mcap) enables Parquet and MCAP exports; the
+`analysis` extra (SciPy, scikit-learn, pandas) enables vehicle-surrogate fitting
+and the human-data comparison. `pip install opensim` additionally lets the tests
+read the OpenSim exports back with OpenSim's own reader.
 
 Run these commands from this package's root. If you already have a MyoSuite
 `dev` checkout, install that path instead of cloning another copy. Use a virtual
@@ -205,8 +224,8 @@ control by contact:
 | Left forefoot (plantarflexors) | Brake pedal | `brake` |
 | Both hands (elbow flexors/extensors) | Free-spinning cradles at 3 and 9 o'clock | `steer`, push-pull |
 | Right index finger | Sequential paddle | `manual_gear_shift`, `gear` |
-| Right little finger | Reverse button, held | `reverse` |
-| Left index finger | Parking-brake button, held | `hand_brake` |
+| Right little finger | Reverse button, latched | `reverse` |
+| Left index finger | Parking-brake switch, latched | `hand_brake` |
 
 ```python
 from myosuite_carla import CarlaBridge, DriverIntent, build_fullbody_driver
@@ -222,17 +241,133 @@ for _ in range(150):
 
 `DriverIntent` holds muscle excitations and a push-pull elbow set-point offset,
 never vehicle controls. CARLA receives only what the mechanisms measure. The
-pelvis is fixed to the seat and gravity is disabled. Trunk, hips, knees,
-shoulders, forearm rotation and wrists are held by joint-equality locks; ankles,
-toes, elbows and fingers move only under muscle force. Elbows use a PID stretch
-reflex on antagonist muscles, and released limbs keep a small antagonist tone.
+pelvis is fixed to the seat. Trunk, hips, knees, shoulders, forearm rotation
+and wrists are held by joint-equality locks; ankles, toes, elbows and fingers
+move only under muscle force. Elbows use a PID stretch reflex on antagonist
+muscles, released limbs keep a small antagonist tone, and a pressing finger
+co-excites its interossei and lumbrical (Valero-Cuevas et al., 1998).
 Mechanisms are placed from the settled body's kinematics and simulated
-fingertip paths, each starting clear of its limb. This is a scripted motor
-program for validation and demonstration, not a trained driving policy.
+fingertip paths, each starting clear of its limb.
+
+Reverse and the parking brake are momentary controls that the vehicle latches,
+as in production cars: each press toggles them. A press must be held for
+`switch_hold` (0.2 s), and reverse also needs the brake pedal pressed; paddle
+pulls must last `paddle_hold` (0.1 s). These interlocks reject brushes from the
+steering hands. A rigid-capsule fingertip cannot hold a bottomed button under
+gravity for more than about 1 to 7 s, so sustained finger holds are outside the
+model's validity. `FullBodyDriverConfig.fast()` (2 ms physics, 114 of 416
+muscles kept) runs 2.5 times faster with the same discrete controls and
+continuous controls within 0.03; see [VALIDATION.md](VALIDATION.md).
 
 `examples/validate_fullbody.py` drives a real vehicle through holding, throttle,
 push-pull steering both ways, braking, reverse, three manual gears and parking
-brake stops, with 12 physical checks.
+brake stops, with 13 physical checks. `--fast` uses the fast preset and
+`--record DIR` exports every frame.
+
+## Vehicle loads on the body
+
+The cockpit frame moves with the car, so MuJoCo's own gravity is off and every
+body segment instead carries the d'Alembert load
+`m (g - a - alpha x r - omega x (omega x r))` from the vehicle's measured
+acceleration, rotation and angular acceleration (`vehicle_loads.py`). After each
+step call `driver.set_vehicle_motion(VehicleMotion.from_telemetry(telemetry,
+previous, dt))`; `seat_offset` places the pelvis relative to CARLA's reference
+point. The wheel also receives a self-aligning steering-feel torque of
+`steering_feel` N m per m/s^2 of lateral acceleration. Mechanisms carry no
+loads. Hard braking at 8 m/s^2 moves the body but presses no control.
+
+## Record and export
+
+`DriveRecorder` collects one row per control period: intent, measured inputs,
+sent and applied commands, vehicle kinematics, mechanism measurements, joint
+coordinates and muscle activation and force. It is also a `DriveObserver`:
+
+```python
+from myosuite_carla import DriveRecorder
+
+recorder = DriveRecorder()
+report = run_fullbody_validation("127.0.0.1", observer=recorder)
+recorder.recording().save("artifacts/drive", formats=("csv", "opensim", "arm_force", "parquet", "mcap"))
+```
+
+| Output | Contents |
+| --- | --- |
+| `datapackage.json`, `frames.csv`, `coordinates.csv`, `activation.csv`, `force.csv` | Frictionless data package with units and descriptions |
+| `opensim/coordinates.mot`, `activation.sto`, `force.sto` | OpenSim tables (coordinates in degrees), MyoSuite's OpenSim names |
+| `arm_force/trajectory.csv`, `manifest.json` | arm_force_driving CARLA recording, schema 1, right-positive lateral acceleration, geolocation |
+| `frames.parquet`, `drive.mcap` | Wide table; Foxglove-compatible JSON channels |
+
+`Recording.load()` reads a saved recording back; `Recording.concatenate()`
+joins runs. Data are exchanged by format only; no arm_force_driving code is used.
+
+## Vehicle surrogate
+
+`SurrogateVehicle` has `CarlaSession`'s interface, so `CarlaBridge` drives it
+unchanged. Its single-track model uses drive-acceleration and steering-gain
+tables, first-order lags, drag and brake terms. `carla_nissan_patrol()` holds
+the parameters fitted to 319 s of designed CARLA 0.10.0 drives. On 526 s of
+held-out drives the open-loop speed error is 0.53 m/s, and the position error
+3 s ahead is 0.45 m against 6.0 m for constant-velocity extrapolation.
+Steering is identified from 2.4 to 13.6 m/s. Collect and fit your own vehicle with:
+
+```shell
+python examples/identify_vehicle.py --seeds 0 1 2 --steer-fast 0
+python examples/fit_vehicle_model.py --train artifacts/vehicle-sysid/seed0 --test artifacts/vehicle-sysid/seed1
+```
+
+## Driving task, scenarios and baseline driver
+
+`FullBodyDrivingEnv` (`driving_env.py`) is an unregistered Gymnasium
+environment: actions are the six `DriverIntent` fields; observations are named
+(`env.observation_names`): lane geometry, near- and far-point angles, the lead
+vehicle, takeover state, measured inputs, driving-joint angles and velocities,
+and driving-muscle activations. Rewards are weighted named terms (`TaskConfig`).
+The vehicle defaults to the surrogate; pass a started `CarlaSession` with
+`reset_vehicle=carla_scenario.teleport` for CARLA.
+
+Scenarios (`scenario.py`) are a lane polyline plus a braking lead vehicle,
+raised-cosine lane changes or an automation-to-driver takeover request, with
+timestamped events (request, takeover with reaction time, minimal-risk
+manoeuvre, collision). `ReflexDriver` (`driver_models.py`) is a baseline built
+from two-point visual steering (Salvucci and Gray, 2004), the Intelligent
+Driver Model (Treiber et al., 2000), a perception delay and the meta-analytic
+2.72 s takeover time (Zhang et al., 2019). It acts only through the muscles.
+
+```shell
+python examples/drive_scenario.py --scenario takeover_request --backend surrogate
+python examples/drive_scenario.py --scenario lead_vehicle_braking --backend carla --record artifacts/lead
+```
+
+`make_driving_env` builds one driver per process for
+`gymnasium.vector.AsyncVectorEnv`: on this machine one process runs 226 steps
+per second (4.5 times real time) and 8 processes 973 steps per second. The
+package does not register environments; registration through
+`myosuite.make_env` must follow MyoSuite's CPU/mjlab task contract.
+
+## Muscle conditions and posture
+
+`FullBodyDriverConfig` reuses MyoSuite's implementations:
+
+| Setting | Effect |
+| --- | --- |
+| `strength=0.5` | Sarcopenia: every peak force halved (`apply_sarcopenia_to_spec`) |
+| `muscle_strength=(("*_l", 0.4),)` | Weakness of muscles matching a name pattern |
+| `fatigue=True`, `initial_fatigue`, `fatigue_sex` | 3CC-r `CumulativeFatigue` every physics step |
+| `motor_noise_signal`, `motor_noise_constant` | Motor noise (`MotorNoiseCfg`), seeded by `reset(seed=...)` |
+| `posture=(("hip_flexion_r", 1.2), ...)` | Seated posture overrides |
+
+Strength and posture change the body before the cockpit is fitted, so
+mechanisms are placed for the resulting body. Segment-length scaling of
+`myofullbody` is not available.
+
+## Compare with human data
+
+`human_comparison.py` turns windows of steering and acceleration into
+amplitude-free steering features and acceleration features, measures how well
+a classifier separates two sets of windows (participant-grouped
+cross-validated AUC) and gives human-vs-human floors.
+`examples/compare_human.py` writes aggregates only and first checks whether the
+human signals can support each feature.
 
 ## Feedback, resets and cleanup
 

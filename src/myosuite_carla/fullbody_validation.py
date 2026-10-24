@@ -12,7 +12,13 @@ from typing import Any, Protocol
 import mujoco
 
 from .bridge import BridgeFrame, CarlaBridge
-from .fullbody import DriverIntent, FullBodyDriver, build_fullbody_driver, summary
+from .fullbody import (
+    DriverIntent,
+    FullBodyDriver,
+    FullBodyDriverConfig,
+    build_fullbody_driver,
+    summary,
+)
 from .session import CarlaSession, SessionConfig
 from .validation import (
     LiveValidationError,
@@ -22,6 +28,7 @@ from .validation import (
     _spawn,
     _yaw_delta,
 )
+from .vehicle_loads import VehicleMotion
 
 
 @dataclass(frozen=True)
@@ -42,17 +49,21 @@ class DrivePhase:
 
 
 def fullbody_scenario() -> tuple[DrivePhase, ...]:
-    """Return the continuous muscle-driven drive used for live validation."""
-    hold = DriverIntent(left_foot=0.15, park_finger=0.06)
+    """Return the continuous muscle-driven drive used for live validation.
+
+    Parking brake and reverse are latched switches: one brief press engages
+    them and another releases them, so no digit holds a button for long.
+    """
+    hold = DriverIntent(left_foot=0.15)
     pull = 0.06
     return (
         DrivePhase("hold", hold, 250, until_stopped=True),
         DrivePhase(
-            "handbrake_hold_throttle",
-            DriverIntent(right_foot=0.012, park_finger=0.06),
-            100,
+            "engage_handbrake", DriverIntent(left_foot=0.15, park_finger=pull), 20
         ),
-        DrivePhase("release_handbrake", DriverIntent(), 25),
+        DrivePhase("release_park_switch", hold, 15),
+        DrivePhase("handbrake_hold_throttle", DriverIntent(right_foot=0.012), 100),
+        DrivePhase("release_handbrake", DriverIntent(park_finger=pull), 25),
         DrivePhase("throttle", DriverIntent(right_foot=0.008), 150),
         DrivePhase("steer_left", DriverIntent(right_foot=0.008, steer=-0.14), 100),
         DrivePhase("steer_right", DriverIntent(right_foot=0.008, steer=0.14), 50),
@@ -61,16 +72,11 @@ def fullbody_scenario() -> tuple[DrivePhase, ...]:
         DrivePhase(
             "select_reverse", DriverIntent(left_foot=0.15, reverse_finger=0.05), 25
         ),
+        DrivePhase("reverse_throttle", DriverIntent(right_foot=0.012), 125),
+        DrivePhase("reverse_brake", hold, 250, until_stopped=True),
         DrivePhase(
-            "reverse_throttle", DriverIntent(right_foot=0.012, reverse_finger=0.05), 125
+            "leave_reverse", DriverIntent(left_foot=0.15, reverse_finger=0.05), 25
         ),
-        DrivePhase(
-            "reverse_brake",
-            DriverIntent(left_foot=0.15, reverse_finger=0.05),
-            250,
-            until_stopped=True,
-        ),
-        DrivePhase("leave_reverse", DriverIntent(left_foot=0.15), 25),
         DrivePhase("shift_1", DriverIntent(left_foot=0.15, gear_finger=pull), 15),
         DrivePhase("release_paddle_1", DriverIntent(left_foot=0.15), 25),
         DrivePhase("gear_1_throttle", DriverIntent(right_foot=0.012), 75),
@@ -80,12 +86,8 @@ def fullbody_scenario() -> tuple[DrivePhase, ...]:
         DrivePhase("gear_3_throttle", DriverIntent(right_foot=0.012), 75),
         DrivePhase("shift_automatic", DriverIntent(gear_finger=pull), 15),
         DrivePhase("coast", DriverIntent(), 25),
-        DrivePhase(
-            "handbrake_stop",
-            DriverIntent(park_finger=0.06),
-            250,
-            until_stopped=True,
-        ),
+        DrivePhase("pull_handbrake", DriverIntent(park_finger=pull), 20),
+        DrivePhase("handbrake_stop", DriverIntent(), 250, until_stopped=True),
         DrivePhase("park", hold, 25),
     )
 
@@ -162,7 +164,8 @@ def _checks(phases: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
     held = phases["handbrake_hold_throttle"]
     left, right = phases["steer_left"], phases["steer_right"]
     reverse = phases["reverse_throttle"]
-    stop = phases["handbrake_stop"]
+    pull, stop = phases["pull_handbrake"], phases["handbrake_stop"]
+    released = phases["release_handbrake"]
     results = [
         check(
             "foot throttle accelerates",
@@ -179,6 +182,12 @@ def _checks(phases: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
             < 0.5 * throttle["signed_displacement_metres"],
             f"{held['signed_displacement_metres']:.2f} m with parking brake vs "
             f"{throttle['signed_displacement_metres']:.2f} m released",
+        ),
+        check(
+            "second switch press releases the parking brake",
+            not released["end_applied"]["hand_brake"]
+            and released["applied_true_frames"]["hand_brake"] < released["frames"],
+            "hand_brake after the second press",
         ),
         check(
             "push-pull hands steer left under foot throttle",
@@ -202,15 +211,15 @@ def _checks(phases: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
             f"{phases['brake']['end_speed_mps']:.3f} m/s",
         ),
         check(
-            "finger-held reverse drives backwards",
+            "reverse button press drives backwards",
             reverse["applied_true_frames"]["reverse"] == reverse["frames"]
             and reverse["signed_displacement_metres"] < -0.5,
             f"{reverse['signed_displacement_metres']:.2f} m along the heading",
         ),
         check(
-            "reverse released",
+            "second button press leaves reverse",
             not phases["leave_reverse"]["end_applied"]["reverse"],
-            "reverse flag after releasing the finger",
+            "reverse flag after the second press",
         ),
     ]
     for gear in (1, 2, 3):
@@ -232,10 +241,10 @@ def _checks(phases: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
         check(
             "parking brake stops the rolling car",
             stop["end_applied"]["hand_brake"]
-            and stop["max_command"]["brake"] == 0.0
-            and stop["start_speed_mps"] > 1.0
-            and stop["end_speed_mps"] < 0.35 * stop["start_speed_mps"],
-            f"{stop['start_speed_mps']:.2f} -> {stop['end_speed_mps']:.2f} m/s "
+            and pull["max_command"]["brake"] == stop["max_command"]["brake"] == 0.0
+            and pull["start_speed_mps"] > 1.0
+            and stop["end_speed_mps"] < 0.35 * pull["start_speed_mps"],
+            f"{pull['start_speed_mps']:.2f} -> {stop['end_speed_mps']:.2f} m/s "
             "without the brake pedal",
         ),
     ]
@@ -252,6 +261,7 @@ def run_fullbody_validation(
     build_ref: str | None = None,
     build_commit: str | None = None,
     observer: DriveObserver | None = None,
+    config: FullBodyDriverConfig | None = None,
 ) -> dict[str, Any]:
     """Drive a real CARLA vehicle with one muscle-actuated MyoSuite full body.
 
@@ -259,6 +269,10 @@ def run_fullbody_validation(
     and finger mechanisms, applies the measured command and ticks CARLA once.
     Applied controls are verified each frame; phase outcomes are then checked
     against physical criteria. Build declarations are recorded, not verified.
+
+    Args:
+        observer: Optional hooks, e.g. a ``DriveRecorder``.
+        config: Driver configuration; defaults to ``FullBodyDriverConfig()``.
 
     Raises:
         LiveValidationError: Validation failed; the exception retains evidence.
@@ -302,7 +316,7 @@ def run_fullbody_validation(
         _require(not original["synchronous_mode"], "Stop the existing ticking owner")
         report["settings_before"] = original
         before = {actor.id for actor in world.get_actors()}
-        driver = build_fullbody_driver()
+        driver = build_fullbody_driver(config)
         report["driver"] = summary(driver)
         selected = _select_blueprint(world, blueprint)
         vehicle = _spawn(world, selected)
@@ -336,6 +350,12 @@ def run_fullbody_validation(
                 driver.advance(phase.intent)
                 frame: BridgeFrame = bridge.step(driver.data)
                 telemetry, command = frame.telemetry, frame.sample.command
+                # The vehicle's measured motion loads the body for the next period.
+                driver.set_vehicle_motion(
+                    VehicleMotion.from_telemetry(
+                        telemetry, last, driver.config.control_dt
+                    )
+                )
                 _require(telemetry.frame == last.frame + 1, "CARLA frame gap")
                 control = vehicle.get_control()
                 applied = {
@@ -378,6 +398,7 @@ def run_fullbody_validation(
                     "phase": phase.name,
                     "frame": telemetry.frame,
                     "simulation_time": frame.simulation_time,
+                    "intent": vars(phase.intent),
                     "start_location": phase_start.location,
                     "start_rotation": phase_start.rotation,
                     "start_speed_mps": phase_start.speed,

@@ -9,6 +9,7 @@ from typing import Any
 
 import mujoco
 
+from .controls import VehicleCommand
 from .inputs import ControlMapper, ControlSample
 from .session import CarlaSession, SynchronizationError, VehicleTelemetry
 
@@ -17,17 +18,26 @@ ControlHook = Callable[[CarlaSession, ControlSample], None]
 
 @dataclass(frozen=True)
 class BridgeFrame:
-    """Physical inputs and the resulting vehicle feedback at one shared time."""
+    """Physical inputs and the resulting vehicle feedback at one shared time.
+
+    ``sent`` is the command applied instead of the measured one, if any.
+    """
 
     sample: ControlSample
     telemetry: VehicleTelemetry
     simulation_time: float
+    sent: VehicleCommand | None = None
+
+    @property
+    def command(self) -> VehicleCommand:
+        """Return the command the vehicle received this frame."""
+        return self.sent if self.sent is not None else self.sample.command
 
     def as_dict(self) -> dict[str, Any]:
         """Return the bridge info payload without live CARLA objects."""
         return {
             "inputs": dict(self.sample.values),
-            "control": self.sample.command.as_dict(),
+            "control": self.command.as_dict(),
             "vehicle": self.telemetry.as_dict(),
             "simulation_time": self.simulation_time,
         }
@@ -87,8 +97,16 @@ class CarlaBridge:
             self.session._stop_after_failure()
             raise
 
-    def step(self, data: mujoco.MjData) -> BridgeFrame:
-        """Read one completed driver step and advance CARLA exactly once."""
+    def step(
+        self, data: mujoco.MjData, *, command: VehicleCommand | None = None
+    ) -> BridgeFrame:
+        """Read one completed driver step and advance CARLA exactly once.
+
+        Args:
+            data: Driver data after one control period.
+            command: Apply this instead of the measured command, e.g. while
+                automation drives before a takeover; inputs are still measured.
+        """
         if self._last_time is None or self._failed:
             raise RuntimeError("Reset a healthy bridge before stepping")
         try:
@@ -101,9 +119,11 @@ class CarlaBridge:
                     "MuJoCo did not advance by one control period"
                 )
             sample = self.mapper.sample(data)
+            if command is not None and not isinstance(command, VehicleCommand):
+                raise TypeError("command must be a VehicleCommand")
             for hook in self.hooks:
                 hook(self.session, sample)
-            telemetry = self.session.step(sample.command)
+            telemetry = self.session.step(command or sample.command)
             assert self._last_carla_time is not None
             if not math.isclose(
                 telemetry.elapsed_seconds - self._last_carla_time,
@@ -114,7 +134,7 @@ class CarlaBridge:
                 raise SynchronizationError("MuJoCo and CARLA clocks diverged")
             self._last_time = current
             self._last_carla_time = telemetry.elapsed_seconds
-            return BridgeFrame(sample, telemetry, current)
+            return BridgeFrame(sample, telemetry, current, command)
         except Exception:
             self._failed = True
             self.session._stop_after_failure()

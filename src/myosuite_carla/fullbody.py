@@ -1,10 +1,12 @@
 """A seated MyoSuite full-body driver that operates every control with muscles.
 
 The body is MyoSuite's ``myofullbody`` (416 muscles) from ``myo_sim``. Its
-pelvis is fixed to the seat and gravity is disabled, as for the acceptance
-fixtures. Trunk, hips, knees, subtalar joints, shoulders, forearm rotation and
-wrists are held in a seated posture by joint-equality locks. Ankles, toes,
-elbows, fingers and thumbs stay free and move only under muscle force.
+pelvis is fixed to the seat. MuJoCo's own gravity is disabled because the
+cockpit frame moves with the car: gravity and the vehicle's d'Alembert loads
+are applied to the body segments instead (:mod:`.vehicle_loads`). Trunk, hips,
+knees, subtalar joints, shoulders, forearm rotation and wrists are held in a
+seated posture by joint-equality locks. Ankles, toes, elbows, fingers and
+thumbs stay free and move only under muscle force.
 
 Every vehicle control comes from a passive mechanism moved by body contact:
 
@@ -13,20 +15,25 @@ Every vehicle control comes from a passive mechanism moved by body contact:
 * both hands rest in spinner cradles at 3 and 9 o'clock; push-pull elbow
   flexion/extension turns the wheel either way;
 * the right index finger pulls a sequential gear paddle, the right little finger
-  holds a reverse button and the left index finger holds a parking-brake button.
-  Thumbs are not used: a single-tendon thumb press buckles under sustained load
-  in this model, whereas the fingers hold steadily.
+  presses a reverse button and the left index finger an electronic
+  parking-brake switch. As in production cars these are momentary: the vehicle
+  latches each press, so no digit holds a button for long. Under gravity a
+  rigid-capsule fingertip pressing a bottomed button rolls off it within about
+  1 to 7 s, so sustained fingertip holds are outside this model's validity.
+  Thumbs are not used: a single-tendon thumb press buckles under load.
 
 The mechanisms are placed from the body's own kinematics so each one starts
 1.5 mm clear of the limb that operates it. Elbows use a proportional-integral-
 derivative stretch reflex on antagonist muscle excitations; everything else is
 open-loop excitation. This is a scripted demonstration driver, not a trained
-policy, and it applies no external forces.
+policy. Apart from the vehicle loads it applies no external forces.
 """
 
 from __future__ import annotations
 
+import fnmatch
 import math
+from collections.abc import Callable
 from dataclasses import dataclass, replace
 from typing import Any
 
@@ -42,6 +49,10 @@ from .inputs import (
     SensorValue,
     UnipolarCalibration,
 )
+from .vehicle_loads import InertialLoads, VehicleMotion, carla_vector_to_cockpit
+
+#: A level vehicle at rest: segments carry gravity only.
+AT_REST = VehicleMotion()
 
 #: Locked seated-posture angles in radians; unlisted locked joints keep qpos0.
 SEATED_POSTURE: dict[str, float] = {
@@ -91,6 +102,9 @@ class FingerControl:
         pad: Distal collision capsule whose tip presses the button.
         contact_bodies: Digit bodies allowed to touch the button.
         palm: Body the button housing is fixed to.
+        intrinsics: Interossei and lumbrical co-excited with the flexors. They
+            flex the knuckle so the fingertip pushes into the button instead of
+            curling off it (Valero-Cuevas, Zajac and Burgar, 1998, J. Biomech.).
     """
 
     flexors: tuple[str, ...]
@@ -98,6 +112,7 @@ class FingerControl:
     pad: str
     contact_bodies: tuple[str, ...]
     palm: str
+    intrinsics: tuple[str, ...] = ()
 
 
 FINGER_CONTROLS: dict[str, FingerControl] = {
@@ -107,6 +122,7 @@ FINGER_CONTROLS: dict[str, FingerControl] = {
         "distph2_coll_r",
         ("distph2_r", "midph2_r"),
         "thirdmc_r",
+        ("RI2", "UI_UB2", "LU_RB2"),
     ),
     "reverse": FingerControl(
         ("FDS5", "FDP5"),
@@ -114,6 +130,7 @@ FINGER_CONTROLS: dict[str, FingerControl] = {
         "5distph_coll_r",
         ("distph5_r", "midph5_r"),
         "thirdmc_r",
+        ("RI5", "UI_UB5", "LU_RB5"),
     ),
     "park": FingerControl(
         ("FDS2_l", "FDP2_l"),
@@ -121,6 +138,7 @@ FINGER_CONTROLS: dict[str, FingerControl] = {
         "distph2_coll_l",
         ("distph2_l", "midph2_l"),
         "thirdmc_l",
+        ("RI2_l", "UI_UB2_l", "LU_RB2_l"),
     ),
 }
 
@@ -140,10 +158,44 @@ class FullBodyDriverConfig:
         press_excitation: Flexor excitation used to trace fingertip paths.
         release_tone: Tibialis anterior excitation holding released feet.
         finger_release_tone: Extensor excitation holding released digits.
+        finger_intrinsic_ratio: Intrinsic excitation per unit of a pressing
+            digit's flexor excitation.
         elbow_gains: Stretch-reflex proportional, integral and derivative gains.
         elbow_tone: Common co-activation of elbow flexors and extensors.
         max_gear: Highest manual gear selected by the paddle.
         settle_seconds: Passive settling time before mechanisms are placed.
+        prune_locked_muscles: Remove the muscles that cross only locked joints
+            (302 of 416); see ``_prune_locked_muscles`` and the parity record.
+        vehicle_loads: Apply gravity and vehicle-motion d'Alembert loads to
+            the body's segments (never to the mechanisms).
+        seat_offset: Pelvis position from the vehicle reference point in
+            CARLA's vehicle frame (forward, right, up), metres; it only affects
+            rotational loads. The default suits a left-hand-drive car.
+        steering_feel: Self-aligning wheel torque per m/s^2 of lateral vehicle
+            acceleration, in N m; it acts against the turn.
+        switch_hold: Time a parking-brake or reverse press must be held before
+            it latches, in seconds.
+        paddle_hold: Time a paddle pull must be held before it shifts, in
+            seconds; it rejects brushes from the steering hand.
+        reverse_requires_brake: Select or leave reverse only with the brake
+            pedal pressed, the usual shift-by-wire interlock.
+        strength: Peak-force scale of every muscle, applied with MyoSuite's
+            ``apply_sarcopenia_to_spec`` before the cockpit is fitted (0.5
+            models sarcopenia as in MyoSuite's ``Sarc`` variants).
+        muscle_strength: ``(pattern, scale)`` pairs applied after ``strength``
+            to muscles whose names match the ``fnmatch`` pattern, e.g.
+            ``(("*_l", 0.4),)`` for a weak left side.
+        fatigue: Pass excitations through MyoSuite's 3CC-r
+            ``CumulativeFatigue`` (per-muscle-group rates of Rakshit et al.,
+            2021) every physics step.
+        fatigue_sex: ``"F"``, ``"M"`` or None for the fatigue parameters.
+        initial_fatigue: Fatigued fraction of every muscle at reset.
+        motor_noise_signal: Signal-dependent excitation noise (fraction of the
+            command), MyoSuite's ``MotorNoiseCfg``; one draw per muscle and
+            control period (Harris and Wolpert, 1998).
+        motor_noise_constant: Additive excitation noise standard deviation.
+        posture: ``(joint, angle)`` overrides of the seated posture, e.g. a
+            reclined trunk; mechanisms are placed for the resulting body.
     """
 
     timestep: float = 0.001
@@ -156,10 +208,31 @@ class FullBodyDriverConfig:
     press_excitation: float = 0.08
     release_tone: float = 0.02
     finger_release_tone: float = 0.15
+    finger_intrinsic_ratio: float = 1.0
     elbow_gains: tuple[float, float, float] = (4.0, 8.0, 0.2)
     elbow_tone: float = 0.02
     max_gear: int = 3
     settle_seconds: float = 3.0
+    prune_locked_muscles: bool = False
+    vehicle_loads: bool = True
+    seat_offset: tuple[float, float, float] = (-0.1, -0.37, 0.6)
+    steering_feel: float = 0.25
+    switch_hold: float = 0.2
+    paddle_hold: float = 0.1
+    reverse_requires_brake: bool = True
+    strength: float = 1.0
+    muscle_strength: tuple[tuple[str, float], ...] = ()
+    fatigue: bool = False
+    fatigue_sex: str | None = None
+    initial_fatigue: float = 0.0
+    motor_noise_signal: float = 0.0
+    motor_noise_constant: float = 0.0
+    posture: tuple[tuple[str, float], ...] = ()
+
+    @classmethod
+    def fast(cls, **overrides: Any) -> FullBodyDriverConfig:
+        """Return the benchmarked fast preset: 2 ms physics and pruned muscles."""
+        return cls(**{"timestep": 0.002, "prune_locked_muscles": True, **overrides})
 
     def __post_init__(self) -> None:
         for name in (
@@ -179,8 +252,39 @@ class FullBodyDriverConfig:
         steps = self.control_dt / self.timestep
         if not math.isclose(steps, round(steps), rel_tol=0, abs_tol=1e-9):
             raise ValueError("control_dt must be a whole number of timesteps")
+        offset = tuple(float(value) for value in self.seat_offset)
+        if len(offset) != 3 or not all(math.isfinite(value) for value in offset):
+            raise ValueError("seat_offset must contain three finite numbers")
+        object.__setattr__(self, "seat_offset", offset)
+        for name in ("switch_hold", "paddle_hold"):
+            value = getattr(self, name)
+            if not math.isfinite(value) or value < 0:
+                raise ValueError(f"{name} must be finite and non-negative")
+        if not math.isfinite(self.steering_feel) or self.steering_feel < 0:
+            raise ValueError("steering_feel must be finite and non-negative")
+        for name in ("release_tone", "finger_release_tone", "finger_intrinsic_ratio"):
+            if not 0 <= getattr(self, name) <= 1:
+                raise ValueError(f"{name} must be an excitation in [0, 1]")
         if not 1 <= self.max_gear < 2**31:
             raise ValueError("max_gear must be a positive signed 32-bit integer")
+        if not math.isfinite(self.strength) or not 0 < self.strength <= 2:
+            raise ValueError("strength must be in (0, 2]")
+        pairs = tuple((str(name), float(scale)) for name, scale in self.muscle_strength)
+        if any(not math.isfinite(scale) or not 0 < scale <= 2 for _, scale in pairs):
+            raise ValueError("muscle_strength scales must be in (0, 2]")
+        object.__setattr__(self, "muscle_strength", pairs)
+        if self.fatigue_sex not in (None, "F", "M"):
+            raise ValueError("fatigue_sex must be 'F', 'M' or None")
+        if not math.isfinite(self.initial_fatigue) or not 0 <= self.initial_fatigue < 1:
+            raise ValueError("initial_fatigue must be in [0, 1)")
+        for name in ("motor_noise_signal", "motor_noise_constant"):
+            value = getattr(self, name)
+            if not math.isfinite(value) or value < 0:
+                raise ValueError(f"{name} must be finite and non-negative")
+        posture = tuple((str(name), float(angle)) for name, angle in self.posture)
+        if any(not math.isfinite(angle) for _, angle in posture):
+            raise ValueError("posture angles must be finite")
+        object.__setattr__(self, "posture", posture)
 
 
 @dataclass(frozen=True)
@@ -196,8 +300,10 @@ class DriverIntent:
         steer: Push-pull elbow set-point offset in radians; positive turns the
             wheel clockwise (right elbow extends, left elbow flexes).
         gear_finger: Right index flexor excitation (sequential gear paddle).
-        reverse_finger: Right little-finger flexor excitation (reverse button).
-        park_finger: Left index flexor excitation (parking-brake button).
+        reverse_finger: Right little-finger flexor excitation (reverse button;
+            each press toggles reverse).
+        park_finger: Left index flexor excitation (parking-brake switch; each
+            press toggles the parking brake).
     """
 
     right_foot: float = 0.0
@@ -225,38 +331,116 @@ class DriverIntent:
         object.__setattr__(self, "steer", steer)
 
 
-class SequentialShifter:
-    """Count measured paddle pulls into gears; 0 is automatic.
+class _PressEdges:
+    """Presses of a button: above 60% travel for ``hold_samples`` readings.
 
-    Each rising edge of the paddle travel (above 60% after falling below 30%)
-    selects the next manual gear, and a pull at ``max_gear`` returns to
-    automatic. Reading the same data twice never counts twice.
+    A press is reported once, when it has been held long enough and its
+    condition allows it, and ends when the travel falls below 30%. Holding
+    rejects brief brushes, as the detent of a production paddle or switch
+    does. Reading the same data twice never reports a press twice; the mapper
+    must sample during each press, as ``CarlaBridge`` does every frame.
     """
 
-    def __init__(self, sensor: str, travel: float, max_gear: int) -> None:
+    def __init__(self, sensor: str, travel: float, hold_samples: int = 1) -> None:
+        if isinstance(hold_samples, bool) or int(hold_samples) < 1:
+            raise ValueError("hold_samples must be a positive integer")
         self.sensor = sensor
         self.travel = float(travel)
+        self.hold_samples = int(hold_samples)
+        self._pressed = False
+        self._held = 0
+
+    def _release(self) -> None:
+        self._pressed = False
+        self._held = 0
+
+    def _rising(self, data: mujoco.MjData, allowed: bool = True) -> bool:
+        fraction = float(data.sensor(self.sensor).data[0]) / self.travel
+        if fraction > 0.6 and not self._pressed:
+            self._held += 1
+            if self._held >= self.hold_samples and allowed:
+                self._pressed = True
+                return True
+        elif fraction < 0.3:
+            self._release()
+        return False
+
+
+class SequentialShifter(_PressEdges):
+    """Count measured paddle pulls into gears; 0 is automatic.
+
+    Each pull selects the next manual gear, and a pull at ``max_gear``
+    returns to automatic.
+
+    Args:
+        sensor: Paddle position sensor name.
+        travel: Full paddle travel in metres.
+        max_gear: Highest manual gear.
+        hold_samples: Readings above 60% travel that make a pull.
+    """
+
+    def __init__(
+        self, sensor: str, travel: float, max_gear: int, hold_samples: int = 1
+    ) -> None:
+        super().__init__(sensor, travel, hold_samples)
         self.max_gear = int(max_gear)
         self.reset()
 
     def reset(self) -> None:
         """Return to automatic with the paddle considered released."""
         self.gear = 0
-        self._pressed = False
+        self._release()
 
     def read_gear(self, model: mujoco.MjModel, data: mujoco.MjData) -> float:
         """Update from the paddle sensor and return the selected gear."""
-        fraction = float(data.sensor(self.sensor).data[0]) / self.travel
-        if not self._pressed and fraction > 0.6:
-            self._pressed = True
+        if self._rising(data):
             self.gear = 0 if self.gear >= self.max_gear else self.gear + 1
-        elif self._pressed and fraction < 0.3:
-            self._pressed = False
         return float(self.gear)
 
     def read_manual(self, model: mujoco.MjModel, data: mujoco.MjData) -> float:
         """Return 1 when a manual gear is selected; call after ``read_gear``."""
         return 1.0 if self.gear else 0.0
+
+
+class LatchingSwitch(_PressEdges):
+    """A momentary push switch whose state the vehicle latches.
+
+    Each press toggles the state, as an electronic parking-brake switch or a
+    shift-by-wire reverse button does, so the digit need not hold it. As in
+    production cars a press must be held and meet ``interlock`` (for example
+    a pressed brake pedal) before it toggles, so a brief brush from steering
+    never latches.
+
+    Args:
+        sensor: Button position sensor name.
+        travel: Full button travel in metres.
+        hold_samples: Readings above 60% travel required to toggle.
+        interlock: Optional condition on the model state required to toggle.
+    """
+
+    def __init__(
+        self,
+        sensor: str,
+        travel: float,
+        *,
+        hold_samples: int = 1,
+        interlock: Callable[[mujoco.MjModel, mujoco.MjData], bool] | None = None,
+    ) -> None:
+        super().__init__(sensor, travel, hold_samples)
+        self.interlock = interlock
+        self.reset()
+
+    def reset(self) -> None:
+        """Disengage with the button considered released."""
+        self.engaged = False
+        self._release()
+
+    def read(self, model: mujoco.MjModel, data: mujoco.MjData) -> float:
+        """Update from the button sensor and return 1 while engaged."""
+        allowed = self.interlock is None or self.interlock(model, data)
+        if self._rising(data, allowed):
+            self.engaged = not self.engaged
+        return 1.0 if self.engaged else 0.0
 
 
 class _Reflex:
@@ -322,6 +506,28 @@ def _find_body(spec: mujoco.MjSpec, name: str) -> mujoco.MjsBody:
     raise KeyError(f"body does not exist: {name!r}")
 
 
+def _posture(config: FullBodyDriverConfig) -> dict[str, float]:
+    return {**SEATED_POSTURE, **dict(config.posture)}
+
+
+def _scale_strength(spec: mujoco.MjSpec, config: FullBodyDriverConfig) -> None:
+    """Scale peak forces uniformly with MyoSuite, then by name pattern."""
+    from myosuite.core.muscle_conditions import apply_sarcopenia_to_spec
+
+    # Also resolves automatic peak forces into explicit, scalable values.
+    apply_sarcopenia_to_spec(spec, force_scale=config.strength)
+    for pattern, scale in config.muscle_strength:
+        matched = [
+            actuator
+            for actuator in spec.actuators
+            if fnmatch.fnmatchcase(actuator.name, pattern)
+        ]
+        if not matched:
+            raise ValueError(f"muscle_strength pattern {pattern!r} matches no muscle")
+        for actuator in matched:
+            actuator.gainprm[2] = float(actuator.gainprm[2]) * scale
+
+
 def _body_spec(config: FullBodyDriverConfig) -> mujoco.MjSpec:
     import myo_sim  # type: ignore[import-untyped]
 
@@ -332,6 +538,10 @@ def _body_spec(config: FullBodyDriverConfig) -> mujoco.MjSpec:
     spec.visual.global_.offwidth = max(spec.visual.global_.offwidth, 1280)
     spec.visual.global_.offheight = max(spec.visual.global_.offheight, 720)
     model = spec.compile()
+    posture = _posture(config)
+    unknown = set(posture) - {model.joint(i).name for i in range(model.njnt)}
+    if unknown:
+        raise ValueError(f"posture names unknown joints: {sorted(unknown)}")
     coupled = {
         int(model.eq_obj1id[i])
         for i in range(model.neq)
@@ -341,7 +551,7 @@ def _body_spec(config: FullBodyDriverConfig) -> mujoco.MjSpec:
         name = model.joint(index).name
         if index in coupled or name.startswith(FREE_JOINT_PREFIXES):
             continue
-        value = SEATED_POSTURE.get(name, float(model.qpos0[model.jnt_qposadr[index]]))
+        value = posture.get(name, float(model.qpos0[model.jnt_qposadr[index]]))
         equality = spec.add_equality(
             name=f"seat_{name}", type=mujoco.mjtEq.mjEQ_JOINT, name1=name
         )
@@ -349,11 +559,70 @@ def _body_spec(config: FullBodyDriverConfig) -> mujoco.MjSpec:
         data = np.zeros(len(equality.data))
         data[0] = value
         equality.data = data
+    if config.strength != 1.0 or config.muscle_strength:
+        _scale_strength(spec, config)
+    if config.prune_locked_muscles:
+        _prune_locked_muscles(spec, posture)
     return spec
+
+
+def _prune_locked_muscles(spec: mujoco.MjSpec, posture: dict[str, float]) -> None:
+    """Remove muscles, and their tendons, that cross only posture-locked joints.
+
+    Their forces act only on locked joints and are absorbed by the locks, so
+    they cannot move the free limbs; computing their tendon paths dominates
+    the step cost. Moment arms are checked at the seated pose and at a pose
+    with every free joint displaced, so a crossing muscle is never removed.
+    """
+    model = spec.compile()
+    free_dofs = [
+        int(model.jnt_dofadr[index])
+        for index in range(model.njnt)
+        if model.joint(index).name.startswith(FREE_JOINT_PREFIXES)
+    ]
+    data = mujoco.MjData(model)
+    for name, value in posture.items():
+        data.qpos[model.jnt_qposadr[model.joint(name).id]] = value
+    crossing = np.zeros(model.nu, dtype=bool)
+    moments = np.zeros((model.nu, model.nv))
+    for displacement in (0.0, 0.15):
+        for index in range(model.njnt):
+            if model.joint(index).name.startswith(FREE_JOINT_PREFIXES):
+                low, high = model.jnt_range[index]
+                address = model.jnt_qposadr[index]
+                data.qpos[address] = np.clip(displacement, low, high)
+        mujoco.mj_forward(model, data)
+        mujoco.mju_sparse2dense(
+            moments,
+            data.actuator_moment,
+            data.moment_rownnz,
+            data.moment_rowadr,
+            data.moment_colind,
+        )
+        crossing |= np.any(np.abs(moments[:, free_dofs]) > 1e-9, axis=1)
+    pruned = {model.actuator(index).name for index in np.flatnonzero(~crossing)}
+    tendons = set()
+    for actuator in list(spec.actuators):
+        if actuator.name in pruned:
+            tendons.add(actuator.target)
+            spec.delete(actuator)
+    used = {actuator.target for actuator in spec.actuators} | {
+        sensor.objname for sensor in spec.sensors
+    }
+    for tendon in list(spec.tendons):
+        if tendon.name in tendons and tendon.name not in used:
+            spec.delete(tendon)
 
 
 #: Settled elbow angle of the solved seated arm posture, in radians.
 REST_ELBOW = 0.3784
+
+
+_FINGER_FIELDS = {
+    "gear_finger": FINGER_CONTROLS["gear"],
+    "reverse_finger": FINGER_CONTROLS["reverse"],
+    "park_finger": FINGER_CONTROLS["park"],
+}
 
 
 def _muscle_groups() -> dict[str, tuple[tuple[str, ...], tuple[str, ...]]]:
@@ -362,45 +631,84 @@ def _muscle_groups() -> dict[str, tuple[tuple[str, ...], tuple[str, ...]]]:
         "right_foot": (tuple(f"{name}_r" for name in PLANTARFLEXORS), ("tibant_r",)),
         "left_foot": (tuple(f"{name}_l" for name in PLANTARFLEXORS), ("tibant_l",)),
     }
-    for field, control in (
-        ("gear_finger", "gear"),
-        ("reverse_finger", "reverse"),
-        ("park_finger", "park"),
-    ):
-        groups[field] = (
-            FINGER_CONTROLS[control].flexors,
-            FINGER_CONTROLS[control].extensors,
-        )
+    for field, control in _FINGER_FIELDS.items():
+        groups[field] = (control.flexors, control.extensors)
     return groups
 
 
+@dataclass(frozen=True)
+class _ExcitationPlan:
+    """Actuator indices of every channel, resolved once per model."""
+
+    groups: tuple[tuple[str, np.ndarray, np.ndarray], ...]
+    intrinsics: tuple[tuple[str, np.ndarray], ...]
+
+
+def _excitation_plan(model: mujoco.MjModel) -> _ExcitationPlan:
+    def ids(names: tuple[str, ...]) -> np.ndarray:
+        return np.asarray([model.actuator(name).id for name in names], dtype=int)
+
+    return _ExcitationPlan(
+        groups=tuple(
+            (name, ids(agonists), ids(antagonists))
+            for name, (agonists, antagonists) in _muscle_groups().items()
+        ),
+        intrinsics=tuple(
+            (field, ids(finger.intrinsics)) for field, finger in _FINGER_FIELDS.items()
+        ),
+    )
+
+
 def _excite(
-    model: mujoco.MjModel,
+    plan: _ExcitationPlan,
     data: mujoco.MjData,
     config: FullBodyDriverConfig,
     levels: dict[str, float],
 ) -> None:
     """Excite pressing groups; hold every released group with antagonist tone."""
-    for name, (agonists, antagonists) in _muscle_groups().items():
+    for name, agonists, antagonists in plan.groups:
         level = levels.get(name, 0.0)
         if level > 0:
-            ids = [model.actuator(muscle).id for muscle in agonists]
-            data.ctrl[ids] = level
+            data.ctrl[agonists] = level
         else:
-            tone = (
+            data.ctrl[antagonists] = (
                 config.release_tone
                 if name.endswith("_foot")
                 else config.finger_release_tone
             )
-            ids = [model.actuator(muscle).id for muscle in antagonists]
-            data.ctrl[ids] = tone
+    for field, intrinsics in plan.intrinsics:
+        level = levels.get(field, 0.0)
+        if level > 0:
+            data.ctrl[intrinsics] = min(1.0, config.finger_intrinsic_ratio * level)
+
+
+def _is_mechanism(name: str) -> bool:
+    return name.startswith(("cockpit_", "cradle_")) or name.endswith("_button_body")
+
+
+def _body_loads(
+    model: mujoco.MjModel, config: FullBodyDriverConfig
+) -> InertialLoads | None:
+    """Vehicle loads on every human segment; mechanisms are gravity-balanced."""
+    if not config.vehicle_loads:
+        return None
+    data = mujoco.MjData(model)
+    mujoco.mj_kinematics(model, data)
+    pelvis = data.xpos[model.body("pelvis").id]
+    origin = pelvis - carla_vector_to_cockpit(config.seat_offset)
+    bodies = [
+        index
+        for index in range(1, model.nbody)
+        if not _is_mechanism(model.body(index).name)
+    ]
+    return InertialLoads(model, bodies, origin)
 
 
 def _settle(
     model: mujoco.MjModel, config: FullBodyDriverConfig
 ) -> tuple[mujoco.MjData, dict[str, float]]:
     data = mujoco.MjData(model)
-    for name, value in SEATED_POSTURE.items():
+    for name, value in _posture(config).items():
         data.qpos[model.jnt_qposadr[model.joint(name).id]] = value
     for side in "rl":
         data.qpos[model.jnt_qposadr[model.joint(f"elbow_flexion_{side}").id]] = (
@@ -408,11 +716,15 @@ def _settle(
         )
     mujoco.mj_forward(model, data)
     reflexes = _reflexes(model, config)
+    loads = _body_loads(model, config)
+    plan = _excitation_plan(model)
     for _ in range(round(config.settle_seconds / config.timestep)):
         data.ctrl[:] = 0
         for reflex in reflexes.values():
             reflex.apply(data, REST_ELBOW, config.timestep)
-        _excite(model, data, config, {})
+        _excite(plan, data, config, {})
+        if loads is not None:
+            loads.apply(data, AT_REST)
         mujoco.mj_step(model, data)
     return data, {side: reflex.integral for side, reflex in reflexes.items()}
 
@@ -473,13 +785,17 @@ def _pad_path(
     data.act[:] = rest.act
     mujoco.mj_forward(model, data)
     reflexes = _reflexes(model, config, integrals)
+    loads = _body_loads(model, config)
+    plan = _excitation_plan(model)
     previous = _pad_point(model, data, control.pad)
     length = 0.0
     for _ in range(round(1.0 / config.timestep)):
         data.ctrl[:] = 0
         for reflex in reflexes.values():
             reflex.apply(data, REST_ELBOW, config.timestep)
-        _excite(model, data, config, {field: config.press_excitation})
+        _excite(plan, data, config, {field: config.press_excitation})
+        if loads is not None:
+            loads.apply(data, AT_REST)
         mujoco.mj_step(model, data)
         point = _pad_point(model, data, control.pad)
         step = float(np.linalg.norm(point - previous))
@@ -787,9 +1103,27 @@ class FullBodyDriver:
         self.rest_integrals = dict(integrals)
         self.initial_gaps = dict(gaps)
         self.shifter = SequentialShifter(
-            "gear_button_position", config.button_travel, config.max_gear
+            "gear_button_position",
+            config.button_travel,
+            config.max_gear,
+            hold_samples=max(1, round(config.paddle_hold / config.control_dt)),
         )
         names = cockpit.names
+        hold = max(1, round(config.switch_hold / config.control_dt))
+        brake_sensor, brake_travel = names.brake_position, cockpit.brake.travel
+
+        def brake_pressed(model: mujoco.MjModel, data: mujoco.MjData) -> bool:
+            return float(data.sensor(brake_sensor).data[0]) > 0.3 * brake_travel
+
+        self.parking_brake = LatchingSwitch(
+            "park_button_position", config.button_travel, hold_samples=hold
+        )
+        self.reverse_switch = LatchingSwitch(
+            "reverse_button_position",
+            config.button_travel,
+            hold_samples=hold,
+            interlock=brake_pressed if config.reverse_requires_brake else None,
+        )
         self.mapper = ControlMapper(
             model,
             (
@@ -813,22 +1147,15 @@ class FullBodyDriver:
                         deadzone=0.02,
                     ),
                 ),
-                Binding(
-                    "hand_brake",
-                    SensorValue("park_button_position"),
-                    UnipolarCalibration(0, config.button_travel, deadzone=0.3),
-                ),
-                Binding(
-                    "reverse",
-                    SensorValue("reverse_button_position"),
-                    UnipolarCalibration(0, config.button_travel, deadzone=0.3),
-                ),
+                Binding("hand_brake", CallbackSource(self.parking_brake.read)),
+                Binding("reverse", CallbackSource(self.reverse_switch.read)),
                 Binding("gear", CallbackSource(self.shifter.read_gear)),
                 Binding("manual_gear_shift", CallbackSource(self.shifter.read_manual)),
             ),
             brake_priority=True,
         )
         self._reflexes = _reflexes(model, config)
+        self._plan = _excitation_plan(model)
         self._substeps = round(config.control_dt / config.timestep)
         driving = {
             muscle
@@ -838,10 +1165,44 @@ class FullBodyDriver:
         for side in "rl":
             driving.update(_side(ELBOW_FLEXORS + ELBOW_EXTENSORS, side))
         self._driving_muscles = sorted(model.actuator(name).id for name in driving)
+        self._loads = _body_loads(model, config)
+        self._steering_dof = int(
+            model.jnt_dofadr[model.joint(cockpit.names.steering_joint).id]
+        )
+        self.motion = AT_REST
+        self._muscles = np.flatnonzero(
+            model.actuator_dyntype == mujoco.mjtDyn.mjDYN_MUSCLE
+        )
+        self._noise: Any = None
+        if config.motor_noise_signal or config.motor_noise_constant:
+            from myosuite.terms.base_action import MotorNoiseCfg
+
+            self._noise = MotorNoiseCfg(
+                signal_dependent_std=config.motor_noise_signal,
+                constant_std=config.motor_noise_constant,
+            )
+        self.fatigue: Any = None
+        if config.fatigue:
+            from myosuite.core.muscle_conditions import CumulativeFatigue
+
+            self.fatigue = CumulativeFatigue(model, sex=config.fatigue_sex)
+        self.np_random = np.random.default_rng()
         self.reset()
 
-    def reset(self) -> mujoco.MjData:
-        """Restore the settled seated pose, reflex state and automatic gear."""
+    def reset(self, seed: int | None = None) -> mujoco.MjData:
+        """Restore the settled pose and reflexes; release every latched switch.
+
+        Args:
+            seed: Seeds the motor-noise generator when given.
+        """
+        if seed is not None:
+            self.np_random = np.random.default_rng(seed)
+        if self.fatigue is not None:
+            self.fatigue.reset(
+                np.full(len(self._muscles), self.config.initial_fatigue)
+                if self.config.initial_fatigue
+                else None
+            )
         mujoco.mj_resetData(self.model, self.data)
         self.data.qpos[:] = self.rest_qpos
         self.data.act[:] = self.rest_act
@@ -849,22 +1210,77 @@ class FullBodyDriver:
         for side, reflex in self._reflexes.items():
             reflex.integral = self.rest_integrals[side]
         self.shifter.reset()
+        self.parking_brake.reset()
+        self.reverse_switch.reset()
+        self.motion = AT_REST
+        self._expected_xfrc = np.zeros_like(self.data.xfrc_applied)
+        self._expected_qfrc = np.zeros_like(self.data.qfrc_applied)
         return self.data
 
+    def set_vehicle_motion(self, motion: VehicleMotion) -> None:
+        """Set the vehicle kinematics whose loads act during the next periods."""
+        if not isinstance(motion, VehicleMotion):
+            raise TypeError("motion must be a VehicleMotion")
+        self.motion = motion
+
     def advance(self, intent: DriverIntent) -> None:
-        """Apply one control period of muscle excitation; no external forces."""
+        """Apply one control period of muscle excitation.
+
+        Only the driver's own vehicle loads may act: gravity and d'Alembert
+        forces on body segments, and the steering-feel torque on the wheel.
+        Any other applied force is rejected.
+        """
         if not isinstance(intent, DriverIntent):
             raise TypeError("intent must be a DriverIntent")
-        if np.any(self.data.qfrc_applied) or np.any(self.data.xfrc_applied):
+        if not (
+            np.array_equal(self.data.xfrc_applied, self._expected_xfrc)
+            and np.array_equal(self.data.qfrc_applied, self._expected_qfrc)
+        ):
             raise RuntimeError("External forces are forbidden for the muscle driver")
         setpoints = {"r": REST_ELBOW - intent.steer, "l": REST_ELBOW + intent.steer}
         levels = {name: getattr(intent, name) for name in _muscle_groups()}
+        feel = 0.0
+        if self.config.vehicle_loads:
+            lateral = float(self.motion.in_cockpit()["lateral_right_acceleration"][0])
+            feel = -self.config.steering_feel * lateral
+        normals = None
+        if self._noise is not None:
+            # One draw per muscle and control period, as in MyoSuite.
+            normals = self.np_random.standard_normal((2, len(self._muscles)))
         for _ in range(self._substeps):
             self.data.ctrl[:] = 0
             for side, reflex in self._reflexes.items():
                 reflex.apply(self.data, setpoints[side], self.config.timestep)
-            _excite(self.model, self.data, self.config, levels)
+            _excite(self._plan, self.data, self.config, levels)
+            if normals is not None or self.fatigue is not None:
+                self._condition(normals)
+            if self._loads is not None:
+                self._loads.apply(self.data, self.motion)
+            self.data.qfrc_applied[:] = 0.0
+            self.data.qfrc_applied[self._steering_dof] = feel
             mujoco.mj_step(self.model, self.data)
+        self._expected_xfrc = self.data.xfrc_applied.copy()
+        self._expected_qfrc = self.data.qfrc_applied.copy()
+
+    def _condition(self, normals: np.ndarray | None) -> None:
+        """Apply motor noise, then fatigue, to this physics step's excitations."""
+        excitation = self.data.ctrl[self._muscles]
+        if normals is not None:
+            from myosuite.terms.base_action import motor_noise
+
+            excitation = motor_noise(
+                excitation,
+                normals[0],
+                normals[1],
+                self._noise.signal_dependent_std,
+                self._noise.constant_std,
+                np,
+            )
+        if self.fatigue is not None:
+            excitation = self.fatigue.step(
+                np.asarray(excitation, dtype=float), dt=self.config.timestep
+            )
+        self.data.ctrl[self._muscles] = excitation
 
     def measurement(self) -> dict[str, float]:
         """Return mechanism travel, contact force and largest driving-muscle force."""
@@ -902,6 +1318,11 @@ class FullBodyDriver:
         values["largest_muscle_newtons"] = float(
             np.max(np.abs(self.data.actuator_force[self._driving_muscles]))
         )
+        if self.fatigue is not None:
+            driving = np.searchsorted(self._muscles, self._driving_muscles)
+            values["driving_fatigued_fraction"] = float(
+                np.mean(self.fatigue.MF[driving])
+            )
         return values
 
     def _contact_force(self, geom: str) -> np.ndarray:

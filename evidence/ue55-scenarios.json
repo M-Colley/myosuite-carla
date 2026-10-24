@@ -1,0 +1,334 @@
+{
+ "lead_vehicle_braking/carla": {
+  "started_utc": "2026-10-24T08:38:36.147151+00:00",
+  "scenario": "lead_vehicle_braking",
+  "backend": "carla",
+  "fast": false,
+  "duration_s": 20.0,
+  "takeover_time_s": null,
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "blueprint": "vehicle.nissan.patrol",
+  "spawn_index": 105,
+  "lane_length_m": 349.02982655929736,
+  "summary": {
+   "frames": 1000,
+   "seconds": 19.999999999999662,
+   "collision": false,
+   "off_road": false,
+   "min_gap_m": 1.9132708386664037,
+   "min_ttc_s": 2.709278239495529,
+   "lane_offset_rms_m": 0.017555572564744257,
+   "lane_offset_max_m": 0.029454021998225187,
+   "final_speed_mps": 0.03504099108536837,
+   "max_brake": 0.2491252747341098,
+   "takeover_time_s": null,
+   "events": [
+    {
+     "time": 0.0,
+     "type": "scenario_start",
+     "scenario": "lead_vehicle_braking"
+    },
+    {
+     "time": 8.02,
+     "type": "lead_brake",
+     "deceleration": 4.0
+    }
+   ],
+   "return": -375.26860779945326,
+   "carla_collisions": []
+  },
+  "status": "completed",
+  "finished_utc": "2026-10-24T08:38:48.336164+00:00",
+  "recorded": [
+   "activation",
+   "arm_force_manifest",
+   "arm_force_trajectory",
+   "coordinates",
+   "datapackage",
+   "force",
+   "frames",
+   "opensim_activation",
+   "opensim_coordinates",
+   "opensim_force"
+  ],
+  "command": "examples/drive_scenario.py --backend carla --host 127.0.0.1 --scenario lead_vehicle_braking --record artifacts/scenario-lead_vehicle_braking-carla --output artifacts/scenario-lead_vehicle_braking-carla.json"
+ },
+ "lead_vehicle_braking/surrogate": {
+  "started_utc": "2026-10-24T08:38:52.177821+00:00",
+  "scenario": "lead_vehicle_braking",
+  "backend": "surrogate",
+  "fast": false,
+  "duration_s": 20.0,
+  "takeover_time_s": null,
+  "summary": {
+   "frames": 1000,
+   "seconds": 19.999999999999662,
+   "collision": false,
+   "off_road": false,
+   "min_gap_m": 2.0755365313538165,
+   "min_ttc_s": 2.6913719033477292,
+   "lane_offset_rms_m": 0.011997112636352876,
+   "lane_offset_max_m": 0.02816046287527231,
+   "final_speed_mps": 0.0,
+   "max_brake": 0.24077899593995225,
+   "takeover_time_s": null,
+   "events": [
+    {
+     "time": 0.0,
+     "type": "scenario_start",
+     "scenario": "lead_vehicle_braking"
+    },
+    {
+     "time": 8.02,
+     "type": "lead_brake",
+     "deceleration": 4.0
+    }
+   ],
+   "return": -335.325442890153
+  },
+  "status": "completed",
+  "finished_utc": "2026-10-24T08:39:02.439411+00:00",
+  "recorded": [
+   "activation",
+   "arm_force_manifest",
+   "arm_force_trajectory",
+   "coordinates",
+   "datapackage",
+   "force",
+   "frames",
+   "opensim_activation",
+   "opensim_coordinates",
+   "opensim_force"
+  ],
+  "command": "examples/drive_scenario.py --backend surrogate --host 127.0.0.1 --scenario lead_vehicle_braking --record artifacts/scenario-lead_vehicle_braking-surrogate --output artifacts/scenario-lead_vehicle_braking-surrogate.json"
+ },
+ "takeover_request/carla": {
+  "started_utc": "2026-10-24T08:39:06.263786+00:00",
+  "scenario": "takeover_request",
+  "backend": "carla",
+  "fast": false,
+  "duration_s": 12.0,
+  "takeover_time_s": 5.0,
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "blueprint": "vehicle.nissan.patrol",
+  "spawn_index": 105,
+  "lane_length_m": 255.5172406736222,
+  "summary": {
+   "frames": 600,
+   "seconds": 11.999999999999833,
+   "collision": false,
+   "off_road": false,
+   "min_gap_m": null,
+   "min_ttc_s": null,
+   "lane_offset_rms_m": 0.040421987561505425,
+   "lane_offset_max_m": 0.04782248679581189,
+   "final_speed_mps": 12.94710433245968,
+   "max_brake": 0.0,
+   "takeover_time_s": 2.9999999999999174,
+   "events": [
+    {
+     "time": 0.0,
+     "type": "scenario_start",
+     "scenario": "takeover_request"
+    },
+    {
+     "time": 0.0,
+     "type": "automation_engaged"
+    },
+    {
+     "time": 5.02,
+     "type": "takeover_request",
+     "modality": "visual-auditory"
+    },
+    {
+     "time": 8.0,
+     "type": "driver_takeover",
+     "reaction_time": 2.9999999999999174,
+     "input": "pedal"
+    }
+   ],
+   "return": -216.87090614090067,
+   "carla_collisions": []
+  },
+  "status": "completed",
+  "finished_utc": "2026-10-24T08:39:13.533360+00:00",
+  "recorded": [
+   "activation",
+   "arm_force_manifest",
+   "arm_force_trajectory",
+   "coordinates",
+   "datapackage",
+   "force",
+   "frames",
+   "opensim_activation",
+   "opensim_coordinates",
+   "opensim_force"
+  ],
+  "command": "examples/drive_scenario.py --backend carla --host 127.0.0.1 --scenario takeover_request --duration 12 --takeover-time 5 --record artifacts/scenario-takeover_request-carla --output artifacts/scenario-takeover_request-carla.json"
+ },
+ "takeover_request/surrogate": {
+  "started_utc": "2026-10-24T08:39:17.150511+00:00",
+  "scenario": "takeover_request",
+  "backend": "surrogate",
+  "fast": false,
+  "duration_s": 12.0,
+  "takeover_time_s": 5.0,
+  "summary": {
+   "frames": 600,
+   "seconds": 11.999999999999833,
+   "collision": false,
+   "off_road": false,
+   "min_gap_m": null,
+   "min_ttc_s": null,
+   "lane_offset_rms_m": 0.0,
+   "lane_offset_max_m": 0.0,
+   "final_speed_mps": 12.679838218376078,
+   "max_brake": 0.0,
+   "takeover_time_s": 2.9999999999999174,
+   "events": [
+    {
+     "time": 0.0,
+     "type": "scenario_start",
+     "scenario": "takeover_request"
+    },
+    {
+     "time": 0.0,
+     "type": "automation_engaged"
+    },
+    {
+     "time": 5.02,
+     "type": "takeover_request",
+     "modality": "visual-auditory"
+    },
+    {
+     "time": 8.0,
+     "type": "driver_takeover",
+     "reaction_time": 2.9999999999999174,
+     "input": "pedal"
+    }
+   ],
+   "return": -36.49439897771904
+  },
+  "status": "completed",
+  "finished_utc": "2026-10-24T08:39:22.414202+00:00",
+  "recorded": [
+   "activation",
+   "arm_force_manifest",
+   "arm_force_trajectory",
+   "coordinates",
+   "datapackage",
+   "force",
+   "frames",
+   "opensim_activation",
+   "opensim_coordinates",
+   "opensim_force"
+  ],
+  "command": "examples/drive_scenario.py --backend surrogate --host 127.0.0.1 --scenario takeover_request --duration 12 --takeover-time 5 --record artifacts/scenario-takeover_request-surrogate --output artifacts/scenario-takeover_request-surrogate.json"
+ },
+ "lane_change/carla": {
+  "started_utc": "2026-10-24T08:39:25.993050+00:00",
+  "scenario": "lane_change",
+  "backend": "carla",
+  "fast": false,
+  "duration_s": 15.0,
+  "takeover_time_s": null,
+  "server_version": "0.10.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "blueprint": "vehicle.nissan.patrol",
+  "spawn_index": 105,
+  "lane_length_m": 260.61067934458214,
+  "summary": {
+   "frames": 750,
+   "seconds": 14.999999999999769,
+   "collision": false,
+   "off_road": false,
+   "min_gap_m": null,
+   "min_ttc_s": null,
+   "lane_offset_rms_m": 0.5346427030842218,
+   "lane_offset_max_m": 1.41633749577805,
+   "final_speed_mps": 10.861748790182336,
+   "max_brake": 0.04961376516733805,
+   "takeover_time_s": null,
+   "events": [
+    {
+     "time": 0.0,
+     "type": "scenario_start",
+     "scenario": "lane_change"
+    },
+    {
+     "time": 5.02,
+     "type": "lane_change_request",
+     "offset": -3.5
+    }
+   ],
+   "return": -123.47083512568399,
+   "carla_collisions": []
+  },
+  "status": "completed",
+  "finished_utc": "2026-10-24T08:39:35.205105+00:00",
+  "recorded": [
+   "activation",
+   "arm_force_manifest",
+   "arm_force_trajectory",
+   "coordinates",
+   "datapackage",
+   "force",
+   "frames",
+   "opensim_activation",
+   "opensim_coordinates",
+   "opensim_force"
+  ],
+  "command": "examples/drive_scenario.py --backend carla --host 127.0.0.1 --scenario lane_change --record artifacts/scenario-lane_change-carla --output artifacts/scenario-lane_change-carla.json"
+ },
+ "lane_change/surrogate": {
+  "started_utc": "2026-10-24T08:39:38.862114+00:00",
+  "scenario": "lane_change",
+  "backend": "surrogate",
+  "fast": false,
+  "duration_s": 15.0,
+  "takeover_time_s": null,
+  "summary": {
+   "frames": 750,
+   "seconds": 14.999999999999769,
+   "collision": false,
+   "off_road": false,
+   "min_gap_m": null,
+   "min_ttc_s": null,
+   "lane_offset_rms_m": 0.5224029680824556,
+   "lane_offset_max_m": 1.3842929830124238,
+   "final_speed_mps": 10.720115803177643,
+   "max_brake": 0.0,
+   "takeover_time_s": null,
+   "events": [
+    {
+     "time": 0.0,
+     "type": "scenario_start",
+     "scenario": "lane_change"
+    },
+    {
+     "time": 5.02,
+     "type": "lane_change_request",
+     "offset": -3.5
+    }
+   ],
+   "return": -75.05571870842729
+  },
+  "status": "completed",
+  "finished_utc": "2026-10-24T08:39:46.581136+00:00",
+  "recorded": [
+   "activation",
+   "arm_force_manifest",
+   "arm_force_trajectory",
+   "coordinates",
+   "datapackage",
+   "force",
+   "frames",
+   "opensim_activation",
+   "opensim_coordinates",
+   "opensim_force"
+  ],
+  "command": "examples/drive_scenario.py --backend surrogate --host 127.0.0.1 --scenario lane_change --record artifacts/scenario-lane_change-surrogate --output artifacts/scenario-lane_change-surrogate.json"
+ }
+}

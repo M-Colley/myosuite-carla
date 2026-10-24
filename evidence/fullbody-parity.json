@@ -1,0 +1,125 @@
+{
+ "program_periods": 400,
+ "reference": "full_1ms",
+ "free_joints": 46,
+ "variants": {
+  "full_1ms": {
+   "muscles": 416,
+   "tendons": 424,
+   "build_seconds": 2.719373800093308,
+   "simulated_seconds": 8.0,
+   "wall_seconds": 3.430215800064616,
+   "real_time_factor": 2.332214783644021,
+   "speedup": 1.0,
+   "max_free_joint_error": 0.0,
+   "worst_joint": "elbow_flexion_r",
+   "max_control_error_by_channel": {
+    "brake": 0.0,
+    "gear": 0.0,
+    "hand_brake": 0.0,
+    "manual_gear_shift": 0.0,
+    "reverse": 0.0,
+    "steer": 0.0,
+    "throttle": 0.0
+   },
+   "rms_control_error_by_channel": {
+    "brake": 0.0,
+    "gear": 0.0,
+    "hand_brake": 0.0,
+    "manual_gear_shift": 0.0,
+    "reverse": 0.0,
+    "steer": 0.0,
+    "throttle": 0.0
+   }
+  },
+  "pruned_1ms": {
+   "muscles": 114,
+   "tendons": 122,
+   "build_seconds": 4.475827699992806,
+   "simulated_seconds": 8.0,
+   "wall_seconds": 2.7180959000252187,
+   "real_time_factor": 2.9432368445593755,
+   "speedup": 1.2619921909424867,
+   "max_free_joint_error": 0.06768368567444971,
+   "worst_joint": "cmc_abduction_l",
+   "max_control_error_by_channel": {
+    "brake": 0.003056991392930586,
+    "gear": 0.0,
+    "hand_brake": 0.0,
+    "manual_gear_shift": 0.0,
+    "reverse": 0.0,
+    "steer": 0.02908697904258356,
+    "throttle": 0.0026603153191914197
+   },
+   "rms_control_error_by_channel": {
+    "brake": 0.0004266910065721887,
+    "gear": 0.0,
+    "hand_brake": 0.0,
+    "manual_gear_shift": 0.0,
+    "reverse": 0.0,
+    "steer": 0.007771600047290605,
+    "throttle": 0.0002231569536886549
+   }
+  },
+  "full_2ms": {
+   "muscles": 416,
+   "tendons": 424,
+   "build_seconds": 1.902567800018005,
+   "simulated_seconds": 8.0,
+   "wall_seconds": 1.7353310000617057,
+   "real_time_factor": 4.610071507807751,
+   "speedup": 1.9766925156887318,
+   "max_free_joint_error": 0.007125419117717913,
+   "worst_joint": "mcp2_flexion_l",
+   "max_control_error_by_channel": {
+    "brake": 0.020334160685221925,
+    "gear": 0.0,
+    "hand_brake": 0.0,
+    "manual_gear_shift": 0.0,
+    "reverse": 0.0,
+    "steer": 0.00801609328191788,
+    "throttle": 0.003672762673936375
+   },
+   "rms_control_error_by_channel": {
+    "brake": 0.002029723886899669,
+    "gear": 0.0,
+    "hand_brake": 0.0,
+    "manual_gear_shift": 0.0,
+    "reverse": 0.0,
+    "steer": 0.001650593652141551,
+    "throttle": 0.0003203021254529174
+   }
+  },
+  "pruned_2ms": {
+   "muscles": 114,
+   "tendons": 122,
+   "build_seconds": 3.9213751999195665,
+   "simulated_seconds": 8.0,
+   "wall_seconds": 1.3893558999989182,
+   "real_time_factor": 5.758063862546831,
+   "speedup": 2.468925204886154,
+   "max_free_joint_error": 0.0672832704219239,
+   "worst_joint": "cmc_abduction_l",
+   "max_control_error_by_channel": {
+    "brake": 0.02040843205061943,
+    "gear": 0.0,
+    "hand_brake": 0.0,
+    "manual_gear_shift": 0.0,
+    "reverse": 0.0,
+    "steer": 0.029851631717058125,
+    "throttle": 0.0037032908622204874
+   },
+   "rms_control_error_by_channel": {
+    "brake": 0.0021746452923058737,
+    "gear": 0.0,
+    "hand_brake": 0.0,
+    "manual_gear_shift": 0.0,
+    "reverse": 0.0,
+    "steer": 0.008356796176061512,
+    "throttle": 0.00030955574156783864
+   }
+  }
+ },
+ "command": "benchmarks/fullbody_parity.py --output artifacts/fullbody-parity.json",
+ "note": "Driver with vehicle loads, finger intrinsics and latched switches; an unrelated TD-MPC2 training job shared the machine."
+}

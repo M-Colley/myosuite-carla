@@ -1,0 +1,31 @@
+﻿........................................................................ [ 23%]
+........................................................................ [ 46%]
+........................................................................ [ 69%]
+........................................................................ [ 92%]
+........................                                                 [100%]
+=============================== tests coverage ================================
+______________ coverage: platform win32, python 3.12.13-final-0 _______________
+Name                                        Stmts   Miss  Cover
+---------------------------------------------------------------
+src\myosuite_carla\__init__.py                 11      0   100%
+src\myosuite_carla\bridge.py                   75      3    96%
+src\myosuite_carla\carla_scenario.py           68     68     0%
+src\myosuite_carla\cockpit.py                 216      5    98%
+src\myosuite_carla\controls.py                 32      1    97%
+src\myosuite_carla\driver_models.py            94      0   100%
+src\myosuite_carla\driving_env.py             161     12    93%
+src\myosuite_carla\fullbody.py                617      9    99%
+src\myosuite_carla\fullbody_validation.py     147     12    92%
+src\myosuite_carla\human_comparison.py         97      4    96%
+src\myosuite_carla\inputs.py                  197      9    95%
+src\myosuite_carla\presets.py                   8      0   100%
+src\myosuite_carla\recording.py               311     21    93%
+src\myosuite_carla\scenario.py                232      8    97%
+src\myosuite_carla\session.py                 226      5    98%
+src\myosuite_carla\validation.py              212      7    97%
+src\myosuite_carla\vehicle_loads.py            73      1    99%
+src\myosuite_carla\vehicle_model.py           347     11    97%
+src\myosuite_carla\wrapper.py                  61      2    97%
+---------------------------------------------------------------
+TOTAL                                        3185    178    94%
+312 passed in 111.98s (0:01:51)
