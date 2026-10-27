@@ -130,7 +130,7 @@ def window_features(
         accel = accel_grid[start : start + samples]
         deviation = float(np.std(part))
         rate_rms = float(np.sqrt(np.mean(np.gradient(part, 1.0 / rate) ** 2)))
-        bounds = np.percentile(part, [5, 95])
+        bounds = np.asarray(np.percentile(part, [5, 95]), dtype=float)
         spread = float(bounds[1] - bounds[0])
         rows.append(
             (

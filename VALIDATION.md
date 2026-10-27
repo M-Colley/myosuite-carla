@@ -16,6 +16,12 @@ Hosted CI for the earlier bridge revision exposed platform differences in MuJoCo
 
 The next hosted run passed Windows Python 3.13, Linux Python 3.14 and the combined embodied human job. Its Python 3.10 job exposed a scikit-learn 1.7.2 partition with one population missing from a test fold. Independent comparisons now stratify unique source groups with `StratifiedKFold`. Shared paired comparisons use `StratifiedGroupKFold`. The original failure reproduces with scikit-learn 1.7.2, and 15 corrected comparison and archive tests pass ([probe](evidence/scientific-2026-10-27-sklearn-1.7.2.txt), [tests](evidence/scientific-2026-10-27-sklearn-1.7.2-tests.txt)).
 
+The hosted run for `c74152f` passes every runtime test job. Its Python 3.10 type check exposes a NumPy 2.2.6 annotation that infers a scalar percentile result. The percentile result now passes through `np.asarray` before indexing. An isolated CPython 3.10.20 environment with NumPy 2.2.6 and mypy 2.4.0 reproduces the earlier error and passes all 23 source files after the correction ([before](evidence/numpy-2.2-typing-before.txt), [after](evidence/numpy-2.2-typing-after.txt)). The 15 focused tests pass, and every feature remains identical across ten seeded signal cases ([tests](evidence/numpy-2.2-typing-tests.txt), [numerical comparison](evidence/numpy-2.2-typing-numeric-parity.txt)). Ruff, formatting and both distribution builds pass.
+
+```powershell
+artifacts/typing-numpy226-review/venv/Scripts/python.exe -m mypy src/myosuite_carla --python-version 3.10 --ignore-missing-imports --follow-imports=skip --cache-dir artifacts/typing-numpy226-review/mypy-cache
+```
+
 The final commands were run from this repository, with the human suite run from its isolated sibling worktree:
 
 ```powershell
