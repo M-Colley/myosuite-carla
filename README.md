@@ -325,6 +325,8 @@ and driving-muscle activations. Rewards are weighted named terms (`TaskConfig`).
 The vehicle defaults to the surrogate; pass a started `CarlaSession` with
 `reset_vehicle=carla_scenario.teleport` for CARLA.
 
+`VehicleFootprint` in `scenario.py` configures the ego and lead lengths, widths, local bounding box centres and local yaw angles. Shapely computes planar contact between the oriented rectangles. Collision events, termination and penalties use this contact flag. The signed longitudinal bumper gap remains a separate measurement. Lead relevance and time to collision account for lateral overlap and whether the lead is ahead. CARLA runs resolve the rectangles from actor bounding boxes. Recordings retain the resolved geometry and front trajectories.
+
 Scenarios (`scenario.py`) are a lane polyline plus a braking lead vehicle,
 raised-cosine lane changes or an automation-to-driver takeover request, with
 timestamped events (request, takeover with reaction time, minimal-risk
@@ -376,6 +378,8 @@ https://doi.org/10.21949/1504477). The data are downloaded, not committed;
 positions are smoothed with a Savitzky-Golay filter, and simulated drives go
 through the identical 10 Hz processing. Trials are split by driver, and only
 training drivers inform the reward.
+
+Paired evaluation retains `FollowingTrial.source_group` through replay, windowing and NPZ files. Its default grouping identity is the original driver. `discriminability(..., grouping="shared")` holds each source together across human and simulated populations. Reports retain source identities, fold assignments and classifier seeds. Paired confidence intervals resample source means. The independent grouping mode remains available for unrelated populations.
 
 ```shell
 python -m pip install torch --index-url https://download.pytorch.org/whl/cpu

@@ -83,7 +83,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: M-Colley/embodied-human
-          ref: 9d38317ec9f0e07c5a393212ab5d8fae210f5ac8
+          ref: 770b358e38b8e4eae966d1f106b3e071e58fce1a
           path: embodied-human
       - uses: actions/setup-python@v5
         with:
@@ -101,7 +101,7 @@ jobs:
         run: python -m pytest tests -q --junitxml=test-results/integration-bridge.xml
       - name: Test embodied human driving integration
         working-directory: bridge
-        run: python -m pytest ../embodied-human/tests/test_driving.py -q --junitxml=test-results/integration-human.xml
+        run: python -m pytest ../embodied-human/tests/test_driving.py ../embodied-human/tests/test_body_sensing.py -q --junitxml=test-results/integration-human.xml
       - uses: actions/upload-artifact@v4
         if: always()
         with:

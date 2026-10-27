@@ -17,7 +17,8 @@ logistic-regression classifier that separates two sets of windows, with
 whole groups (participants, drives or simulated episodes) held out together.
 0.5 means indistinguishable. :func:`human_floor` gives the same AUC for each
 human participant against all others, the natural between-driver spread that
-a model need not undercut. Only aggregates leave these functions.
+a model need not undercut. Classification reports retain row fold assignments
+for auditing source separation. Raw signals remain local.
 
 Car-following trials (:class:`~myosuite_carla.ngsim.FollowingTrial`, human or
 simulated through the same processing) become :data:`FOLLOWING_FEATURES`.
@@ -33,7 +34,7 @@ from __future__ import annotations
 import importlib
 import math
 from collections.abc import Sequence
-from typing import Any
+from typing import Any, Literal
 
 import numpy as np
 from numpy.typing import NDArray
@@ -129,7 +130,8 @@ def window_features(
         accel = accel_grid[start : start + samples]
         deviation = float(np.std(part))
         rate_rms = float(np.sqrt(np.mean(np.gradient(part, 1.0 / rate) ** 2)))
-        spread = float(np.subtract(*np.percentile(part, [95, 5])))
+        bounds = np.percentile(part, [5, 95])
+        spread = float(bounds[1] - bounds[0])
         rows.append(
             (
                 rate_rms / (2 * math.pi * deviation) if deviation > 1e-9 else 0.0,
@@ -283,6 +285,7 @@ def discriminability(
     folds: int = 5,
     seed: int = 0,
     model: str = "logistic",
+    grouping: Literal["independent", "shared"] = "independent",
 ) -> dict[str, Any]:
     """Cross-validated AUC of a classifier separating two sets of windows.
 
@@ -290,9 +293,13 @@ def discriminability(
     is always tested on drivers or episodes it has not seen. ``model`` is
     ``"logistic"`` (standardized logistic regression) or ``"boosting"``
     (gradient-boosted trees, a stricter judge for nonlinear differences).
+    ``grouping="shared"`` holds a matching source ID out across both
+    populations, as required when a simulation replays a human trial.
+    ``"independent"`` gives each population its own group namespace.
 
     Returns:
-        ``auc``, window counts and the number of folds used.
+        AUC, row and source counts, grouping mode and fold assignments for
+        each population in input row order. No raw feature values are returned.
     """
     model_selection = importlib.import_module("sklearn.model_selection")
     metrics = importlib.import_module("sklearn.metrics")
@@ -302,16 +309,40 @@ def discriminability(
     ensemble = importlib.import_module("sklearn.ensemble")
     if model not in ("logistic", "boosting"):
         raise ValueError("model must be 'logistic' or 'boosting'")
+    if grouping not in ("independent", "shared"):
+        raise ValueError("grouping must be 'independent' or 'shared'")
+    first, second = np.asarray(first, dtype=float), np.asarray(second, dtype=float)
+    if (
+        first.ndim != 2
+        or second.ndim != 2
+        or first.shape[1] != second.shape[1]
+        or first.shape[1] == 0
+        or not np.all(np.isfinite(first))
+        or not np.all(np.isfinite(second))
+    ):
+        raise ValueError("Each population needs finite rows with matching features")
+    if len(first_groups) != len(first) or len(second_groups) != len(second):
+        raise ValueError("Each feature row needs one source group")
+    if isinstance(folds, bool) or not isinstance(folds, int) or folds < 2:
+        raise ValueError("folds must be an integer of at least two")
+    raw_groups = [
+        [str(group) for group in values] for values in (first_groups, second_groups)
+    ]
+    if any(not group for values in raw_groups for group in values):
+        raise ValueError("Source group identifiers must be nonempty")
     features = np.vstack([first, second])
     labels = np.r_[np.zeros(len(first)), np.ones(len(second))]
     groups = np.asarray(
-        [f"a:{group}" for group in first_groups]
-        + [f"b:{group}" for group in second_groups]
+        [
+            f"{population}:{group}" if grouping == "independent" else group
+            for population, values in enumerate(raw_groups)
+            for group in values
+        ]
     )
+    counts = [len(set(groups[labels == label])) for label in (0, 1)]
     usable = min(
         folds,
-        len(set(groups[labels == 0])),
-        len(set(groups[labels == 1])),
+        *counts,
     )
     if usable < 2:
         raise ValueError("Each side needs at least two groups")
@@ -319,7 +350,16 @@ def discriminability(
         n_splits=usable, shuffle=True, random_state=seed
     )
     scores = np.zeros(len(labels))
-    for train, test in splitter.split(features, labels, groups):
+    assignments: NDArray[np.int_] = np.full(len(labels), -1, dtype=int)
+    fold_groups = []
+    splits = list(splitter.split(features, labels, groups))
+    for train, test in splits:
+        if len(np.unique(labels[train])) != 2 or len(np.unique(labels[test])) != 2:
+            raise ValueError(
+                "Each fold needs both populations. "
+                "Use more source groups or fewer folds."
+            )
+    for index, (train, test) in enumerate(splits):
         classifier = (
             pipeline.make_pipeline(
                 preprocessing.StandardScaler(),
@@ -332,10 +372,27 @@ def discriminability(
         )
         classifier.fit(features[train], labels[train])
         scores[test] = classifier.predict_proba(features[test])[:, 1]
+        assignments[test] = index
+        fold_groups.append(
+            {"train": len(set(groups[train])), "test": len(set(groups[test]))}
+        )
     return {
         "auc": float(metrics.roc_auc_score(labels, scores)),
         "windows": [int(len(first)), int(len(second))],
         "folds": int(usable),
+        "model": model,
+        "seed": int(seed),
+        "grouping": grouping,
+        "groups": counts,
+        "independent_groups": len(set(groups)),
+        "shared_groups": len(set(raw_groups[0]) & set(raw_groups[1]))
+        if grouping == "shared"
+        else 0,
+        "fold_groups": fold_groups,
+        "fold_assignments": [
+            assignments[: len(first)].tolist(),
+            assignments[len(first) :].tolist(),
+        ],
     }
 
 

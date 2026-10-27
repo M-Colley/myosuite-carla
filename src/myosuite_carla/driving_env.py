@@ -306,6 +306,11 @@ class FullBodyDrivingEnv(gym.Env[NDArray[np.float32], NDArray[np.float32]]):
         frame = self.bridge.reset(self.driver.data)
         self._telemetry = frame.telemetry
         self._inputs = dict(frame.sample.values)
+        actor = getattr(self.vehicle, "vehicle", None)
+        if actor is not None:
+            from .carla_scenario import vehicle_footprint
+
+            self.monitor.set_footprints(ego=vehicle_footprint(actor))
         self.monitor.reset(frame.telemetry)
         self._previous_accel = 0.0
         self._needs_reset = False
@@ -313,6 +318,7 @@ class FullBodyDrivingEnv(gym.Env[NDArray[np.float32], NDArray[np.float32]]):
         return observation, {
             "scenario": dict(self.monitor.state),
             "events": list(self.monitor.events),
+            "vehicle_footprints": self.monitor.footprints,
         }
 
     def set_scenario(self, scenario: Scenario) -> None:
@@ -356,7 +362,7 @@ class FullBodyDrivingEnv(gym.Env[NDArray[np.float32], NDArray[np.float32]]):
         state = self.monitor.update(telemetry, self.dt, self._inputs)
         observation = self._observe()
         terms = self._reward_terms(state)
-        collided = state["gap_m"] < 0
+        collided = bool(state["collision"])
         off_road = bool(state["off_road"])
         terminated = collided or off_road
         truncated = state["time"] >= self.scenario.duration - 1e-9
@@ -373,6 +379,7 @@ class FullBodyDrivingEnv(gym.Env[NDArray[np.float32], NDArray[np.float32]]):
                 data=self.driver.data,
             )
             self.recorder.metadata["events"] = list(self.monitor.events)
+            self.recorder.metadata["vehicle_footprints"] = self.monitor.footprints
         if terminated or truncated:
             self._needs_reset = True
         info = {
@@ -384,6 +391,7 @@ class FullBodyDrivingEnv(gym.Env[NDArray[np.float32], NDArray[np.float32]]):
             "reward_terms": terms,
             "collision": collided,
             "off_road": off_road,
+            "vehicle_footprints": self.monitor.footprints,
         }
         reading = self.driver.interface_reading()
         if reading is not None:
@@ -428,7 +436,7 @@ class FullBodyDrivingEnv(gym.Env[NDArray[np.float32], NDArray[np.float32]]):
             "automation": -task.automation
             * self.dt
             * float(state["automation"] and state["takeover_requested"]),
-            "collision": -task.collision * float(state["gap_m"] < 0),
+            "collision": -task.collision * state["collision"],
             "off_road": -task.off_road * float(state["off_road"]),
         }
         return {name: float(value) for name, value in terms.items()}

@@ -13,7 +13,18 @@ import math
 from typing import Any
 
 from .controls import VehicleCommand
-from .scenario import Lane, Scenario, ScenarioMonitor
+from .scenario import Lane, Scenario, ScenarioMonitor, VehicleFootprint
+
+
+def vehicle_footprint(actor: Any) -> VehicleFootprint:
+    """Read a CARLA actor's planar local bounding box without importing CARLA."""
+    bounds = actor.bounding_box
+    return VehicleFootprint(
+        length=2.0 * float(bounds.extent.x),
+        width=2.0 * float(bounds.extent.y),
+        center=(float(bounds.location.x), float(bounds.location.y)),
+        yaw=float(bounds.rotation.yaw),
+    )
 
 
 def lane_from_carla(
@@ -81,6 +92,10 @@ class CarlaLeadVehicle:
         blueprint = self.world.get_blueprint_library().find(self.blueprint)
         self.actor = self.world.spawn_actor(blueprint, self._transform(pose))
         self.actor.set_simulate_physics(False)
+        self.monitor.set_footprints(lead=vehicle_footprint(self.actor))
+        pose = self.monitor.lead_pose()
+        assert pose is not None
+        self.actor.set_transform(self._transform(pose))
 
     def _transform(self, pose: tuple[float, float, float]) -> Any:
         x, y, yaw = pose
@@ -91,9 +106,10 @@ class CarlaLeadVehicle:
 
     def __call__(self, session: Any, sample: Any) -> None:
         """Bridge hook: place the lead before CARLA ticks."""
-        pose = self.monitor.lead_pose()
-        if self.actor is not None and pose is not None:
-            self.actor.set_transform(self._transform(pose))
+        if self.actor is not None:
+            pose = self.monitor.preview_lead_pose(session.config.fixed_delta_seconds)
+            if pose is not None:
+                self.actor.set_transform(self._transform(pose))
 
     def destroy(self) -> None:
         """Remove the lead actor if one was spawned."""

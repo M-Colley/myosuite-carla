@@ -24,6 +24,8 @@ may restrict the Python minor version and platform further.
 
 The 2026-10-27 integration review also checked current MyoSuite `dev` commit `230f198458b501c423a0892b78da60419ffc49a3`. The final integration tests include the fatigue reset fix from [MyoSuite PR 575](https://github.com/MyoHub/myosuite/pull/575). Embodied human driving and embodied UI composition use their public CPU APIs. Vehicle adapters restore the initial surrogate pose and speed on reset. `VehicleSessionEngine` requires an explicit `reset_vehicle(session, seed, options)` callback for live vehicle resets.
 
+Version 0.1.1 adds Shapely 2 or newer for planar vehicle footprints. Embodied human 0.1.1 uses `VehicleMotion.acceleration_at` for head sensing and requires this bridge version. Following trial archives use schema 2 to retain source groups. The reader accepts the earlier archives. Shared source grouping is selected explicitly for paired human and simulated evaluations.
+
 ## Install the matching client
 
 Build the server and Python client from the same CARLA checkout, or use the

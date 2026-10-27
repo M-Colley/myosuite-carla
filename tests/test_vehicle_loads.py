@@ -101,3 +101,45 @@ def test_motion_from_telemetry_differentiates_rate() -> None:
     assert VehicleMotion.from_telemetry(now).angular_acceleration == (0, 0, 0)
     with pytest.raises(ValueError):
         VehicleMotion.from_telemetry(now, before, 0.0)
+
+
+def test_acceleration_at_includes_tangential_centripetal_and_coriolis_terms() -> None:
+    motion = VehicleMotion(
+        acceleration=(1.0, 2.0, 3.0),
+        angular_velocity=(0.0, 0.0, math.degrees(2.0)),
+        angular_acceleration=(0.0, 0.0, math.degrees(3.0)),
+    )
+    # In cockpit axes omega=-2z, alpha=-3z and the point is at +x.
+    # Tangential=-3y, centripetal=-4x and Coriolis=+8x for v_rel=+2y.
+    acceleration = motion.acceleration_at(
+        (1.0, 0.0, 0.0),
+        relative_velocity=(0.0, 2.0, 0.0),
+        relative_acceleration=(0.5, 1.0, -1.0),
+    )
+    np.testing.assert_allclose(acceleration, [2.5, -3.0, 2.0], atol=1e-12)
+
+
+def test_acceleration_at_projects_pitched_and_rolled_world_motion() -> None:
+    axes = carla_axes((24.0, -37.0, 18.0))
+    forward_acceleration = axes.T @ np.array([4.0, 0.0, 0.0])
+    yaw_rate = axes.T @ np.array([0.0, 0.0, math.degrees(2.0)])
+    roll_acceleration = axes.T @ np.array([math.degrees(3.0), 0.0, 0.0])
+    motion = VehicleMotion(
+        acceleration=tuple(forward_acceleration),
+        angular_velocity=tuple(yaw_rate),
+        angular_acceleration=tuple(roll_acceleration),
+        rotation=(24.0, -37.0, 18.0),
+    )
+    # alpha=+3y and omega=-2z in the right-handed cockpit.
+    np.testing.assert_allclose(
+        motion.acceleration_at((1.0, 0.0, 1.0)), [-1.0, -4.0, -3.0], atol=1e-12
+    )
+
+
+@pytest.mark.parametrize(
+    "field", ["offset", "relative_velocity", "relative_acceleration"]
+)
+def test_acceleration_at_requires_finite_vectors(field: str) -> None:
+    arguments = {"offset": (0.0, 0.0, 0.0), field: (math.nan, 0.0, 0.0)}
+    with pytest.raises(ValueError, match=field):
+        VehicleMotion().acceleration_at(**arguments)

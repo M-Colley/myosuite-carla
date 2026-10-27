@@ -1,5 +1,37 @@
 # Validation record
 
+## Scientific corrections on 2026-10-27
+
+Version 0.1.1 implements the three scientific corrections identified in the integration review. Vehicle contact uses oriented planar rectangles through Shapely 2.2.0. `VehicleFootprint` records length, width, local centre and local yaw. CARLA actors provide resolved bounding boxes. Events, terminal states and penalties share the geometric collision flag. The lead actor receives its next frame pose before the tick. Front trajectories and resolved projected lengths preserve bumper gaps during following analysis.
+
+`VehicleMotion.acceleration_at` computes reference acceleration, tangential acceleration, centripetal acceleration, Coriolis acceleration and relative point acceleration. Embodied human sensing evaluates this expression at the head centre of mass. The configured seat offset locates the vehicle reference point. Analytic checks cover angular acceleration, constant yaw rate, relative translation, head rotation, head centre of mass offsets and pitched or rolled vehicle frames. The body load model retains its documented omission of Coriolis forces and segment rotational inertia.
+
+Paired evaluations retain original source identities through `FollowingTrial.source_group`, scenario replay, resampling, windows and NPZ schema 2. Older archives remain readable. Shared grouping keeps each original source together across human and simulated populations. Evaluation reports retain source identities, fold assignments, classifier seeds and bootstrap settings. Paired intervals resample source means. Invalid alignment and insufficient independent sources raise errors.
+
+The final bridge suite reports **419 passed and 4 live tests skipped** ([output](evidence/scientific-2026-10-27-bridge.txt), [JUnit](evidence/scientific-2026-10-27-bridge.xml)). The minimum MuJoCo 3.6 suite reports **69 passed** ([output](evidence/scientific-2026-10-27-minimum.txt)). The isolated embodied human suite reports **452 passed and 24 optional tests skipped**. Ruff, formatting, mypy, the Python 3.10 mypy target and both package builds pass. The [environment record](evidence/scientific-2026-10-27-environment.json) includes source hashes and versions. The environment uses the MyoSuite `dev` revision and fatigue fix recorded below. Embodied human includes current `main` revision `ff631bf40a8feaee653966cdde6cd032ad3d1495`.
+
+Lead relevance uses lateral footprint extents and forward ordering in lane coordinates. The 100 seed default sampler check retains every same lane lead around curves. World polygons determine contact. This separation preserves both curved road following and adjacent lane passing.
+
+Hosted CI for the earlier bridge revision exposed platform differences in MuJoCo enum comparisons and NumPy typing. Recording now converts joint and actuator enums to builtin integers. A regression preserves both expected coordinates and muscle arrays under int convertible enum objects. Percentile spread uses indexed array elements. The Python 3.10 type target passes.
+
+The final commands were run from this repository, with the human suite run from its isolated sibling worktree:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe -m pytest tests -q --junitxml=test-results/scientific-improvements-suite.xml
+.venv-min/Scripts/python.exe -m pytest tests/test_scenario.py tests/test_carla_scenario.py tests/test_driving_env.py tests/test_vehicle_loads.py -q
+.venv/Scripts/python.exe -m ruff check src tests examples
+.venv/Scripts/python.exe -m ruff format --check src tests examples
+.venv/Scripts/python.exe -m mypy src/myosuite_carla --ignore-missing-imports --follow-imports=skip --python-version 3.10
+.venv/Scripts/python.exe -m build
+```
+
+UE5.8 live validation failed before any scenario ran. The local command returned connection refused at `127.0.0.1:2000` ([attempt](evidence/scientific-2026-10-27-ue58-attempt.json)). The [preflight](evidence/scientific-2026-10-27-ue58-preflight.json) records no listener and missing CARLA project binaries. The prepared engine is 5.8.0 at `0703595a`, and the CARLA source is `ee5859b4`. The installed client is the earlier 0.10.0 wheel. A matching UE5.8 server and client remain required. The [acquisition record](evidence/scientific-2026-10-27-runtime-acquisition.json) retains the official release and workflow checks.
+
+```powershell
+.venv/Scripts/python.exe examples/validate_carla.py --host 127.0.0.1 --port 2000 --timeout 5 --target-ref ue58-dev --build-ref unavailable --output artifacts/scientific-ue58-live-attempt.json
+```
+
 ## Integration review on 2026-10-27
 
 The review used Windows, CPython 3.12.13, MuJoCo 3.17.0, NumPy 2.5.4, myo-sim 0.2.3 and Stable-Baselines3 2.9.0. MyoSuite was loaded from current `dev` commit `230f198458b501c423a0892b78da60419ffc49a3` with the fatigue reset fix in commit `37c8b863fe448f8fff2b29eb62a53a269b79d16f` ([upstream PR 575](https://github.com/MyoHub/myosuite/pull/575)). The sibling revisions were embodied-human `9d38317ec9f0e07c5a393212ab5d8fae210f5ac8` and embodied-ui `605862bd551401bfce91afb4afcf280b2bef98fd`.
@@ -24,7 +56,7 @@ $env:PYTHONPATH = (Resolve-Path '../myosuite-dev-review').Path
 
 Five focused tests pass with the minimum MuJoCo 3.6.0. They cover derived state consistency in both driver presets, pedal isolation and steering in both directions. No live CARLA server was started for this review. The four live tests remain disabled. UE5.8 runtime validation remains pending.
 
-Three scientific improvements remain. First, collision detection uses longitudinal gap alone. Adjacent lane passing therefore needs explicit vehicle footprints and lane occupancy. Second, embodied-human's `BodySensing.head_motion` omits rotational acceleration terms at the head's position. Its vestibular inputs need a shared rigid body kinematics calculation. Third, paired human and simulated trials need shared source identifiers during grouped evaluation. This prevents the same driving context from entering both training and test partitions.
+The subsequent scientific corrections address vehicle footprints, rotational head acceleration and shared source grouping. Their implementation and validation are recorded above.
 
 ## Earlier validation
 

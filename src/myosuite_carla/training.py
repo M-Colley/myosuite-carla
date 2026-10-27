@@ -40,7 +40,6 @@ from .driver_models import ReflexDriver, ReflexDriverConfig
 from .fullbody import DriverIntent
 from .ngsim import FollowingTrial, resample_following
 from .scenario import (
-    VEHICLE_LENGTH,
     Lane,
     LaneChange,
     LeadVehicle,
@@ -111,6 +110,7 @@ def scenario_from_trial(
         start_speed=float(trial.speed[0]),
         target_speed=float(top_speed),
         duration=trial.duration,
+        source_group=trial.group_id or None,
         lead=LeadVehicle(
             gap=float(trial.gap[0]),
             speed=float(trial.leader_speed[0]),
@@ -456,7 +456,16 @@ class DrivingTaskWrapper(gym.Wrapper[Any, Any, Any, Any]):
         self._filtered = np.zeros(len(self.fields))
         self._history = {
             key: []
-            for key in ("time", "s", "lead_s", "lane", "speed_error", "gap", "ttc")
+            for key in (
+                "time",
+                "s",
+                "lead_s",
+                "lead_length",
+                "lane",
+                "speed_error",
+                "gap",
+                "ttc",
+            )
         }
         # The start state opens the trial, as a human trial opens with it.
         self._record(env.monitor.state, env)
@@ -536,8 +545,9 @@ class DrivingTaskWrapper(gym.Wrapper[Any, Any, Any, Any]):
     def _record(self, state: dict[str, float], env: Any) -> None:
         history = self._history
         history["time"].append(state["time"])
-        history["s"].append(state["s_m"])
-        history["lead_s"].append(state.get("lead_s_m", math.nan))
+        history["s"].append(state["ego_front_s_m"])
+        history["lead_s"].append(state["lead_front_s_m"])
+        history["lead_length"].append(state["lead_length_m"])
         driving = not state["automation"]
         history["lane"].append(state["lane_offset_m"] if driving else math.nan)
         target = max(state["target_speed_mps"], 1.0)
@@ -554,16 +564,27 @@ class DrivingTaskWrapper(gym.Wrapper[Any, Any, Any, Any]):
         if history["time"][-1] - history["time"][start] < self.style_window - 1e-9:
             return None
         self._window_start = len(history["time"]) - 1
-        window = slice(start, len(history["time"]))
+        return self._following_trial(env, slice(start, len(history["time"])))
+
+    def _following_trial(self, env: Any, window: slice) -> FollowingTrial | None:
+        """Resample front trajectories using the resolved lead footprint."""
+        history = self._history
         lead: NDArray[np.float64] = np.asarray(history["lead_s"][window], dtype=float)
-        if not np.all(np.isfinite(lead)):
+        lengths: NDArray[np.float64] = np.asarray(
+            history["lead_length"][window], dtype=float
+        )
+        if not np.all(np.isfinite(lead)) or not np.all(lengths > 0):
             return None
+        length = float(lengths[-1])
+        # Geometry may resolve after reset; retain the same bumper rear path.
+        fronts = lead - lengths + length
         return resample_following(
             history["time"][window],
             history["s"][window],
-            lead.tolist(),
-            VEHICLE_LENGTH,
+            fronts.tolist(),
+            length,
             driver=env.scenario.name,
+            source_group=env.scenario.source_group,
         )
 
     def _episode_report(self, info: dict[str, Any]) -> dict[str, Any]:
@@ -596,11 +617,7 @@ class DrivingTaskWrapper(gym.Wrapper[Any, Any, Any, Any]):
             and np.all(np.isfinite(lead_s))
             and len(lead_s) > 30
         ):
-            report["following_trial"] = resample_following(
-                history["time"],
-                history["s"],
-                lead_s.tolist(),
-                VEHICLE_LENGTH,
-                driver=env.scenario.name,
-            )
+            trial = self._following_trial(env, slice(None))
+            if trial is not None:
+                report["following_trial"] = trial
         return report

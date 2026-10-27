@@ -60,6 +60,63 @@ def test_spaces_names_and_reset_contract(driver: Any) -> None:
         env.step(np.zeros(5))
     # Out-of-range actions are clipped to the motor program's limits.
     assert env.intent([2.0, -1.0, 0.9, 0, 0, 0]).steer == 0.5
+
+
+def test_collision_events_termination_and_reward_share_footprint_geometry(
+    driver: Any,
+) -> None:
+    from myosuite_carla.driving_env import FullBodyDrivingEnv
+    from myosuite_carla.scenario import LeadVehicle, Scenario
+
+    env = FullBodyDrivingEnv(
+        Scenario(lead=LeadVehicle(gap=10.0, speed=0.0, brake_time=None)), driver=driver
+    )
+    try:
+        for x, y, collision in (
+            (19.8, 3.5, False),
+            (30.0, 0.0, False),
+            (16.0, 0.0, True),
+        ):
+            env.reset(seed=0)
+            env.vehicle.reset(location=(x, y, 0.0))
+            _, _, terminated, _, info = env.step(np.zeros(6))
+            assert info["collision"] is collision
+            assert terminated is collision
+            assert info["reward_terms"]["collision"] == -env.task.collision * collision
+            assert (
+                any(event["type"] == "collision" for event in info["events"])
+                is collision
+            )
+            assert not info["off_road"]
+    finally:
+        env.close()
+
+
+def test_live_actor_geometry_reaches_reset_and_recording_metadata(driver: Any) -> None:
+    from types import SimpleNamespace
+
+    from myosuite_carla.driving_env import FullBodyDrivingEnv
+    from myosuite_carla.scenario import LeadVehicle, Scenario
+
+    recorder = DriveRecorder(body=False)
+    env = FullBodyDrivingEnv(
+        Scenario(lead=LeadVehicle()), driver=driver, recorder=recorder
+    )
+    env.vehicle.vehicle = SimpleNamespace(
+        bounding_box=SimpleNamespace(
+            extent=SimpleNamespace(x=3.0, y=1.0),
+            location=SimpleNamespace(x=0.5, y=0.0),
+            rotation=SimpleNamespace(yaw=0.0),
+        )
+    )
+    try:
+        _, reset_info = env.reset(seed=0)
+        assert reset_info["vehicle_footprints"]["ego"]["length"] == 6.0
+        assert env.monitor.state["gap_m"] == pytest.approx(env.scenario.lead.gap)
+        env.step(np.zeros(6))
+        assert recorder.metadata["vehicle_footprints"]["ego"]["center"] == (0.5, 0.0)
+    finally:
+        env.close()
     for action in (
         0.2,
         [0.2],

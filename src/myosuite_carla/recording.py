@@ -407,24 +407,23 @@ class DriveRecorder:
         self, model: mujoco.MjModel, data: mujoco.MjData, row: dict[str, Any]
     ) -> None:
         if self._body_layout is None:
-            scalar = (mujoco.mjtJoint.mjJNT_HINGE, mujoco.mjtJoint.mjJNT_SLIDE)
+            hinge = int(mujoco.mjtJoint.mjJNT_HINGE)
+            scalar = (hinge, int(mujoco.mjtJoint.mjJNT_SLIDE))
             joints = [
                 index
                 for index in range(model.njnt)
-                if model.jnt_type[index] in scalar
+                if int(model.jnt_type[index]) in scalar
                 and not _is_mechanism_joint(model.joint(index).name)
             ]
             muscles = [
                 index
                 for index in range(model.nu)
-                if model.actuator_dyntype[index] == mujoco.mjtDyn.mjDYN_MUSCLE
+                if int(model.actuator_dyntype[index]) == int(mujoco.mjtDyn.mjDYN_MUSCLE)
             ]
             self._body_layout = (
                 tuple(model.joint(index).name for index in joints),
                 tuple(
-                    "hinge"
-                    if model.jnt_type[index] == mujoco.mjtJoint.mjJNT_HINGE
-                    else "slide"
+                    "hinge" if int(model.jnt_type[index]) == hinge else "slide"
                     for index in joints
                 ),
                 np.asarray(model.jnt_qposadr[joints], dtype=int),

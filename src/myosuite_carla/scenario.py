@@ -16,16 +16,61 @@ from __future__ import annotations
 
 import math
 from collections.abc import Callable, Sequence
-from dataclasses import dataclass, field, replace
+from copy import copy
+from dataclasses import asdict, dataclass, field, replace
+from functools import cached_property
 from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
+from shapely import Polygon, box
+from shapely.affinity import rotate, translate
 
 from .controls import VehicleCommand
 
-#: Ego and lead bumper-to-reference distance used for gaps, metres.
+#: Default vehicle length, metres.
 VEHICLE_LENGTH = 4.8
+
+
+@dataclass(frozen=True)
+class VehicleFootprint:
+    """Planar vehicle bounding box relative to its telemetry reference point.
+
+    Args:
+        length: Box length in metres.
+        width: Box width in metres.
+        center: Box centre in local forward/right coordinates, metres.
+        yaw: Box rotation relative to the vehicle heading, degrees.
+    """
+
+    length: float = VEHICLE_LENGTH
+    width: float = 2.0
+    center: tuple[float, float] = (0.0, 0.0)
+    yaw: float = 0.0
+
+    def __post_init__(self) -> None:
+        for name in ("length", "width"):
+            value = getattr(self, name)
+            if isinstance(value, bool) or not math.isfinite(value) or value <= 0:
+                raise ValueError(f"{name} must be finite and positive")
+        center = tuple(float(value) for value in self.center)
+        if len(center) != 2 or not all(math.isfinite(value) for value in center):
+            raise ValueError("center must contain two finite coordinates")
+        if not math.isfinite(self.yaw):
+            raise ValueError("yaw must be finite")
+        object.__setattr__(self, "center", center)
+
+    @cached_property
+    def _local(self) -> Polygon:
+        rectangle = box(
+            -self.length / 2, -self.width / 2, self.length / 2, self.width / 2
+        )
+        return translate(rotate(rectangle, self.yaw, origin=(0, 0)), *self.center)
+
+    def polygon(self, pose: tuple[float, float, float]) -> Polygon:
+        """Return the footprint at a world ``(x, y, yaw_deg)`` pose."""
+        x, y, yaw = pose
+        return translate(rotate(self._local, yaw, origin=(0, 0)), x, y)
 
 
 @dataclass(frozen=True)
@@ -129,6 +174,7 @@ class LeadVehicle:
             NGSIM. When given, the lead follows them by linear interpolation
             (holding the last speed) instead of the cruise-brake profile, and
             starts at the first sample's speed.
+        footprint: Planar bounding box relative to the lead reference point.
     """
 
     gap: float = 30.0
@@ -139,8 +185,11 @@ class LeadVehicle:
     resume_time: float | None = None
     acceleration: float = 1.5
     profile: tuple[tuple[float, float], ...] = ()
+    footprint: VehicleFootprint = field(default_factory=VehicleFootprint)
 
     def __post_init__(self) -> None:
+        if not isinstance(self.footprint, VehicleFootprint):
+            raise TypeError("footprint must be a VehicleFootprint")
         for name in ("gap", "speed", "deceleration", "brake_to", "acceleration"):
             value = getattr(self, name)
             if not math.isfinite(value) or value < 0:
@@ -219,7 +268,9 @@ class Scenario:
         takeover: Optional automation-to-driver takeover.
         lane_changes: Instructions to move to an offset lane.
         road_half_width: Drivable half-width around the lane centre, metres;
-            the vehicle is off the road when its centre is within 1 m of it.
+            any footprint portion outside it counts as off the road.
+        ego_footprint: Planar bounding box relative to the ego reference point.
+        source_group: Shared source context for paired human and simulated runs.
     """
 
     name: str = "free"
@@ -232,6 +283,16 @@ class Scenario:
     takeover: TakeoverRequest | None = None
     lane_changes: tuple[LaneChange, ...] = ()
     road_half_width: float = 5.25
+    ego_footprint: VehicleFootprint = field(default_factory=VehicleFootprint)
+    source_group: str | None = None
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.ego_footprint, VehicleFootprint):
+            raise TypeError("ego_footprint must be a VehicleFootprint")
+        if self.source_group is not None and (
+            not isinstance(self.source_group, str) or not self.source_group.strip()
+        ):
+            raise ValueError("source_group must be a nonempty string or None")
 
     def start_pose(self) -> tuple[float, float, float]:
         """Return the ego start ``(x, y, yaw_deg)``."""
@@ -298,10 +359,21 @@ class ScenarioMonitor:
     Call :meth:`reset` with the start telemetry, then :meth:`update` once per
     frame with the new telemetry and the measured driver inputs. Events are
     appended to :attr:`events` as dictionaries with ``time`` and ``type``.
+    Collision reports sampled planar contact, with a 1 nm numerical tolerance.
+    The signed ``gap_m`` uses lane coordinates and projected bumper extents.
+    ``lead_present`` requires an ahead box with overlapping lateral lane extents.
+    Headway and TTC are infinite when that condition does not hold.
+    ``ego_front_s_m`` and ``lead_front_s_m`` add projected front extents to
+    reference arclengths. ``lead_length_m`` is the projected box length.
     """
 
     def __init__(self, scenario: Scenario) -> None:
         self.scenario = scenario
+        self.ego_footprint = scenario.ego_footprint
+        self.lead_footprint = (
+            scenario.lead.footprint if scenario.lead else VehicleFootprint()
+        )
+        self._telemetry: Any = None
         self.events: list[dict[str, Any]] = []
         self.time = 0.0
         self._lead_s = 0.0
@@ -311,6 +383,39 @@ class ScenarioMonitor:
         self._requested = False
         self._minimal_risk = False
         self.state: dict[str, float] = {}
+
+    @property
+    def footprints(self) -> dict[str, dict[str, Any]]:
+        """Return the resolved footprints for recording and replay."""
+        return {"ego": asdict(self.ego_footprint), "lead": asdict(self.lead_footprint)}
+
+    def set_footprints(
+        self,
+        *,
+        ego: VehicleFootprint | None = None,
+        lead: VehicleFootprint | None = None,
+    ) -> None:
+        """Resolve live geometry, preserving the initial gap at scenario time zero."""
+        for name, footprint in (("ego_footprint", ego), ("lead_footprint", lead)):
+            if footprint is not None:
+                if not isinstance(footprint, VehicleFootprint):
+                    raise TypeError("footprints must be VehicleFootprint instances")
+                setattr(self, name, footprint)
+        if self._telemetry is not None:
+            if self.time == 0.0 and self.scenario.lead is not None:
+                self._place_lead(self._telemetry)
+            self.state = self._measure(self._telemetry)
+
+    def _place_lead(self, telemetry: Any) -> None:
+        lead = self.scenario.lead
+        if lead is None:
+            return
+        s, _, lane_yaw = self.scenario.lane.project(*telemetry.location[:2])
+        front = self.ego_footprint.polygon(
+            (0.0, 0.0, telemetry.rotation[1] - lane_yaw)
+        ).bounds[2]
+        rear = -self.lead_footprint._local.bounds[0]
+        self._lead_s = s + front + rear + lead.gap
 
     def _event(self, kind: str, **details: Any) -> None:
         self.events.append({"time": round(self.time, 6), "type": kind, **details})
@@ -323,9 +428,8 @@ class ScenarioMonitor:
         self.automation = scenario.takeover is not None
         self._requested = self._minimal_risk = False
         self._target_offset = 0.0
-        s, _, _ = scenario.lane.project(*telemetry.location[:2])
         if scenario.lead is not None:
-            self._lead_s = s + VEHICLE_LENGTH + scenario.lead.gap
+            self._place_lead(telemetry)
             self._lead_speed = (
                 scenario.lead.profile_speed(0.0)
                 if scenario.lead.profile
@@ -334,6 +438,7 @@ class ScenarioMonitor:
         self._event("scenario_start", scenario=scenario.name)
         if self.automation:
             self._event("automation_engaged")
+        self._telemetry = telemetry
         self.state = self._measure(telemetry)
         return self.state
 
@@ -401,8 +506,9 @@ class ScenarioMonitor:
             ):
                 self._minimal_risk = True
                 self._event("minimal_risk_manoeuvre")
+        self._telemetry = telemetry
         self.state = self._measure(telemetry)
-        if self.state["gap_m"] < 0 and not any(
+        if self.state["collision"] and not any(
             event["type"] == "collision" for event in self.events
         ):
             self._event("collision", other="lead")
@@ -416,18 +522,28 @@ class ScenarioMonitor:
         velocity = np.asarray(telemetry.velocity, dtype=float)
         heading = math.radians(yaw)
         speed = float(velocity[0] * math.cos(heading) + velocity[1] * math.sin(heading))
+        local_bounds = self.ego_footprint.polygon((0.0, 0.0, yaw - lane_yaw)).bounds
         state = {
             "time": self.time,
             "s_m": s,
+            "ego_front_s_m": s + local_bounds[2],
             "lane_offset_m": offset - self._target_offset,
             "heading_error_deg": _wrap(yaw - lane_yaw),
             "speed_mps": speed,
             "target_speed_mps": scenario.target_speed,
             "target_offset_m": self._target_offset,
-            "off_road": float(abs(offset) > scenario.road_half_width - 1.0),
-            "lead_present": float(scenario.lead is not None),
+            "off_road": float(
+                offset + local_bounds[1] < -scenario.road_half_width
+                or offset + local_bounds[3] > scenario.road_half_width
+            ),
+            "lead_present": 0.0,
+            "lead_exists": float(scenario.lead is not None),
+            "collision": 0.0,
             "gap_m": math.inf,
             "lead_speed_mps": 0.0,
+            "lead_s_m": math.inf,
+            "lead_front_s_m": math.inf,
+            "lead_length_m": 0.0,
             "time_to_collision_s": math.inf,
             "time_headway_s": math.inf,
             "automation": float(self.automation),
@@ -435,14 +551,36 @@ class ScenarioMonitor:
             "minimal_risk": float(self._minimal_risk),
         }
         if scenario.lead is not None:
-            gap = self._lead_s - s - VEHICLE_LENGTH
+            pose = self.lead_pose()
+            assert pose is not None
+            ego_shape = self.ego_footprint.polygon((x, y, yaw))
+            lead_shape = self.lead_footprint.polygon(pose)
+            lead_local_bounds = self.lead_footprint._local.bounds
+            in_path = (
+                lead_local_bounds[1] <= offset + local_bounds[3] + 1e-9
+                and offset + local_bounds[1] <= lead_local_bounds[3] + 1e-9
+                and self._lead_s + 0.5 * sum(lead_local_bounds[::2])
+                >= s + 0.5 * sum(local_bounds[::2])
+            )
+            front = local_bounds[2]
+            rear = -lead_local_bounds[0]
+            gap = self._lead_s - s - front - rear
             closing = speed - self._lead_speed
             state.update(
+                lead_present=float(in_path),
+                # One nanometre admits contact despite coordinate roundoff.
+                collision=float(ego_shape.distance(lead_shape) <= 1e-9),
                 gap_m=gap,
                 lead_speed_mps=self._lead_speed,
                 lead_s_m=self._lead_s,
-                time_to_collision_s=gap / closing if closing > 1e-6 else math.inf,
-                time_headway_s=gap / speed if speed > 0.1 else math.inf,
+                lead_front_s_m=self._lead_s + lead_local_bounds[2],
+                lead_length_m=lead_local_bounds[2] - lead_local_bounds[0],
+                time_to_collision_s=max(gap, 0.0) / closing
+                if in_path and closing > 1e-6
+                else math.inf,
+                time_headway_s=max(gap, 0.0) / speed
+                if in_path and speed > 0.1
+                else math.inf,
             )
         return state
 
@@ -451,6 +589,16 @@ class ScenarioMonitor:
         if self.scenario.lead is None:
             return None
         return self.scenario.lane.pose(self._lead_s)
+
+    def preview_lead_pose(self, dt: float) -> tuple[float, float, float] | None:
+        """Predict the next lead pose without advancing scenario state or events."""
+        if isinstance(dt, bool) or not math.isfinite(dt) or dt <= 0:
+            raise ValueError("dt must be finite and positive")
+        future = copy(self)
+        future.events = list(self.events)
+        future.time += dt
+        future._advance_lead(dt)
+        return future.lead_pose()
 
     def view_angle(self, telemetry: Any, distance: float) -> float:
         """Angle in radians to the target lane centre ``distance`` m ahead.

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import replace
 from pathlib import Path
 
 import numpy as np
@@ -115,3 +116,54 @@ def test_trials_split_into_windows_of_equal_length() -> None:
     assert len(windows) == 4 and {len(w.time) for w in windows} == {51}
     assert windows[1].time[0] == 0.0 and windows[1].time[-1] == pytest.approx(5.0)
     np.testing.assert_array_equal(windows[1].gap, trial.gap[50:101])
+
+
+def test_source_groups_survive_windows_archives_and_driver_splits(
+    tmp_path: Path,
+) -> None:
+    time = np.arange(0.0, 20.0 + 1e-9, 0.02)
+    trials = [
+        resample_following(
+            time,
+            8.0 * time,
+            20.0 + 8.0 * time,
+            4.8,
+            driver=f"simulation:{i}",
+            source_group=f"human:{i // 2}",
+        )
+        for i in range(6)
+    ]
+    windows = split_windows(trials, 5.0)
+    assert [window.group_id for window in windows] == [
+        trial.group_id for trial in trials for _ in range(4)
+    ]
+    restored = load_trials(save_trials(windows, tmp_path / "paired.npz"))
+    assert [trial.group_id for trial in restored] == [
+        trial.group_id for trial in windows
+    ]
+    train, test = split_by_driver(restored, test_fraction=0.34, seed=1)
+    assert {trial.group_id for trial in train}.isdisjoint(
+        trial.group_id for trial in test
+    )
+    assert len({trial.group_id for trial in test}) == 1
+    unpaired = replace(trials[0], source_group=None)
+    assert unpaired.group_id == unpaired.driver
+
+
+def test_legacy_trial_archive_uses_driver_as_source_group(tmp_path: Path) -> None:
+    time = np.arange(21, dtype=float) / 10
+    arrays = {
+        field: np.asarray([time])
+        for field in (
+            "time",
+            "position",
+            "speed",
+            "acceleration",
+            "gap",
+            "leader_speed",
+        )
+    }
+    path = tmp_path / "legacy.npz"
+    np.savez(path, drivers=np.asarray(["human:1"]), **arrays)
+    restored = load_trials(path)
+    assert restored[0].group_id == "human:1"

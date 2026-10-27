@@ -1,0 +1,40 @@
+{
+  "checked_utc": "2026-10-27T17:32:38.9432364Z",
+  "memory_kib": {
+    "free_commit": 20887764,
+    "total_commit": 76844676,
+    "total_physical": 66811180,
+    "free_physical": 37339608
+  },
+  "disks": [
+    {
+      "Name": "C",
+      "Free": 47333761024,
+      "Used": 1952002871296
+    },
+    {
+      "Name": "D",
+      "Free": 152779128832,
+      "Used": 4848066457600
+    }
+  ],
+  "listener": [],
+  "carla_paths": [
+    {
+      "path": "C:/carla-ue58/UnrealEngine5_carla/Engine/Binaries/Win64/UnrealEditor.exe",
+      "exists": true
+    },
+    {
+      "path": "C:/carla-ue58/carla-myosuite/Unreal/CarlaUnreal/Binaries/Win64/CarlaUnreal.exe",
+      "exists": false
+    },
+    {
+      "path": "C:/carla-ue58/carla-myosuite/Unreal/CarlaUnreal/Binaries/Win64/UnrealEditor-CarlaUnreal.dll",
+      "exists": false
+    },
+    {
+      "path": "C:/carla-ue58/carla-myosuite/Build/Windows/x64/Unreal/CarlaUnreal/Binaries/Win64/CarlaUnreal.exe",
+      "exists": false
+    }
+  ]
+}
