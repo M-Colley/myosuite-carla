@@ -401,6 +401,7 @@ def main() -> int:
                 "image_size_x": "1280",
                 "image_size_y": "720",
                 "fov": "90",
+                # Capture each tick without a second floating point time threshold.
                 "sensor_tick": "0",
             }.items():
                 rgb.set_attribute(name, value)
@@ -438,7 +439,7 @@ def main() -> int:
                 title += " with SuRT"
             video = Video(args.output, driver, title)
             stack.callback(cleanup, "video", video.close)
-            for step in range(round(args.seconds / env.dt)):
+            for step in range(math.ceil(args.seconds / env.dt)):
                 intent = agent.act()
                 _, _, terminated, truncated, info = env.step(intent)
                 telemetry = session.snapshot()
@@ -448,9 +449,14 @@ def main() -> int:
                         driver.data.qpos,
                         driver.data.qvel,
                         driver.data.act,
+                        telemetry.location,
+                        telemetry.rotation,
+                        telemetry.velocity,
+                        telemetry.acceleration,
+                        telemetry.angular_velocity,
                     )
                 ):
-                    raise RuntimeError("The MuJoCo body contains a nonfinite state")
+                    raise RuntimeError("The simulation contains a nonfinite state")
                 applied = vehicle.get_control()
                 applied_controls = {
                     name: float(getattr(applied, name))
@@ -461,9 +467,14 @@ def main() -> int:
                     for name, value in applied_controls.items()
                 ):
                     raise RuntimeError("Applied CARLA controls differ from the command")
-                image = images.get(timeout=60)
-                while image.frame < telemetry.frame:
+                try:
                     image = images.get(timeout=60)
+                    while image.frame < telemetry.frame:
+                        image = images.get(timeout=60)
+                except queue.Empty as error:
+                    raise TimeoutError(
+                        f"No camera image for CARLA frame {telemetry.frame}"
+                    ) from error
                 if image.frame != telemetry.frame:
                     raise RuntimeError("CARLA camera and vehicle frames differ")
                 report["camera_frames_matched"] += 1
@@ -480,12 +491,12 @@ def main() -> int:
                         "gaze_degrees": agent.log.gaze[-1],
                         "belief_sd_m": agent.log.belief_sd[-1],
                         "head_acceleration_mps2": agent.log.head_acceleration[-1],
-                        "head_rate_rps": agent.log.head_rate[-1],
+                        "head_rate_rad_s": agent.log.head_rate[-1],
                         "fatigue": agent.log.fatigue[-1],
                         "mechanics": driver.measurement(),
                     }
                 )
-                if step % 2 == 1:
+                if step % 2 == 1 or terminated or truncated:
                     video.frame(image, env, agent, info)
                 if terminated or truncated:
                     break
@@ -500,6 +511,7 @@ def main() -> int:
                 events=monitor.events,
                 glance_metrics=agent.log.glance_metrics(),
                 task_summary=task.result.summary() if task is not None else None,
+                vehicle_footprints=monitor.footprints,
             )
             report["status"] = (
                 "completed"

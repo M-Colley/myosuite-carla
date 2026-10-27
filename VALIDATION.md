@@ -1,5 +1,39 @@
 # Validation record
 
+## Local embodied human video on 2026-10-27
+
+The local `C:/Users/localadmin/Desktop/embodied-human` project drove a live CARLA 0.10.0 vehicle through `AttentiveDriver`. Two independent 12 second episodes used seed 0 and the SuRT visual search task. The recording combines the CARLA chase camera, MuJoCo body, measured controls, gaze state, and task display. The resulting local video is `artifacts/embodied-human-live/embodied-human-carla-0.10.mp4` (26 seconds, 1920 by 1080 pixels, 25 frames per second). Each episode starts with a one second title card.
+
+The [evidence manifest](evidence/embodied-human-0.10-video.json) identifies the actual import paths, source hashes, revisions, versions, runtime build metadata, video checksum, and measured outcomes. The [recording archive](evidence/embodied-human-0.10-recordings.zip) contains both complete frame reports, CSV recordings, source patches, the exact recording script, failure evidence, and cleanup records. The recording script is preserved in commit `f578745452ea0ec24dda7f396280b4c5f5adfcdc`. Subsequent changes handle fractional episode durations, label head angular velocity explicitly in radians per second, and include resolved vehicle footprints directly in the JSON report. A live 2.01 second request completed 101 simulation frames in 2.02 seconds after this correction.
+
+The server and Python client both reported `0.10.0`. The runtime was `C:/Users/localadmin/Desktop/Carla-0.10.0-Win64-Shipping`. Its `VERSION` file identifies CARLA revision `ada75f920642e18cace0a9f85ecf9d4077ddb531`, content revision `a32a1930bc319caba3e0cde845e46e23b9136e81`, and Unreal revision `6cf20383302899026a5e777219ba4206afe47d38`. This runtime uses UE5.5. MyoSuite used development base `230f198458b501c423a0892b78da60419ffc49a3` with the fatigue correction in `37c8b863fe448f8fff2b29eb62a53a269b79d16f`. The human source used base `ff631bf40a8feaee653966cdde6cd032ad3d1495` with the local head sensing correction. Its source patch and hashes are retained in the archive.
+
+Actual commands from the repository root were:
+
+```powershell
+$runtime = 'C:/Users/localadmin/Desktop/Carla-0.10.0-Win64-Shipping'
+Start-Process -FilePath "$runtime/CarlaUnreal.exe" -WorkingDirectory $runtime -ArgumentList '-RenderOffScreen','-nosound','-unattended','-notrace','-quality-level=Epic','-ResX=1280','-ResY=720','-carla-rpc-port=2000' -WindowStyle Hidden
+$env:PYTHONPATH = (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe examples/record_embodied_human.py --human-repo C:/Users/localadmin/Desktop/embodied-human --fast --scenario lane_change --seconds 12 --task surt --seed 0 --spawn 105 --output artifacts/embodied-human-live/lane-change.mp4 --record artifacts/embodied-human-live/lane-change-recording
+.venv/Scripts/python.exe examples/record_embodied_human.py --human-repo C:/Users/localadmin/Desktop/embodied-human --fast --scenario lead_brake --seconds 12 --task surt --seed 0 --spawn 105 --output artifacts/embodied-human-live/lead-brake.mp4 --record artifacts/embodied-human-live/lead-brake-recording
+```
+
+Both episodes completed 600 consecutive simulation frames at 50 Hz. Each camera frame matched the corresponding vehicle frame. Every applied throttle, brake, and steering control matched its command within `1e-5`. The fast body configuration retained 114 muscles and received vehicle loads. CARLA collision sensors recorded zero contacts. The footprint monitor recorded zero collisions and zero violations of the configured road corridor. All actors and captured world settings were restored. A final RPC probe confirmed an empty vehicle and sensor set and asynchronous simulation. The server processes started for this recording were then stopped.
+
+| Measured outcome | Lane change response | Lead braking |
+| --- | --- | --- |
+| Final speed | 8.670 m/s | 0.653 m/s |
+| Final lateral target error | 0.787 m | 0.071 m |
+| Maximum absolute lateral target error | 3.217 m | 0.106 m |
+| Minimum bumper gap | No lead vehicle | 2.659 m |
+| Peak measured brake input | 0.0145 | 0.1691 |
+
+The lane change retained a residual error at episode end. Its lateral position changed from approximately 0 m to minus 2.713 m against a minus 3.5 m target. Its footprint still crossed the assumed adjacent lane boundary at 12 seconds. In the braking episode, the lead began braking at 4 seconds. Ego speed decreased from 7.826 m/s at that event to 0.653 m/s at episode end. The vehicle remained moving. These results warrant a comparison across multiple seeds with and without the secondary task before changing driver parameters.
+
+Road perception used the human project's parametric geometry interface. The chase camera provided the video output. The lead actor followed a scripted trajectory. Gaze came from the attention model, and the MuJoCo head remained posture constrained. Road departure checks used a configured corridor of plus or minus 5.25 m. These results establish seeded integration behavior. Comparison with measured human driving remains required for human validity. UE5.8 live validation remains pending.
+
+The first camera attempt failed after one frame because a `sensor_tick` of 0.02 seconds skipped a capture. A zero interval now requests capture on every simulation tick. The retained failed report records the camera timeout and successful cleanup. A separate two second recording passed 100 aligned frames after the correction. The full bridge regression suite then passed 421 tests with four opt in live tests skipped. Ruff, mypy, and both distribution builds passed. The two video episodes provide the separate live evidence.
+
 ## Scientific corrections on 2026-10-27
 
 Version 0.1.1 implements the three scientific corrections identified in the integration review. Vehicle contact uses oriented planar rectangles through Shapely 2.2.0. `VehicleFootprint` records length, width, local centre and local yaw. CARLA actors provide resolved bounding boxes. Events, terminal states and penalties share the geometric collision flag. The lead actor receives its next frame pose before the tick. Front trajectories and resolved projected lengths preserve bumper gaps during following analysis.
