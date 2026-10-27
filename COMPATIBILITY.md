@@ -22,6 +22,8 @@ compatible version may have a different API. The standalone package itself
 supports Python 3.10+, MuJoCo 3.6+ and Gymnasium 1.0 through 1.2; your CARLA wheel
 may restrict the Python minor version and platform further.
 
+The 2026-10-27 integration review also checked current MyoSuite `dev` commit `230f198458b501c423a0892b78da60419ffc49a3`. The final integration tests include the fatigue reset fix from [MyoSuite PR 575](https://github.com/MyoHub/myosuite/pull/575). Embodied human driving and embodied UI composition use their public CPU APIs. Vehicle adapters restore the initial surrogate pose and speed on reset. `VehicleSessionEngine` requires an explicit `reset_vehicle(session, seed, options)` callback for live vehicle resets.
+
 ## Install the matching client
 
 Build the server and Python client from the same CARLA checkout, or use the

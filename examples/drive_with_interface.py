@@ -20,6 +20,7 @@ from __future__ import annotations
 import argparse
 import json
 import time
+from contextlib import ExitStack
 from dataclasses import replace
 from pathlib import Path
 from typing import Any
@@ -74,62 +75,63 @@ def main() -> int:
         feedback=(Route("lights.left_blinker", "lamp.on"),),
     )
     scenario = SCENARIOS["free"]()
-    cleanup: list[Any] = []
+    cleanup = ExitStack()
     report: dict[str, Any] = {"backend": args.backend}
     kwargs: dict[str, Any] = {}
-    if args.backend == "carla":
-        import carla
-
-        client = carla.Client(args.host, args.port or 2000)
-        client.set_timeout(20.0)
-        world = client.get_world()
-        spawn = world.get_map().get_spawn_points()[args.spawn]
-        from myosuite_carla import CarlaSession
-        from myosuite_carla.carla_scenario import lane_from_carla, teleport
-
-        length = scenario.duration * max(scenario.target_speed, 5.0) + 120.0
-        scenario = replace(
-            scenario, lane=lane_from_carla(world.get_map(), spawn, length=length)
-        )
-        vehicle = world.spawn_actor(
-            world.get_blueprint_library().find(args.blueprint), spawn
-        )
-
-        session = CarlaSession(
-            client,
-            vehicle,
-            SessionConfig(fixed_delta_seconds=config.control_dt),
-            api=carla,
-            own_vehicle=True,
-        )
-        session.start()
-        cleanup.append(session.close)
-        kwargs.update(
-            vehicle=session,
-            hooks=(interface_hook(driver, routes),),
-            reset_vehicle=teleport,
-        )
-        report.update(
-            server_version=client.get_server_version(), map=world.get_map().name
-        )
-    elif args.backend == "unity":
-        from embodied_ui.backends import RemoteEngine
-
-        def lights() -> dict[str, float]:
-            reading = driver.interface_reading()
-            return routes.command(reading).controls if reading is not None else {}
-
-        engine = RemoteEngine(args.host, args.port or 47474, dt=config.control_dt)
-        session = EngineVehicleSession(engine, extra=lights)
-        session.start()
-        cleanup.append(session.close)
-        kwargs.update(vehicle=session, reset_vehicle=lambda v, s: None)
-        report.update(engine=engine.engine_name)
-    env = FullBodyDrivingEnv(scenario, driver=driver, **kwargs)
-    policy = ReflexDriver(env.dt)
-    rows = []
-    started = time.perf_counter()
     try:
+        if args.backend == "carla":
+            import carla
+
+            client = carla.Client(args.host, args.port or 2000)
+            client.set_timeout(20.0)
+            world = client.get_world()
+            spawn = world.get_map().get_spawn_points()[args.spawn]
+            from myosuite_carla import CarlaSession
+            from myosuite_carla.carla_scenario import lane_from_carla, teleport
+
+            length = scenario.duration * max(scenario.target_speed, 5.0) + 120.0
+            scenario = replace(
+                scenario, lane=lane_from_carla(world.get_map(), spawn, length=length)
+            )
+            vehicle = world.spawn_actor(
+                world.get_blueprint_library().find(args.blueprint), spawn
+            )
+
+            cleanup.callback(vehicle.destroy)
+            session = CarlaSession(
+                client,
+                vehicle,
+                SessionConfig(fixed_delta_seconds=config.control_dt),
+                api=carla,
+                own_vehicle=False,
+            )
+            cleanup.callback(session.close)
+            session.start()
+            kwargs.update(
+                vehicle=session,
+                hooks=(interface_hook(driver, routes),),
+                reset_vehicle=teleport,
+            )
+            report.update(
+                server_version=client.get_server_version(), map=world.get_map().name
+            )
+        elif args.backend == "unity":
+            from embodied_ui.backends import RemoteEngine
+
+            def lights() -> dict[str, float]:
+                reading = driver.interface_reading()
+                return routes.command(reading).controls if reading is not None else {}
+
+            engine = RemoteEngine(args.host, args.port or 47474, dt=config.control_dt)
+            session = EngineVehicleSession(engine, extra=lights)
+            cleanup.callback(session.close)
+            session.start()
+            kwargs.update(vehicle=session, reset_vehicle=lambda v, s: None)
+            report.update(engine=engine.engine_name)
+        env = FullBodyDrivingEnv(scenario, driver=driver, **kwargs)
+        policy = ReflexDriver(env.dt)
+        rows = []
+        started = time.perf_counter()
         env.reset(seed=0)
         policy.reset()
         joint = driver.model.joint("dash/hazard/angle").qposadr[0]
@@ -151,8 +153,7 @@ def main() -> int:
             if terminated or truncated:
                 break
     finally:
-        for close in reversed(cleanup):
-            close()
+        cleanup.close()
     report.update(
         wall_seconds=round(time.perf_counter() - started, 2),
         periods=len(rows),

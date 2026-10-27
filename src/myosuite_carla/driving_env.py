@@ -142,6 +142,9 @@ class TaskConfig:
             value = getattr(self, item.name)
             if not math.isfinite(value) or value < 0:
                 raise ValueError(f"{item.name} must be finite and non-negative")
+        for name in ("safe_headway", "near_distance"):
+            if getattr(self, name) == 0:
+                raise ValueError(f"{name} must be positive")
 
 
 def _reset_surrogate(vehicle: Any, scenario: Scenario) -> None:
@@ -322,13 +325,10 @@ class FullBodyDrivingEnv(gym.Env[NDArray[np.float32], NDArray[np.float32]]):
 
     def intent(self, action: Any) -> DriverIntent:
         """Convert an action vector into a validated driver intent."""
-        values = np.clip(
-            np.asarray(action, dtype=float).reshape(-1),
-            self.action_space.low,
-            self.action_space.high,
-        )
+        values = np.asarray(action, dtype=float)
         if values.shape != (len(ACTION_FIELDS),) or not np.all(np.isfinite(values)):
             raise ValueError(f"action must be {len(ACTION_FIELDS)} finite numbers")
+        values = np.clip(values, self.action_space.low, self.action_space.high)
         return DriverIntent(**dict(zip(ACTION_FIELDS, map(float, values))))
 
     def step(

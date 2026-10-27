@@ -23,6 +23,9 @@ def lane_from_carla(
 
     At junctions the first successor is taken. The width is the start lane's.
     """
+    for name, value in (("length", length), ("step", step)):
+        if not math.isfinite(value) or value <= 0:
+            raise ValueError(f"{name} must be finite and positive")
     waypoint = world_map.get_waypoint(transform.location)
     points = [(waypoint.transform.location.x, waypoint.transform.location.y)]
     travelled = 0.0

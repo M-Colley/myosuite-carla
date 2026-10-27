@@ -1,5 +1,33 @@
 # Validation record
 
+## Integration review on 2026-10-27
+
+The review used Windows, CPython 3.12.13, MuJoCo 3.17.0, NumPy 2.5.4, myo-sim 0.2.3 and Stable-Baselines3 2.9.0. MyoSuite was loaded from current `dev` commit `230f198458b501c423a0892b78da60419ffc49a3` with the fatigue reset fix in commit `37c8b863fe448f8fff2b29eb62a53a269b79d16f` ([upstream PR 575](https://github.com/MyoHub/myosuite/pull/575)). The sibling revisions were embodied-human `9d38317ec9f0e07c5a393212ab5d8fae210f5ac8` and embodied-ui `605862bd551401bfce91afb4afcf280b2bef98fd`.
+
+The final bridge suite reports **372 passed and 4 live tests skipped** ([output](evidence/review-2026-10-27-bridge.txt), [JUnit](evidence/review-2026-10-27-bridge.xml)). The embodied human driving suite reports **5 passed** ([output](evidence/review-2026-10-27-human.txt), [JUnit](evidence/review-2026-10-27-human.xml)). Ruff, formatting, mypy and both distribution builds pass. The [environment record](evidence/review-2026-10-27-summary.json) includes dependency versions, source hashes and sibling revisions. CI now runs the bridge with the optional interface and training dependencies alongside these pinned embodied human and embodied UI revisions.
+
+The fixes refresh derived MuJoCo state after each driver period, preserve button hold duration across repeated reads, reject malformed actions and invalid task distances, reset vehicle adapters, align lead placement with reported gap, support custom surrogate knots and TD3 cloning, preserve the requested style window and use the actual reflex evaluation baseline. Both live examples now release resources after setup failures. Lane sampling rejects traversal distances that would prevent progress.
+
+The upstream fatigue regression mutated caller supplied arrays during stepping. It also failed on readonly arrays and changed repeated seeded episodes. All three regression cases pass after copying the reset vector. MyoSuite's focused fatigue, wrapper, reset and noise suites report 270 passed, 10 skipped and 6 expected failures. All applicable precommit hooks pass. Its required model builder, CPU terms, fragment, parity and registry suite reports 312 passed, 2 skipped, 4 expected failures and 4 identical parity failures before and after the fix. The existing failures are `myoChallengeBaodingP2-v1`, `myoChallengeRelocateP1-v0`, `myoHandReorient8-v0` and `myoLegRoughTerrainWalk-v0`.
+
+The local commands use a separate MyoSuite worktree. Its source takes precedence over the existing editable installation:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe -m pytest tests -q --junitxml=test-results/review-dev-suite.xml
+.venv/Scripts/python.exe -m pytest ../embodied-human/tests/test_driving.py -q --junitxml=test-results/review-embodied-human.xml
+.venv/Scripts/python.exe -m ruff check src tests examples
+.venv/Scripts/python.exe -m ruff format --check src tests examples
+.venv/Scripts/python.exe -m mypy src/myosuite_carla --ignore-missing-imports --follow-imports=skip
+.venv/Scripts/python.exe -m build
+```
+
+Five focused tests pass with the minimum MuJoCo 3.6.0. They cover derived state consistency in both driver presets, pedal isolation and steering in both directions. No live CARLA server was started for this review. The four live tests remain disabled. UE5.8 runtime validation remains pending.
+
+Three scientific improvements remain. First, collision detection uses longitudinal gap alone. Adjacent lane passing therefore needs explicit vehicle footprints and lane occupancy. Second, embodied-human's `BodySensing.head_motion` omits rotational acceleration terms at the head's position. Its vestibular inputs need a shared rigid body kinematics calculation. Third, paired human and simulated trials need shared source identifiers during grouped evaluation. This prevents the same driving context from entering both training and test partitions.
+
+## Earlier validation
+
 Validated locally on Windows on 2026-10-23, with the researcher features below
 validated on 2026-10-24. The CARLA source
 contract is `ue58-dev` commit `defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5`;
@@ -9,7 +37,7 @@ This record accompanies Mark Colley's standalone `myosuite-carla` repository.
 The initial offline results below were obtained before extraction from the
 MyoSuite worktree; the commands use the equivalent standalone root layout.
 
-**Current result: 312 passed, no skips, 94% statement coverage** against an
+**Recorded live result: 312 passed, no skips, 94% statement coverage** against an
 actual CARLA **0.10.0 / Unreal Engine 5.5** server (CPython 3.12.13, NumPy
 2.5.4, MuJoCo 3.17.0); see
 [researcher features](#researcher-features-loads-recording-surrogate-task-and-conditions).

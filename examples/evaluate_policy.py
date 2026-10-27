@@ -1,9 +1,9 @@
 """Evaluate a trained driving policy against the reflex driver and human drivers.
 
 Every evaluation episode runs twice from the same scenario and seed: with the
-trained policy (deterministic) and with a zero action, which in the residual
-modes is the reflex driver itself. Per stage the report gives success,
-collisions, lane error, minimum gap and return for both, and the paired
+trained policy (deterministic) and with the reflex driver. The reflex driver
+uses a zero demand residual in direct-policy evaluations. Per stage the report
+gives success, collisions, lane error, minimum gap and return for both, and the paired
 difference of returns with a bootstrap 95% interval.
 
 For human-likeness, held-out NGSIM trials (one per driver, drivers never used
@@ -25,6 +25,21 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+
+
+def _reflex_environment(env: Any) -> Any:
+    """Reuse the physical task with a reflex baseline for each policy mode."""
+    if env.mode != "direct":
+        return env
+    from myosuite_carla.training import DrivingTaskWrapper
+
+    return DrivingTaskWrapper(
+        env.unwrapped,
+        mode="demand",
+        vehicle_spread=0.0,
+        expert=env.expert.config,
+        takeover_population=False,
+    )
 
 
 def _run_chunk(job: dict[str, Any]) -> list[dict[str, Any]]:
@@ -53,6 +68,7 @@ def _run_chunk(job: dict[str, Any]) -> list[dict[str, Any]]:
     normalizer.training = False
     env = make_training_env(0, mode=mode, stages=STAGES, vehicle_spread=0.0)
     env.takeover_population = False
+    reflex_env = _reflex_environment(env)
     sampler = ScenarioSampler(STAGES, (), SamplerConfig(), len(STAGES) - 1)
     trials = load_trials(job["trials"]) if job["trials"] else []
     results = []
@@ -64,7 +80,8 @@ def _run_chunk(job: dict[str, Any]) -> list[dict[str, Any]]:
             rng = np.random.default_rng(episode["seed"])
             scenario = sampler.sample(rng, episode["kind"])
         for agent in ("policy", "reflex"):
-            observation, _ = env.reset(
+            current_env = env if agent == "policy" else reflex_env
+            observation, _ = current_env.reset(
                 seed=episode["seed"], options={"scenario": scenario}
             )
             total = task = 0.0
@@ -74,8 +91,10 @@ def _run_chunk(job: dict[str, Any]) -> list[dict[str, Any]]:
                         normalizer.normalize_obs(observation), deterministic=True
                     )
                 else:
-                    action = np.zeros(env.action_space.shape)
-                observation, reward, terminated, truncated, info = env.step(action)
+                    action = np.zeros(current_env.action_space.shape)
+                observation, reward, terminated, truncated, info = current_env.step(
+                    action
+                )
                 total += reward
                 terms = info["reward_terms"]
                 task += reward - terms["residual"] - terms["smoothness"]

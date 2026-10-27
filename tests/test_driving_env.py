@@ -60,6 +60,26 @@ def test_spaces_names_and_reset_contract(driver: Any) -> None:
         env.step(np.zeros(5))
     # Out-of-range actions are clipped to the motor program's limits.
     assert env.intent([2.0, -1.0, 0.9, 0, 0, 0]).steer == 0.5
+    for action in (
+        0.2,
+        [0.2],
+        np.zeros((2, 3)),
+        [np.inf, 0, 0, 0, 0, 0],
+        [0, 0, np.nan, 0, 0, 0],
+    ):
+        with pytest.raises(ValueError, match="6 finite numbers"):
+            env.intent(action)
+
+
+@pytest.mark.parametrize("name", ["safe_headway", "near_distance"])
+@pytest.mark.parametrize("value", [0.0, -1.0, np.inf, np.nan])
+def test_task_distances_and_headway_require_positive_finite_values(
+    name: str, value: float
+) -> None:
+    from myosuite_carla.driving_env import TaskConfig
+
+    with pytest.raises(ValueError, match=name):
+        TaskConfig(**{name: value})
 
 
 def test_reflex_driver_stops_behind_a_braking_lead(driver: Any) -> None:

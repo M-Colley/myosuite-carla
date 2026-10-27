@@ -450,7 +450,7 @@ class ScenarioMonitor:
         """Return the lead vehicle's ``(x, y, yaw_deg)`` reference point."""
         if self.scenario.lead is None:
             return None
-        return self.scenario.lane.pose(self._lead_s + VEHICLE_LENGTH / 2)
+        return self.scenario.lane.pose(self._lead_s)
 
     def view_angle(self, telemetry: Any, distance: float) -> float:
         """Angle in radians to the target lane centre ``distance`` m ahead.

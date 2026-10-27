@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import math
+import runpy
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -134,6 +136,27 @@ def test_zero_residual_reproduces_the_reflex_driver(driver: Any) -> None:
         assert len(info["following_trial"].time) == 61
         # The 6 s follow ends its second 5 s style window only at 10 s.
         assert "following_window" not in info
+
+
+def test_direct_policy_evaluation_uses_the_reflex_driver(driver: Any) -> None:
+    from myosuite_carla.driver_models import ReflexDriver
+    from myosuite_carla.driving_env import FullBodyDrivingEnv
+    from myosuite_carla.scenario import Scenario
+    from myosuite_carla.training import DrivingTaskWrapper
+
+    namespace = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / "examples" / "evaluate_policy.py")
+    )
+    base = FullBodyDrivingEnv(Scenario(duration=1.0), driver=driver)
+    direct = DrivingTaskWrapper(base, mode="direct", vehicle_spread=0.0)
+    baseline = namespace["_reflex_environment"](direct)
+    assert baseline.unwrapped is base
+    baseline.reset(seed=0)
+    reference = ReflexDriver(base.dt)
+    expected = reference.act(base.state)
+    actual = baseline.intent_for(np.zeros(baseline.action_space.shape))
+    assert actual == expected
+    assert actual.left_foot == 0.0
 
 
 def test_residual_waits_for_the_takeover_and_direct_mode_maps_bounds(

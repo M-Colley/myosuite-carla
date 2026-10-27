@@ -157,6 +157,25 @@ def test_fit_recovers_known_parameters_from_its_own_drives() -> None:
     assert set(result["by_group"]) == {"s1"}
 
 
+def test_fit_supports_custom_speed_and_throttle_knots() -> None:
+    pytest.importorskip("scipy")
+    template = VehicleModelParams(
+        speed_knots=(0.0, 5.0, 10.0),
+        throttle_knots=(0.5, 1.0),
+        drive=((1.0, 1.0, 1.0), (2.0, 2.0, 2.0)),
+        reverse_drive=(0.5, 1.0),
+        steer_gain=(0.3, 0.3, 0.3),
+    )
+    # Use an actual rolling segment with enough steering and speed support.
+    segment = _synthetic(0)[0]
+    params, report = fit_vehicle_model(
+        [segment], template=template, throttle_lags=(0.0,)
+    )
+    assert params.speed_knots == template.speed_knots
+    assert params.throttle_knots == template.throttle_knots
+    assert report["lateral_samples"] > 0
+
+
 def test_bridge_drives_the_surrogate_like_a_carla_session() -> None:
     from types import SimpleNamespace
 

@@ -10,6 +10,7 @@ import pytest
 from myosuite_carla import VehicleCommand
 from myosuite_carla.driver_models import idm_acceleration
 from myosuite_carla.scenario import (
+    VEHICLE_LENGTH,
     Lane,
     LaneChange,
     LeadVehicle,
@@ -71,6 +72,16 @@ def test_lead_vehicle_braking_yields_gap_ttc_and_collision_event() -> None:
     kinds = [event["type"] for event in monitor.events]
     assert kinds[:2] == ["scenario_start", "lead_brake"]
     assert kinds.count("collision") == 1
+
+
+def test_lead_reference_pose_matches_the_reported_bumper_gap() -> None:
+    scenario = Scenario(lead=LeadVehicle(gap=10.0, speed=0.0, brake_time=None))
+    monitor = ScenarioMonitor(scenario)
+    ego_x, ego_y, _ = scenario.start_pose()
+    state = monitor.reset(_telemetry(ego_x, ego_y))
+    pose = monitor.lead_pose()
+    assert pose is not None
+    assert pose[0] - ego_x - VEHICLE_LENGTH == pytest.approx(state["gap_m"])
 
 
 def test_takeover_hands_over_on_input_or_starts_a_minimal_risk_stop() -> None:
