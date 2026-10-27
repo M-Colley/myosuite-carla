@@ -12,7 +12,8 @@
     "myosuite-carla": "0.1.1",
     "embodied-human": "0.1.1",
     "embodied-ui": "0.1.0",
-    "stable-baselines3": "2.9.0"
+    "stable-baselines3": "2.9.0",
+    "scikit-learn": "1.9.1"
   },
   "myosuite": {
     "dev_base": "230f198458b501c423a0892b78da60419ffc49a3",
@@ -26,9 +27,9 @@
     "errors": "0",
     "failures": "0",
     "skipped": "4",
-    "tests": "423",
-    "time": "104.684",
-    "timestamp": "2026-10-27T17:58:29.855447+00:00",
+    "tests": "425",
+    "time": "104.915",
+    "timestamp": "2026-10-27T18:10:05.857862+00:00",
     "hostname": "DESKTOP-0AVO5Q3"
   },
   "human_suite": {
@@ -37,8 +38,8 @@
     "failures": "0",
     "skipped": "24",
     "tests": "476",
-    "time": "76.407",
-    "timestamp": "2026-10-27T17:58:29.653370+00:00",
+    "time": "76.830",
+    "timestamp": "2026-10-27T18:10:05.683724+00:00",
     "hostname": "DESKTOP-0AVO5Q3"
   },
   "source_sha256": {
@@ -52,7 +53,7 @@
       "driving_env.py": "b587780dbed1cf85c3d42afa905bbed70e3207ae69c5e72bbc1c58bd557dbaea",
       "fullbody.py": "d93c0d33083390c6807381024fa446606e528495d34780b5b53f3b838e66caa6",
       "fullbody_validation.py": "9c0f02b1d87f03006be8e96a0235f9b7298dac87b22aba9ae501c825f8965fea",
-      "human_comparison.py": "83e078915d468b756c6fa295b64b5e5ec3e53168a7b8558195525092e3228e94",
+      "human_comparison.py": "b531af6d1c64beb508083c164d46b1d39b769d25a6c2161abfb382fc0c730fc3",
       "inputs.py": "1707a4eee9938fa96002baded2e0d692f886a92495ac81dfac78b6563d3dd0d3",
       "interfaces.py": "144e823e83f7ecdf98fe2db00e9b35d2d711605202804a0fdefb37992547eb46",
       "ngsim.py": "1949d1b1b750037816bbd2b19d9a72f922c24a25b9e6f50d494272628012bbca",
@@ -131,5 +132,11 @@
     }
   },
   "live_carla_pass": false,
-  "human_tested_revision": "fbeb05c384e8526d1723bfa9748503ba170b88f9"
+  "human_tested_revision": "770b358e38b8e4eae966d1f106b3e071e58fce1a",
+  "classifier_compatibility": {
+    "scikit-learn": "1.7.2",
+    "baseline_bridge_revision": "f3e88770816cf35f332818dfa3f9d662244aea62",
+    "baseline_error_reproduced": true,
+    "corrected_tests_passed": 15
+  }
 }

@@ -120,6 +120,45 @@ def test_independent_grouping_preserves_population_namespaces() -> None:
     assert implicit["shared_groups"] == 0
 
 
+@pytest.mark.parametrize(
+    "sizes_a,sizes_b,folds",
+    [([20] * 6, [20] * 6, 5), ([1, 39], [1, 20, 5, 17, 6, 1, 13, 2, 9, 7], 5)],
+)
+def test_independent_folds_keep_each_population_with_unequal_source_sizes(
+    monkeypatch, sizes_a, sizes_b, folds
+) -> None:
+    import sklearn.model_selection
+
+    class LegacyGroupSplit:
+        def __init__(self, **kwargs):
+            pass
+
+        def split(self, features, labels, groups):
+            # Older group splitters can place rare-class groups in one fold.
+            yield np.flatnonzero(labels == 1), np.flatnonzero(labels == 0)
+
+    monkeypatch.setattr(
+        sklearn.model_selection, "StratifiedGroupKFold", LegacyGroupSplit
+    )
+    rng = np.random.default_rng(8)
+    populations = [rng.normal(size=(sum(sizes), 2)) for sizes in (sizes_a, sizes_b)]
+    identifiers = [
+        [f"group:{i}" for i, size in enumerate(sizes) for _ in range(size)]
+        for sizes in (sizes_a, sizes_b)
+    ]
+    report = discriminability(*populations, *identifiers, folds=folds)
+    assert report["splitter"] == "StratifiedKFold"
+    assert report["folds"] == min(folds, len(sizes_a), len(sizes_b))
+    for source_ids, assignments in zip(identifiers, report["fold_assignments"]):
+        assignments = np.asarray(assignments)
+        for source in set(source_ids):
+            assert len(set(assignments[np.asarray(source_ids) == source])) == 1
+        assert set(assignments) == set(range(report["folds"]))
+    for fold in report["fold_groups"]:
+        assert min(fold["train_populations"]) >= 1
+        assert min(fold["test_populations"]) >= 1
+
+
 @pytest.mark.parametrize("groups", [["one"] * 4, ["one", "one", "two"]])
 def test_shared_grouping_rejects_insufficient_or_misaligned_sources(groups) -> None:
     rows = np.arange(8, dtype=float).reshape(4, 2)

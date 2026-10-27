@@ -289,8 +289,9 @@ def discriminability(
 ) -> dict[str, Any]:
     """Cross-validated AUC of a classifier separating two sets of windows.
 
-    Groups are held out together (``StratifiedGroupKFold``), so the classifier
-    is always tested on drivers or episodes it has not seen. ``model`` is
+    Whole source groups form test folds. Independent populations use
+    ``StratifiedKFold`` over group IDs and their population labels. Shared
+    sources use ``StratifiedGroupKFold`` over rows. ``model`` is
     ``"logistic"`` (standardized logistic regression) or ``"boosting"``
     (gradient-boosted trees, a stricter judge for nonlinear differences).
     ``grouping="shared"`` holds a matching source ID out across both
@@ -346,13 +347,28 @@ def discriminability(
     )
     if usable < 2:
         raise ValueError("Each side needs at least two groups")
-    splitter = model_selection.StratifiedGroupKFold(
-        n_splits=usable, shuffle=True, random_state=seed
-    )
+    if grouping == "independent":
+        unique_groups, first_rows = np.unique(groups, return_index=True)
+        splitter = model_selection.StratifiedKFold(
+            n_splits=usable, shuffle=True, random_state=seed
+        )
+        splits = [
+            (
+                np.flatnonzero(np.isin(groups, unique_groups[train])),
+                np.flatnonzero(np.isin(groups, unique_groups[test])),
+            )
+            for train, test in splitter.split(unique_groups, labels[first_rows])
+        ]
+        splitter_name = "StratifiedKFold"
+    else:
+        splitter = model_selection.StratifiedGroupKFold(
+            n_splits=usable, shuffle=True, random_state=seed
+        )
+        splits = list(splitter.split(features, labels, groups))
+        splitter_name = "StratifiedGroupKFold"
     scores = np.zeros(len(labels))
     assignments: NDArray[np.int_] = np.full(len(labels), -1, dtype=int)
     fold_groups = []
-    splits = list(splitter.split(features, labels, groups))
     for train, test in splits:
         if len(np.unique(labels[train])) != 2 or len(np.unique(labels[test])) != 2:
             raise ValueError(
@@ -374,7 +390,16 @@ def discriminability(
         scores[test] = classifier.predict_proba(features[test])[:, 1]
         assignments[test] = index
         fold_groups.append(
-            {"train": len(set(groups[train])), "test": len(set(groups[test]))}
+            {
+                "train": len(set(groups[train])),
+                "test": len(set(groups[test])),
+                "train_populations": [
+                    len(set(groups[train][labels[train] == label])) for label in (0, 1)
+                ],
+                "test_populations": [
+                    len(set(groups[test][labels[test] == label])) for label in (0, 1)
+                ],
+            }
         )
     return {
         "auc": float(metrics.roc_auc_score(labels, scores)),
@@ -382,6 +407,7 @@ def discriminability(
         "folds": int(usable),
         "model": model,
         "seed": int(seed),
+        "splitter": splitter_name,
         "grouping": grouping,
         "groups": counts,
         "independent_groups": len(set(groups)),
