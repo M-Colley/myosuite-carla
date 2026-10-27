@@ -494,6 +494,20 @@ through the muscles is future work. The live CARLA run is recorded in
 [VALIDATION.md](VALIDATION.md#mix-and-match-with-embodied-ui). The Unity
 backend has not been run, because no Unity Editor was available.
 
+## Record an attentive human driver
+
+The recording example runs `AttentiveDriver` from a specified local `embodied-human` checkout. The video combines a synchronized CARLA chase camera, the MuJoCo body, measured limb controls, model gaze, and the SuRT visual search task. Road perception uses the human project's parametric geometry interface. The head remains posture constrained. Each recording includes source hashes, versions, per frame telemetry, applied controls, collision sensor contacts, and cleanup results in a JSON file beside the video.
+
+Install MyoSuite from `dev`, the matching CARLA client, and these optional dependencies. Start a rendering CARLA server with no other synchronous client. The default spawn index assumes `Town10HD_Opt`.
+
+```shell
+python -m pip install -e ".[video]" -e ../embodied-human
+python examples/record_embodied_human.py --human-repo ../embodied-human --fast --scenario lane_change --seconds 12 --seed 0 --output artifacts/lane-change.mp4 --record artifacts/lane-change
+python examples/record_embodied_human.py --human-repo ../embodied-human --fast --scenario lead_brake --seconds 12 --seed 0 --output artifacts/lead-brake.mp4 --record artifacts/lead-brake
+```
+
+The fast configuration retains 114 muscles and applies vehicle loads to the body. The two episodes evaluate a requested lateral displacement and a braking lead vehicle. The lead vehicle follows a scripted trajectory. These seeded integration demonstrations establish execution and physical coupling. Human driving validity requires comparison with measured human data. The actual CARLA 0.10.0 recording results are documented in [VALIDATION.md](VALIDATION.md).
+
 ## Test
 
 Run the offline contact demonstration and tests from the repository root:

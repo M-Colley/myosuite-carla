@@ -30,6 +30,8 @@ rl = ["stable-baselines3>=2.8,<3", "scipy>=1.10", "scikit-learn>=1.3", "pandas>=
 # embodied-ui devices and engines (myosuite_carla.interfaces); embodied-ui is
 # installed from its repository and needs MuJoCo 3.7 or newer.
 ui = ["embodied-ui>=0.1", "mujoco>=3.7"]
+# Synchronized CARLA, MuJoCo and human-state recording.
+video = ["imageio>=2.31", "imageio-ffmpeg>=0.4", "pillow>=10"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
