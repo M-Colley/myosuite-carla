@@ -26,6 +26,10 @@ The completed full suites passed 513 bridge tests with four live tests skipped a
 
 The longitudinal controller receives exact vehicle telemetry in this experiment. The human estimator covers lateral state. Recorded vehicles differ from the fitted Nissan Patrol surrogate. Perception error, vehicle heterogeneity, and broader driving conditions require further evaluation. Live CARLA validation of this correction remains pending.
 
+The configured reflex delay was 0.02 s at a 0.02 s control timestep. The history stores `max(1, round(perception_delay / dt))` observations and appends the current observation before reading its oldest entry. This setting adds zero history lag. The preserved timing is relevant when interpreting human response times.
+
+Hosted CI passed for the final evidence commits. [Bridge CI at `fedb997`](https://github.com/M-Colley/myosuite-carla/actions/runs/40729055945) passed its offline and integration jobs. [Human tests at `db886b3`](https://github.com/M-Colley/embodied-human/actions/runs/40729056025) and the [matched core benchmarks](https://github.com/M-Colley/embodied-human/actions/runs/40729056192) passed. The bridge live job was skipped.
+
 Commands ran from the standalone `myosuite-carla` repository:
 
 ```powershell

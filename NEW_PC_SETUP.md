@@ -118,6 +118,28 @@ Set-Location "$workRoot\myosuite-carla"
 $python = (Resolve-Path '.venv\Scripts\python.exe').Path
 ```
 
+### Optional embodied human empirical integration
+
+The retained actuator comparison uses separate bridge, human and MyoSuite development sources. The pins below include its controller API, complete profile restoration and evidence archive. The MyoSuite revision includes the fatigue reset correction in [PR 575](https://github.com/MyoHub/myosuite/pull/575). Use these commands after creating the sibling checkouts and interpreter above. The CARLA client remains specific to the selected server package.
+
+```powershell
+git -C "$workRoot\myosuite-carla" fetch origin codex/embodied-human-compatibility
+git -C "$workRoot\myosuite-carla" checkout --detach fedb997b063515f2cd00c4e99c640094195aad48
+git -C "$workRoot\myosuite" fetch https://github.com/M-Colley/myosuite.git codex/fatigue-reset-array-copy
+git -C "$workRoot\myosuite" checkout --detach 37c8b863fe448f8fff2b29eb62a53a269b79d16f
+git clone --branch codex/empirical-driving-calibration https://github.com/M-Colley/embodied-human.git "$workRoot\embodied-human"
+git -C "$workRoot\embodied-human" checkout --detach db886b3c0fe5b009bc35a9f876a09a3752ddd929
+Set-Location "$workRoot\myosuite-carla"
+& $python -m pip install -c constraints/windows-py312-live.txt -e ../myosuite -e '.[test,lint,data,analysis,video]' -e '../embodied-human[empirical]'
+& $python -m pip check
+& $python -c "import embodied_human,myosuite,myosuite_carla; from myosuite_carla.driver_models import ReflexDriverConfig; print(embodied_human.__file__); print(myosuite.__file__); print(myosuite_carla.__file__); assert callable(ReflexDriverConfig.from_dict)"
+& $python -m pytest tests ../embodied-human/tests/test_actuation_evaluation.py ../embodied-human/tests/test_driving_profiles.py -q
+```
+
+The measured run used bridge source `d545099` and human source `e938e90`. The later pins retain those model sources and add the complete evaluation evidence and replay labels. Runtime import paths and source hashes are recorded in the study provenance. Package version `0.1.1` alone does not identify the required source revision.
+
+The [acceleration control contract](COMPATIBILITY.md#acceleration-control-and-empirical-profiles) records the vehicle assumptions and actual history delay. The inverse remains experimental. The independent test interval includes zero, and mean gap error increased. The engineering tracking result uses the same vehicle model for control and simulation. Live validation of this correction remains pending.
+
 ## 4. Prove the Python side works before starting CARLA
 
 ```powershell
