@@ -1,0 +1,68 @@
+........................................................................ [ 16%]
+........................................................................ [ 33%]
+........................................................................ [ 50%]
+...................ssss................................................. [ 67%]
+........................................................................ [ 84%]
+.................................................................        [100%]
+============================== warnings summary ===============================
+tests/test_cockpit.py::test_composes_with_real_muscle_models[elbow]
+  C:\Users\localadmin\Desktop\myosuite-dev-review\myosuite\core\model_builder.py:820: UserWarning: Attach conflict when attaching 'MyoElbow_v0.1.7', policy is 'warning'
+  njmax: parent has -1 (default), child has 1000, keeping parent value
+  nconmax: parent has -1 (default), child has 400, keeping parent value
+  nuser_jnt: parent has -1 (default), child has 1, keeping parent value
+    return spec.compile(), spec
+
+tests/test_cockpit.py: 3 warnings
+tests/test_muscle_contact.py: 9 warnings
+tests/test_validation.py: 4 warnings
+tests/test_validation_selection.py: 1 warning
+  C:\Users\localadmin\Desktop\myosuite-dev-review\myosuite\core\model_builder.py:820: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    return spec.compile(), spec
+
+tests/test_cockpit.py::test_composes_with_real_muscle_models[arm]
+  C:\Users\localadmin\Desktop\myosuite-dev-review\myosuite\core\model_builder.py:820: UserWarning: Attach conflict when attaching 'MyoArm_v0.01', policy is 'warning'
+  njmax: parent has -1 (default), child has 1000, keeping parent value
+  nconmax: parent has -1 (default), child has 400, keeping parent value
+  nuser_jnt: parent has -1 (default), child has 1, keeping parent value
+    return spec.compile(), spec
+
+tests/test_conditions.py: 8 warnings
+tests/test_driving_env.py: 1 warning
+tests/test_fullbody.py: 2 warnings
+tests/test_interfaces.py: 1 warning
+tests/test_training.py: 1 warning
+tests/test_training_sb3.py: 1 warning
+  C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:563: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    model = spec.compile()
+
+tests/test_conditions.py: 6 warnings
+tests/test_driving_env.py: 1 warning
+tests/test_fullbody.py: 1 warning
+tests/test_interfaces.py: 1 warning
+tests/test_training.py: 1 warning
+tests/test_training_sb3.py: 1 warning
+  C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:600: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    model = spec.compile()
+
+tests/test_conditions.py: 6 warnings
+tests/test_driving_env.py: 1 warning
+tests/test_fullbody.py: 2 warnings
+tests/test_interfaces.py: 1 warning
+tests/test_training.py: 1 warning
+tests/test_training_sb3.py: 1 warning
+  C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:1416: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    body = _body_spec(config).compile()
+
+tests/test_conditions.py::test_weak_left_side_scales_forces_and_weakens_the_brake_foot
+tests/test_conditions.py::test_weak_left_side_scales_forces_and_weakens_the_brake_foot
+tests/test_conditions.py::test_sarcopenia_halves_every_peak_force
+  C:\Users\localadmin\Desktop\myosuite-dev-review\myosuite\core\muscle_conditions.py:224: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    peak_force = _peak_force(spec.compile())
+
+tests/test_training_sb3.py::test_behaviour_cloning_fits_an_expert[PPO]
+  C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\training_sb3.py:326: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+  Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:821.)
+    total += float(loss) * len(batch)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+421 passed, 4 skipped, 60 warnings in 105.02s (0:01:45)

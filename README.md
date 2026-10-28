@@ -325,6 +325,8 @@ and driving-muscle activations. Rewards are weighted named terms (`TaskConfig`).
 The vehicle defaults to the surrogate; pass a started `CarlaSession` with
 `reset_vehicle=carla_scenario.teleport` for CARLA.
 
+`VehicleFootprint` in `scenario.py` configures the ego and lead lengths, widths, local bounding box centres and local yaw angles. Shapely computes planar contact between the oriented rectangles. Collision events, termination and penalties use this contact flag. The signed longitudinal bumper gap remains a separate measurement. Lead relevance and time to collision account for lateral overlap and whether the lead is ahead. CARLA runs resolve the rectangles from actor bounding boxes. Recordings retain the resolved geometry and front trajectories.
+
 Scenarios (`scenario.py`) are a lane polyline plus a braking lead vehicle,
 raised-cosine lane changes or an automation-to-driver takeover request, with
 timestamped events (request, takeover with reaction time, minimal-risk
@@ -376,6 +378,8 @@ https://doi.org/10.21949/1504477). The data are downloaded, not committed;
 positions are smoothed with a Savitzky-Golay filter, and simulated drives go
 through the identical 10 Hz processing. Trials are split by driver, and only
 training drivers inform the reward.
+
+Paired evaluation retains `FollowingTrial.source_group` through replay, windowing and NPZ files. Its default grouping identity is the original driver. `discriminability(..., grouping="shared")` holds each source together across human and simulated populations. Reports retain source identities, fold assignments and classifier seeds. Paired confidence intervals resample source means. The independent grouping mode remains available for unrelated populations.
 
 ```shell
 python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
@@ -489,6 +493,50 @@ The example flips the hazard switch by hand, and operating new devices
 through the muscles is future work. The live CARLA run is recorded in
 [VALIDATION.md](VALIDATION.md#mix-and-match-with-embodied-ui). The Unity
 backend has not been run, because no Unity Editor was available.
+
+## Record an attentive human driver
+
+The recording example runs `AttentiveDriver` from a specified local `embodied-human` checkout. The video combines a synchronized CARLA chase camera, the MuJoCo body, measured limb controls, model gaze, and the SuRT visual search task. Road perception uses the human project's parametric geometry interface. The head remains posture constrained. Each recording includes source hashes, versions, per frame telemetry, applied controls, collision sensor contacts, and cleanup results in a JSON file beside the video.
+
+Install MyoSuite from `dev`, the matching CARLA client, and these optional dependencies. Start a rendering CARLA server with no other synchronous client. The default spawn index assumes `Town10HD_Opt`.
+
+```shell
+python -m pip install -e ".[video]" -e ../embodied-human
+python examples/record_embodied_human.py --human-repo ../embodied-human --fast --scenario lane_change --seconds 12 --seed 0 --output artifacts/lane-change.mp4 --record artifacts/lane-change
+python examples/record_embodied_human.py --human-repo ../embodied-human --fast --scenario lead_brake --seconds 12 --seed 0 --output artifacts/lead-brake.mp4 --record artifacts/lead-brake
+```
+
+The fast configuration retains 114 muscles and applies vehicle loads to the body. The two episodes evaluate a requested lateral displacement and a braking lead vehicle. The lead vehicle follows a scripted trajectory. These seeded integration demonstrations establish execution and physical coupling. Human driving validity requires comparison with measured human data. The actual CARLA 0.10.0 recording results are documented in [VALIDATION.md](VALIDATION.md).
+
+## Empirical following calibration
+
+`empirical_following.FollowingProtocol` compares the IDM acceleration component with recorded NGSIM states. Its observations are acceleration errors relative to the measurements. It preserves each original vehicle source through fitting and evaluation. The companion `closed_loop_following` function replays recorded leaders through `embodied-human.AttentiveDriver`, one reused MyoSuite body, and the fitted offline vehicle surrogate. It reports speed and bumper gap errors, collisions, road departures, and termination for baseline and fitted configurations.
+
+The [embodied human campaign](https://github.com/M-Colley/embodied-human) connects these protocols to the other empirical sources. Vehicle tracks provide the NGSIM grouping unit. A component fit requires a separate check of its transfer to closed loop behavior. The reports preserve this distinction and retain failed episodes. [VALIDATION.md](VALIDATION.md) contains the actual commands and outcomes.
+
+`ClosedLoopFollowingProtocol` supplies a physical calibration objective. Every candidate drives the attentive human, MyoSuite muscles, and fitted vehicle surrogate. The context manager reuses one body. Its episode cache binds the full IDM settings, source window, and simulation seed. Source seeds remain stable across request ordering and batching. Incomplete or unsafe episodes make the objective infeasible. `FollowingProtocol` accepts explicit source exclusions before selecting new source groups. The companion embodied human example `calibrate_closed_loop_following.py` fixes the partitions and acceptance criterion before fitting and retains every executed episode.
+
+`ReflexDriverConfig.acceleration_control` enables a speed dependent inverse of the fitted vehicle model. `AccelerationControlConfig` calculates continuous throttle and brake targets and closes separate feedback loops on the measured pedals. Foot muscle excitations execute those targets. The optional configuration preserves the legacy controller when unset. `ReflexDriverConfig.from_dict` restores the complete nested vehicle and controller configuration for empirical profiles and video replay.
+
+Vehicle calibration, profile restoration, longitudinal telemetry and realized perception delay follow the [acceleration control contract](COMPATIBILITY.md#acceleration-control-and-empirical-profiles).
+
+The companion `evaluate_actuation_improvement.py` in embodied human compares three fixed configurations. These combine legacy actuation with default IDM, corrected actuation with default IDM, and corrected actuation with the previously fitted IDM. Development selection uses 32 previously inspected source tracks. The selected correction receives one independent test on 24 fresh tracks with two matched simulation seeds. Controller configurations are fixed within each physical protocol and included in cache identity.
+
+The completed comparison reduced mean normalized trajectory error from 0.7686 to 0.6987. Its paired source change was −0.0699 (95% bootstrap CI [−0.1655, 0.0212]). Speed and acceleration RMSE decreased, while gap RMSE increased. The correction remains experimental and package defaults remain unchanged. [The retained evidence](evidence/actuation-improvement-2026-10-28/summary.json) includes all 192 development and test episodes, frozen source windows, complete configurations, and verified replay metadata in `study-evidence.zip`.
+
+The following command records the first two fresh test sources with matched seed 117. The paired video places legacy actuation on the left and corrected actuation on the right. The complete controller configuration comes from each saved episode.
+
+```shell
+python examples/record_empirical_trials.py --source artifacts/ngsim/ngsim-i80-cars.csv --report artifacts/actuation-improvement-2026-10-28/run/fullreport.json --out artifacts/actuation-improvement-videos --groups ngsim:1136:2 ngsim:1193:2 --base-seed 117
+```
+
+The empirical recorder renders the retained test trials with the actual MyoSuite body and measured controls. Each paired video places the baseline on the left and the fitted candidate on the right. The road schematics show recorded trajectory references and simulated bumper gaps. Videos use the original model configurations and simulation seeds. Every replay must match the saved trajectory samples and RMSE values within an absolute tolerance of `1e-8` before its clip is published. The recorder checks source hashes and resumes previously verified clips.
+
+```shell
+python examples/record_empirical_trials.py --source artifacts/ngsim/ngsim-i80-cars.csv --report artifacts/closed-loop-calibration-2026-10-28/run/fullreport.json --out artifacts/empirical-trial-videos
+```
+
+The retained six test trials produce six paired 20 second clips and `held-out-trials.mp4`, a two minute montage at 25 fps. Install the `video` extra and use the matching embodied human and MyoSuite development sources recorded in the calibration provenance. These recordings depict offline replays through the fitted vehicle surrogate.
 
 ## Test
 

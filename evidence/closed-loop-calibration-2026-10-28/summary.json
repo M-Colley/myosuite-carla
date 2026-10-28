@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "status": "evaluated",
+  "decision": "rejected_after_test_regression",
+  "defaults_updated": false,
+  "design_source_commits": {
+    "embodied-human": "cbb05bf934005e25dff01af9023bcfa5b9446cb2",
+    "myosuite-carla": "c09b2cf0882e27cb3e9141cff33afb1655b32213"
+  },
+  "design_publication": "committed and pushed before test evaluation",
+  "design_canonical_sha256": "4eb1f8a64cd27d39df2e863a3f94b1fda7a0239a28c865212d5f39ad58bc4703",
+  "source_dataset": {
+    "dataset_id": "ngsim",
+    "source": "https://doi.org/10.21949/1504477",
+    "licence": "CC BY-SA 3.0",
+    "domain": "real_road"
+  },
+  "configuration": {
+    "samples": 16,
+    "train_sources": 6,
+    "validation_sources": 3,
+    "test_sources": 6,
+    "seconds": 20.0,
+    "trials_per_source": 1,
+    "seed": 20261028,
+    "fit_seed": 17,
+    "evaluation_seed": 117,
+    "accept": 0.25,
+    "bootstrap": 2000,
+    "desired_speed": 16.0
+  },
+  "source_exclusions": 97,
+  "partitions": {
+    "train": 6,
+    "validation": 3,
+    "test": 6
+  },
+  "elapsed_seconds": 798.2900340999477,
+  "physical_episodes": 141,
+  "failed_episodes": 0,
+  "body_builds": 1,
+  "cache_hits": 12,
+  "test_mean_rmse": {
+    "baseline": {
+      "speed_rmse_mps": 0.9899709832739708,
+      "gap_rmse_m": 4.446443715487232,
+      "acceleration_rmse_mps2": 0.9924590134625922
+    },
+    "fitted": {
+      "speed_rmse_mps": 1.03741515804044,
+      "gap_rmse_m": 4.951876903451028,
+      "acceleration_rmse_mps2": 1.0033489820480628
+    }
+  },
+  "test_primary_mse": {
+    "baseline": 1.0333772596450161,
+    "fitted": 1.169056420065787
+  },
+  "test_primary_change": {
+    "value": 0.13567916042077088,
+    "interval": [
+      -0.020732698022521413,
+      0.30352346159081506
+    ]
+  },
+  "observed_primary_percent_increase": 13.129683196955488,
+  "validation_baseline_distance": 1.2302469680511352,
+  "validation_selected_distance": 1.1204590756819586,
+  "selected_parameters": {
+    "max_acceleration": 0.5247419364750385,
+    "comfortable_deceleration": 1.0199383188039066,
+    "time_headway": 1.7045110486447812,
+    "min_gap": 3.7804894307628274,
+    "exponent": 4.0
+  },
+  "runtime_source_identity_verified": true,
+  "source_ci": {
+    "human_tests": 40701561727,
+    "human_benchmarks": 40701561608,
+    "bridge_integration": 40701657996,
+    "conclusion": "success"
+  },
+  "independent_review": {
+    "source_exclusion_and_partition_checks": true,
+    "training_and_validation_distances_recomputed": true,
+    "paired_bootstrap_recomputed": true,
+    "profile_resolution_verified": true
+  },
+  "test_suites": {
+    "human-tests.xml": {
+      "tests": 565,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 24,
+      "passed": 541
+    },
+    "bridge-tests.xml": {
+      "tests": 458,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4,
+      "passed": 454
+    }
+  },
+  "retained_files": {
+    "bridge-tests.txt": {
+      "bytes": 4555,
+      "sha256": "afc052c3cbe173293043bc90f1c7206be86c16f12f344ef7d47cbb96b39dc663"
+    },
+    "bridge-tests.xml": {
+      "bytes": 58869,
+      "sha256": "22dc0a7a68f1e2f54505c4d511a73f983cc0cb6db1ab87d3fd8eec5ea6c673cf"
+    },
+    "calibration.txt": {
+      "bytes": 3953,
+      "sha256": "04493abaf32b158af1532cd9bc40edfdc76f9f526781a95667fb47be0c15063a"
+    },
+    "closed-loop-comparison.png": {
+      "bytes": 484053,
+      "sha256": "784d619603a32a6c7c5ac3b99284f0fb2beb8cf9f37e35b84a564ae0e8e5b1b9"
+    },
+    "command.txt": {
+      "bytes": 651,
+      "sha256": "380cfbc4a89a9286d5aff87c9ca609197345959146c392fc1ae445cf5f04d95c"
+    },
+    "design.json": {
+      "bytes": 4646,
+      "sha256": "7780ca84fce6892d85bc63dd0a6c4dd7e80280e874e5c00ed776d0895401078a"
+    },
+    "human-tests.txt": {
+      "bytes": 2115,
+      "sha256": "546d798a5c3fae1c4a7ea2a4d5e979490c67862bff67cfb7aaf923547e8024e6"
+    },
+    "human-tests.xml": {
+      "bytes": 77529,
+      "sha256": "d844a925667b2faec0c23977bfcc744f6cefeb036319687781f5746136b66f1b"
+    },
+    "provenance-before-evaluation.json": {
+      "bytes": 74766,
+      "sha256": "1d3d664be1ff6c7a901439008bf9a704dc33382bf6ee20cc7083ea1b5992fc6b"
+    },
+    "provenance.json": {
+      "bytes": 74837,
+      "sha256": "95e855d6a9704650aa87ae915bde8d2e8ee5d3a97a289cfa7f0d8acf4e575047"
+    },
+    "reports.zip": {
+      "bytes": 2160254,
+      "sha256": "92bcabb209cdd9b4814efb7e1c1386c3624d20c0405fd804be12608d75615654"
+    }
+  }
+}

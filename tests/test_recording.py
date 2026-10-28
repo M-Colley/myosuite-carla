@@ -98,6 +98,47 @@ def test_recorder_builds_named_columns_and_body_arrays() -> None:
     )
 
 
+@pytest.mark.parametrize("integer_only_enums", [False, True])
+def test_body_recording_normalizes_mujoco_enum_values(
+    monkeypatch: pytest.MonkeyPatch, integer_only_enums: bool
+) -> None:
+    model = mujoco.MjModel.from_xml_string(MODEL)
+    data = mujoco.MjData(model)
+    data.qpos[:] = (0.01, 0.12, 0.05)
+    data.act[:] = (0.6, 0.2)
+    mujoco.mj_forward(model, data)
+    if integer_only_enums:
+
+        class IntegerEnum:
+            def __init__(self, value: int) -> None:
+                self.value = value
+
+            def __int__(self) -> int:
+                return self.value
+
+        monkeypatch.setattr(
+            mujoco,
+            "mjtJoint",
+            SimpleNamespace(
+                mjJNT_HINGE=IntegerEnum(int(mujoco.mjtJoint.mjJNT_HINGE)),
+                mjJNT_SLIDE=IntegerEnum(int(mujoco.mjtJoint.mjJNT_SLIDE)),
+            ),
+        )
+        monkeypatch.setattr(
+            mujoco,
+            "mjtDyn",
+            SimpleNamespace(mjDYN_MUSCLE=IntegerEnum(int(mujoco.mjtDyn.mjDYN_MUSCLE))),
+        )
+    recorder = DriveRecorder()
+    recorder.add(0.0, _telemetry(0, 0.0, 0.0), command={}, model=model, data=data)
+    result = recorder.recording()
+    assert result.joints == ("elbow_flexion_r", "knee_translation")
+    assert result.joint_kinds == ("hinge", "slide")
+    assert result.muscles == ("BIClong", "TRIlong")
+    np.testing.assert_array_equal(result.coordinates, [[0.01, 0.12]])
+    np.testing.assert_array_equal(result.activation, [[0.6, 0.2]])
+
+
 def test_recorder_rejects_changing_fields_and_empty_use() -> None:
     recorder = DriveRecorder(body=False)
     with pytest.raises(ValueError, match="Nothing"):

@@ -120,6 +120,7 @@ def main() -> int:
         trials_path=trials_path,
         motor_noise=args.motor_noise,
         vehicle_spread=args.vehicle_spread,
+        style_window=args.style_window,
     )
     if args.algo == "sac":
         model = SAC(

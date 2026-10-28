@@ -1,0 +1,5 @@
+scikit-learn 1.7.2
+Before correction: Each fold needs both populations. Use more source groups or fewer folds.
+Corrected splitter: StratifiedKFold
+Corrected AUC: 0.5120833333333333
+Fold groups: [{'train': 9, 'test': 3, 'train_populations': [4, 5], 'test_populations': [2, 1]}, {'train': 9, 'test': 3, 'train_populations': [5, 4], 'test_populations': [1, 2]}, {'train': 10, 'test': 2, 'train_populations': [5, 5], 'test_populations': [1, 1]}, {'train': 10, 'test': 2, 'train_populations': [5, 5], 'test_populations': [1, 1]}, {'train': 10, 'test': 2, 'train_populations': [5, 5], 'test_populations': [1, 1]}]

@@ -1,9 +1,9 @@
 """Evaluate a trained driving policy against the reflex driver and human drivers.
 
 Every evaluation episode runs twice from the same scenario and seed: with the
-trained policy (deterministic) and with a zero action, which in the residual
-modes is the reflex driver itself. Per stage the report gives success,
-collisions, lane error, minimum gap and return for both, and the paired
+trained policy (deterministic) and with the reflex driver. The reflex driver
+uses a zero demand residual in direct-policy evaluations. Per stage the report
+gives success, collisions, lane error, minimum gap and return for both, and the paired
 difference of returns with a bootstrap 95% interval.
 
 For human-likeness, held-out NGSIM trials (one per driver, drivers never used
@@ -12,7 +12,9 @@ the ego starts like the human follower. Both agents are compared with those
 human followers by (a) the RMS gap error against the follower of the same
 leader, (b) the judge's driver-grouped cross-validated AUC with gradient
 boosting and (c) the per-feature overlap scoreboard, next to a human-vs-human
-floor from two disjoint halves of the held-out drivers.
+floor from two disjoint halves of the held-out source groups. Every replay
+and its human source share a cross-validation group. Paired intervals
+resample original source means.
 """
 
 from __future__ import annotations
@@ -20,11 +22,27 @@ from __future__ import annotations
 import argparse
 import json
 import pickle
+from collections.abc import Sequence
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 from typing import Any
 
 import numpy as np
+
+
+def _reflex_environment(env: Any) -> Any:
+    """Reuse the physical task with a reflex baseline for each policy mode."""
+    if env.mode != "direct":
+        return env
+    from myosuite_carla.training import DrivingTaskWrapper
+
+    return DrivingTaskWrapper(
+        env.unwrapped,
+        mode="demand",
+        vehicle_spread=0.0,
+        expert=env.expert.config,
+        takeover_population=False,
+    )
 
 
 def _run_chunk(job: dict[str, Any]) -> list[dict[str, Any]]:
@@ -53,6 +71,7 @@ def _run_chunk(job: dict[str, Any]) -> list[dict[str, Any]]:
     normalizer.training = False
     env = make_training_env(0, mode=mode, stages=STAGES, vehicle_spread=0.0)
     env.takeover_population = False
+    reflex_env = _reflex_environment(env)
     sampler = ScenarioSampler(STAGES, (), SamplerConfig(), len(STAGES) - 1)
     trials = load_trials(job["trials"]) if job["trials"] else []
     results = []
@@ -64,7 +83,8 @@ def _run_chunk(job: dict[str, Any]) -> list[dict[str, Any]]:
             rng = np.random.default_rng(episode["seed"])
             scenario = sampler.sample(rng, episode["kind"])
         for agent in ("policy", "reflex"):
-            observation, _ = env.reset(
+            current_env = env if agent == "policy" else reflex_env
+            observation, _ = current_env.reset(
                 seed=episode["seed"], options={"scenario": scenario}
             )
             total = task = 0.0
@@ -74,8 +94,10 @@ def _run_chunk(job: dict[str, Any]) -> list[dict[str, Any]]:
                         normalizer.normalize_obs(observation), deterministic=True
                     )
                 else:
-                    action = np.zeros(env.action_space.shape)
-                observation, reward, terminated, truncated, info = env.step(action)
+                    action = np.zeros(current_env.action_space.shape)
+                observation, reward, terminated, truncated, info = current_env.step(
+                    action
+                )
                 total += reward
                 terms = info["reward_terms"]
                 task += reward - terms["residual"] - terms["smoothness"]
@@ -89,6 +111,9 @@ def _run_chunk(job: dict[str, Any]) -> list[dict[str, Any]]:
                 "success": bool(info["episode_success"]),
                 **info["episode_metrics"],
             }
+            if episode["kind"] == "ngsim":
+                record["driver"] = trial.driver
+                record["source_group"] = trial.group_id
             if "following_trial" in info:
                 record["features"] = following_features(
                     info["following_trial"]
@@ -105,16 +130,138 @@ def _gap_rmse(row: dict[str, Any], trial: Any) -> float:
     return float(np.sqrt(np.mean((agent[:count] - trial.gap[:count]) ** 2)))
 
 
-def _bootstrap(differences: np.ndarray) -> list[float]:
+def _source_means(
+    differences: np.ndarray, groups: Sequence[Any] | None = None
+) -> np.ndarray:
+    values = np.asarray(differences, dtype=float)
+    if values.ndim != 1 or len(values) == 0 or not np.all(np.isfinite(values)):
+        raise ValueError("Paired differences must be a nonempty finite vector")
+    identifiers = list(range(len(values))) if groups is None else list(groups)
+    if len(identifiers) != len(values):
+        raise ValueError("Each paired difference needs one source group")
+    labels = np.asarray([str(group) for group in identifiers])
+    return np.asarray(
+        [np.mean(values[labels == group]) for group in dict.fromkeys(labels)]
+    )
+
+
+def _bootstrap(
+    differences: np.ndarray, *, groups: Sequence[Any] | None = None
+) -> list[float]:
     from scipy import stats
 
-    if len(differences) < 3 or np.allclose(differences, differences[0]):
-        return [float(np.mean(differences))] * 2
-    result = stats.bootstrap((differences,), np.mean, random_state=0, n_resamples=2000)
+    units = _source_means(differences, groups)
+    if len(units) < 2:
+        raise ValueError("A bootstrap interval needs at least two source groups")
+    if np.allclose(units, units[0]):
+        return [float(np.mean(units))] * 2
+    result = stats.bootstrap(
+        (units,), np.mean, random_state=0, n_resamples=2000, method="percentile"
+    )
     return [
         float(result.confidence_interval.low),
         float(result.confidence_interval.high),
     ]
+
+
+def _paired_difference(
+    differences: np.ndarray, groups: Sequence[Any]
+) -> dict[str, Any]:
+    units = _source_means(differences, groups)
+    return {
+        "mean": float(units.mean()),
+        "ci95": _bootstrap(units) if len(units) >= 2 else None,
+        "sources": len(units),
+        "ci_method": "percentile bootstrap of source means",
+        "ci_resamples": 2000,
+        "ci_seed": 0,
+    }
+
+
+def _human_comparison(
+    human: Sequence[Any],
+    results: Sequence[dict[str, Any]],
+    *,
+    indices: Sequence[int] | None = None,
+) -> dict[str, Any]:
+    """Compare matched trials with the original source held out across labels."""
+    from myosuite_carla.human_comparison import (
+        FOLLOWING_FEATURES,
+        discriminability,
+        following_features,
+        scoreboard,
+    )
+
+    human_features = np.vstack([following_features(trial) for trial in human])
+    sources = [trial.group_id for trial in human]
+    if len(set(sources)) < 2:
+        raise ValueError("Paired evaluation needs at least two original source groups")
+    trial_indices = list(range(len(human))) if indices is None else list(indices)
+    if len(trial_indices) != len(human) or len(set(trial_indices)) != len(human):
+        raise ValueError("Each human trial needs a unique evaluation index")
+    unique_sources = list(dict.fromkeys(sources))
+    first_half = set(unique_sources[: len(unique_sources) // 2])
+    left = np.asarray([source in first_half for source in sources])
+    floor = None
+    if len(first_half) >= 2 and len(unique_sources) - len(first_half) >= 2:
+        floor = discriminability(
+            human_features[left],
+            human_features[~left],
+            [source for source in sources if source in first_half],
+            [source for source in sources if source not in first_half],
+            model="boosting",
+            grouping="independent",
+        )
+    likeness: dict[str, Any] = {
+        "trials": len(human),
+        "sources": len(unique_sources),
+        "source_groups": sources,
+        "grouping_unit": "original source group",
+    }
+    errors = {}
+    for agent in ("policy", "reflex"):
+        candidates = [
+            row for row in results if row["kind"] == "ngsim" and row["agent"] == agent
+        ]
+        lookup = {row["index"]: row for row in candidates}
+        if len(lookup) != len(candidates) or set(lookup) != set(trial_indices):
+            raise ValueError(
+                "Paired results must match every human evaluation index once"
+            )
+        rows = [lookup[index] for index in trial_indices]
+        if [row.get("source_group") for row in rows] != sources:
+            raise ValueError(
+                "Paired results must retain the original human source groups"
+            )
+        features = np.asarray([row["features"] for row in rows])
+        errors[agent] = np.asarray(
+            [_gap_rmse(row, trial) for row, trial in zip(rows, human)]
+        )
+        judge = discriminability(
+            features,
+            human_features,
+            sources,
+            sources,
+            model="boosting",
+            grouping="shared",
+        )
+        likeness[agent] = {
+            "gap_rmse_m": {
+                "mean": float(np.mean(errors[agent])),
+                "median": float(np.median(errors[agent])),
+            },
+            "judge_auc": judge["auc"],
+            "judge": judge,
+            "scoreboard": scoreboard(human_features, features, FOLLOWING_FEATURES),
+        }
+    likeness["gap_rmse_difference_m"] = _paired_difference(
+        errors["policy"] - errors["reflex"], sources
+    )
+    return {
+        "human_floor_auc": floor["auc"] if floor is not None else None,
+        "human_floor": floor,
+        "human_likeness": likeness,
+    }
 
 
 def main() -> int:
@@ -127,12 +274,6 @@ def main() -> int:
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
-    from myosuite_carla.human_comparison import (
-        FOLLOWING_FEATURES,
-        discriminability,
-        following_features,
-        scoreboard,
-    )
     from myosuite_carla.ngsim import load_trials
     from myosuite_carla.training import STAGES
 
@@ -144,13 +285,14 @@ def main() -> int:
     ]
     trials_path = args.run / "ngsim_test.npz"
     human = []
+    chosen: list[int] = []
     if trials_path.exists() and args.ngsim_trials > 0:
         bank = load_trials(trials_path)
         rng = np.random.default_rng(0)
-        chosen, seen = [], set()
+        seen = set()
         for index in rng.permutation(len(bank)):
-            if bank[index].driver not in seen:
-                seen.add(bank[index].driver)
+            if bank[index].group_id not in seen:
+                seen.add(bank[index].group_id)
                 chosen.append(int(index))
             if len(chosen) == args.ngsim_trials:
                 break
@@ -160,6 +302,7 @@ def main() -> int:
                 "seed": 20_000 + n,
                 "index": index,
                 "driver": bank[index].driver,
+                "source_group": bank[index].group_id,
             }
             for n, index in enumerate(chosen)
         ]
@@ -211,58 +354,17 @@ def main() -> int:
                 for p, r in zip(rows["policy"], rows["reflex"])
             ]
         )
-        summary["task_return_difference"] = {
-            "mean": float(differences.mean()),
-            "ci95": _bootstrap(differences),
-        }
+        summary["task_return_difference"] = _paired_difference(
+            differences,
+            [
+                row["source_group"] if stage == "ngsim" else row["seed"]
+                for row in rows["policy"]
+            ],
+        )
         report["stages"][stage] = summary
 
     if human:
-        human_features = np.vstack([following_features(trial) for trial in human])
-        drivers = [trial.driver for trial in human]
-        half = len(human) // 2
-        report["human_floor_auc"] = discriminability(
-            human_features[:half],
-            human_features[half:],
-            drivers[:half],
-            drivers[half:],
-            model="boosting",
-        )["auc"]
-        likeness: dict[str, Any] = {"trials": len(human)}
-        errors: dict[str, np.ndarray] = {}
-        for agent in ("policy", "reflex"):
-            rows = sorted(
-                (
-                    row
-                    for row in results
-                    if row["kind"] == "ngsim" and row["agent"] == agent
-                ),
-                key=lambda row: row["seed"],
-            )
-            features = np.asarray([row["features"] for row in rows])
-            errors[agent] = np.asarray(
-                [_gap_rmse(row, trial) for row, trial in zip(rows, human)]
-            )
-            likeness[agent] = {
-                "gap_rmse_m": {
-                    "mean": float(np.mean(errors[agent])),
-                    "median": float(np.median(errors[agent])),
-                },
-                "judge_auc": discriminability(
-                    features,
-                    human_features,
-                    [f"agent:{row['driver']}" for row in rows],
-                    drivers,
-                    model="boosting",
-                )["auc"],
-                "scoreboard": scoreboard(human_features, features, FOLLOWING_FEATURES),
-            }
-        difference = errors["policy"] - errors["reflex"]
-        likeness["gap_rmse_difference_m"] = {
-            "mean": float(np.mean(difference)),
-            "ci95": _bootstrap(difference),
-        }
-        report["human_likeness"] = likeness
+        report.update(_human_comparison(human, results, indices=chosen))
     output.write_text(json.dumps(report, indent=1), encoding="utf-8")
     print(json.dumps(report, indent=1))
     return 0

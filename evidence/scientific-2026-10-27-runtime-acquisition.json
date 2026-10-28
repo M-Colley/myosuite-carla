@@ -1,0 +1,70 @@
+{
+  "checked_date": "2026-10-27",
+  "official_download_page": {
+    "url": "https://github.com/carla-simulator/carla/blob/ue58-dev/Docs/download.md",
+    "sha": "5c07792e108f88979983f66d4bd1597c34dbb438",
+    "ue58_release_link_pending": true,
+    "nightly_engine": "UE5.5"
+  },
+  "official_releases": [
+    {
+      "tag": "0.9.16",
+      "url": "https://github.com/carla-simulator/carla/releases/tag/0.9.16",
+      "published_at": "2025-09-16T09:32:23Z"
+    },
+    {
+      "tag": "0.10.0",
+      "url": "https://github.com/carla-simulator/carla/releases/tag/0.10.0",
+      "published_at": "2024-12-19T14:10:57Z"
+    },
+    {
+      "tag": "0.9.15",
+      "url": "https://github.com/carla-simulator/carla/releases/tag/0.9.15",
+      "published_at": "2023-11-11T12:51:52Z"
+    },
+    {
+      "tag": "0.9.14",
+      "url": "https://github.com/carla-simulator/carla/releases/tag/0.9.14",
+      "published_at": "2022-12-24T02:26:17Z"
+    },
+    {
+      "tag": "0.9.13",
+      "url": "https://github.com/carla-simulator/carla/releases/tag/0.9.13",
+      "published_at": "2021-11-16T19:51:12Z"
+    }
+  ],
+  "ue58_branch": {
+    "commit": "7bb47bcc7818b82bd46b4900ca3cfae45144baa2",
+    "url": "https://github.com/carla-simulator/carla/tree/7bb47bcc7818b82bd46b4900ca3cfae45144baa2"
+  },
+  "successful_ue58_branch_workflows": [
+    {
+      "name": "Graph Update: pip in /Docs #1654881822",
+      "id": 40327353754,
+      "url": "https://github.com/carla-simulator/carla/actions/runs/40327353754",
+      "head_sha": "6bb051b2ecfd4ff8453789f99beff7578c45ff2a"
+    },
+    {
+      "name": "Graph Update: pip in /Util/AgenticTools #1617442683",
+      "id": 37787450970,
+      "url": "https://github.com/carla-simulator/carla/actions/runs/37787450970",
+      "head_sha": "7c841d73925dc363afabde3b70dc8eb6a7d7e456"
+    },
+    {
+      "name": "Graph Update: pip in /Util/AgenticTools #1613099577",
+      "id": 37473141957,
+      "url": "https://github.com/carla-simulator/carla/actions/runs/37473141957",
+      "head_sha": "8c272e95137a7dd245c9ef14e4545c7061ec0afd"
+    },
+    {
+      "name": "Graph Update: pip in /., /Docs, /PythonAPI/carla, /PythonAPI/docs, /PythonAPI/examples, /PythonAPI/examples/av_stacks/alpamayo, /PythonAPI/examples/av_stacks/autoware/map_tools, /PythonAPI/examples/nvidia/cosmos/client, /PythonAPI/examples/nvidia/cosmos/server, /PythonAPI/examples/nvidia/cosmos/server/workers, /PythonAPI/examples/nvidia/nurec, /PythonAPI/examples/nvidia/nurec/nre/grpc, /PythonAPI/test, /PythonAPI/util, /PythonAPI/util/tools #1612556204",
+      "id": 37438029841,
+      "url": "https://github.com/carla-simulator/carla/actions/runs/37438029841",
+      "head_sha": "57bb68772497130b6b0b47efa6f4ce5ac3a74c97"
+    }
+  ],
+  "successful_simulator_build_in_returned_workflows": false,
+  "local_probe": "scientific-2026-10-27-ue58-preflight.json",
+  "live_attempt": "scientific-2026-10-27-ue58-attempt.json",
+  "live_pass": false
+}

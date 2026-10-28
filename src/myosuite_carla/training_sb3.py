@@ -56,6 +56,7 @@ def make_training_env(
     trials_path: str | None = None,
     motor_noise: float = 0.0,
     vehicle_spread: float = 0.1,
+    style_window: float = 5.0,
     fast: bool = True,
     sampler_config: SamplerConfig | None = None,
 ) -> DrivingTaskWrapper:
@@ -72,7 +73,13 @@ def make_training_env(
         sampler_config or SamplerConfig(),
         stage,
     )
-    return DrivingTaskWrapper(env, sampler, mode=mode, vehicle_spread=vehicle_spread)
+    return DrivingTaskWrapper(
+        env,
+        sampler,
+        mode=mode,
+        vehicle_spread=vehicle_spread,
+        style_window=style_window,
+    )
 
 
 def make_vec_env(
@@ -309,7 +316,7 @@ def behaviour_clone(
         for start in range(0, len(inputs), batch_size):
             batch = order[start : start + batch_size]
             if hasattr(policy, "actor"):
-                predicted = policy.actor(inputs[batch], deterministic=True)
+                predicted = policy(inputs[batch], deterministic=True)
             else:
                 predicted = policy.get_distribution(inputs[batch]).mode()
             loss = torch.mean((predicted - targets[batch]) ** 2)

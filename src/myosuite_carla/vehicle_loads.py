@@ -147,6 +147,39 @@ class VehicleMotion:
             "lateral_right_acceleration": np.array([project(self.acceleration)[1]]),
         }
 
+    def acceleration_at(
+        self,
+        offset: Sequence[float],
+        *,
+        relative_velocity: Sequence[float] = (0.0, 0.0, 0.0),
+        relative_acceleration: Sequence[float] = (0.0, 0.0, 0.0),
+    ) -> NDArray[np.float64]:
+        """Return inertial point acceleration expressed in cockpit axes.
+
+        Args:
+            offset: Vector from the vehicle reference point to the point, m.
+            relative_velocity: Point velocity relative to the cockpit, m/s.
+            relative_acceleration: Point acceleration relative to the cockpit,
+                m/s^2. All three inputs use the rotating cockpit axes.
+
+        Tangential, centripetal and Coriolis acceleration are included. Gravity
+        is separate from this kinematic acceleration.
+        """
+        frame = self.in_cockpit()
+        r = np.asarray(_vector(offset, "offset"))
+        velocity = np.asarray(_vector(relative_velocity, "relative_velocity"))
+        acceleration = np.asarray(
+            _vector(relative_acceleration, "relative_acceleration")
+        )
+        omega, alpha = frame["angular_velocity"], frame["angular_acceleration"]
+        return np.asarray(
+            frame["acceleration"]
+            + np.cross(alpha, r)
+            + np.cross(omega, np.cross(omega, r))
+            + 2.0 * np.cross(omega, velocity)
+            + acceleration
+        )
+
 
 class InertialLoads:
     """Compute per-body d'Alembert forces for selected bodies of a model.

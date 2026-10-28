@@ -22,6 +22,41 @@ compatible version may have a different API. The standalone package itself
 supports Python 3.10+, MuJoCo 3.6+ and Gymnasium 1.0 through 1.2; your CARLA wheel
 may restrict the Python minor version and platform further.
 
+The 2026-10-27 integration review also checked current MyoSuite `dev` commit `230f198458b501c423a0892b78da60419ffc49a3`. The final integration tests include the fatigue reset fix from [MyoSuite PR 575](https://github.com/MyoHub/myosuite/pull/575). Embodied human driving and embodied UI composition use their public CPU APIs. Vehicle adapters restore the initial surrogate pose and speed on reset. `VehicleSessionEngine` requires an explicit `reset_vehicle(session, seed, options)` callback for live vehicle resets.
+
+Version 0.1.1 adds Shapely 2 or newer for planar vehicle footprints. Embodied human 0.1.1 uses `VehicleMotion.acceleration_at` for head sensing and requires this bridge version. Following trial archives use schema 2 to retain source groups. The reader accepts the earlier archives. Shared source grouping is selected explicitly for paired human and simulated evaluations.
+
+## Acceleration control and empirical profiles
+
+Actuator calibration affects the inferred human following parameters. The legacy fixed throttle bias produced positive acceleration for a zero acceleration request. `AccelerationControlConfig` optionally inverts the vehicle drive curve and drag model, then tracks measured pedal positions. `ReflexDriver` returns muscle intents through the existing body interface. Its default configuration retains the legacy controller.
+
+The inverse requires vehicle specific `VehicleModelParams`. Its default identifies the CARLA 0.10 Nissan Patrol surrogate. Forward driving on a level road is assumed. Reverse driving raises an error, and finite pedal travel limits achievable acceleration. For a custom vehicle, identify its drive, drag and braking parameters with `examples/identify_vehicle.py` and `examples/fit_vehicle_model.py`. Supply the fitted parameters to the controller and the evaluated surrogate. Live execution requires an additional check against that actual CARLA vehicle.
+
+```python
+from dataclasses import asdict
+import json
+
+from myosuite_carla.driver_models import AccelerationControlConfig, ReflexDriverConfig
+from myosuite_carla.vehicle_model import SurrogateVehicle, carla_nissan_patrol
+
+vehicle_parameters = carla_nissan_patrol()
+vehicle = SurrogateVehicle(params=vehicle_parameters)
+reflex_configuration = ReflexDriverConfig(
+    acceleration_control=AccelerationControlConfig(vehicle=vehicle_parameters)
+)
+saved_configuration = json.loads(json.dumps(asdict(reflex_configuration)))
+restored_configuration = ReflexDriverConfig.from_dict(saved_configuration)
+assert restored_configuration.acceleration_control.vehicle == vehicle.params
+```
+
+Profiles must preserve the complete controller and vehicle configuration. Pedal targets and resulting motion depend on that full configuration. `ReflexDriverConfig.from_dict` restores the nested typed configuration. In embodied human, `ResolvedDrivingProfile.make_reflex_config` uses this method. Physical reports also retain the body configuration, simulation timestep, source window and seed. `ClosedLoopFollowingProtocol` binds the complete controller configuration to its cache identity.
+
+Longitudinal control currently receives exact simulated speed, bumper gap, closing speed and acceleration. The attentive human estimates lateral state. Consequently, acceleration tracking measures the actuator interface under these telemetry assumptions. The engineering test uses the same vehicle model for inversion and simulation. Human sensing accuracy requires separate empirical evaluation.
+
+The reflex history uses `N = max(1, round(perception_delay / dt))` entries. Appending the current state before reading the oldest entry gives a steady history lag of `(N - 1) * dt`. The retained study used `perception_delay = dt = 0.02 s`, which adds zero history lag. Record the configured delay, timestep and realized lag when comparing human response times. Changes to this timing require a new comparison with the retained legacy traces.
+
+The independent trajectory test remains inconclusive. Combined normalized error decreased by 9.10%, while bumper gap RMSE increased. Its paired source interval includes zero. Retain speed, gap and acceleration errors separately, match source identities and seeds, and select configurations before opening test results. The [retained study](evidence/actuation-improvement-2026-10-28/summary.json) supports continued experimental use of the correction. Its live CARLA validation remains pending.
+
 ## Install the matching client
 
 Build the server and Python client from the same CARLA checkout, or use the

@@ -30,7 +30,7 @@ from __future__ import annotations
 import importlib
 import math
 from collections.abc import Callable, Iterable, Mapping, Sequence
-from dataclasses import dataclass, fields
+from dataclasses import dataclass, fields, replace
 from typing import Any
 
 import numpy as np
@@ -608,9 +608,7 @@ def fit_vehicle_model(
 
     def lateral_residual(theta: NDArray[np.float64]) -> NDArray[np.float64]:
         gains, lag = theta[:-1], theta[-1]
-        trial = VehicleModelParams(
-            wheelbase=wheelbase, speed_knots=knots.speed_knots, steer_gain=gains
-        )
+        trial = replace(knots, wheelbase=wheelbase, steer_gain=gains)
         parts = []
         for segment in segments:
             speed = segment.speed[1:]

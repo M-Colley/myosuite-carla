@@ -1,0 +1,2 @@
+artifacts\typing-numpy226-review\human_comparison_baseline.py:134: error: Value of type "floating[Any]" is not indexable  [index]
+Found 1 error in 1 file (checked 1 source file)
