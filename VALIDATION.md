@@ -2,6 +2,10 @@
 
 ## Physical closed loop calibration on 2026-10-28
 
+The first complete calibration executed 141 physical episodes safely. Validation selected candidate 3 with objective 1.12046, compared with baseline 1.23025. The six fresh test sources increased normalized trajectory MSE from 1.03338 to 1.16906. The paired increase was 0.13568 (95% bootstrap interval [−0.02073, 0.30352]). Mean source speed RMSE increased from 0.98997 to 1.03742 m/s. Gap RMSE increased from 4.44644 to 4.95188 m. Acceleration RMSE increased from 0.99246 to 1.00335 m/s². The candidate failed the predeclared acceptance rule. Global defaults remain unchanged.
+
+The [summary](evidence/closed-loop-calibration-2026-10-28/summary.json), [complete report archive](evidence/closed-loop-calibration-2026-10-28/reports.zip), and [test comparison figure](evidence/closed-loop-calibration-2026-10-28/closed-loop-comparison.png) preserve the outcome. The fixed design and source code were published in human revision `cbb05bf` and bridge revision `c09b2cf` before test evaluation. Runtime hashes remained identical throughout the run. An independent calculation reproduced all training and validation distances and the paired test interval. The archive contains every executed episode, including candidates rejected during selection.
+
 `ClosedLoopFollowingProtocol` now evaluates every fitted parameter candidate through the attentive human, MyoSuite muscles, and vehicle surrogate. It reuses one body and caches episodes by complete IDM settings, source window, and exact simulation seed. Source specific seeds remain stable across request ordering and batching. A failed, unsafe, or incomplete episode makes its objective infeasible. The compatibility function `closed_loop_following` retains its previous total trial limit and seed convention.
 
 The companion human calibration fixes a fresh source split before simulation. It excludes the 96 tracks from the previous campaign and the additional runtime measurement track. The new design uses six training, three validation, and six test sources. Every physical episode spans the full 20 second source window. Sixteen Sobol draws fit four IDM parameters. The baseline remains a validation candidate. Speed, bumper gap, and acceleration RMSE use assumed fixed normalization scales of 1 m/s, 5 m, and 1 m/s². Trials are averaged within source before squaring normalized errors. Sources receive equal weights.
@@ -9,6 +13,8 @@ The companion human calibration fixes a fresh source split before simulation. It
 Contextual acceptance requires complete safe test pairs and a source paired bootstrap upper 95% error change below zero. The primary objective and rule are fixed before fitting. The test data never select parameters. Global defaults remain separate from contextual profiles. The fitted values describe the combined human controller and Nissan Patrol surrogate under the recorded conditions. Differences between NGSIM vehicles and the surrogate can affect these estimates.
 
 The complete bridge suite passed 454 tests and skipped four live tests in 118.06 seconds. The human suite passed 541 tests and skipped 24 optional tests in 87.13 seconds. Ruff, formatting, and mypy passed for the bridge. Human Ruff and mypy also passed. The physical run uses MyoSuite development revision `37c8b863fe448f8fff2b29eb62a53a269b79d16f`. The implementation preserves lazy optional imports and the public CPU bridge API.
+
+Wheel and source builds passed for both packages. Hosted checks passed for human source revision `cbb05bf` and bridge source revision `c09b2cf`. These include the matched human core benchmark comparison, integrated driving checks, and all Linux and Windows jobs. The opt in live job remained skipped. This fit still requires live CARLA evaluation.
 
 ## Empirical driving comparison on 2026-10-28
 
