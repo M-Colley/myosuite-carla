@@ -508,6 +508,12 @@ python examples/record_embodied_human.py --human-repo ../embodied-human --fast -
 
 The fast configuration retains 114 muscles and applies vehicle loads to the body. The two episodes evaluate a requested lateral displacement and a braking lead vehicle. The lead vehicle follows a scripted trajectory. These seeded integration demonstrations establish execution and physical coupling. Human driving validity requires comparison with measured human data. The actual CARLA 0.10.0 recording results are documented in [VALIDATION.md](VALIDATION.md).
 
+## Empirical following calibration
+
+`empirical_following.FollowingProtocol` compares the IDM acceleration component with recorded NGSIM states. Its observations are acceleration errors relative to the measurements. It preserves each original vehicle source through fitting and evaluation. The companion `closed_loop_following` function replays recorded leaders through `embodied-human.AttentiveDriver`, one reused MyoSuite body, and the fitted offline vehicle surrogate. It reports speed and bumper gap errors, collisions, road departures, and termination for baseline and fitted configurations.
+
+The [embodied human campaign](https://github.com/M-Colley/embodied-human) connects these protocols to the other empirical sources. Vehicle tracks provide the NGSIM grouping unit. A component fit requires a separate check of its transfer to closed loop behavior. The reports preserve this distinction and retain failed episodes. [VALIDATION.md](VALIDATION.md) contains the actual commands and outcomes.
+
 ## Test
 
 Run the offline contact demonstration and tests from the repository root:

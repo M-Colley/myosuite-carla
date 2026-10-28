@@ -1,0 +1,28 @@
+........................................................................ [ 13%]
+..................................sssss................................. [ 26%]
+........................................................................ [ 40%]
+..........s.s...........................ssssss.......................... [ 53%]
+........................................................................ [ 67%]
+.................................sssssss........................s....... [ 80%]
+........................................................................ [ 94%]
+...........ss.........s.........                                         [100%]
+============================== warnings summary ===============================
+tests/test_driving.py::test_attentive_driver_shares_gaze_with_surt
+tests/test_driving.py::test_takeover_time_emerges_from_the_modules
+tests/test_touch_contact.py::test_existing_myosuite_fullbody_can_be_sensed_without_rebuilding_it
+  C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:563: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    model = spec.compile()
+
+tests/test_driving.py::test_attentive_driver_shares_gaze_with_surt
+tests/test_driving.py::test_takeover_time_emerges_from_the_modules
+  C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:600: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    model = spec.compile()
+
+tests/test_driving.py::test_attentive_driver_shares_gaze_with_surt
+tests/test_driving.py::test_takeover_time_emerges_from_the_modules
+tests/test_touch_contact.py::test_existing_myosuite_fullbody_can_be_sensed_without_rebuilding_it
+  C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:1416: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    body = _body_spec(config).compile()
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+512 passed, 24 skipped, 8 warnings in 116.49s (0:01:56)

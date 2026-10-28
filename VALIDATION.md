@@ -1,5 +1,29 @@
 # Validation record
 
+## Empirical driving comparison on 2026-10-28
+
+The embodied human empirical campaign processed five public datasets. DriveDNA Controlled remains pending after HTTP 403 with `GatedRepo`. The owner confirmed the access request is pending. All six sources have adapters and explicit status records. The [campaign summary](evidence/empirical-driving-2026-10-28/summary.json) records coverage, decisions, and evidence hashes. The full dataset reports are retained in embodied human's `evidence/empirical-driving-2026-10-28/reports.zip`.
+
+The new `empirical_following` module compares the existing IDM component against recorded NGSIM states. Source tracks remain grouped across partitions. A seeded selection uses 96 of the 4,346 available tracks before splitting into 58 training, 19 validation, and 19 test sources. Training and validation use 64 parameter draws. Desired speed remains fixed at 16 m/s. Mean trial acceleration RMSE decreases from 2.823 to 1.348 m/s² on the test sources.
+
+The physical check replays six held out leader trajectories through the actual `AttentiveDriver`, a cached MyoSuite body with 114 muscles, and the fitted CARLA 0.10 Nissan Patrol surrogate. Each source has a baseline and fitted replay with the same initial state and seed. All 12 episodes complete their 20 second windows without a collision or road departure. Speed RMSE increases from 0.8803 to 1.0177 m/s. Gap RMSE increases from 3.6497 to 4.5717 m. Acceleration RMSE increases from 0.9158 to 0.9566 m/s². The source paired speed error increase is 0.1374 m/s (95% bootstrap interval [0.0133, 0.2789]). The [complete report](evidence/empirical-driving-2026-10-28/ngsim.json) retains trajectories, configurations, source groups, seeds, and cleanup outcomes.
+
+The candidate is rejected after the closed loop regression. The Lehtonen fixation and RightGaze allocation candidates are also rejected after test regressions. Model defaults remain unchanged. Further calibration needs a closed loop objective and fresh evaluation data. The current held out results have been inspected and cannot support another independent selection claim.
+
+The complete bridge suite passed 434 tests and skipped four live tests in 201.02 seconds. The human suite passed 512 tests and skipped 24 optional tests. Sixteen subsequent campaign tests passed after adding runtime import provenance. Ruff, formatting, mypy, and wheel and source builds passed for the bridge. Python 3.12.13, MuJoCo 3.17.0, NumPy 2.5.4, SciPy 1.17.1, and pandas 3.0.6 were used. Actual MyoSuite imports used development revision `37c8b863fe448f8fff2b29eb62a53a269b79d16f`. Test output and JUnit records are retained beside the summary.
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../embodied-human/src').Path + [IO.Path]::PathSeparator + (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe -m pytest tests -q --junitxml=artifacts/empirical-driving-2026-10-28/bridge-tests.xml
+.venv/Scripts/python.exe ../embodied-human/examples/evaluate_driving_data.py --inputs artifacts/empirical-driving-2026-10-28/inputs.json --out artifacts/empirical-driving-2026-10-28/final --fit --samples 64 --seconds 30 --max-following-groups 96 --closed-loop-trials 6
+.venv/Scripts/python.exe -m ruff check src tests examples benchmarks
+.venv/Scripts/python.exe -m ruff format --check src tests examples benchmarks
+.venv/Scripts/python.exe -m mypy src/myosuite_carla --ignore-missing-imports --follow-imports=skip
+.venv/Scripts/python.exe -m build
+```
+
+These empirical runs use the offline vehicle surrogate. The earlier CARLA 0.10 live results remain separate. A matching UE5.8 server and client remain unavailable.
+
 ## Local embodied human video on 2026-10-27
 
 The local `C:/Users/localadmin/Desktop/embodied-human` project drove a live CARLA 0.10.0 vehicle through `AttentiveDriver`. Two independent 12 second episodes used seed 0 and the SuRT visual search task. The recording combines the CARLA chase camera, MuJoCo body, measured controls, gaze state, and task display. The resulting local video is `artifacts/embodied-human-live/embodied-human-carla-0.10.mp4` (26 seconds, 1920 by 1080 pixels, 25 frames per second). Each episode starts with a one second title card.
