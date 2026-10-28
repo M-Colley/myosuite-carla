@@ -1,6 +1,8 @@
 """Physics aligned video frames preserve the episode duration."""
 
 import importlib.util
+import json
+from dataclasses import asdict
 from pathlib import Path
 
 import pytest
@@ -25,3 +27,38 @@ def test_twenty_second_trial_has_exactly_five_hundred_video_frames():
 def test_unsupported_video_rate_is_rejected(fps):
     with pytest.raises(ValueError):
         _module().frame_steps(20, 0.02, fps)
+
+
+def test_recorded_actuator_configuration_is_preserved():
+    from myosuite_carla.driver_models import (
+        AccelerationControlConfig,
+        IdmConfig,
+        ReflexDriverConfig,
+    )
+
+    original = ReflexDriverConfig(
+        perception_delay=0.08,
+        idm=IdmConfig(time_headway=0.8),
+        acceleration_control=AccelerationControlConfig(pedal_integral=0.04),
+    )
+    restored = _module().controller_configuration(
+        asdict(original.idm), 0.02, json.loads(json.dumps(asdict(original)))
+    )
+    assert restored == original
+
+
+def test_video_rejects_conflicting_idm_and_controller_settings():
+    from myosuite_carla.driver_models import IdmConfig, ReflexDriverConfig
+
+    with pytest.raises(ValueError, match="differ"):
+        _module().controller_configuration(
+            asdict(IdmConfig(time_headway=0.8)), 0.02, asdict(ReflexDriverConfig())
+        )
+
+
+def test_earlier_video_reports_keep_their_original_controller_defaults():
+    from myosuite_carla.driver_models import IdmConfig
+
+    restored = _module().controller_configuration(asdict(IdmConfig()), 0.02, None)
+    assert restored.perception_delay == 0.02
+    assert restored.acceleration_control is None

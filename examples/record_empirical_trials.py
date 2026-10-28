@@ -221,6 +221,24 @@ def verify_replay(
     return errors
 
 
+def controller_configuration(
+    parameters: dict[str, float],
+    dt: float,
+    explicit: dict[str, Any] | None,
+) -> Any:
+    """Restore the complete recorded controller and reject parameter drift."""
+    from myosuite_carla.driver_models import IdmConfig, ReflexDriverConfig
+
+    configuration = (
+        ReflexDriverConfig.from_dict(explicit)
+        if explicit is not None
+        else ReflexDriverConfig(idm=IdmConfig(**parameters), perception_delay=dt)
+    )
+    if asdict(configuration.idm) != parameters:
+        raise ValueError("recorded controller and IDM profile differ")
+    return configuration
+
+
 def replay(
     driver: Any,
     body: BodyView,
@@ -230,12 +248,13 @@ def replay(
     path: Path,
     fps: int,
     desired_speed: float,
+    reflex_configuration: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     import embodied_human as eh
     import numpy as np
     from embodied_human.agents.driver import AttentiveDriver
 
-    from myosuite_carla.driver_models import IdmConfig, ReflexDriver, ReflexDriverConfig
+    from myosuite_carla.driver_models import ReflexDriver
     from myosuite_carla.driving_env import FullBodyDrivingEnv
     from myosuite_carla.training import scenario_from_trial
 
@@ -250,15 +269,13 @@ def replay(
     }
     try:
         _, initial = env.reset(seed=expected["seed"])
+        configuration = controller_configuration(
+            parameters, env.dt, reflex_configuration
+        )
         agent = AttentiveDriver(
             eh.build_human(seed=expected["seed"]),
             env,
-            reflex=ReflexDriver(
-                env.dt,
-                ReflexDriverConfig(
-                    idm=IdmConfig(**parameters), perception_delay=env.dt
-                ),
-            ),
+            reflex=ReflexDriver(env.dt, configuration),
         )
         agent.reset(seed=expected["seed"])
         panel = Panel(
@@ -363,6 +380,7 @@ def main() -> int:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--fps", type=int, default=25)
     parser.add_argument("--groups", nargs="+")
+    parser.add_argument("--base-seed", type=int)
     args = parser.parse_args()
     from embodied_human.reporting import runtime_sources
 
@@ -373,9 +391,11 @@ def main() -> int:
     provenance = json.loads(
         (args.report.parent / report["provenance_report"]).read_text()
     )
+    source_record = provenance.get("source", report.get("design", {}).get("source"))
     if (
         report["status"] != "evaluated"
-        or sha256(args.source) != provenance["source"]["sha256"]
+        or source_record is None
+        or sha256(args.source) != source_record["sha256"]
     ):
         raise ValueError(
             "report status or trajectory source differs from the calibration"
@@ -388,20 +408,35 @@ def main() -> int:
             raise ValueError(f"runtime source differs from the calibration: {name}")
     design = report["design"]
     config = design["configuration"]
-    protocol = load_following_protocol(
-        args.source,
-        max_groups=sum(
-            len(design["partitions"][role]) for role in ("train", "validation", "test")
-        ),
-        seed=config["seed"],
-        desired_speed=config["desired_speed"],
-        excluded_groups=design["excluded_source_groups"],
-    )
-    selected = {
-        group
-        for role in ("train", "validation", "test")
-        for group in design["partitions"][role]
-    }
+    if "development" in design["partitions"]:
+        fixture = design["fixtures"]["test"]
+        fixture_path = Path(fixture["path"])
+        if not fixture_path.is_file():
+            fixture_path = (
+                args.report.parent / fixture["path"].replace("\\", "/").split("/")[-1]
+            )
+        if not fixture_path.is_file() or sha256(fixture_path) != fixture["sha256"]:
+            raise ValueError("the frozen test source fixture is unavailable or changed")
+        protocol = load_following_protocol(
+            fixture_path, max_groups=None, desired_speed=config["desired_speed"]
+        )
+        selected = set(design["partitions"]["test"])
+    else:
+        protocol = load_following_protocol(
+            args.source,
+            max_groups=sum(
+                len(design["partitions"][role])
+                for role in ("train", "validation", "test")
+            ),
+            seed=config["seed"],
+            desired_speed=config["desired_speed"],
+            excluded_groups=design["excluded_source_groups"],
+        )
+        selected = {
+            group
+            for role in ("train", "validation", "test")
+            for group in design["partitions"][role]
+        }
     if set(protocol.groups) != selected:
         raise ValueError("selected source windows differ from the frozen design")
     body_config = FullBodyDriverConfig.fast()
@@ -413,12 +448,30 @@ def main() -> int:
     groups = sorted(args.groups or design["partitions"]["test"])
     if not groups or set(groups) - set(design["partitions"]["test"]):
         raise ValueError("video groups must belong to the held out test partition")
+    seed_sets = [
+        {
+            row.get("base_seed")
+            for row in report["closed_loop"]["episodes"]
+            if row["source_group"] == group and row["profile"] == label
+        }
+        for group in groups
+        for label in ("baseline", "fitted")
+    ]
+    common_seeds = set.intersection(*seed_sets)
+    if not common_seeds:
+        raise ValueError("the recorded profiles lack a common simulation seed")
+    base_seed = args.base_seed
+    if base_seed is None:
+        base_seed = min(common_seeds, key=lambda value: -1 if value is None else value)
+    if base_seed not in common_seeds:
+        raise ValueError("the requested base seed is absent from a trial profile")
     args.out.mkdir(parents=True, exist_ok=True)
     manifest_path = args.out / "manifest.json"
     identity = {
         "report_sha256": sha256(args.report),
         "source_sha256": sha256(args.source),
         "fps": args.fps,
+        "base_seed": base_seed,
     }
     manifest = (
         json.loads(manifest_path.read_text())
@@ -447,7 +500,10 @@ def main() -> int:
                 expected = next(
                     row
                     for row in report["closed_loop"]["episodes"]
-                    if row["source_group"] == group and row["profile"] == label
+                    if row["source_group"] == group
+                    and row["profile"] == label
+                    and row.get("base_seed") == base_seed
+                    and row["trial_index"] == 0
                 )
                 trial = protocol.trials_for(group)[expected["trial_index"]]
                 print(f"Rendering {group} {label}", flush=True)
@@ -461,6 +517,9 @@ def main() -> int:
                         args.out / f"{stem}-{label}.mp4",
                         args.fps,
                         config["desired_speed"],
+                        report["closed_loop"]
+                        .get("reflex_configurations", {})
+                        .get(label),
                     )
                 )
             paired = args.out / f"{stem}-paired.mp4"

@@ -328,6 +328,58 @@ def test_episode_cache_binds_exact_settings_source_and_seed_and_copies_records(
         protocol({}, groups, 0)
 
 
+def test_physical_protocol_binds_a_controller_snapshot_and_resolved_idm(monkeypatch):
+    import myosuite_carla.empirical_following as module
+    from myosuite_carla.driver_models import (
+        AccelerationControlConfig,
+        ReflexDriverConfig,
+    )
+
+    source = FollowingProtocol([_trial("a")])
+    maps = [[0.0, 0.0], [1.0, 0.08]]
+    baseline = ClosedLoopFollowingProtocol(source)
+    corrected = ClosedLoopFollowingProtocol(
+        source,
+        reflex_config=ReflexDriverConfig(
+            idm=IdmConfig(time_headway=2.3),
+            acceleration_control=AccelerationControlConfig(),
+            throttle_map=maps,
+        ),
+    )
+    maps[1][1] = 999
+    assert corrected.reflex_config.throttle_map[1][1] == 0.08
+    with pytest.raises(AttributeError):
+        corrected.reflex_config = ReflexDriverConfig()
+    assert (
+        baseline.metadata["controller_config_sha256"]
+        != corrected.metadata["controller_config_sha256"]
+    )
+    captured = []
+
+    def execute(driver, trial, parameters, **kwargs):
+        captured.append((parameters, kwargs["reflex_config"]))
+        return {
+            "status": "completed",
+            "collision": False,
+            "off_road": False,
+            "surrogate_closed": True,
+            "coverage_fraction": 1.0,
+            "speed_rmse_mps": 1.0,
+            "gap_rmse_m": 1.0,
+            "acceleration_rmse_mps2": 1.0,
+        }
+
+    monkeypatch.setattr(module, "_run_closed_loop_episode", execute)
+    for protocol in (baseline, corrected):
+        monkeypatch.setattr(protocol, "_ensure_driver", lambda: None)
+        protocol({}, protocol.groups, 17)
+        protocol({}, protocol.groups, 17)
+        assert protocol.diagnostics["episode_runs"] == 1
+    assert captured[0][1].acceleration_control is None
+    assert captured[1][1].acceleration_control is not None
+    assert captured[1][0].time_headway == 2.3
+
+
 @pytest.mark.parametrize(
     "change",
     [

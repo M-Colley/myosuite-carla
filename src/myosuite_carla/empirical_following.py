@@ -9,6 +9,7 @@ NGSIM identifiers denote source vehicle tracks, not identified participants.
 from __future__ import annotations
 
 import hashlib
+import json
 import math
 from collections.abc import Mapping, Sequence
 from copy import deepcopy
@@ -19,7 +20,7 @@ from typing import Any
 import numpy as np
 from numpy.typing import NDArray
 
-from .driver_models import IdmConfig, idm_acceleration
+from .driver_models import IdmConfig, ReflexDriverConfig, idm_acceleration
 from .ngsim import RATE, FollowingTrial, following_trials, load_tracks, load_trials
 
 METRICS = ("acceleration_rmse", "acceleration_bias")
@@ -303,6 +304,7 @@ def _run_closed_loop_episode(
     trial_index: int,
     seed: int,
     config: ClosedLoopConfig,
+    reflex_config: ReflexDriverConfig | None = None,
 ) -> dict[str, Any]:
     """Run one muscle driven follower and retain completion and error evidence."""
     import embodied_human as eh
@@ -337,11 +339,16 @@ def _run_closed_loop_episode(
         )
         env = FullBodyDrivingEnv(scenario, driver=driver)
         _, initial = env.reset(seed=seed)
-        reflex_config = ReflexDriverConfig(idm=parameters, perception_delay=env.dt)
+        resolved_reflex = (
+            ReflexDriverConfig(idm=parameters, perception_delay=env.dt)
+            if reflex_config is None
+            else replace(reflex_config, idm=parameters)
+        )
+        record["reflex_config"] = asdict(resolved_reflex)
         agent = AttentiveDriver(
             eh.build_human(seed=seed),
             env,
-            reflex=ReflexDriver(env.dt, reflex_config),
+            reflex=ReflexDriver(env.dt, resolved_reflex),
         )
         agent.reset(seed=seed)
         states = [initial["scenario"]]
@@ -454,8 +461,19 @@ class ClosedLoopFollowingProtocol:
         protocol: FollowingProtocol,
         *,
         config: ClosedLoopConfig = ClosedLoopConfig(),
+        reflex_config: ReflexDriverConfig | None = None,
     ) -> None:
         self.config = config
+        supplied = reflex_config or ReflexDriverConfig(perception_delay=0.02)
+        self._reflex_config = replace(
+            deepcopy(supplied),
+            throttle_map=tuple((row[0], row[1]) for row in supplied.throttle_map),
+            brake_map=tuple((row[0], row[1]) for row in supplied.brake_map),
+            steer_map=tuple((row[0], row[1]) for row in supplied.steer_map),
+        )
+        self._reflex_identity = hashlib.sha256(
+            json.dumps(asdict(self._reflex_config), sort_keys=True).encode()
+        ).hexdigest()
         self.groups = tuple(protocol.groups)
         self.desired_speed = protocol.desired_speed
         self._source_metadata = deepcopy(protocol.metadata)
@@ -503,6 +521,11 @@ class ClosedLoopFollowingProtocol:
         }
 
     @property
+    def reflex_config(self) -> ReflexDriverConfig:
+        """Return the immutable controller configuration bound to this cache."""
+        return self._reflex_config
+
+    @property
     def observed(self) -> dict[str, dict[str, float]]:
         """Return zero trajectory error targets for every selected source."""
         return {group: dict.fromkeys(CLOSED_LOOP_METRICS, 0.0) for group in self.groups}
@@ -514,6 +537,8 @@ class ClosedLoopFollowingProtocol:
             **deepcopy(self._source_metadata),
             "role": "physical_closed_loop_calibration",
             "configuration": asdict(self.config),
+            "reflex_config": asdict(self._reflex_config),
+            "controller_config_sha256": self._reflex_identity,
             "metrics": dict(zip(CLOSED_LOOP_METRICS, ("m/s", "m", "m/s^2"))),
             "fixed_error_scales": dict(CLOSED_LOOP_SCALES),
             "observed_target_definition": "zero trajectory error to recorded follower",
@@ -575,7 +600,13 @@ class ClosedLoopFollowingProtocol:
     ) -> dict[str, Any]:
         if self._closed:
             raise RuntimeError("closed loop protocol has been closed")
-        key = (tuple(asdict(parameters).values()), group, trial_index, seed)
+        key = (
+            self._reflex_identity,
+            tuple(asdict(parameters).values()),
+            group,
+            trial_index,
+            seed,
+        )
         if key in self._cache:
             self._cache_hits += 1
             return deepcopy(self._cache[key])
@@ -589,6 +620,7 @@ class ClosedLoopFollowingProtocol:
             trial_index=trial_index,
             seed=seed,
             config=self.config,
+            reflex_config=self._reflex_config,
         )
         self._cache[key] = deepcopy(record)
         return record
@@ -600,7 +632,7 @@ class ClosedLoopFollowingProtocol:
         requested = self._requested_groups(groups)
         if isinstance(seed, bool) or not isinstance(seed, int) or seed < 0:
             raise ValueError("seed must be a nonnegative integer")
-        config = idm_config(parameters)
+        config = idm_config(idm_parameters(self._reflex_config.idm) | dict(parameters))
         records: dict[str, list[dict[str, Any]]] = {}
         for group in requested:
             records[group] = [
@@ -643,7 +675,11 @@ class ClosedLoopFollowingProtocol:
         requested = self._requested_groups(groups)
         if isinstance(seed, bool) or not isinstance(seed, int) or seed < 0:
             raise ValueError("seed must be a nonnegative integer")
-        profiles = {"baseline": idm_config(baseline), "fitted": idm_config(fitted)}
+        defaults = idm_parameters(self._reflex_config.idm)
+        profiles = {
+            "baseline": idm_config(defaults | dict(baseline)),
+            "fitted": idm_config(defaults | dict(fitted)),
+        }
         episodes = []
         for label, parameters in profiles.items():
             for group in requested:
@@ -667,6 +703,7 @@ class ClosedLoopFollowingProtocol:
             "desired_speed_mps": self.desired_speed,
             "profiles": {key: asdict(value) for key, value in profiles.items()},
             "configuration": asdict(self.config),
+            "reflex_config": asdict(self._reflex_config),
             "episodes": episodes,
             **deepcopy(self._body_metadata),
         }
