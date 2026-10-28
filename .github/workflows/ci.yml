@@ -83,7 +83,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: M-Colley/embodied-human
-          ref: cbb05bf934005e25dff01af9023bcfa5b9446cb2
+          ref: e938e90b7d38638fe2c588e5e7f7a6621e41eec2
           path: embodied-human
       - uses: actions/setup-python@v5
         with:
@@ -107,6 +107,7 @@ jobs:
           ../embodied-human/tests/test_body_sensing.py
           ../embodied-human/tests/test_driving_campaign.py
           ../embodied-human/tests/test_closed_loop_calibration.py
+          ../embodied-human/tests/test_actuation_evaluation.py
           ../embodied-human/tests/test_driving_data.py
           ../embodied-human/tests/test_driving_evaluation.py
           ../embodied-human/tests/test_driving_profiles.py

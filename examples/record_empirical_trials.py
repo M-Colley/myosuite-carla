@@ -72,11 +72,19 @@ class Panel:
     """One profile with measured controls, actual body, and trajectory schematic."""
 
     def __init__(
-        self, path: Path, profile: str, group: str, trial: Any, fps: int, body: BodyView
+        self,
+        path: Path,
+        profile: str,
+        group: str,
+        trial: Any,
+        fps: int,
+        body: BodyView,
+        title: str | None = None,
     ) -> None:
         import imageio.v2 as imageio
 
         self.profile, self.group, self.trial, self.body = profile, group, trial, body
+        self.title = title
         self.colour = (55, 145, 210) if profile == "baseline" else (235, 135, 62)
         self.frames = 0
         self.writer = imageio.get_writer(
@@ -101,7 +109,9 @@ class Panel:
 
         canvas = Image.new("RGB", (960, 1080), (15, 21, 30))
         draw = ImageDraw.Draw(canvas)
-        title = "Baseline" if self.profile == "baseline" else "Fitted candidate"
+        title = self.title or (
+            "Baseline" if self.profile == "baseline" else "Fitted candidate"
+        )
         draw.text((22, 12), title, font=font(31), fill=self.colour)
         draw.text(
             (22, 57),
@@ -279,7 +289,13 @@ def replay(
         )
         agent.reset(seed=expected["seed"])
         panel = Panel(
-            temporary, expected["profile"], expected["source_group"], trial, fps, body
+            temporary,
+            expected["profile"],
+            expected["source_group"],
+            trial,
+            fps,
+            body,
+            expected.get("video_label"),
         )
         capture = frame_steps(scenario.duration, env.dt, fps)
         states = [initial["scenario"]]
@@ -505,6 +521,17 @@ def main() -> int:
                     and row.get("base_seed") == base_seed
                     and row["trial_index"] == 0
                 )
+                explicit = (
+                    report["closed_loop"].get("reflex_configurations", {}).get(label)
+                )
+                if (
+                    label == "fitted"
+                    and explicit is not None
+                    and explicit.get("acceleration_control") is not None
+                    and report["closed_loop"]["profiles"][label]
+                    == report["closed_loop"]["profiles"]["baseline"]
+                ):
+                    expected = {**expected, "video_label": "Corrected actuation"}
                 trial = protocol.trials_for(group)[expected["trial_index"]]
                 print(f"Rendering {group} {label}", flush=True)
                 records.append(
@@ -517,9 +544,7 @@ def main() -> int:
                         args.out / f"{stem}-{label}.mp4",
                         args.fps,
                         config["desired_speed"],
-                        report["closed_loop"]
-                        .get("reflex_configurations", {})
-                        .get(label),
+                        explicit,
                     )
                 )
             paired = args.out / f"{stem}-paired.mp4"
@@ -571,7 +596,8 @@ def main() -> int:
         script_sha256=sha256(Path(__file__)),
         interpretation=(
             "Exact offline replay. Recorded trajectories are schematic references. "
-            "The fitted candidate was rejected."
+            "Model update decision: "
+            + report.get("model_update", {}).get("decision", "unreported")
         ),
     )
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")

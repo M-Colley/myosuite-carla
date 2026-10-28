@@ -12,6 +12,23 @@ from typing import Any
 import numpy as np
 
 
+def reference_grid_rmse(record: dict[str, Any]) -> float:
+    """Score a common time grid, including early stops and feasible brake holds."""
+    requested = record["desired_acceleration_mps2"]
+    initial = record["initial_speed_mps"]
+    samples = [row for row in record["samples"] if row["time_s"] >= 2]
+    if not samples:
+        raise ValueError("the reference grid needs samples after two seconds")
+    reference = [
+        requested if requested >= 0 or initial + requested * row["time_s"] > 0 else 0
+        for row in samples
+    ]
+    errors = (
+        np.asarray([row["actual_acceleration_mps2"] for row in samples]) - reference
+    )
+    return float(np.sqrt(np.mean(errors**2)))
+
+
 def evaluate(seconds: float = 6.0) -> dict[str, Any]:
     from myosuite_carla.driver_models import (
         AccelerationControlConfig,
@@ -104,7 +121,11 @@ def evaluate(seconds: float = 6.0) -> dict[str, Any]:
                     errors = np.asarray(measured) - desired
                     record["tracking_rmse_mps2"] = float(np.sqrt(np.mean(errors**2)))
                     record["tracking_bias_mps2"] = float(np.mean(errors))
+                    record["reference_grid_tracking_rmse_mps2"] = reference_grid_rmse(
+                        record
+                    )
                 except Exception as error:
+                    record["status"] = "failed"
                     record["error"] = f"{type(error).__name__}: {error}"
                 finally:
                     env.close()
@@ -125,6 +146,10 @@ def evaluate(seconds: float = 6.0) -> dict[str, Any]:
         else "failed",
         "role": "engineering_tracking_consistency",
         "scoring": "after two seconds; positive speed above 0.5 m/s",
+        "reference_grid_scoring": (
+            "common times after two seconds; "
+            "zero feasible acceleration after the reference vehicle stops"
+        ),
         "configuration": {label: asdict(config) for label, config in profiles.items()},
         "episodes": episodes,
         "mean_tracking_rmse_mps2": {
@@ -134,6 +159,19 @@ def evaluate(seconds: float = 6.0) -> dict[str, Any]:
                         row["tracking_rmse_mps2"]
                         for row in episodes
                         if row["profile"] == label and "tracking_rmse_mps2" in row
+                    ]
+                )
+            )
+            for label in profiles
+        },
+        "mean_reference_grid_tracking_rmse_mps2": {
+            label: float(
+                np.mean(
+                    [
+                        row["reference_grid_tracking_rmse_mps2"]
+                        for row in episodes
+                        if row["profile"] == label
+                        and "reference_grid_tracking_rmse_mps2" in row
                     ]
                 )
             )

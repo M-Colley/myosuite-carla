@@ -520,6 +520,14 @@ The [embodied human campaign](https://github.com/M-Colley/embodied-human) connec
 
 The companion `evaluate_actuation_improvement.py` in embodied human compares three fixed configurations. These combine legacy actuation with default IDM, corrected actuation with default IDM, and corrected actuation with the previously fitted IDM. Development selection uses 32 previously inspected source tracks. The selected correction receives one independent test on 24 fresh tracks with two matched simulation seeds. Controller configurations are fixed within each physical protocol and included in cache identity.
 
+The completed comparison reduced mean normalized trajectory error from 0.7686 to 0.6987. Its paired source change was −0.0699 (95% bootstrap CI [−0.1655, 0.0212]). Speed and acceleration RMSE decreased, while gap RMSE increased. The correction remains experimental and package defaults remain unchanged. [The retained evidence](evidence/actuation-improvement-2026-10-28/summary.json) includes all 192 development and test episodes, frozen source windows, complete configurations, and verified replay metadata in `study-evidence.zip`.
+
+The following command records the first two fresh test sources with matched seed 117. The paired video places legacy actuation on the left and corrected actuation on the right. The complete controller configuration comes from each saved episode.
+
+```shell
+python examples/record_empirical_trials.py --source artifacts/ngsim/ngsim-i80-cars.csv --report artifacts/actuation-improvement-2026-10-28/run/fullreport.json --out artifacts/actuation-improvement-videos --groups ngsim:1136:2 ngsim:1193:2 --base-seed 117
+```
+
 The empirical recorder renders the retained test trials with the actual MyoSuite body and measured controls. Each paired video places the baseline on the left and the fitted candidate on the right. The road schematics show recorded trajectory references and simulated bumper gaps. Videos use the original model configurations and simulation seeds. Every replay must match the saved trajectory samples and RMSE values within an absolute tolerance of `1e-8` before its clip is published. The recorder checks source hashes and resumes previously verified clips.
 
 ```shell

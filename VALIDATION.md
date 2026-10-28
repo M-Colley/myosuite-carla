@@ -1,5 +1,43 @@
 # Validation record
 
+## Actuator correction and independent evaluation on 2026-10-28
+
+The corrected actuator interface reduced mean test normalized trajectory MSE from 0.7686406859 to 0.6987135337 (9.10%). The paired change was −0.0699271523 (95% source bootstrap interval [−0.1654942475, 0.02120664355]). The interval includes zero. The result is `inconclusive_contextual_candidate`. Global defaults remain unchanged.
+
+| Mean source test metric | Legacy actuator interface | Corrected actuator interface |
+| --- | --- | --- |
+| Speed RMSE | 0.88229290 m/s | 0.83071484 m/s |
+| Bumper gap RMSE | 3.41394387 m | 3.59434404 m |
+| Acceleration RMSE | 0.85608742 m/s² | 0.75578731 m/s² |
+
+The experiment compared three fixed configurations on 32 development tracks sampled from the 112 previously inspected tracks. Arm A used legacy actuation and the baseline IDM. Arm B used the vehicle inverse and measured pedal feedback with the same IDM parameters. Arm C combined corrected actuation with the earlier component IDM fit. Development objective values were 1.03503493, 1.00556169, and 1.10160000, respectively. Development selection therefore chose B. The selected configuration was stored before test jobs began.
+
+The independent test used 24 fresh tracks outside all 112 inspected identities. Each track had one complete 20 second window and two common simulation seeds (117 and 118). The test contained 48 matched seed pairs and 96 physical episodes. Development contributed 96 episodes. All 192 episodes completed without collision, road departure, numerical failure, or incomplete coverage. Each worker reused one 114 muscle MyoSuite body. All worker protocols and surrogate vehicles were closed after execution.
+
+The primary score first averages metric RMSE across seeds within each source. It then squares normalized errors across speed, bumper gap, and acceleration. The fixed normalization scales remain 1 m/s, 5 m, and 1 m/s². Sources receive equal weights. The paired source bootstrap uses 5,000 resamples. Complete safe pairs and an upper 95% error change below zero are required for contextual acceptance. An independent audit reproduced all development distances, the selected arm, every episode RMSE, and the test interval.
+
+The engineering reference grid contained nine conditions per interface (18 trials). Initial speeds were 5, 10, and 15 m/s. Acceleration demands were −1, 0, and +1 m/s². Both interfaces were scored at common times after two seconds. Feasible reference acceleration becomes zero after the reference vehicle stops. Mean reference grid tracking RMSE decreased from 0.54323634 to 0.08542668 m/s². This metric was computed from the 18 saved traces after physical execution. The traces remained unchanged. This consistency check uses the same fitted vehicle model for inverse control and simulation.
+
+The comparison design was fixed before its simulation calls. Development selection was written at 16:17:36 UTC. Test workers started at approximately 16:17:37 UTC. Human source revision `e938e90b7d38638fe2c588e5e7f7a6621e41eec2` and bridge source revision `d545099dd1766c0f044cab74810620ff39e0381c` were committed at 16:17:46 UTC. The first completed test result was written at 16:17:47 UTC. The source commits occurred during the transition to testing. Runtime model source hashes remained unchanged throughout execution.
+
+The [fixed design](evidence/actuation-improvement-2026-10-28/design.json) and [study evidence archive](evidence/actuation-improvement-2026-10-28/study-evidence.zip) retain source assignments, configurations, all episodes, selection records, commands, and provenance. The local montage is `artifacts/actuation-improvement-videos/held-out-trials.mp4`. Its two illustrative sources, `ngsim:1136:2` and `ngsim:1193:2`, were chosen by ascending test source identifier. These videos show verified offline replays.
+
+The completed full suites passed 513 bridge tests with four live tests skipped and 561 human tests with 24 optional tests skipped. Ten targeted tracking and video checks also passed. Ruff and mypy passed for both packages. Formatting checks passed for the changed Python files. Wheel and source builds passed. The environment used Python 3.12.13, MuJoCo 3.17.0, NumPy 2.5.4, and SciPy 1.17.1. MyoSuite used development revision `37c8b863fe448f8fff2b29eb62a53a269b79d16f`.
+
+The longitudinal controller receives exact vehicle telemetry in this experiment. The human estimator covers lateral state. Recorded vehicles differ from the fitted Nissan Patrol surrogate. Perception error, vehicle heterogeneity, and broader driving conditions require further evaluation. Live CARLA validation of this correction remains pending.
+
+Commands ran from the standalone `myosuite-carla` repository:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../embodied-human/src').Path + [IO.Path]::PathSeparator + (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe examples/check_acceleration_tracking.py --out artifacts/actuation-improvement-2026-10-28/acceleration-tracking.json
+.venv/Scripts/python.exe ../embodied-human/examples/evaluate_actuation_improvement.py --source artifacts/ngsim/ngsim-i80-cars.csv --component-report evidence/empirical-driving-2026-10-28/ngsim.json --development-report evidence/empirical-driving-2026-10-28/ngsim.json --development-report artifacts/closed-loop-calibration-2026-10-28/run/fullreport.json --development-report artifacts/closed-loop-benchmark.json --out artifacts/actuation-improvement-2026-10-28/run --development-sources 32 --test-sources 24 --seed 20261029 --development-seed 17 --test-seeds 117 118 --seconds 20 --desired-speed 16 --bootstrap 5000 --workers 3
+.venv/Scripts/python.exe examples/record_empirical_trials.py --source artifacts/ngsim/ngsim-i80-cars.csv --report artifacts/actuation-improvement-2026-10-28/run/fullreport.json --out artifacts/actuation-improvement-videos --groups ngsim:1136:2 ngsim:1193:2 --base-seed 117
+.venv/Scripts/python.exe -m pytest tests -q
+.venv/Scripts/python.exe -m pytest ../embodied-human/tests -q
+```
+
+
 ## Videos of the six test trials on 2026-10-28
 
 All six held out NGSIM trials were replayed with their original baseline and fitted configurations. Each paired clip lasts 20 seconds at 25 fps and measures 1920 by 1080 pixels. The montage lasts 120 seconds. Its local path is `artifacts/empirical-trial-videos/held-out-trials.mp4`. Baseline appears on the left. The rejected fitted candidate appears on the right. Each panel shows the actual MyoSuite body, measured controls, and schematic recorded and simulated trajectories.
