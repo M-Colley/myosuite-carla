@@ -1,0 +1,192 @@
+{
+  "ngsim:1037:1:paired": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      1920,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:1037:1:baseline": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      960,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:1037:1:fitted": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      960,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:1049:1:paired": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      1920,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:1049:1:baseline": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      960,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:1049:1:fitted": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      960,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:1149:1:paired": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      1920,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:1149:1:baseline": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      960,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:1149:1:fitted": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      960,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:1381:2:paired": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      1920,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:1381:2:baseline": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      960,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:1381:2:fitted": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      960,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:2328:1:paired": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      1920,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:2328:1:baseline": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      960,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:2328:1:fitted": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      960,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:323:1:paired": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      1920,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:323:1:baseline": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      960,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "ngsim:323:1:fitted": {
+    "frames": 500,
+    "seconds": 20.0,
+    "size": [
+      960,
+      1080
+    ],
+    "fps": 25.0,
+    "codec": "h264"
+  },
+  "montage": {
+    "frames": 3000,
+    "seconds": 120.0,
+    "size": [
+      1920,
+      1080
+    ],
+    "fps": 25,
+    "sha256": "c6c755d9ee10d1cf75d05bf2656a49da5abc3e01f1f6f890116ccd0d5f86c7a6"
+  }
+}

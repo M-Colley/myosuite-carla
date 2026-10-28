@@ -516,6 +516,14 @@ The [embodied human campaign](https://github.com/M-Colley/embodied-human) connec
 
 `ClosedLoopFollowingProtocol` supplies a physical calibration objective. Every candidate drives the attentive human, MyoSuite muscles, and fitted vehicle surrogate. The context manager reuses one body. Its episode cache binds the full IDM settings, source window, and simulation seed. Source seeds remain stable across request ordering and batching. Incomplete or unsafe episodes make the objective infeasible. `FollowingProtocol` accepts explicit source exclusions before selecting new source groups. The companion embodied human example `calibrate_closed_loop_following.py` fixes the partitions and acceptance criterion before fitting and retains every executed episode.
 
+The empirical recorder renders the retained test trials with the actual MyoSuite body and measured controls. Each paired video places the baseline on the left and the fitted candidate on the right. The road schematics show recorded trajectory references and simulated bumper gaps. Videos use the original model configurations and simulation seeds. Every replay must match the saved trajectory samples and RMSE values within an absolute tolerance of `1e-8` before its clip is published. The recorder checks source hashes and resumes previously verified clips.
+
+```shell
+python examples/record_empirical_trials.py --source artifacts/ngsim/ngsim-i80-cars.csv --report artifacts/closed-loop-calibration-2026-10-28/run/fullreport.json --out artifacts/empirical-trial-videos
+```
+
+The retained six test trials produce six paired 20 second clips and `held-out-trials.mp4`, a two minute montage at 25 fps. Install the `video` extra and use the matching embodied human and MyoSuite development sources recorded in the calibration provenance. These recordings depict offline replays through the fitted vehicle surrogate.
+
 ## Test
 
 Run the offline contact demonstration and tests from the repository root:

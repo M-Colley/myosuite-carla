@@ -1,5 +1,22 @@
 # Validation record
 
+## Videos of the six test trials on 2026-10-28
+
+All six held out NGSIM trials were replayed with their original baseline and fitted configurations. Each paired clip lasts 20 seconds at 25 fps and measures 1920 by 1080 pixels. The montage lasts 120 seconds. Its local path is `artifacts/empirical-trial-videos/held-out-trials.mp4`. Baseline appears on the left. The rejected fitted candidate appears on the right. Each panel shows the actual MyoSuite body, measured controls, and schematic recorded and simulated trajectories.
+
+All 12 physical replays completed safely. Every replay used the original derived seed, 114 muscle body configuration, source window, desired speed, and controller parameters. The complete 201 sample time, speed, gap, and acceleration arrays and three RMSE values matched the calibration report with maximum absolute difference 0.0. The comparison tolerance was `1e-8`. Each replay executed 1,000 physics steps at 50 Hz and recorded 500 frames. The final physics endpoint remains in trajectory verification. Video sampling covers times 0 to 19.96 seconds.
+
+The [video manifest](evidence/empirical-trial-videos-2026-10-28/manifest.json) retains all seeds, parameters, source identities, numerical errors, cleanup checks, encoder versions, and file hashes. The [encoded media checks](evidence/empirical-trial-videos-2026-10-28/encoded-media-checks.json) confirm 500 decoded frames for each profile and pair and 3,000 frames for the montage. The [contact sheet](evidence/empirical-trial-videos-2026-10-28/all-trials-contact-sheet.png) shows every paired trial at 10 seconds. The [capture archive](evidence/empirical-trial-videos-2026-10-28/capture.zip) preserves the exact recorder and command. Videos remain in the local artifact cache. These clips depict offline replays through the fitted vehicle surrogate.
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../embodied-human/src').Path + [IO.Path]::PathSeparator + (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe examples/record_empirical_trials.py --source artifacts/ngsim/ngsim-i80-cars.csv --report artifacts/closed-loop-calibration-2026-10-28/run/fullreport.json --out artifacts/empirical-trial-videos
+```
+
+The recorder validates original source hashes and the frozen source selection before replay. Verified clips can be resumed. The five frame schedule tests passed. Ruff and formatting checks passed. Production package code and model parameters remain unchanged.
+
+The full bridge suite passed 459 tests and skipped four live tests in 133.46 seconds. Wheel and source builds passed. The source distribution contains the recorder, its tests, the manifest, and capture archive.
+
 ## Physical closed loop calibration on 2026-10-28
 
 The first complete calibration executed 141 physical episodes safely. Validation selected candidate 3 with objective 1.12046, compared with baseline 1.23025. The six fresh test sources increased normalized trajectory MSE from 1.03338 to 1.16906. The paired increase was 0.13568 (95% bootstrap interval [−0.02073, 0.30352]). Mean source speed RMSE increased from 0.98997 to 1.03742 m/s. Gap RMSE increased from 4.44644 to 4.95188 m. Acceleration RMSE increased from 0.99246 to 1.00335 m/s². The candidate failed the predeclared acceptance rule. Global defaults remain unchanged.
