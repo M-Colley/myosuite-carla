@@ -514,6 +514,8 @@ The fast configuration retains 114 muscles and applies vehicle loads to the body
 
 The [embodied human campaign](https://github.com/M-Colley/embodied-human) connects these protocols to the other empirical sources. Vehicle tracks provide the NGSIM grouping unit. A component fit requires a separate check of its transfer to closed loop behavior. The reports preserve this distinction and retain failed episodes. [VALIDATION.md](VALIDATION.md) contains the actual commands and outcomes.
 
+`ClosedLoopFollowingProtocol` supplies a physical calibration objective. Every candidate drives the attentive human, MyoSuite muscles, and fitted vehicle surrogate. The context manager reuses one body. Its episode cache binds the full IDM settings, source window, and simulation seed. Source seeds remain stable across request ordering and batching. Incomplete or unsafe episodes make the objective infeasible. `FollowingProtocol` accepts explicit source exclusions before selecting new source groups. The companion embodied human example `calibrate_closed_loop_following.py` fixes the partitions and acceptance criterion before fitting and retains every executed episode.
+
 ## Test
 
 Run the offline contact demonstration and tests from the repository root:
