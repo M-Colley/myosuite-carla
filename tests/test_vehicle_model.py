@@ -102,14 +102,60 @@ def test_params_validate_and_round_trip_through_json() -> None:
 
 def test_parameters_saved_without_an_exponent_load_as_linear() -> None:
     saved = TRUTH.as_dict()
-    del saved["steer_exponent"]
+    del saved["steer_exponent"], saved["steer_rise_rate"], saved["steer_fall_rate"]
     assert VehicleModelParams.from_dict(saved) == TRUTH
     squared = replace(TRUTH, steer_exponent=2.0)
     np.testing.assert_allclose(squared.steer_input([-0.5, 0.0, 0.3]), [-0.25, 0, 0.09])
     np.testing.assert_allclose(TRUTH.steer_input([-0.5, 0.3]), [-0.5, 0.3])
 
 
-def _synthetic(seed: int, truth: VehicleModelParams = TRUTH):
+def test_steering_rate_limit_follows_chaos_input_interpolation() -> None:
+    # Chaos limits the raw steer before its curve: the magnitude grows at most
+    # 2.5 and shrinks at most 5.0 per second.
+    limited = replace(TRUTH, steer_lag=0.0, steer_rise_rate=2.5, steer_fall_rate=5.0)
+    commands = [VehicleCommand(throttle=0.3, steer=0.5)] * 15
+    commands += [VehicleCommand(throttle=0.3, steer=-0.5)] * 25
+
+    def steers(params: VehicleModelParams) -> list[float]:
+        out = []
+        config = SessionConfig(fixed_delta_seconds=0.02)
+        with SurrogateVehicle(params, config, speed=5.0) as vehicle:
+            for command in commands:
+                telemetry = vehicle.step(command)
+                rate = math.radians(telemetry.angular_velocity[2])
+                angle = math.atan(rate * params.wheelbase / telemetry.speed)
+                out.append(angle / float(params.road_wheel_angle(telemetry.speed)))
+        return out
+
+    values = steers(limited)
+    np.testing.assert_allclose(values[:10], 0.05 * np.arange(1, 11), atol=1e-9)
+    assert values[14] == pytest.approx(0.5)
+    np.testing.assert_allclose(values[15:19], [0.4, 0.3, 0.2, 0.1], atol=1e-9)
+    assert np.all(np.diff(values[14:]) <= 1e-12)
+    assert values[-1] == pytest.approx(-0.5)
+    # Zero rates leave the command unlimited.
+    assert steers(replace(limited, steer_rise_rate=0.0, steer_fall_rate=0.0))[
+        0
+    ] == pytest.approx(0.5)
+
+
+def test_rollouts_reproduce_rate_limited_drives() -> None:
+    limited = replace(TRUTH, steer_rise_rate=2.5, steer_fall_rate=5.0)
+    commands = [VehicleCommand()] * 10 + [VehicleCommand(throttle=0.5)] * 100
+    for steer in (0.6, -0.6, 0.0):
+        commands += [VehicleCommand(throttle=0.3, steer=steer)] * 40
+    recorder = DriveRecorder(body=False)
+    with SurrogateVehicle(limited, SessionConfig(fixed_delta_seconds=0.02)) as vehicle:
+        _drive(vehicle, commands, recorder, "doublet")
+    segments = segments_from_recording(recorder.recording())
+    exact = evaluate_vehicle_model(limited, segments)["summary"]
+    assert exact["yaw_rate_rmse_deg_s"] < 1e-6 and exact["speed_rmse_mps"] < 1e-9
+    unlimited = evaluate_vehicle_model(TRUTH, segments, measured_speed=True)
+    assert unlimited["summary"]["speed_rmse_mps"] == 0.0
+    assert unlimited["summary"]["yaw_rate_rmse_deg_s"] > 0.1
+
+
+def _synthetic(seed: int, truth: VehicleModelParams = TRUTH, steps: bool = False):
     rng = np.random.default_rng(seed)
     recorder = DriveRecorder(body=False)
     vehicle = SurrogateVehicle(truth, SessionConfig(fixed_delta_seconds=0.02)).start()
@@ -117,13 +163,17 @@ def _synthetic(seed: int, truth: VehicleModelParams = TRUTH):
         vehicle.reset()
         throttle = float(rng.uniform(0.2, 1.0))
         steer = float(rng.uniform(-0.5, 0.5))
+        sweep = [
+            VehicleCommand(throttle=throttle, steer=steer * math.sin(0.05 * k))
+            for k in range(120)
+        ]
+        if steps:
+            sweep += [VehicleCommand(throttle=throttle, steer=steer)] * 40
+            sweep += [VehicleCommand(throttle=throttle, steer=-steer)] * 40
         commands = (
             [VehicleCommand()] * 10
             + [VehicleCommand(throttle=throttle)] * int(rng.integers(150, 300))
-            + [
-                VehicleCommand(throttle=throttle, steer=steer * math.sin(0.05 * k))
-                for k in range(120)
-            ]
+            + sweep
             + [VehicleCommand()] * 50
             + [VehicleCommand(brake=float(rng.uniform(0.2, 1.0)))] * 150
         )
@@ -194,6 +244,30 @@ def test_fit_identifies_a_squared_steering_input_curve() -> None:
     squared = evaluate_vehicle_model(params, test)["summary"]["yaw_rate_rmse_deg_s"]
     straight = evaluate_vehicle_model(linear, test)["summary"]["yaw_rate_rmse_deg_s"]
     assert squared < 0.5 * straight
+
+
+def test_fit_holds_a_given_steering_rate_limit() -> None:
+    pytest.importorskip("scipy")
+    truth = replace(TRUTH, steer_rise_rate=2.5, steer_fall_rate=5.0)
+    train = _synthetic(0, truth, steps=True)
+    params, _ = fit_vehicle_model(
+        train,
+        smoothing=0.05,
+        steer_exponent=1.0,
+        steer_rise_rate=2.5,
+        steer_fall_rate=5.0,
+    )
+    assert (params.steer_rise_rate, params.steer_fall_rate) == (2.5, 5.0)
+    assert params.steer_lag == pytest.approx(truth.steer_lag, abs=0.02)
+    unlimited, _ = fit_vehicle_model(train, smoothing=0.05, steer_exponent=1.0)
+    assert unlimited.steer_rise_rate == 0.0
+    test = _synthetic(1, truth, steps=True)
+
+    def error(model: VehicleModelParams) -> float:
+        result = evaluate_vehicle_model(model, test, measured_speed=True)
+        return float(result["summary"]["yaw_rate_rmse_deg_s"])
+
+    assert error(params) < 0.5 * error(unlimited)
 
 
 def test_fit_supports_custom_speed_and_throttle_knots() -> None:

@@ -56,6 +56,14 @@ def main() -> int:
         help="fix the steering input exponent (1: CARLA 1.0); identified if omitted",
     )
     parser.add_argument(
+        "--steer-rate-limit",
+        type=float,
+        nargs=2,
+        default=(0.0, 0.0),
+        metavar=("RISE", "FALL"),
+        help="steering input rate limit per second (Chaos: 2.5 5); 0 0 disables",
+    )
+    parser.add_argument(
         "--output", type=Path, default=Path("artifacts/vehicle-surrogate.json")
     )
     args = parser.parse_args()
@@ -65,6 +73,8 @@ def main() -> int:
         wheelbase=args.wheelbase,
         smoothing=args.smoothing,
         steer_exponent=args.steer_exponent,
+        steer_rise_rate=args.steer_rate_limit[0],
+        steer_fall_rate=args.steer_rate_limit[1],
     )
     report = {
         "created_utc": datetime.now(timezone.utc).isoformat(),

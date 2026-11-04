@@ -6,11 +6,13 @@ records half a second at rest and then one manoeuvre: a throttle launch, coast
 and pedal stop; a hand-brake stop; a reverse launch; or a speed-held
 sinusoidal steering sweep at 2-10 m/s (``steer``) or 8-14 m/s
 (``steer_fast``); or a low-speed sweep (``steer_low``) or step and hold
-(``steer_hold``) at 0.8-3 m/s up to full lock. Levels, speeds, amplitudes and
-frequencies are drawn from each seed. Segments with a collision or a roll
-above 3 degrees (a curb strike) are discarded. Every frame of each seed is
-exported with ``DriveRecorder`` to ``--data/seed<N>`` with a
-``collection.json`` log; fit with ``examples/fit_vehicle_model.py``.
+(``steer_hold``) at 0.8-3 m/s up to full lock; or a step doublet
+(``steer_doublet``: a held step, the opposite step and release) at 3-10 m/s.
+Levels, speeds, amplitudes and frequencies are drawn from each seed. Segments
+with a collision or a roll above 3 degrees (a curb strike) are discarded.
+Every frame of each seed is exported with ``DriveRecorder`` to
+``--data/seed<N>`` with a ``collection.json`` log; fit with
+``examples/fit_vehicle_model.py``.
 """
 
 from __future__ import annotations
@@ -88,6 +90,15 @@ class Segment:
             rate = self.target * math.tan(0.98 * abs(self.amplitude)) / 3.075
             self.frequency = min(max(self.frequency, rate / (math.pi * 0.6)), 1.2)
             self.hold = float(np.clip(0.6 / rate, 0.6, 2.5))
+        if kind == "steer_doublet":
+            self.target = float(rng.uniform(3.0, 10.0))
+            lateral = float(rng.uniform(0.5, 3.0))
+            # Steer for that steady lateral acceleration on the squared curve
+            # with a 0.92 rad gain; each half turns the heading about 0.25 rad.
+            angle = math.atan(lateral * 3.075 / self.target**2)
+            side = float(rng.choice((-1.0, 1.0)))
+            self.amplitude = side * float(np.clip(math.sqrt(angle / 0.92), 0.05, 0.8))
+            self.hold = float(np.clip(0.25 * self.target / lateral, 0.4, 1.5))
 
     def _next(self, stage: str) -> None:
         self.stage, self.stage_frames = stage, 0
@@ -136,19 +147,31 @@ class Segment:
                 if time >= 1.0:
                     self._next("stop")
                 return VehicleCommand(reverse=True)
-        if self.kind in ("steer", "steer_fast", "steer_low", "steer_hold"):
+        if self.kind in (
+            "steer",
+            "steer_fast",
+            "steer_low",
+            "steer_hold",
+            "steer_doublet",
+        ):
             if self.kind in ("steer_low", "steer_hold"):
                 throttle = float(np.clip(0.2 + 0.4 * (self.target - speed), 0.0, 0.6))
             else:
                 throttle = float(np.clip(0.3 + 0.25 * (self.target - speed), 0.0, 1.0))
             if self.stage == "drive":
                 if speed >= self.target or time >= 8.0 or room <= 30:
-                    self._next("hold" if self.kind == "steer_hold" else "sweep")
+                    held = self.kind in ("steer_hold", "steer_doublet")
+                    self._next("hold" if held else "sweep")
                 return VehicleCommand(throttle=throttle)
             if self.stage == "hold":
                 if time >= self.hold or room <= 0:
-                    self._next("release")
+                    doublet = self.kind == "steer_doublet"
+                    self._next("counter" if doublet else "release")
                 return VehicleCommand(throttle=throttle, steer=self.amplitude)
+            if self.stage == "counter":
+                if time >= self.hold or room <= 0:
+                    self._next("release")
+                return VehicleCommand(throttle=throttle, steer=-self.amplitude)
             if self.stage == "release":
                 if time >= 1.5 or room <= 0:
                     self._next("stop")
@@ -177,7 +200,7 @@ def _run_seed(
     log: list[dict[str, Any]] = []
     long = [item for item in spawns if item[1] >= 140.0] or spawns
     for index, kind in enumerate(kinds):
-        candidates = long if kind == "steer_fast" else spawns
+        candidates = long if kind in ("steer_fast", "steer_doublet") else spawns
         spawn, budget = candidates[int(rng.integers(len(candidates)))]
         vehicle.set_transform(spawn)
         vehicle.set_target_velocity(api.Vector3D(0.0, 0.0, 0.0))
@@ -251,6 +274,7 @@ def main() -> int:
     parser.add_argument("--steer-fast", type=int, default=0)
     parser.add_argument("--steer-low", type=int, default=0)
     parser.add_argument("--steer-hold", type=int, default=0)
+    parser.add_argument("--steer-doublet", type=int, default=0)
     parser.add_argument("--data", type=Path, default=Path("artifacts/vehicle-sysid"))
     args = parser.parse_args()
     import carla
@@ -292,6 +316,7 @@ def main() -> int:
         "steer_fast": args.steer_fast,
         "steer_low": args.steer_low,
         "steer_hold": args.steer_hold,
+        "steer_doublet": args.steer_doublet,
     }
     common = {
         "server_version": client.get_server_version(),
