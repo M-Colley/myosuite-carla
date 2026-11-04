@@ -50,12 +50,21 @@ def main() -> int:
     parser.add_argument("--wheelbase", type=float, default=3.075)
     parser.add_argument("--smoothing", type=float, default=1.0)
     parser.add_argument(
+        "--steer-exponent",
+        type=float,
+        default=None,
+        help="fix the steering input exponent (1: CARLA 1.0); identified if omitted",
+    )
+    parser.add_argument(
         "--output", type=Path, default=Path("artifacts/vehicle-surrogate.json")
     )
     args = parser.parse_args()
     train = _segments(args.train)
     params, fit = fit_vehicle_model(
-        train, wheelbase=args.wheelbase, smoothing=args.smoothing
+        train,
+        wheelbase=args.wheelbase,
+        smoothing=args.smoothing,
+        steer_exponent=args.steer_exponent,
     )
     report = {
         "created_utc": datetime.now(timezone.utc).isoformat(),

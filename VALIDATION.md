@@ -1,5 +1,27 @@
 # Validation record
 
+## Steering exponent in the vehicle surrogate on 2026-11-04
+
+The surrogate's road-wheel angle is now `G(|u|) sgn(S) |S|^p`, with the exponent `p` identified jointly with the gain table and lag. The refit used the retained command, training seeds 0 and 3 (319 s) and held-out seeds 1, 2 and 4 (526 s) plus the muscle-driven CARLA drives. With `--steer-exponent 1` it reproduced the retained linear fit exactly (largest gain difference 0.0, identical held-out errors). Longitudinal parameters are unaffected.
+
+The adoption rule was set before fitting: the exponent fit replaces the default only if held-out yaw-rate RMSE decreases in both steering groups and neither the overall held-out yaw-rate RMSE nor any 3 s position error increases. The structural choice is not blind: the shape analysis of the CARLA 1.0 review below inspected all five seeds, and CARLA's source independently gives the squared curve. The exponent and gains were fitted on seeds 0 and 3 only.
+
+The identified exponent is 1.974. The gain table falls smoothly from 0.978 rad at standstill to 0.856 rad above 15 m/s, where the linear fit had needed 0.489 to 0.102 rad; most of its apparent speed dependence was the amplitude dependence of the squared curve. Steering lag is 0.039 s (linear fit 0.038 s). The training lateral residual fell from 0.93 to 0.15 deg/s.
+
+| Held-out set | Yaw-rate RMSE, linear | Yaw-rate RMSE, exponent | 3 s position error, linear → exponent |
+| --- | --- | --- | --- |
+| All 60 segments | 0.761 deg/s | 0.128 deg/s | 0.452 → 0.452 m |
+| Steering 2-10 m/s | 2.231 deg/s | 0.337 deg/s | 0.279 → 0.279 m |
+| Steering 8-14 m/s | 0.691 deg/s | 0.091 deg/s | 0.623 → 0.623 m |
+| Muscle-driven drives (29 segments) | 0.562 deg/s | 0.144 deg/s | 0.651 → 0.646 m |
+
+The rule was met and `carla_nissan_patrol()` now holds the exponent fit ([report](evidence/ue55-vehicle-surrogate-exponent.json)); the [linear report](evidence/ue55-vehicle-surrogate.json) is retained. Among the muscle-driven drives, the lane change's final heading error fell from 5.33° to 0.82° and the takeover's from 1.18° to 0.01°. One phase is worse: the full-body `steer_right` yaw-rate RMSE rose from 1.95 to 2.53 deg/s (final heading error 1.13° to 1.45°), while `steer_left` fell from 0.97 to 0.19 deg/s. Steering is identified from 2.4 to 13.6 m/s and up to steer 0.51; full lock extrapolates the power law. Parameters saved without `steer_exponent` load as linear, so retained reports reproduce unchanged. With the new default, the bridge suite passed 515 tests with the four live tests skipped, and the embodied human suite passed 561 tests with 24 optional tests skipped; ruff and mypy passed. A new test recovers an exponent of 2 from squared synthetic drives.
+
+```powershell
+.venv/Scripts/python.exe examples/fit_vehicle_model.py --train artifacts/vehicle-sysid/seed0 artifacts/vehicle-sysid/seed3 --test artifacts/vehicle-sysid/seed1 artifacts/vehicle-sysid/seed2 artifacts/vehicle-sysid/seed4 --test-by-phase artifacts/scenario-lead_vehicle_braking-carla artifacts/scenario-takeover_request-carla artifacts/scenario-lane_change-carla artifacts/ue55-fullbody-loads --output artifacts/surrogate-refit-2026-11-04/exponent.json
+.venv/Scripts/python.exe examples/fit_vehicle_model.py <same arguments> --steer-exponent 1 --output artifacts/surrogate-refit-2026-11-04/linear.json
+```
+
 ## CARLA 1.0 source review on 2026-11-04
 
 This is a source and data review, not a live run: no CARLA 1.0 server or wheel was executed. Upstream `carla-simulator/carla` was fetched read-only into the pinned worktree's repository. The `1.0` tag and branch `ue5/1.0` point to `ecb0af47fcd991c0ec6f48433df2a09721b2fec8` (2026-11-02), 40 commits after the reviewed `defabe35`; `ue58-dev` was at `a3c6d7f4f017cdce9f344219d17c3cdf4bb69374` (2026-11-04). CMake sets `CARLA_VERSION` to `1.0`. The GitHub releases list ended at 0.9.16. CARLA's download server returned a Linux `CARLA_1.0.tar.gz` of 13,985,818,522 bytes, last modified 2026-11-02 09:36:05 UTC, and 404 for the analogous Windows path.

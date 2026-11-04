@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import math
+from dataclasses import replace
 
 import numpy as np
 import pytest
@@ -94,13 +95,24 @@ def test_params_validate_and_round_trip_through_json() -> None:
         VehicleModelParams(speed_knots=(1.0, 0.5) + SPEED_KNOTS[2:])
     with pytest.raises(ValueError, match="non-negative"):
         VehicleModelParams(brake_decel=-1.0)
+    with pytest.raises(ValueError, match="steer_exponent"):
+        VehicleModelParams(steer_exponent=0.2)
     assert isinstance(carla_nissan_patrol(), VehicleModelParams)
 
 
-def _synthetic(seed: int):
+def test_parameters_saved_without_an_exponent_load_as_linear() -> None:
+    saved = TRUTH.as_dict()
+    del saved["steer_exponent"]
+    assert VehicleModelParams.from_dict(saved) == TRUTH
+    squared = replace(TRUTH, steer_exponent=2.0)
+    np.testing.assert_allclose(squared.steer_input([-0.5, 0.0, 0.3]), [-0.25, 0, 0.09])
+    np.testing.assert_allclose(TRUTH.steer_input([-0.5, 0.3]), [-0.5, 0.3])
+
+
+def _synthetic(seed: int, truth: VehicleModelParams = TRUTH):
     rng = np.random.default_rng(seed)
     recorder = DriveRecorder(body=False)
-    vehicle = SurrogateVehicle(TRUTH, SessionConfig(fixed_delta_seconds=0.02)).start()
+    vehicle = SurrogateVehicle(truth, SessionConfig(fixed_delta_seconds=0.02)).start()
     for index in range(12):
         vehicle.reset()
         throttle = float(rng.uniform(0.2, 1.0))
@@ -139,6 +151,7 @@ def test_fit_recovers_known_parameters_from_its_own_drives() -> None:
     assert params.hand_brake_decel == pytest.approx(TRUTH.hand_brake_decel, rel=0.1)
     assert params.throttle_lag == pytest.approx(TRUTH.throttle_lag, abs=0.03)
     assert params.steer_lag == pytest.approx(TRUTH.steer_lag, abs=0.03)
+    assert params.steer_exponent == pytest.approx(1.0, abs=0.1)
     identified = np.asarray(report["steer_knots_identified"])
     gains = np.asarray(params.steer_gain)
     assert identified.sum() >= 3
@@ -155,6 +168,32 @@ def test_fit_recovers_known_parameters_from_its_own_drives() -> None:
     assert summary["speed_rmse_mps"] < 0.1
     assert summary["position_error_3s_m"] < 0.2 * summary["baseline_error_3s_m"]
     assert set(result["by_group"]) == {"s1"}
+
+
+def test_fit_identifies_a_squared_steering_input_curve() -> None:
+    pytest.importorskip("scipy")
+    # CARLA 0.10.0 drove through Chaos's squared steering input curve.
+    truth = replace(
+        TRUTH,
+        steer_gain=tuple(0.95 - 0.01 * speed for speed in SPEED_KNOTS),
+        steer_exponent=2.0,
+    )
+    train = _synthetic(0, truth)
+    params, report = fit_vehicle_model(train, smoothing=0.05)
+    assert report["steer_exponent_identified"]
+    assert params.steer_exponent == pytest.approx(2.0, abs=0.1)
+    identified = np.asarray(report["steer_knots_identified"])
+    np.testing.assert_allclose(
+        np.asarray(params.steer_gain)[identified],
+        np.asarray(truth.steer_gain)[identified],
+        rtol=0.1,
+    )
+    linear, report = fit_vehicle_model(train, smoothing=0.05, steer_exponent=1.0)
+    assert linear.steer_exponent == 1.0 and not report["steer_exponent_identified"]
+    test = _synthetic(1, truth)
+    squared = evaluate_vehicle_model(params, test)["summary"]["yaw_rate_rmse_deg_s"]
+    straight = evaluate_vehicle_model(linear, test)["summary"]["yaw_rate_rmse_deg_s"]
+    assert squared < 0.5 * straight
 
 
 def test_fit_supports_custom_speed_and_throttle_knots() -> None:

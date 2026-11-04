@@ -308,16 +308,22 @@ joins runs. Data are exchanged by format only; no arm_force_driving code is used
 
 `SurrogateVehicle` has `CarlaSession`'s interface, so `CarlaBridge` drives it
 unchanged. Its single-track model uses drive-acceleration and steering-gain
-tables, first-order lags, drag and brake terms. `carla_nissan_patrol()` holds
-the parameters fitted to 319 s of designed CARLA 0.10.0 drives. On 526 s of
-held-out drives the open-loop speed error is 0.53 m/s, and the position error
-3 s ahead is 0.45 m against 6.0 m for constant-velocity extrapolation.
-Steering is identified from 2.4 to 13.6 m/s. Collect and fit your own vehicle with:
+tables, a steering input exponent, first-order lags, drag and brake terms.
+`carla_nissan_patrol()` holds the parameters fitted to 319 s of designed CARLA
+0.10.0 drives. On 526 s of held-out drives the open-loop speed error is
+0.53 m/s, the yaw-rate error 0.13 deg/s, and the position error 3 s ahead is
+0.45 m against 6.0 m for constant-velocity extrapolation. CARLA 0.10.0 steers
+through a squared input curve (identified exponent 1.97); CARLA 1.0 steers
+linearly, so fit a 1.0 vehicle anew. Steering is identified from 2.4 to
+13.6 m/s and up to half lock. Collect and fit your own vehicle with:
 
 ```shell
 python examples/identify_vehicle.py --seeds 0 1 2 --steer-fast 0
 python examples/fit_vehicle_model.py --train artifacts/vehicle-sysid/seed0 --test artifacts/vehicle-sysid/seed1
 ```
+
+`fit_vehicle_model.py` identifies the steering exponent unless
+`--steer-exponent` fixes it.
 
 ## Driving task, scenarios and baseline driver
 

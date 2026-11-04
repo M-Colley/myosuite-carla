@@ -13,16 +13,19 @@ signed forward speed ``u`` and yaw rate ``r`` (positive turns right)::
 
     du/dt = D(T, |u|) - c0 sgn(u) - c1 u - c2 u |u|
             - (kb brake + kh hand_brake) sgn(u) - g sin(pitch)
-    r     = u tan(G(|u|) S) / L
+    r     = u tan(G(|u|) sgn(S) |S|^p) / L
 
 ``T`` and ``S`` are throttle and steer after first-order lags. ``D`` is a
 non-negative drive-acceleration table over throttle and speed (negated in
 reverse), which absorbs the engine torque curve and automatic gearbox, and
 ``G`` an effective road-wheel angle table over speed, which absorbs the
-steering curve and tyre slip. Tables are interpolated linearly and held
-constant beyond their last knot. Braking never reverses the car. Load
-transfer, individual gear shifts, suspension and lateral slip dynamics are not
-modelled; the held-out errors in ``VALIDATION.md`` bound what that costs.
+speed-dependent steering curve and tyre slip. ``p`` is the shape of the
+steering input curve: CARLA 1.0 forces Chaos's linear curve (``p = 1``), while
+CARLA 0.10.0 used Chaos's default squared curve (``p = 2``). Tables are
+interpolated linearly and held constant beyond their last knot. Braking never
+reverses the car. Load transfer, individual gear shifts, suspension and lateral
+slip dynamics are not modelled; the held-out errors in ``VALIDATION.md`` bound
+what that costs.
 """
 
 from __future__ import annotations
@@ -66,6 +69,7 @@ class VehicleModelParams:
             column per speed knot, m/s^2.
         reverse_drive: Reverse drive acceleration per throttle knot, m/s^2.
         steer_gain: Effective road-wheel angle at full steer per speed knot, rad.
+        steer_exponent: Exponent p of the steering input curve, in [0.5, 3].
         rolling: Rolling resistance c0, m/s^2.
         linear_drag: Linear resistance c1, 1/s.
         quadratic_drag: Aerodynamic resistance c2, 1/m.
@@ -83,6 +87,7 @@ class VehicleModelParams:
     )
     reverse_drive: tuple[float, ...] = tuple(2.0 * value for value in THROTTLE_KNOTS)
     steer_gain: tuple[float, ...] = (0.5,) * len(SPEED_KNOTS)
+    steer_exponent: float = 1.0
     rolling: float = 0.15
     linear_drag: float = 0.0
     quadratic_drag: float = 0.002
@@ -118,6 +123,8 @@ class VehicleModelParams:
         gains = np.asarray(self.steer_gain)
         if gains.shape != speeds.shape or np.any(gains <= 0) or np.any(gains >= 1.45):
             raise ValueError("steer_gain needs one angle in (0, 1.45) per speed knot")
+        if not 0.5 <= self.steer_exponent <= 3.0:
+            raise ValueError("steer_exponent must be within [0.5, 3]")
         if self.wheelbase <= 0:
             raise ValueError("wheelbase must be positive")
 
@@ -133,6 +140,11 @@ class VehicleModelParams:
         """Return the effective road-wheel angle at full steer for a speed."""
         return np.interp(np.abs(speed), self.speed_knots, self.steer_gain)
 
+    def steer_input(self, steer: Any) -> Any:
+        """Return the steering input curve sgn(S) |S|^p of a lagged steer."""
+        steer = np.asarray(steer, dtype=float)
+        return np.sign(steer) * np.abs(steer) ** self.steer_exponent
+
     def as_dict(self) -> dict[str, Any]:
         """Return the parameters as JSON-ready floats and lists."""
         return {
@@ -147,6 +159,8 @@ class VehicleModelParams:
     @classmethod
     def from_dict(cls, values: Mapping[str, Any]) -> VehicleModelParams:
         """Build parameters from :meth:`as_dict` output."""
+        # Parameters saved before the steering exponent existed are linear.
+        values = {"steer_exponent": 1.0, **values}
         return cls(**{item.name: values[item.name] for item in fields(cls)})
 
 
@@ -162,7 +176,9 @@ def _lag(values: NDArray[np.float64], tau: float, dt: float) -> NDArray[np.float
 
 
 def _yaw_rate(params: VehicleModelParams, speed: Any, steer: Any) -> Any:
-    angle = np.clip(params.road_wheel_angle(speed) * np.asarray(steer), -1.4, 1.4)
+    angle = np.clip(
+        params.road_wheel_angle(speed) * params.steer_input(steer), -1.4, 1.4
+    )
     return np.asarray(speed) * np.tan(angle) / params.wheelbase
 
 
@@ -537,14 +553,16 @@ def fit_vehicle_model(
     throttle_lags: Sequence[float] = tuple(np.linspace(0.0, 0.6, 25)),
     smoothing: float = 1.0,
     min_speed: float = 0.1,
+    steer_exponent: float | None = None,
 ) -> tuple[VehicleModelParams, dict[str, Any]]:
     """Identify surrogate parameters from logged CARLA drives.
 
     The longitudinal terms are non-negative least squares on measured speed
     changes, with second-difference smoothing of the drive table across speed
     and throttle, for every candidate throttle lag; the lag with the smallest
-    data residual wins. The steering table and lag are bounded nonlinear least
-    squares on measured yaw rate above 0.5 m/s, also smoothed. Requires SciPy.
+    data residual wins. The steering table, lag and exponent are bounded
+    nonlinear least squares on measured yaw rate above 0.5 m/s, the table also
+    smoothed. Requires SciPy.
 
     Args:
         segments: Logged drives, e.g. from :func:`segments_from_recording`.
@@ -553,6 +571,9 @@ def fit_vehicle_model(
         throttle_lags: Candidate throttle time constants in seconds.
         smoothing: Weight of the table smoothness penalties.
         min_speed: Longitudinal samples need this speed before and after, m/s.
+        steer_exponent: Fixed steering input exponent, or None to identify it
+            within [0.5, 3]. The data separate it from the gain table only if
+            steering at each speed spans several amplitudes.
 
     Returns:
         Parameters and a fit report with residual RMS values and sample counts.
@@ -605,10 +626,14 @@ def fit_vehicle_model(
     rolling, linear, quadratic, brake, hand = coefficients[cells + count_t :]
 
     lateral_penalty = _second_differences(count_u)
+    identify_exponent = steer_exponent is None
 
     def lateral_residual(theta: NDArray[np.float64]) -> NDArray[np.float64]:
-        gains, lag = theta[:-1], theta[-1]
-        trial = replace(knots, wheelbase=wheelbase, steer_gain=gains)
+        gains, lag = theta[:count_u], theta[count_u]
+        exponent = theta[-1] if steer_exponent is None else steer_exponent
+        trial = replace(
+            knots, wheelbase=wheelbase, steer_gain=gains, steer_exponent=exponent
+        )
         parts = []
         for segment in segments:
             speed = segment.speed[1:]
@@ -619,12 +644,13 @@ def fit_vehicle_model(
         scale = smoothing * math.sqrt(len(data) / count_u) * 0.05
         return np.concatenate([data, scale * (lateral_penalty @ gains)])
 
-    lateral = optimize.least_squares(
-        lateral_residual,
-        x0=np.r_[np.full(count_u, 0.3), 0.1],
-        bounds=(np.r_[np.full(count_u, 0.005), 0.0], np.r_[np.full(count_u, 1.4), 1.0]),
-    )
-    gains, steer_lag = lateral.x[:-1].copy(), float(lateral.x[-1])
+    start = np.r_[np.full(count_u, 0.3), 0.1]
+    low, high = np.r_[np.full(count_u, 0.005), 0.0], np.r_[np.full(count_u, 1.4), 1.0]
+    if identify_exponent:
+        start, low, high = np.r_[start, 1.0], np.r_[low, 0.5], np.r_[high, 3.0]
+    lateral = optimize.least_squares(lateral_residual, x0=start, bounds=(low, high))
+    gains, steer_lag = lateral.x[:count_u].copy(), float(lateral.x[count_u])
+    exponent = float(lateral.x[-1]) if steer_exponent is None else float(steer_exponent)
     # Knots without steering data hold the nearest identified gain rather than
     # extrapolating the smoothing trend, which can drive gains to zero.
     speeds = np.concatenate([np.abs(segment.speed[1:]) for segment in segments])
@@ -643,6 +669,7 @@ def fit_vehicle_model(
         drive=drive,
         reverse_drive=reverse,
         steer_gain=gains,
+        steer_exponent=exponent,
         rolling=rolling,
         linear_drag=linear,
         quadratic_drag=quadratic,
@@ -655,6 +682,7 @@ def fit_vehicle_model(
     throttles = np.concatenate([segment.throttle for segment in segments])
     reversing = np.concatenate([segment.reverse > 0.5 for segment in segments])
     report = {
+        "steer_exponent_identified": identify_exponent,
         "steer_knots_identified": [bool(value) for value in identified],
         "envelope": {
             "max_speed_mps": float(speeds.max()),
@@ -774,9 +802,11 @@ def evaluate_vehicle_model(
 
 #: CARLA 0.10.0 (UE5.5) ``vehicle.nissan.patrol`` on Town10HD_Opt, fitted by
 #: ``examples/fit_vehicle_model.py`` to seeds 0 and 3 of
-#: ``evidence/ue55-vehicle-sysid.zip``. Held-out errors are in
-#: ``evidence/ue55-vehicle-surrogate.json`` and VALIDATION.md; steering is
-#: identified from about 2.4 to 13.6 m/s and reverse up to throttle 0.53.
+#: ``evidence/ue55-vehicle-sysid.zip``, with the steering exponent identified
+#: (2026-11-04). Held-out errors are in
+#: ``evidence/ue55-vehicle-surrogate-exponent.json`` and VALIDATION.md; steering
+#: is identified from about 2.4 to 13.6 m/s and reverse up to throttle 0.53.
+#: CARLA 1.0 steers linearly and needs its own fit.
 _PATROL: dict[str, Any] = {
     "wheelbase": 3.075,
     "speed_knots": [0, 1, 2.5, 4, 6, 8, 11, 15, 20],
@@ -819,23 +849,24 @@ _PATROL: dict[str, Any] = {
     ],
     "reverse_drive": [0.14466, 0.98024, 1.8164, 2.65256],
     "steer_gain": [
-        0.489392,
-        0.489392,
-        0.386428,
-        0.282451,
-        0.261281,
-        0.31202,
-        0.205496,
-        0.101791,
-        0.101791,
+        0.978456,
+        0.978456,
+        0.959446,
+        0.940788,
+        0.92297,
+        0.904144,
+        0.881377,
+        0.855695,
+        0.855695,
     ],
+    "steer_exponent": 1.97384,
     "rolling": 0.287323,
     "linear_drag": 0,
     "quadratic_drag": 0.00660362,
     "brake_decel": 6.36968,
     "hand_brake_decel": 4.92694,
     "throttle_lag": 0.075,
-    "steer_lag": 0.037593,
+    "steer_lag": 0.0393034,
 }
 
 

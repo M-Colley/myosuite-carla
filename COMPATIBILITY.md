@@ -110,15 +110,18 @@ Windows package was found. No CARLA 1.0 server has been run with this bridge.
   identified or tuned on 0.10.0 or its surrogate does not transfer: the
   `carla_nissan_patrol()` steering table, `AutomationConfig.steer_gain`, the
   two-point steering gains and the calibration of cabin wheel travel to `steer`.
-  The surrogate's linear-in-`s` steering table also misspecifies 0.10.0 itself.
-  Re-identify the vehicle on 1.0 before using it there.
+  The surrogate now identifies the exponent (`steer_exponent`, 1.97 for the
+  0.10.0 Patrol); its earlier linear table misspecified 0.10.0 and had
+  4 to 8 times the held-out yaw-rate error (see VALIDATION.md). Re-identify the
+  vehicle on 1.0, where the exponent should come out near 1, before using it
+  there.
 - **Vehicle physics.** UE5.8 Chaos and the 1.0 vehicle content differ from
   UE5.5. All fitted drive, brake, drag and lag parameters were identified on
   0.10.0 and need re-identification on 1.0.
 - **Geolocation.** `Map.transform_to_geolocation` in `defabe35` passed CARLA's
   `y` (south) as the northing, so latitude grew southwards; upstream
-  `2466fff9c` (in the tag) corrected it. 0.10.0 and 1.0 both increase latitude northwards
-  (towards −`y`), but 0.10.0 offsets a scaled Mercator projection while 1.0
+  `2466fff9c` (in the tag) corrected it. 0.10.0 and 1.0 both increase latitude
+  northwards (towards −`y`), but 0.10.0 offsets a scaled Mercator projection while 1.0
   uses the map's `GeoProjection`, so recorded coordinates are not
   interchangeable. `DriveRecorder` stores the server version with each
   recording.
