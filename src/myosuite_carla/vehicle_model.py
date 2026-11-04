@@ -924,14 +924,16 @@ def evaluate_vehicle_model(
     return result
 
 
-#: CARLA 0.10.0 (UE5.5) ``vehicle.nissan.patrol`` on Town10HD_Opt, fitted by
-#: ``examples/fit_vehicle_model.py`` to seeds 0 and 3 of
-#: ``evidence/ue55-vehicle-sysid.zip``, with the steering exponent identified
-#: (2026-11-04). Held-out errors are in
-#: ``evidence/ue55-vehicle-surrogate-exponent.json`` and VALIDATION.md; steering
-#: is identified from about 2.4 to 13.6 m/s and reverse up to throttle 0.53.
-#: CARLA 1.0 steers linearly and needs its own fit. The steering input rate
-#: limit is off: it failed one check of its confirmatory test (VALIDATION.md).
+#: CARLA 0.10.0 (UE5.5) ``vehicle.nissan.patrol`` on Town10HD_Opt. The tables
+#: and steering exponent were fitted by ``examples/fit_vehicle_model.py`` to
+#: seeds 0 and 3 of ``evidence/ue55-vehicle-sysid.zip`` (held-out errors in
+#: ``evidence/ue55-vehicle-surrogate-exponent.json``). The steering rate limit
+#: is Chaos's default; the speed-dependent steer lag was fitted with it on 271
+#: steering segments and passed a test on fresh drives
+#: (``evidence/steer-lag-speed-2026-11-04``, VALIDATION.md, 2026-11-04). The
+#: steering gains are identified from about 2.4 to 13.6 m/s and confirmed to
+#: three-quarter lock at 0.8-3 m/s; reverse up to throttle 0.53. CARLA 1.0
+#: steers linearly and needs its own fit.
 _PATROL: dict[str, Any] = {
     "wheelbase": 3.075,
     "speed_knots": [0, 1, 2.5, 4, 6, 8, 11, 15, 20],
@@ -985,13 +987,16 @@ _PATROL: dict[str, Any] = {
         0.855695,
     ],
     "steer_exponent": 1.97384,
+    "steer_rise_rate": 2.5,
+    "steer_fall_rate": 5.0,
     "rolling": 0.287323,
     "linear_drag": 0,
     "quadratic_drag": 0.00660362,
     "brake_decel": 6.36968,
     "hand_brake_decel": 4.92694,
     "throttle_lag": 0.075,
-    "steer_lag": 0.0393034,
+    "steer_lag": 0.024,
+    "steer_lag_slope": 0.0016,
 }
 
 

@@ -308,21 +308,20 @@ joins runs. Data are exchanged by format only; no arm_force_driving code is used
 
 `SurrogateVehicle` has `CarlaSession`'s interface, so `CarlaBridge` drives it
 unchanged. Its single-track model uses drive-acceleration and steering-gain
-tables, a steering input exponent, first-order lags, drag and brake terms.
-`carla_nissan_patrol()` holds the parameters fitted to 319 s of designed CARLA
-0.10.0 drives. On 526 s of held-out drives the open-loop speed error is
-0.53 m/s, the yaw-rate error 0.13 deg/s, and the position error 3 s ahead is
-0.45 m against 6.0 m for constant-velocity extrapolation. CARLA 0.10.0 steers
-through a squared input curve (identified exponent 1.97); CARLA 1.0 steers
-linearly, so fit a 1.0 vehicle anew. Steering is identified from 2.4 to
-13.6 m/s and up to half lock. Low-speed holds confirm the settled angle to
-three-quarter lock. The surrogate can also apply Chaos's steering input rate
-limit (`steer_rise_rate`, `steer_fall_rate`). With the engine's rates (2.5 and
-5.0 per second) it cut the steering error of fresh steps and doublets by about
-80%. It made one-period low-speed sweeps 8% worse in its first test, and a
-jointly fitted shorter lag made 8-14 m/s sweeps worse in a second one, so
-`carla_nissan_patrol()` leaves it off (see VALIDATION.md). Collect and fit
-your own vehicle with:
+tables, a steering input exponent, Chaos's steering input rate limit,
+first-order lags, drag and brake terms. `carla_nissan_patrol()` holds the
+parameters fitted to designed CARLA 0.10.0 drives. On 526 s of held-out drives
+the open-loop speed error is 0.53 m/s, the yaw-rate error 0.12 deg/s, and the
+position error 3 s ahead is 0.45 m against 6.0 m for constant-velocity
+extrapolation. CARLA 0.10.0 steers through a squared input curve (identified
+exponent 1.97); CARLA 1.0 steers linearly, so fit a 1.0 vehicle anew. The
+steering gains are identified from 2.4 to 13.6 m/s and up to half lock;
+low-speed holds confirm the settled angle to three-quarter lock. The steer
+command is rate-limited as in Chaos (2.5 per second rising, 5.0 falling), and
+its lag grows with speed, from 0.026 s at 1 m/s to 0.040 s at 10 m/s. On
+fresh drives at 0.8-14 m/s this cut the steering error of steps, doublets and
+sweeps by 9-89% against the earlier default (see VALIDATION.md). Collect and
+fit your own vehicle with:
 
 ```shell
 python examples/identify_vehicle.py --seeds 0 1 2 --steer-fast 0
@@ -330,8 +329,8 @@ python examples/fit_vehicle_model.py --train artifacts/vehicle-sysid/seed0 --tes
 ```
 
 `fit_vehicle_model.py` identifies the steering exponent unless
-`--steer-exponent` fixes it; `--steer-rate-limit RISE FALL` fits with a fixed
-rate limit.
+`--steer-exponent` fixes it; `--steer-rate-limit RISE FALL` and
+`--steer-lag-slope` fit with a fixed rate limit and lag slope.
 
 ## Driving task, scenarios and baseline driver
 

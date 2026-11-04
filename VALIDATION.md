@@ -1,5 +1,53 @@
 # Validation record
 
+## Speed-dependent steering lag test on 2026-11-04
+
+The surrogate's steer time constant is now `steer_lag + steer_lag_slope |u|`, with `u` the speed before each frame. A zero slope reproduces the constant lag exactly: the archived analysis of seeds 18-21 reran identically. The candidate kept the engine's rate limit (rise 2.5, fall 5.0) and fitted the lag and slope jointly. The gain table, exponent and longitudinal parameters stayed at the default. The code, [design](evidence/steer-lag-speed-2026-11-04/design.md), [fit script](evidence/steer-lag-speed-2026-11-04/fit.py) and [analysis script](evidence/steer-lag-speed-2026-11-04/analyse.py) were committed in `6403eee` at 16:07:49 UTC, before the fit ran. The adoption rule was unchanged from the previous test. The fitted candidate was committed in `fc18954` at 16:08:16 UTC, before the test drives were recorded.
+
+**Fit.** The objective was the lateral fit's: the yaw-rate residual with the measured speed. It covered the steering segments of seeds 0, 3, 10, 12 and 14-21 (271 segments, 96,608 frames above 0.5 m/s), searched on a grid with 1000 segment bootstrap resamples ([fit](evidence/steer-lag-speed-2026-11-04/fit.json)):
+
+- **Lag at standstill:** 0.024 s (95% interval 0.020-0.028).
+- **Slope:** 0.0016 s per m/s (0.0010-0.0022). As predicted, the interval excludes zero.
+- **Time constant:** 0.026 s at 1 m/s, 0.032 s at 5 m/s and 0.040 s at 10 m/s, close to the earlier constant 0.039 s.
+- **Training error:** 0.376 deg/s, against 0.391 for the best constant lag. With `evaluate_vehicle_model`, the candidate scored 0.235 deg/s against 1.199 for the default, 0.325 for the engine rates with the default lag and 0.263 for the previous constant-lag candidate.
+
+The fit's fast path matched `evaluate_vehicle_model` to 2e-16 deg/s.
+
+**Test.** The CARLA 0.10.0 server ran with `-nullrhi` after 13.6 GB of commit memory was confirmed free; it held 3.9 GB, and at least 11 GB stayed free. Server and client reported `0.10.0` on `Town10HD_Opt`. Fresh seeds 22-25 were recorded from 16:09:25 to 16:10:17 UTC. Of 136 segments, 116 were kept: 31 low-speed sweeps, 28 holds, 26 doublets, 15 sweeps at 2-10 m/s and 16 at 8-14 m/s. The 20 discarded segments had 14 collisions and 6 roll strikes. The [data](evidence/steer-lag-speed-2026-11-04/data.zip) include every collection log.
+
+The candidate met every check, so `carla_nissan_patrol()` now holds it ([analysis](evidence/steer-lag-speed-2026-11-04/analysis.json)):
+
+| Check (measured speed unless noted) | Default | Candidate | Result |
+| --- | --- | --- | --- |
+| Control: fresh 2-10 m/s sweeps, open loop, ≤ 0.674 deg/s | 0.340 deg/s | — | pass |
+| (a) Low-speed sweeps, holds and doublets pooled, ≥ 25% lower | 1.490 deg/s | 0.254 deg/s (−83%) | pass |
+| (b) Low-speed sweeps | 0.559 | 0.266 (−52%) | pass |
+| (b) Holds | 1.237 | 0.140 (−89%) | pass |
+| (b) Doublets | 2.714 | 0.365 (−87%) | pass |
+| (c) 2-10 m/s sweeps, ≤ +5% | 0.157 | 0.110 (−30%) | pass |
+| (c) 8-14 m/s sweeps, ≤ +5% | 0.116 | 0.105 (−9%) | pass |
+| (d) Pooled (a) segments, open loop, not higher | 2.673 | 1.757 (−34%) | pass |
+| (e) Original held-out seeds 1, 2, 4, open loop, ≤ +5% | 0.128 deg/s; 3 s errors | 0.120 deg/s (−6%); 3 s errors unchanged | pass |
+| (f) Muscle-driven drives, open loop, ≤ +5% | 0.144 deg/s, 0.646 m | 0.111 deg/s, 0.646 m | pass |
+
+On the original held-out seeds, the 2-10 m/s sweeps went from 0.337 to 0.314 deg/s and the 8-14 m/s sweeps from 0.091 to 0.082. The 3 s position errors did not change, because these segments start steering after 3 s. The held-out open-loop speed error stays at 0.53 m/s, since longitudinal parameters are unchanged.
+
+Secondary results:
+
+- **Earlier candidates on seeds 22-25.** The engine-rate model with the default lag scored 0.453, 0.244 and 0.434 deg/s on low-speed sweeps, holds and doublets; its 2-10 and 8-14 m/s sweeps were unchanged. The previous constant-lag candidate scored 0.299, 0.161 and 0.381, but its 8-14 m/s sweeps rose again, to 0.144 (+24%).
+- **Seeds 11 and 13** (held out from every fit, inspected before). The candidate reduced the error from 0.869 to 0.252 deg/s.
+- **Full-body phases.** `steer_right` went from 2.53 to 0.51 deg/s, with its final heading error from 1.45° to 0.23°; `steer_left` went from 0.19 to 0.08 deg/s.
+
+This is the third test of the rate limit and the first candidate to pass. Its training data included seeds 14-21 from the two earlier tests, so seeds 22-25 are its only fresh evidence. The constant-lag variant failed on 8-14 m/s sweeps in two independent test sets, while the speed-dependent lag improved them. Results that built the default surrogate at run time, such as the 2026-10-28 closed-loop calibration, actuation comparison and trial videos, used earlier steering dynamics. They reproduce at their recorded bridge revisions.
+
+```powershell
+.venv/Scripts/python.exe evidence/steer-lag-speed-2026-11-04/fit.py --sysid artifacts/vehicle-sysid --wide artifacts/vehicle-sysid-wide --first artifacts/steer-rate-limit --second artifacts/steer-rate-lag --previous evidence/steer-rate-lag-2026-11-04/fit.json --output evidence/steer-lag-speed-2026-11-04/fit.json
+.venv/Scripts/python.exe examples/identify_vehicle.py --host 127.0.0.1 --seeds 22 23 24 25 --launch 0 --hand-brake 0 --reverse 0 --steer 4 --steer-fast 4 --steer-low 8 --steer-hold 8 --steer-doublet 10 --data artifacts/steer-lag-speed
+.venv/Scripts/python.exe evidence/steer-lag-speed-2026-11-04/analyse.py --candidate evidence/steer-lag-speed-2026-11-04/fit.json --previous evidence/steer-rate-lag-2026-11-04/fit.json --fresh artifacts/steer-lag-speed --wide artifacts/vehicle-sysid-wide --sysid artifacts/vehicle-sysid --muscle artifacts/scenario-lead_vehicle_braking-carla artifacts/scenario-takeover_request-carla artifacts/scenario-lane_change-carla artifacts/ue55-fullbody-loads --output evidence/steer-lag-speed-2026-11-04/analysis.json
+```
+
+With the new default and `Desktop/embodied-human/src` on `PYTHONPATH`, the bridge suite passed 520 tests with the four live tests skipped. Two new tests check the speed-dependent lag frame by frame and a fit with a fixed slope. The embodied human suite passed 561 tests with 24 optional tests skipped. Ruff, formatting and mypy passed.
+
 ## Joint steering rise rate and lag test on 2026-11-04
 
 This run fitted the steering rise rate and lag together and tested them on fresh drives. The [design](evidence/steer-rate-lag-2026-11-04/design.md) and the [fit](evidence/steer-rate-lag-2026-11-04/fit.py) and [analysis](evidence/steer-rate-lag-2026-11-04/analyse.py) scripts were committed in `0c0acf0` at 15:06:15 UTC, before the fit ran. The fitted candidate was committed in `2d19c54` at 15:06:42 UTC, before the test drives were recorded. The gain table, exponent and longitudinal parameters stayed at the default, and the fall rate at 5.0.
