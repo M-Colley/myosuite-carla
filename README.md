@@ -315,7 +315,10 @@ tables, a steering input exponent, first-order lags, drag and brake terms.
 0.45 m against 6.0 m for constant-velocity extrapolation. CARLA 0.10.0 steers
 through a squared input curve (identified exponent 1.97); CARLA 1.0 steers
 linearly, so fit a 1.0 vehicle anew. Steering is identified from 2.4 to
-13.6 m/s and up to half lock. Collect and fit your own vehicle with:
+13.6 m/s and up to half lock. Low-speed holds confirm the settled angle to
+three-quarter lock, but the surrogate does not yet model Chaos's steering
+input rate limit (2.5 per second rising), so fast large steps at low speed are
+less accurate (see VALIDATION.md). Collect and fit your own vehicle with:
 
 ```shell
 python examples/identify_vehicle.py --seeds 0 1 2 --steer-fast 0

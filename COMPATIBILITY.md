@@ -114,7 +114,12 @@ Windows package was found. No CARLA 1.0 server has been run with this bridge.
   0.10.0 Patrol); its earlier linear table misspecified 0.10.0 and had
   4 to 8 times the held-out yaw-rate error (see VALIDATION.md). Re-identify the
   vehicle on 1.0, where the exponent should come out near 1, before using it
-  there.
+  there. Chaos also rate-limits the raw steering input (UE5.8 engine
+  defaults: the magnitude rises at 2.5 and falls at 5.0 per second). CARLA's
+  C++ in the 1.0 tag and `ue58-dev` overrides only the curve. The vehicle
+  blueprints were not inspected, so the 1.0 rates are unconfirmed. The 0.10.0
+  low-speed steps agree with these rates; the surrogate does not yet model
+  them.
 - **Vehicle physics.** UE5.8 Chaos and the 1.0 vehicle content differ from
   UE5.5. All fitted drive, brake, drag and lag parameters were identified on
   0.10.0 and need re-identification on 1.0.

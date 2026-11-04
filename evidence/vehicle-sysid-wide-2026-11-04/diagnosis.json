@@ -1,0 +1,53 @@
+{
+ "segments": {
+  "train": 33,
+  "held_new": 33,
+  "original": 30
+ },
+ "speed_or_steering": {
+  "default": {
+   "new_open_loop": 2.4584045848575373,
+   "new_measured_speed": 1.1011039117337538,
+   "original_open_loop": 0.23056038838021603,
+   "original_measured_speed": 0.1725399257886816
+  },
+  "refit": {
+   "new_open_loop": 1.2409066214442865,
+   "new_measured_speed": 1.0825563641340692,
+   "original_open_loop": 0.46169561078993665,
+   "original_measured_speed": 0.5073139727385435
+  }
+ },
+ "relaxation": {
+  "sigma_m": 0.09147607602959941,
+  "train_measured_speed": {
+   "without": 1.0439730928046125,
+   "with": 1.2555645008346958
+  },
+  "new_measured_speed": {
+   "without": 1.1011039117337538,
+   "with": 1.280341124766388
+  },
+  "original_measured_speed": {
+   "without": 0.1725399257886816,
+   "with": 0.23207922787006038
+  }
+ },
+ "rate_limit": {
+  "train_measured_speed": {
+   "without": 1.0439730928046125,
+   "with": 0.4435488193658856,
+   "with_no_lag": 0.4553413047237008
+  },
+  "new_measured_speed": {
+   "without": 1.1011039117337538,
+   "with": 0.47720287354292623,
+   "with_no_lag": 0.3666878424851112
+  },
+  "original_measured_speed": {
+   "without": 0.1725399257886816,
+   "with": 0.1725399257886816,
+   "with_no_lag": 0.33930060244377236
+  }
+ }
+}

@@ -1,5 +1,42 @@
 # Validation record
 
+## Wider steering identification on 2026-11-04
+
+The [design](evidence/vehicle-sysid-wide-2026-11-04/design.md) was committed in `20e02ed` at 12:15:21 UTC before recording. It fixed the segments, the split, the analyses and the adoption rule. The CARLA 0.10.0 / UE5.5 package in `C:/Users/localadmin/Desktop/Carla-0.10.0-Win64-Shipping` (CARLA `ada75f920642e18cace0a9f85ecf9d4077ddb531`) ran with `-nullrhi`, so it held no GPU context while two unrelated GPU jobs kept the card busy. Server and client reported `0.10.0` on `Town10HD_Opt`. Seeds 10-13 were recorded from 12:16:19 to 12:16:49 UTC. Each seed had 10 low-speed sweeps (0.8-3 m/s, amplitude 0.4-1.0), 8 step-and-hold segments (±0.2-1.0) and 3 original 2-10 m/s sweeps as a control. Of 84 segments, 71 were kept. Nine collisions and four roll strikes were discarded, including 9 of 32 holds; 6 of these 9 holds had |S| of at least 0.68, so near full lock is under-sampled. The [data](evidence/vehicle-sysid-wide-2026-11-04/data.zip) include every collection log.
+
+**Control.** On the five held-out control sweeps the current default's yaw-rate RMSE was 0.075 deg/s, against a limit of 0.674. The session therefore reproduces the original one.
+
+**Steady state.** The settled road-wheel angles of 23 holds fit `g sgn(S) |S|^p` with p = 1.92 ± 0.05 and g = 0.94 rad. The current default (p = 1.974, identified only to |S| = 0.51) predicts them with an RMSE of 0.08° at |S| ≤ 0.51 (10 holds) and 0.09° at 0.51-0.75 (9 holds). At 0.75-1.0 the RMSE is 2.88° (4 holds, mean −0.73°). The retained linear fit misses by 1.98°, 7.96° and 19.9°.
+
+**Extrapolation and refit.** In open loop, the default's yaw-rate RMSE on the 33 held-out low-speed segments was 2.46 deg/s (linear fit 2.98). By band: 0.37 for narrow |S| at identified speed, 0.94 narrow and slow, 2.19 wide at identified speed, and 3.39 wide and slow (20 segments). The refit on seeds 0, 3, 10 and 12 identified p = 1.817 and a lag of 0.063 s. Its gains fell from 0.986 rad at 0-1 m/s to 0.70 rad above 15 m/s. It did not meet the rule, and the default is unchanged ([analysis](evidence/vehicle-sysid-wide-2026-11-04/analysis.json), [rejected fit](evidence/vehicle-sysid-wide-2026-11-04/rejected-refit.json)):
+
+| Check | Default | Refit | Result |
+| --- | --- | --- | --- |
+| (a) Held-out low-speed yaw-rate RMSE (seeds 11, 13) | 2.458 deg/s | 1.241 deg/s | pass |
+| (b) Original held-out yaw-rate RMSE (seeds 1, 2, 4), ≤ +5% | 0.128 deg/s | 0.238 deg/s (+86%) | fail |
+| (c) 3 s position error, original `steer` | 0.279 m | 0.333 m (+19%) | fail |
+| (c) 3 s position error, original `steer_fast` | 0.623 m | 0.895 m (+44%) | fail |
+| (c) 3 s position error, muscle-driven drives | 0.646 m | 0.792 m (+23%) | fail |
+
+The refit's other position groups improved: launches went from 0.524 to 0.290 m and hand-brake stops from 0.461 to 0.172 m. Reverse was unchanged within the tolerance (0.0561 to 0.0567 m).
+
+**Post-hoc diagnosis.** This analysis was added after the rule failed and is not part of the design ([script](evidence/vehicle-sysid-wide-2026-11-04/diagnose.py), [results](evidence/vehicle-sysid-wide-2026-11-04/diagnosis.json)). All errors below use the measured speed, as in the lateral fit.
+
+- **Speed error dominates.** With the measured speed, the default's yaw-rate RMSE on the new held-out segments falls from 2.46 to 1.10 deg/s, and the refit's to 1.08. So the refit's open-loop gain came from its longitudinal part. On the 30 original held-out steering segments its steering is worse (0.507 against 0.173 deg/s).
+- **Tyre relaxation does not explain the rest.** A road-wheel-angle lag with time constant `sigma / v`, fitted on seeds 10 and 12 (sigma = 0.091 m), raised the error on every set: training 1.04 to 1.26, new 1.10 to 1.28, original 0.173 to 0.232 deg/s.
+- **Chaos's steering input rate limit does.** The UE5.8 engine source (`ChaosVehicleMovementComponent`) limits the raw steering input before the curve: the magnitude rises at 2.5 per second and falls at 5.0 per second. CARLA's C++ in the 1.0 tag and `ue58-dev` overrides only the curve. The vehicle blueprints were not inspected. Applied to the commands with no fitted parameter, the limit cut the default's error from 1.04 to 0.44 deg/s on training seeds and from 1.10 to 0.48 on the held-out seeds. The original segments stayed at 0.173, because their sweeps never reach the limit. Dropping the 0.039 s lag as well gave 0.37 and 0.34 deg/s; the lag remains needed. The UE5.5 defaults were not read, but the parameter-free agreement indicates the same rates in 0.10.0.
+
+The rate limit is a candidate structural addition to the surrogate. It needs its own confirmatory test on fresh seeds before it changes the default. The refit's longitudinal improvement at low speed also needs one.
+
+```powershell
+.venv/Scripts/python.exe examples/identify_vehicle.py --host 127.0.0.1 --seeds 10 11 12 13 --launch 0 --hand-brake 0 --reverse 0 --steer 3 --steer-low 10 --steer-hold 8 --data artifacts/vehicle-sysid-wide
+.venv/Scripts/python.exe examples/fit_vehicle_model.py --train artifacts/vehicle-sysid/seed0 artifacts/vehicle-sysid/seed3 artifacts/vehicle-sysid-wide/seed10 artifacts/vehicle-sysid-wide/seed12 --test artifacts/vehicle-sysid/seed1 artifacts/vehicle-sysid/seed2 artifacts/vehicle-sysid/seed4 artifacts/vehicle-sysid-wide/seed11 artifacts/vehicle-sysid-wide/seed13 --test-by-phase artifacts/scenario-lead_vehicle_braking-carla artifacts/scenario-takeover_request-carla artifacts/scenario-lane_change-carla artifacts/ue55-fullbody-loads --output artifacts/vehicle-sysid-wide/refit.json
+.venv/Scripts/python.exe evidence/vehicle-sysid-wide-2026-11-04/analyse.py --wide artifacts/vehicle-sysid-wide --sysid artifacts/vehicle-sysid --linear evidence/ue55-vehicle-surrogate.json --refit evidence/vehicle-sysid-wide-2026-11-04/rejected-refit.json --muscle artifacts/scenario-lead_vehicle_braking-carla artifacts/scenario-takeover_request-carla artifacts/scenario-lane_change-carla artifacts/ue55-fullbody-loads --output evidence/vehicle-sysid-wide-2026-11-04/analysis.json
+.venv/Scripts/python.exe evidence/vehicle-sysid-wide-2026-11-04/diagnose.py --wide artifacts/vehicle-sysid-wide --sysid artifacts/vehicle-sysid --refit evidence/vehicle-sysid-wide-2026-11-04/rejected-refit.json --output evidence/vehicle-sysid-wide-2026-11-04/diagnosis.json
+```
+
+The archived analysis and diagnosis were regenerated after formatting the scripts and matched byte for byte. The recorder's new segment kinds default to zero, so earlier seeds draw the same values. With `Desktop/embodied-human/src` on `PYTHONPATH`, the bridge suite passed 515 tests with the four live tests skipped. The venv's editable `embodied_human` points to another checkout without `driving_evaluation`, which skips one more test. Ruff, formatting and mypy passed.
+
 ## Steering exponent in the vehicle surrogate on 2026-11-04
 
 The surrogate's road-wheel angle is now `G(|u|) sgn(S) |S|^p`, with the exponent `p` identified jointly with the gain table and lag. The refit used the retained command, training seeds 0 and 3 (319 s) and held-out seeds 1, 2 and 4 (526 s) plus the muscle-driven CARLA drives. With `--steer-exponent 1` it reproduced the retained linear fit exactly (largest gain difference 0.0, identical held-out errors). Longitudinal parameters are unaffected.
