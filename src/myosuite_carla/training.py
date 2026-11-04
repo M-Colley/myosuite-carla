@@ -268,6 +268,7 @@ def perturb_vehicle(
         quadratic_drag=params.quadratic_drag * resist,
         throttle_lag=params.throttle_lag * lag,
         steer_lag=params.steer_lag * lag,
+        steer_lag_slope=params.steer_lag_slope * lag,
     )
 
 

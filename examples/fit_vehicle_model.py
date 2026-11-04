@@ -64,6 +64,12 @@ def main() -> int:
         help="steering input rate limit per second (Chaos: 2.5 5); 0 0 disables",
     )
     parser.add_argument(
+        "--steer-lag-slope",
+        type=float,
+        default=0.0,
+        help="growth of the steer time constant with speed, s per m/s",
+    )
+    parser.add_argument(
         "--output", type=Path, default=Path("artifacts/vehicle-surrogate.json")
     )
     args = parser.parse_args()
@@ -75,6 +81,7 @@ def main() -> int:
         steer_exponent=args.steer_exponent,
         steer_rise_rate=args.steer_rate_limit[0],
         steer_fall_rate=args.steer_rate_limit[1],
+        steer_lag_slope=args.steer_lag_slope,
     )
     report = {
         "created_utc": datetime.now(timezone.utc).isoformat(),
