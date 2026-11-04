@@ -5,11 +5,12 @@ Each segment teleports one vehicle to rest at a spawn point with at least
 records half a second at rest and then one manoeuvre: a throttle launch, coast
 and pedal stop; a hand-brake stop; a reverse launch; or a speed-held
 sinusoidal steering sweep at 2-10 m/s (``steer``) or 8-14 m/s
-(``steer_fast``). Levels, speeds, amplitudes and frequencies are drawn from
-each seed. Segments with a collision or a roll above 3 degrees (a curb strike)
-are discarded. Every frame of each seed is exported with ``DriveRecorder`` to
-``--data/seed<N>`` with a ``collection.json`` log; fit with
-``examples/fit_vehicle_model.py``.
+(``steer_fast``); or a low-speed sweep (``steer_low``) or step and hold
+(``steer_hold``) at 0.8-3 m/s up to full lock. Levels, speeds, amplitudes and
+frequencies are drawn from each seed. Segments with a collision or a roll
+above 3 degrees (a curb strike) are discarded. Every frame of each seed is
+exported with ``DriveRecorder`` to ``--data/seed<N>`` with a
+``collection.json`` log; fit with ``examples/fit_vehicle_model.py``.
 """
 
 from __future__ import annotations
@@ -72,6 +73,21 @@ class Segment:
             self.target = float(rng.uniform(8.0, 14.0))
             self.amplitude = float(rng.uniform(0.03, 0.25))
             self.frequency = float(rng.uniform(0.4, 0.9))
+        self.hold = 0.0
+        if kind in ("steer_low", "steer_hold"):
+            self.target = float(rng.uniform(0.8, 3.0))
+            if kind == "steer_low":
+                self.amplitude = float(rng.uniform(0.4, 1.0))
+                self.frequency = float(rng.uniform(0.3, 0.8))
+            else:
+                side = float(rng.choice((-1.0, 1.0)))
+                self.amplitude = side * float(rng.uniform(0.2, 1.0))
+            # Bound the heading excursion near 0.6 rad per half sweep or
+            # hold, taking the road-wheel angle as at most 0.98 rad times
+            # the steer (linear, so conservative).
+            rate = self.target * math.tan(0.98 * abs(self.amplitude)) / 3.075
+            self.frequency = min(max(self.frequency, rate / (math.pi * 0.6)), 1.2)
+            self.hold = float(np.clip(0.6 / rate, 0.6, 2.5))
 
     def _next(self, stage: str) -> None:
         self.stage, self.stage_frames = stage, 0
@@ -120,11 +136,22 @@ class Segment:
                 if time >= 1.0:
                     self._next("stop")
                 return VehicleCommand(reverse=True)
-        if self.kind in ("steer", "steer_fast"):
-            throttle = float(np.clip(0.3 + 0.25 * (self.target - speed), 0.0, 1.0))
+        if self.kind in ("steer", "steer_fast", "steer_low", "steer_hold"):
+            if self.kind in ("steer_low", "steer_hold"):
+                throttle = float(np.clip(0.2 + 0.4 * (self.target - speed), 0.0, 0.6))
+            else:
+                throttle = float(np.clip(0.3 + 0.25 * (self.target - speed), 0.0, 1.0))
             if self.stage == "drive":
                 if speed >= self.target or time >= 8.0 or room <= 30:
-                    self._next("sweep")
+                    self._next("hold" if self.kind == "steer_hold" else "sweep")
+                return VehicleCommand(throttle=throttle)
+            if self.stage == "hold":
+                if time >= self.hold or room <= 0:
+                    self._next("release")
+                return VehicleCommand(throttle=throttle, steer=self.amplitude)
+            if self.stage == "release":
+                if time >= 1.5 or room <= 0:
+                    self._next("stop")
                 return VehicleCommand(throttle=throttle)
             if self.stage == "sweep":
                 if time >= 1.0 / self.frequency or room <= 0:
@@ -197,6 +224,7 @@ def _run_seed(
                 "target_speed": program.target,
                 "steer_amplitude": program.amplitude,
                 "steer_frequency": program.frequency,
+                "steer_hold_s": program.hold,
             }
         )
         if valid:
@@ -221,6 +249,8 @@ def main() -> int:
     parser.add_argument("--reverse", type=int, default=3)
     parser.add_argument("--steer", type=int, default=12)
     parser.add_argument("--steer-fast", type=int, default=0)
+    parser.add_argument("--steer-low", type=int, default=0)
+    parser.add_argument("--steer-hold", type=int, default=0)
     parser.add_argument("--data", type=Path, default=Path("artifacts/vehicle-sysid"))
     args = parser.parse_args()
     import carla
@@ -260,6 +290,8 @@ def main() -> int:
         "reverse": args.reverse,
         "steer": args.steer,
         "steer_fast": args.steer_fast,
+        "steer_low": args.steer_low,
+        "steer_hold": args.steer_hold,
     }
     common = {
         "server_version": client.get_server_version(),
