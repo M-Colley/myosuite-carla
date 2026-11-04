@@ -319,8 +319,10 @@ linearly, so fit a 1.0 vehicle anew. Steering is identified from 2.4 to
 three-quarter lock. The surrogate can also apply Chaos's steering input rate
 limit (`steer_rise_rate`, `steer_fall_rate`). With the engine's rates (2.5 and
 5.0 per second) it cut the steering error of fresh steps and doublets by about
-80%. It made one-period low-speed sweeps 8% worse, so `carla_nissan_patrol()`
-leaves it off (see VALIDATION.md). Collect and fit your own vehicle with:
+80%. It made one-period low-speed sweeps 8% worse in its first test, and a
+jointly fitted shorter lag made 8-14 m/s sweeps worse in a second one, so
+`carla_nissan_patrol()` leaves it off (see VALIDATION.md). Collect and fit
+your own vehicle with:
 
 ```shell
 python examples/identify_vehicle.py --seeds 0 1 2 --steer-fast 0

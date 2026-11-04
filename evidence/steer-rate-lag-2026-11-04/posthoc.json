@@ -1,0 +1,194 @@
+{
+ "seeds 14-17": {
+  "default": {
+   "steer": {
+    "yaw_rate_rmse_deg_s": 0.20753087609024798,
+    "segments": 11
+   },
+   "steer_doublet": {
+    "yaw_rate_rmse_deg_s": 1.8582329083816804,
+    "segments": 26
+   },
+   "steer_hold": {
+    "yaw_rate_rmse_deg_s": 1.7610689490530236,
+    "segments": 29
+   },
+   "steer_low": {
+    "yaw_rate_rmse_deg_s": 0.4269526397157272,
+    "segments": 31
+   }
+  },
+  "engine_rates": {
+   "steer": {
+    "yaw_rate_rmse_deg_s": 0.20753087609024798,
+    "segments": 11
+   },
+   "steer_doublet": {
+    "yaw_rate_rmse_deg_s": 0.3191771537043629,
+    "segments": 26
+   },
+   "steer_hold": {
+    "yaw_rate_rmse_deg_s": 0.31520365139274914,
+    "segments": 29
+   },
+   "steer_low": {
+    "yaw_rate_rmse_deg_s": 0.46095235429987025,
+    "segments": 31
+   }
+  },
+  "candidate": {
+   "steer": {
+    "yaw_rate_rmse_deg_s": 0.1525767760589953,
+    "segments": 11
+   },
+   "steer_doublet": {
+    "yaw_rate_rmse_deg_s": 0.296294196208095,
+    "segments": 26
+   },
+   "steer_hold": {
+    "yaw_rate_rmse_deg_s": 0.2561333704556801,
+    "segments": 29
+   },
+   "steer_low": {
+    "yaw_rate_rmse_deg_s": 0.27991289789954515,
+    "segments": 31
+   }
+  }
+ },
+ "seeds 18-21": {
+  "default": {
+   "steer": {
+    "yaw_rate_rmse_deg_s": 0.1464613964012355,
+    "segments": 12
+   },
+   "steer_doublet": {
+    "yaw_rate_rmse_deg_s": 3.091160966344582,
+    "segments": 32
+   },
+   "steer_fast": {
+    "yaw_rate_rmse_deg_s": 0.095251307180046,
+    "segments": 16
+   },
+   "steer_hold": {
+    "yaw_rate_rmse_deg_s": 1.6897835193329667,
+    "segments": 29
+   },
+   "steer_low": {
+    "yaw_rate_rmse_deg_s": 0.5407139548725485,
+    "segments": 30
+   }
+  },
+  "engine_rates": {
+   "steer": {
+    "yaw_rate_rmse_deg_s": 0.1464613964012355,
+    "segments": 12
+   },
+   "steer_doublet": {
+    "yaw_rate_rmse_deg_s": 0.4569412779883264,
+    "segments": 32
+   },
+   "steer_fast": {
+    "yaw_rate_rmse_deg_s": 0.095251307180046,
+    "segments": 16
+   },
+   "steer_hold": {
+    "yaw_rate_rmse_deg_s": 0.2922558468658913,
+    "segments": 29
+   },
+   "steer_low": {
+    "yaw_rate_rmse_deg_s": 0.40003397293720755,
+    "segments": 30
+   }
+  },
+  "candidate": {
+   "steer": {
+    "yaw_rate_rmse_deg_s": 0.10570758813881716,
+    "segments": 12
+   },
+   "steer_doublet": {
+    "yaw_rate_rmse_deg_s": 0.4375496231382082,
+    "segments": 32
+   },
+   "steer_fast": {
+    "yaw_rate_rmse_deg_s": 0.1327054982363476,
+    "segments": 16
+   },
+   "steer_hold": {
+    "yaw_rate_rmse_deg_s": 0.23527000890851035,
+    "segments": 29
+   },
+   "steer_low": {
+    "yaw_rate_rmse_deg_s": 0.24414892137061897,
+    "segments": 30
+   }
+  }
+ },
+ "seeds 14-21": {
+  "default": {
+   "steer": {
+    "yaw_rate_rmse_deg_s": 0.17409637276584414,
+    "segments": 23
+   },
+   "steer_doublet": {
+    "yaw_rate_rmse_deg_s": 2.517442365261568,
+    "segments": 58
+   },
+   "steer_fast": {
+    "yaw_rate_rmse_deg_s": 0.095251307180046,
+    "segments": 16
+   },
+   "steer_hold": {
+    "yaw_rate_rmse_deg_s": 1.7256047452857828,
+    "segments": 58
+   },
+   "steer_low": {
+    "yaw_rate_rmse_deg_s": 0.4835151148724035,
+    "segments": 61
+   }
+  },
+  "engine_rates": {
+   "steer": {
+    "yaw_rate_rmse_deg_s": 0.17409637276584414,
+    "segments": 23
+   },
+   "steer_doublet": {
+    "yaw_rate_rmse_deg_s": 0.3928354770430451,
+    "segments": 58
+   },
+   "steer_fast": {
+    "yaw_rate_rmse_deg_s": 0.095251307180046,
+    "segments": 16
+   },
+   "steer_hold": {
+    "yaw_rate_rmse_deg_s": 0.30378721441611534,
+    "segments": 58
+   },
+   "steer_low": {
+    "yaw_rate_rmse_deg_s": 0.4306635480597119,
+    "segments": 61
+   }
+  },
+  "candidate": {
+   "steer": {
+    "yaw_rate_rmse_deg_s": 0.1269166913929842,
+    "segments": 23
+   },
+   "steer_doublet": {
+    "yaw_rate_rmse_deg_s": 0.3718192138005963,
+    "segments": 58
+   },
+   "steer_fast": {
+    "yaw_rate_rmse_deg_s": 0.1327054982363476,
+    "segments": 16
+   },
+   "steer_hold": {
+    "yaw_rate_rmse_deg_s": 0.24575393516176255,
+    "segments": 58
+   },
+   "steer_low": {
+    "yaw_rate_rmse_deg_s": 0.2621309389697214,
+    "segments": 61
+   }
+  }
+ }
+}

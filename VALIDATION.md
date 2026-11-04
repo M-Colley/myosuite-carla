@@ -1,5 +1,51 @@
 # Validation record
 
+## Joint steering rise rate and lag test on 2026-11-04
+
+This run fitted the steering rise rate and lag together and tested them on fresh drives. The [design](evidence/steer-rate-lag-2026-11-04/design.md) and the [fit](evidence/steer-rate-lag-2026-11-04/fit.py) and [analysis](evidence/steer-rate-lag-2026-11-04/analyse.py) scripts were committed in `0c0acf0` at 15:06:15 UTC, before the fit ran. The fitted candidate was committed in `2d19c54` at 15:06:42 UTC, before the test drives were recorded. The gain table, exponent and longitudinal parameters stayed at the default, and the fall rate at 5.0.
+
+**Fit.** The objective was the lateral fit's: the yaw-rate residual with the measured speed. It covered the steering segments of seeds 0, 3, 10, 12 and 14-17 (152 segments, 54,068 frames above 0.5 m/s), searched on a grid. Resampling segments 1000 times gave 95% intervals:
+
+- **Rise rate:** 2.5 per second (2.45-2.6), the engine value.
+- **Lag:** 0.030 s (0.028-0.034), against 0.039 s in the default.
+- **Training error:** 0.397 deg/s, against 1.960 for the default and 0.450 for the engine rates with the default lag.
+
+The secondary split held its prediction. Segments below 3 m/s gave a lag of 0.026 s (0.022-0.034) and a rise rate of 2.45. Segments at or above 3 m/s gave 0.038 s (0.034-0.042) and 2.85 ([fit](evidence/steer-rate-lag-2026-11-04/fit.json)). The fit's fast path matched `evaluate_vehicle_model` to 8e-16 deg/s.
+
+**Test.** The CARLA 0.10.0 server ran with `-nullrhi`, as before. A first start at 15:07 UTC was stopped after 30 s, because the user's training jobs left under 2 GB of commit memory free. A second start at 15:13 UTC had about 18 GB free with the server loaded. Server and client reported `0.10.0` on `Town10HD_Opt`. Fresh seeds 18-21 were recorded from 15:14:55 to 15:17:10 UTC. Of 136 segments, 119 were kept: 30 low-speed sweeps, 29 holds, 32 doublets, 12 sweeps at 2-10 m/s and 16 at 8-14 m/s. The 17 discarded segments had 13 collisions and 4 roll strikes. The [data](evidence/steer-rate-lag-2026-11-04/data.zip) include every collection log.
+
+The candidate failed check (c), so the default is unchanged ([analysis](evidence/steer-rate-lag-2026-11-04/analysis.json)). The design had named (b) or (c) as where a speed-dependent delay would show.
+
+| Check (measured speed unless noted) | Default | Candidate | Result |
+| --- | --- | --- | --- |
+| Control: fresh 2-10 m/s sweeps, open loop, ≤ 0.674 deg/s | 0.329 deg/s | — | pass |
+| (a) Low-speed sweeps, holds and doublets pooled, ≥ 25% lower | 1.857 deg/s | 0.313 deg/s (−83%) | pass |
+| (b) Low-speed sweeps | 0.541 | 0.244 | pass |
+| (b) Holds | 1.690 | 0.235 | pass |
+| (b) Doublets | 3.091 | 0.438 | pass |
+| (c) 2-10 m/s sweeps, ≤ +5% | 0.146 | 0.106 | pass |
+| (c) 8-14 m/s sweeps, ≤ +5% | 0.095 | 0.133 (+39%) | fail |
+| (d) Pooled (a) segments, open loop, not higher | 2.832 | 1.570 | pass |
+| (e) Original held-out seeds 1, 2, 4, open loop, ≤ +5% | 0.128 deg/s; 3 s errors | 0.133 deg/s (+4%); 3 s errors unchanged | pass |
+| (f) Muscle-driven drives, open loop, ≤ +5% | 0.144 deg/s, 0.646 m | 0.109 deg/s, 0.646 m | pass |
+
+Secondary results:
+
+- **Engine rates on the new seeds.** The engine-rate model of the previous test (rise 2.5, fall 5.0, default lag) improved the low-speed sweeps this time, from 0.541 to 0.400 deg/s. Holds fell to 0.292 and doublets to 0.457. The 2-10 and 8-14 m/s sweeps were unchanged, since their commands never reach the limit. It was not the candidate here, so this does not adopt it.
+- **Seeds 11 and 13** (held out from every fit, inspected before). The candidate reduced the error from 0.869 to 0.281 deg/s, and the engine rates to 0.379.
+- **Full-body phases.** The candidate brought `steer_right` from 2.53 to 0.55 deg/s and `steer_left` from 0.19 to 0.11.
+
+**Post-hoc pooling.** This was added after the rule failed and belongs to neither design ([script](evidence/steer-rate-lag-2026-11-04/posthoc.py), [results](evidence/steer-rate-lag-2026-11-04/posthoc.json)). Over seeds 14-21, the engine-rate model lowered the measured-speed error in every kind its limit reaches: low-speed sweeps from 0.484 to 0.431 deg/s, holds from 1.726 to 0.304 and doublets from 2.517 to 0.393. The other kinds were unchanged. Its failure on seeds 14-17 therefore looks like sampling variation in the sweeps, but that needs its own test. Both runs agree that the steering delay grows with speed. A shorter constant lag helps at 1-3 m/s and hurts at 8-14 m/s, which a speed-dependent lag would have to resolve. Two follow-ups would each need fresh seeds and a fixed rule: the engine-rate model under the rule of `abf6f08`, or the rate limit with a speed-dependent lag.
+
+```powershell
+.venv/Scripts/python.exe evidence/steer-rate-lag-2026-11-04/fit.py --sysid artifacts/vehicle-sysid --wide artifacts/vehicle-sysid-wide --fresh artifacts/steer-rate-limit --output evidence/steer-rate-lag-2026-11-04/fit.json
+.venv/Scripts/python.exe examples/identify_vehicle.py --host 127.0.0.1 --seeds 18 19 20 21 --launch 0 --hand-brake 0 --reverse 0 --steer 4 --steer-fast 4 --steer-low 8 --steer-hold 8 --steer-doublet 10 --data artifacts/steer-rate-lag
+.venv/Scripts/python.exe evidence/steer-rate-lag-2026-11-04/analyse.py --candidate evidence/steer-rate-lag-2026-11-04/fit.json --fresh artifacts/steer-rate-lag --wide artifacts/vehicle-sysid-wide --sysid artifacts/vehicle-sysid --muscle artifacts/scenario-lead_vehicle_braking-carla artifacts/scenario-takeover_request-carla artifacts/scenario-lane_change-carla artifacts/ue55-fullbody-loads --output evidence/steer-rate-lag-2026-11-04/analysis.json
+.venv/Scripts/python.exe evidence/steer-rate-lag-2026-11-04/posthoc.py --candidate evidence/steer-rate-lag-2026-11-04/fit.json --first artifacts/steer-rate-limit --second artifacts/steer-rate-lag --output evidence/steer-rate-lag-2026-11-04/posthoc.json
+```
+
+No library code changed in this run. With `Desktop/embodied-human/src` on `PYTHONPATH`, the bridge suite passed 518 tests with the four live tests skipped. Ruff, formatting and mypy passed.
+
 ## Steering input rate limit test on 2026-11-04
 
 The surrogate can now apply Chaos's steering input rate limit (`steer_rise_rate`, `steer_fall_rate`) to the command before its steering lag. Zero, the default, leaves the command unlimited. This run tested whether `carla_nissan_patrol()` should take the engine's rates (2.5 rising, 5.0 falling per second), with nothing refitted. The code, the [design](evidence/steer-rate-limit-2026-11-04/design.md) and its [analysis script](evidence/steer-rate-limit-2026-11-04/analyse.py) were committed in `abf6f08` at 14:46:47 UTC, before recording. The CARLA 0.10.0 server used for the wider identification ran again with `-nullrhi`, while two unrelated jobs kept the GPU fully busy. Server and client reported `0.10.0` on `Town10HD_Opt`. Fresh seeds 14-17 were recorded from 14:47:55 to 14:48:45 UTC. Each seed had 8 low-speed sweeps, 8 step-and-hold segments, 10 step doublets at 3-10 m/s and 3 control sweeps. Of 116 segments, 97 were kept. Of the 19 discarded (10 collisions, 9 roll strikes), 14 were doublets, 11 of them steering left first. The kept doublets therefore lean towards right-first steps and smaller lateral loads. The [data](evidence/steer-rate-limit-2026-11-04/data.zip) include every collection log.
