@@ -326,6 +326,11 @@ class DriveRecorder:
             vehicle=str(session.vehicle.type_id),
             fixed_delta_seconds=float(session.config.fixed_delta_seconds),
         )
+        # Geolocation depends on the server: CARLA 1.0 projects through the
+        # map's GeoProjection, 0.10.0 through a scaled Mercator offset.
+        server_version = getattr(session, "server_version", "")
+        if server_version:
+            self.metadata.setdefault("server_version", str(server_version))
 
         def geolocate(location: Sequence[float]) -> tuple[float, float]:
             geo = world_map.transform_to_geolocation(api.Location(*location))

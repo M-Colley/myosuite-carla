@@ -1,5 +1,19 @@
 # Validation record
 
+## CARLA 1.0 source review on 2026-11-04
+
+This is a source and data review, not a live run: no CARLA 1.0 server or wheel was executed. Upstream `carla-simulator/carla` was fetched read-only into the pinned worktree's repository. The `1.0` tag and branch `ue5/1.0` point to `ecb0af47fcd991c0ec6f48433df2a09721b2fec8` (2026-11-02), 40 commits after the reviewed `defabe35`; `ue58-dev` was at `a3c6d7f4f017cdce9f344219d17c3cdf4bb69374` (2026-11-04). CMake sets `CARLA_VERSION` to `1.0`. The GitHub releases list ended at 0.9.16. CARLA's download server returned a Linux `CARLA_1.0.tar.gz` of 13,985,818,522 bytes, last modified 2026-11-02 09:36:05 UTC, and 404 for the analogous Windows path.
+
+`LibCarla/source/carla/client` and `rpc` are unchanged from `defabe35`. The Python bindings changed only in `Control.cpp` (gear-ratio lists), OSM2ODR export and documentation, so the calls of the bridge and of `embodied-ui`'s `CarlaEngine` are unaffected. Behavioural changes found in the tag: forced linear steering input (`674a3a70e`, already in `defabe35`), the geolocation north axis (`2466fff9c`), runtime wheel physics control and friction triggers (`538ecebea`), and the version (`8d30115a8`). Of the nine client fixes in validation snapshot `ee5859b4`, the tag has an independent gear-ratio fix; PR 9999 was open and approved, the other seven closed unmerged.
+
+The retained 0.10.0 Nissan Patrol drives used Chaos's squared steering input curve. With the effective road-wheel angle `atan(L * yaw_rate / v)` fitted as `g * sign(s) * |s|**p`, the best exponent was 2.00 (2-4 m/s, 661 samples) and 1.95 in the 4-6, 6-8, 8-10 and 10-14 m/s bands (621, 902, 826 and 146 samples). A linear fit left 33, 139, 313, 49 and 17 times the squared error. The squared gain was 0.90 to 0.97 rad, and the per-sweep linear gain grew in proportion to the sweep amplitude (4-6 m/s: 0.083 rad at amplitude 0.10, 0.441 rad at 0.54). Within 19 single sweeps the median exponent was 1.95 (quartiles 1.95 and 1.95). The [analysis](evidence/carla-1.0-review/steer-input-curve.json) ran on seeds 0-4 of [the sysid archive](evidence/ue55-vehicle-sysid.zip) with the yaw rate one frame after the command:
+
+```powershell
+python -I evidence/carla-1.0-review/steer_input_curve.py evidence/ue55-vehicle-sysid.zip evidence/carla-1.0-review/steer-input-curve.json
+```
+
+`DriveRecorder` now stores the CARLA server version with each recording. The recording test double now increases latitude towards −y, matching 0.10.0 and 1.0. [COMPATIBILITY.md](COMPATIBILITY.md#carla-10) lists the consequences: the 0.10.0 surrogate, steering gains and wheel calibration need re-identification on 1.0, and live validation there remains pending. The bridge suite passed 513 tests with the four live tests skipped (127 s); ruff and mypy passed.
+
 ## Actuator correction and independent evaluation on 2026-10-28
 
 The corrected actuator interface reduced mean test normalized trajectory MSE from 0.7686406859 to 0.6987135337 (9.10%). The paired change was −0.0699271523 (95% source bootstrap interval [−0.1654942475, 0.02120664355]). The interval includes zero. The result is `inconclusive_contextual_candidate`. Global defaults remain unchanged.

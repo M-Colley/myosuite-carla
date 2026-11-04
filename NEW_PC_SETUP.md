@@ -9,7 +9,10 @@ different server choices; keep their results separate:
 | Official CARLA **0.10.0**, Unreal Engine **5.5** | Reproduce the supplementary live tests already recorded here | Download the Windows package; see section 5B |
 
 A shared CARLA `0.10.0` version string does **not** distinguish UE5.5 from
-UE5.8. Preserve the server's engine version and source/build identity.
+the pinned UE5.8 commits below, which predate the `1.0` version. Builds from the
+`1.0` tag report `1.0`; their steering response differs from 0.10.0 (see
+[COMPATIBILITY.md](COMPATIBILITY.md#carla-10)). Preserve the server's engine
+version and source/build identity.
 No successful UE5.8 engine/simulator build or live run is claimed by this guide. The
 Windows build commands below were checked against the pinned upstream source
 and its [official Windows guide](https://github.com/carla-simulator/carla/blob/defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5/Docs/build_windows_ue5.md).

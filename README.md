@@ -79,6 +79,10 @@ the tested MyoSuite revision and CARLA API contract.
 warns against `pip install carla` for this branch. Version equality is checked at
 session startup but cannot distinguish commits with identical version strings.
 See [COMPATIBILITY.md](COMPATIBILITY.md) for the pinned upstream API contract.
+The branch becomes CARLA 1.0. The Python API calls the bridge makes are
+unchanged there, but its linear steering response differs from 0.10.0, so
+vehicle and steering parameters fitted on 0.10.0 need re-identification
+([details](COMPATIBILITY.md#carla-10)). No 1.0 server has been run yet.
 
 ## Compose the physical driver
 
