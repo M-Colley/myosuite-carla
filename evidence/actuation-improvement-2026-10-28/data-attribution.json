@@ -1,0 +1,11 @@
+{
+  "dataset": "NGSIM I-80 vehicle trajectories",
+  "source": "https://doi.org/10.21949/1504477",
+  "licence": "CC BY-SA 3.0",
+  "derived_fixtures": [
+    "run/development.npz",
+    "run/test.npz"
+  ],
+  "processing": "Existing empirical NGSIM loader; 10 Hz signals with Savitzky-Golay smoothing (window 21, polynomial 3); fixed first 20 second source window.",
+  "source_sha256": "bc3cff7ccc9c9fa5425f3424d5bee341dea2a35ea955328b3b221ee64c3931dc"
+}

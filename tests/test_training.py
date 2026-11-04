@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import math
+import runpy
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -45,10 +47,65 @@ def _trial(seconds: float = 20.0) -> FollowingTrial:
     )
 
 
+def test_paired_evaluation_keeps_original_sources_and_fold_assignments() -> None:
+    from dataclasses import replace
+
+    module = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / "examples" / "evaluate_policy.py")
+    )
+    human = [
+        replace(_trial(), driver=f"record:{i}", source_group=f"source:{i}")
+        for i in range(6)
+    ]
+    rows = [
+        {
+            "kind": "ngsim",
+            "agent": agent,
+            "index": i,
+            "seed": 20_000 + i,
+            "driver": f"simulation:{i}",
+            "source_group": trial.group_id,
+            "features": (np.arange(8, dtype=float) + i).tolist(),
+            "gap": (trial.gap + (1 if agent == "policy" else 2)).tolist(),
+        }
+        for agent in ("policy", "reflex")
+        for i, trial in enumerate(human)
+    ]
+    report = module["_human_comparison"](human, list(reversed(rows)))
+    likeness = report["human_likeness"]
+    assert likeness["source_groups"] == [trial.group_id for trial in human]
+    for agent in ("policy", "reflex"):
+        judge = likeness[agent]["judge"]
+        assert judge["grouping"] == "shared" and judge["independent_groups"] == 6
+        assert judge["fold_assignments"][0] == judge["fold_assignments"][1]
+    assert likeness["gap_rmse_difference_m"]["sources"] == 6
+    assert likeness["gap_rmse_difference_m"]["mean"] == pytest.approx(-1.0)
+    bad = [dict(row, source_group="different") for row in rows]
+    with pytest.raises(ValueError, match="source"):
+        module["_human_comparison"](human, bad)
+
+
+def test_paired_bootstrap_resamples_source_means() -> None:
+    module = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / "examples" / "evaluate_policy.py")
+    )
+    differences = np.asarray([1, 3, 10, 20], dtype=float)
+    groups = ["one", "one", "two", "three"]
+    summary = module["_paired_difference"](differences, groups)
+    assert summary["sources"] == 3
+    assert summary["mean"] == pytest.approx(np.mean([2, 10, 20]))
+    assert summary["ci95"] == module["_bootstrap"](np.asarray([2, 10, 20]))
+    with pytest.raises(ValueError, match="two"):
+        module["_bootstrap"](np.asarray([1, 3]), groups=["one", "one"])
+    one = module["_paired_difference"](np.asarray([1, 3]), ["one", "one"])
+    assert one["ci95"] is None and one["sources"] == 1
+
+
 def test_lead_profile_replays_recorded_speeds() -> None:
     trial = _trial()
     scenario = scenario_from_trial(trial)
     assert scenario.start_speed == 8.0 and scenario.lead.gap == 12.0
+    assert scenario.source_group == trial.group_id
     monitor = ScenarioMonitor(scenario)
     from types import SimpleNamespace
 
@@ -136,6 +193,27 @@ def test_zero_residual_reproduces_the_reflex_driver(driver: Any) -> None:
         assert "following_window" not in info
 
 
+def test_direct_policy_evaluation_uses_the_reflex_driver(driver: Any) -> None:
+    from myosuite_carla.driver_models import ReflexDriver
+    from myosuite_carla.driving_env import FullBodyDrivingEnv
+    from myosuite_carla.scenario import Scenario
+    from myosuite_carla.training import DrivingTaskWrapper
+
+    namespace = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / "examples" / "evaluate_policy.py")
+    )
+    base = FullBodyDrivingEnv(Scenario(duration=1.0), driver=driver)
+    direct = DrivingTaskWrapper(base, mode="direct", vehicle_spread=0.0)
+    baseline = namespace["_reflex_environment"](direct)
+    assert baseline.unwrapped is base
+    baseline.reset(seed=0)
+    reference = ReflexDriver(base.dt)
+    expected = reference.act(base.state)
+    actual = baseline.intent_for(np.zeros(baseline.action_space.shape))
+    assert actual == expected
+    assert actual.left_foot == 0.0
+
+
 def test_residual_waits_for_the_takeover_and_direct_mode_maps_bounds(
     driver: Any,
 ) -> None:
@@ -193,3 +271,60 @@ def test_speed_reward_follows_the_headway_behind_a_lead(driver: Any) -> None:
         if terminated or truncated:
             break
     assert windows == 2 and bound > 0
+
+
+@pytest.mark.parametrize("resolve_after_reset", [False, True])
+def test_following_reports_use_resolved_footprint_fronts(
+    driver: Any, resolve_after_reset: bool
+) -> None:
+    from myosuite_carla.driving_env import FullBodyDrivingEnv
+    from myosuite_carla.scenario import Scenario, VehicleFootprint
+    from myosuite_carla.training import DrivingTaskWrapper
+
+    scenario = Scenario(
+        name="custom_follow",
+        duration=1.0,
+        target_speed=0.0,
+        source_group="recorded_driver:4",
+        ego_footprint=VehicleFootprint(
+            length=6.0, width=2.0, center=(1.0, 0.0), yaw=10.0
+        ),
+        lead=LeadVehicle(
+            speed=0.0,
+            gap=12.0,
+            brake_time=None,
+            footprint=VehicleFootprint(
+                length=10.0, width=2.5, center=(-0.5, 0.0), yaw=20.0
+            ),
+        ),
+    )
+    base = FullBodyDrivingEnv(scenario, driver=driver)
+    env = DrivingTaskWrapper(
+        base,
+        mode="direct",
+        vehicle_spread=0.0,
+        takeover_population=False,
+        style_window=0.5,
+        action_filter=0.0,
+    )
+    env.reset(seed=0)
+    initial_front = base.monitor.state["ego_front_s_m"]
+    if resolve_after_reset:
+        base.monitor.set_footprints(
+            lead=VehicleFootprint(length=14.0, width=2.8, center=(-1.0, 0.0), yaw=-15.0)
+        )
+    windows = []
+    while True:
+        _, _, terminated, truncated, info = env.step(np.asarray([-1.0, 1.0, 0.0]))
+        if "following_window" in info:
+            windows.append(info["following_window"])
+        if terminated or truncated:
+            break
+    trial = info["following_trial"]
+    assert trial.position[0] == pytest.approx(initial_front)
+    assert trial.group_id == scenario.source_group
+    assert len(windows) == 2
+    for reported in [*windows, trial]:
+        np.testing.assert_allclose(reported.gap, info["scenario"]["gap_m"], atol=1e-9)
+        np.testing.assert_allclose(reported.leader_speed, 0.0, atol=1e-9)
+        assert reported.group_id == scenario.source_group

@@ -45,6 +45,8 @@ class FollowingTrial:
         acceleration: Follower acceleration, m/s^2.
         gap: Bumper-to-bumper gap to the leader, metres.
         leader_speed: Leader speed, m/s.
+        source_group: Original driver or source context shared by paired
+            human and simulated trials. Defaults to ``driver`` for grouping.
     """
 
     driver: str
@@ -54,6 +56,18 @@ class FollowingTrial:
     acceleration: NDArray[np.float64]
     gap: NDArray[np.float64]
     leader_speed: NDArray[np.float64]
+    source_group: str | None = None
+
+    def __post_init__(self) -> None:
+        if self.source_group is not None and (
+            not isinstance(self.source_group, str) or not self.source_group.strip()
+        ):
+            raise ValueError("source_group must be a nonempty string or None")
+
+    @property
+    def group_id(self) -> str:
+        """Return the original source used for grouped evaluation and splitting."""
+        return self.source_group if self.source_group is not None else self.driver
 
     @property
     def duration(self) -> float:
@@ -80,6 +94,8 @@ def resample_following(
     leader_position: Sequence[float],
     leader_length: float,
     driver: str = "",
+    *,
+    source_group: str | None = None,
 ) -> FollowingTrial:
     """Bring a simulated follow onto the NGSIM grid and processing.
 
@@ -102,6 +118,7 @@ def resample_following(
         acceleration=accel,
         gap=leader_smoothed - leader_length - smoothed,
         leader_speed=leader_speed,
+        source_group=source_group,
     )
 
 
@@ -233,6 +250,7 @@ def split_windows(
                     acceleration=trial.acceleration[part],
                     gap=trial.gap[part],
                     leader_speed=trial.leader_speed[part],
+                    source_group=trial.source_group,
                 )
             )
     return windows
@@ -241,12 +259,12 @@ def split_windows(
 def split_by_driver(
     trials: Sequence[FollowingTrial], test_fraction: float = 0.3, seed: int = 0
 ) -> tuple[list[FollowingTrial], list[FollowingTrial]]:
-    """Split trials into training and held-out sets with no shared driver."""
-    drivers = sorted({trial.driver for trial in trials})
+    """Split trials with no shared original driver or source group."""
+    drivers = sorted({trial.group_id for trial in trials})
     rng = np.random.default_rng(seed)
     held = set(rng.permutation(drivers)[: int(round(test_fraction * len(drivers)))])
-    train = [trial for trial in trials if trial.driver not in held]
-    test = [trial for trial in trials if trial.driver in held]
+    train = [trial for trial in trials if trial.group_id not in held]
+    test = [trial for trial in trials if trial.group_id in held]
     return train, test
 
 
@@ -259,7 +277,11 @@ def save_trials(trials: Sequence[FollowingTrial], path: str | Path) -> Path:
     target.parent.mkdir(parents=True, exist_ok=True)
     arrays = {name: np.stack([getattr(t, name) for t in trials]) for name in _FIELDS}
     np.savez_compressed(
-        target, drivers=np.asarray([t.driver for t in trials]), **arrays
+        target,
+        schema_version=np.asarray(2),
+        drivers=np.asarray([t.driver for t in trials]),
+        source_groups=np.asarray([t.source_group or "" for t in trials]),
+        **arrays,
     )
     return target
 
@@ -268,10 +290,19 @@ def load_trials(path: str | Path) -> list[FollowingTrial]:
     """Read trials written by :func:`save_trials`."""
     with np.load(path, allow_pickle=False) as data:
         drivers = data["drivers"].tolist()
+        sources = (
+            data["source_groups"].tolist()
+            if "source_groups" in data
+            else [""] * len(drivers)
+        )
+        if len(sources) != len(drivers):
+            raise ValueError("Each saved trial needs one source group")
         arrays = {name: data[name] for name in _FIELDS}
     return [
         FollowingTrial(
-            driver=str(driver), **{name: arrays[name][i] for name in _FIELDS}
+            driver=str(driver),
+            source_group=str(sources[i]) or None,
+            **{name: arrays[name][i] for name in _FIELDS},
         )
         for i, driver in enumerate(drivers)
     ]

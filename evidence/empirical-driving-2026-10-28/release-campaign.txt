@@ -1,0 +1,46 @@
+lehtonen2018: starting
+lehtonen2018: evaluated
+rightgaze2022: starting
+rightgaze2022: evaluated
+expert_driving: starting
+expert_driving: reference_ready
+ngsim: starting
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:563: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:600: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:1416: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  body = _body_spec(config).compile()
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:563: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:600: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+ngsim: evaluated
+drivedna_controlled: starting
+drivedna_controlled: access_pending
+mpdb: starting
+mpdb: reference_ready

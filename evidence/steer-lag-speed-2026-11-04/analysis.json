@@ -1,0 +1,886 @@
+{
+ "candidate": {
+  "steer_rise_rate": 2.5,
+  "steer_fall_rate": 5.0,
+  "steer_lag": 0.024,
+  "steer_lag_slope": 0.0016
+ },
+ "collection": {
+  "seed22": {
+   "server_version": "0.10.0",
+   "client_version": "0.10.0",
+   "map": "Carla/Maps/Town10HD_Opt",
+   "started_utc": "2026-11-04T16:09:25.754597+00:00",
+   "finished_utc": "2026-11-04T16:09:39.394056+00:00",
+   "kinds": {
+    "steer": {
+     "recorded": 4,
+     "kept": 4
+    },
+    "steer_doublet": {
+     "recorded": 10,
+     "kept": 7
+    },
+    "steer_low": {
+     "recorded": 8,
+     "kept": 8
+    },
+    "steer_fast": {
+     "recorded": 4,
+     "kept": 4
+    },
+    "steer_hold": {
+     "recorded": 8,
+     "kept": 7
+    }
+   }
+  },
+  "seed23": {
+   "server_version": "0.10.0",
+   "client_version": "0.10.0",
+   "map": "Carla/Maps/Town10HD_Opt",
+   "started_utc": "2026-11-04T16:09:39.395562+00:00",
+   "finished_utc": "2026-11-04T16:09:51.969432+00:00",
+   "kinds": {
+    "steer_fast": {
+     "recorded": 4,
+     "kept": 4
+    },
+    "steer_doublet": {
+     "recorded": 10,
+     "kept": 4
+    },
+    "steer_low": {
+     "recorded": 8,
+     "kept": 8
+    },
+    "steer": {
+     "recorded": 4,
+     "kept": 3
+    },
+    "steer_hold": {
+     "recorded": 8,
+     "kept": 6
+    }
+   }
+  },
+  "seed24": {
+   "server_version": "0.10.0",
+   "client_version": "0.10.0",
+   "map": "Carla/Maps/Town10HD_Opt",
+   "started_utc": "2026-11-04T16:09:51.970438+00:00",
+   "finished_utc": "2026-11-04T16:10:04.805605+00:00",
+   "kinds": {
+    "steer_doublet": {
+     "recorded": 10,
+     "kept": 9
+    },
+    "steer_hold": {
+     "recorded": 8,
+     "kept": 8
+    },
+    "steer_low": {
+     "recorded": 8,
+     "kept": 8
+    },
+    "steer": {
+     "recorded": 4,
+     "kept": 4
+    },
+    "steer_fast": {
+     "recorded": 4,
+     "kept": 4
+    }
+   }
+  },
+  "seed25": {
+   "server_version": "0.10.0",
+   "client_version": "0.10.0",
+   "map": "Carla/Maps/Town10HD_Opt",
+   "started_utc": "2026-11-04T16:10:04.806606+00:00",
+   "finished_utc": "2026-11-04T16:10:17.584886+00:00",
+   "kinds": {
+    "steer_hold": {
+     "recorded": 8,
+     "kept": 7
+    },
+    "steer_fast": {
+     "recorded": 4,
+     "kept": 4
+    },
+    "steer_low": {
+     "recorded": 8,
+     "kept": 7
+    },
+    "steer_doublet": {
+     "recorded": 10,
+     "kept": 6
+    },
+    "steer": {
+     "recorded": 4,
+     "kept": 4
+    }
+   }
+  }
+ },
+ "segments": {
+  "fresh_by_kind": {
+   "steer_low": 31,
+   "steer_hold": 28,
+   "steer_doublet": 26,
+   "steer": 15,
+   "steer_fast": 16
+  },
+  "seeds_11_13": 38,
+  "original_held_out": 60,
+  "muscle_driven": 29
+ },
+ "control": {
+  "default_yaw_rate_rmse_deg_s": 0.3395973317538807,
+  "limit_deg_s": 0.674,
+  "passed": true
+ },
+ "models": {
+  "default": {
+   "fresh_measured_speed": {
+    "all": {
+     "yaw_rate_rmse_deg_s": 1.0899616492381283,
+     "final_heading_error_deg": 0.6419843746867007,
+     "final_position_error_m": 0.15026664972975237,
+     "position_error_3s_m": 0.024139231899692647,
+     "segments": 116
+    },
+    "steer": {
+     "yaw_rate_rmse_deg_s": 0.15692319453930723,
+     "final_heading_error_deg": 0.052211002777801586,
+     "final_position_error_m": 0.01912083731457709,
+     "position_error_3s_m": 0.03142253918763404,
+     "segments": 15
+    },
+    "steer_doublet": {
+     "yaw_rate_rmse_deg_s": 2.71381745244133,
+     "final_heading_error_deg": 1.2730744216999474,
+     "final_position_error_m": 0.3547899105742549,
+     "position_error_3s_m": 0.03190287959932809,
+     "segments": 26
+    },
+    "steer_fast": {
+     "yaw_rate_rmse_deg_s": 0.11614434385041411,
+     "final_heading_error_deg": 0.08177711656088535,
+     "final_position_error_m": 0.029204816315140436,
+     "position_error_3s_m": 0.05334608226653008,
+     "segments": 16
+    },
+    "steer_hold": {
+     "yaw_rate_rmse_deg_s": 1.2372639344747867,
+     "final_heading_error_deg": 1.2724616442086056,
+     "final_position_error_m": 0.2379103199356797,
+     "position_error_3s_m": 0.008395293795179198,
+     "segments": 28
+    },
+    "steer_low": {
+     "yaw_rate_rmse_deg_s": 0.5585237466952032,
+     "final_heading_error_deg": 0.07395900331811367,
+     "final_position_error_m": 0.015198412591969173,
+     "position_error_3s_m": 0.008586461319291618,
+     "segments": 31
+    }
+   },
+   "new_measured_speed": {
+    "yaw_rate_rmse_deg_s": 1.4895159785383127,
+    "final_heading_error_deg": 0.881679811744653,
+    "final_position_error_m": 0.20275119894356292,
+    "position_error_3s_m": 0.015998793798013642,
+    "segments": 85
+   },
+   "new_open_loop": {
+    "yaw_rate_rmse_deg_s": 2.6728132751748555,
+    "final_heading_error_deg": 3.119940517783677,
+    "final_position_error_m": 3.797054779122734,
+    "position_error_3s_m": 0.5145999412647547,
+    "segments": 85
+   },
+   "seeds_11_13_measured_speed": {
+    "all": {
+     "yaw_rate_rmse_deg_s": 0.8691627003898992,
+     "final_heading_error_deg": 0.623059450021559,
+     "final_position_error_m": 0.12364994196168934,
+     "position_error_3s_m": 0.009916844521100152,
+     "segments": 38
+    },
+    "steer": {
+     "yaw_rate_rmse_deg_s": 0.04614386972649174,
+     "final_heading_error_deg": 0.04278995771211089,
+     "final_position_error_m": 0.008469108833753977,
+     "position_error_3s_m": 0.018488829401024254,
+     "segments": 5
+    },
+    "steer_hold": {
+     "yaw_rate_rmse_deg_s": 1.1844338469939808,
+     "final_heading_error_deg": 1.2078730526002621,
+     "final_position_error_m": 0.26471382620147177,
+     "position_error_3s_m": 0.009648790636067108,
+     "segments": 13
+    },
+    "steer_low": {
+     "yaw_rate_rmse_deg_s": 0.8472349886219808,
+     "final_heading_error_deg": 0.3174211312576386,
+     "final_position_error_m": 0.04298675135666982,
+     "position_error_3s_m": 0.007731485841473217,
+     "segments": 20
+    }
+   },
+   "original_open_loop": {
+    "all": {
+     "yaw_rate_rmse_deg_s": 0.12806568085104456,
+     "final_heading_error_deg": 0.1482473184132206,
+     "final_position_error_m": 3.737706882812936,
+     "position_error_3s_m": 0.45167141743400224,
+     "segments": 60
+    },
+    "hand_brake": {
+     "yaw_rate_rmse_deg_s": 0.039695867575672276,
+     "final_heading_error_deg": 0.018381263860302643,
+     "final_position_error_m": 1.1912381929615,
+     "position_error_3s_m": 0.4613848814650564,
+     "segments": 4
+    },
+    "launch": {
+     "yaw_rate_rmse_deg_s": 0.03878018811765243,
+     "final_heading_error_deg": 0.05644183296067825,
+     "final_position_error_m": 5.805047687621719,
+     "position_error_3s_m": 0.5237150610587833,
+     "segments": 20
+    },
+    "reverse": {
+     "yaw_rate_rmse_deg_s": 0.004047027837448313,
+     "final_heading_error_deg": 0.005970763663450877,
+     "final_position_error_m": 0.09546921636121353,
+     "position_error_3s_m": 0.05606527006798786,
+     "segments": 6
+    },
+    "steer": {
+     "yaw_rate_rmse_deg_s": 0.3370180431671702,
+     "final_heading_error_deg": 0.40825877399271876,
+     "final_position_error_m": 1.3956596522217453,
+     "position_error_3s_m": 0.2791831620677296,
+     "segments": 18
+    },
+    "steer_fast": {
+     "yaw_rate_rmse_deg_s": 0.09115577221160882,
+     "final_heading_error_deg": 0.06261351161690473,
+     "final_position_error_m": 3.864769951483035,
+     "position_error_3s_m": 0.6225307347648764,
+     "segments": 12
+    }
+   },
+   "muscle_driven": {
+    "yaw_rate_rmse_deg_s": 0.14393783875420355,
+    "final_heading_error_deg": 0.23010420895353872,
+    "final_position_error_m": 8.960947907374372,
+    "position_error_3s_m": 0.6457410021116406,
+    "segments": 29
+   },
+   "muscle_driven_phases": {
+    "steer_left": {
+     "yaw_rate_rmse_deg_s": 0.19099945092130716,
+     "final_heading_error_deg": 0.12500828806221875,
+     "final_position_error_m": 0.17764688731485054,
+     "position_error_3s_m": null,
+     "segments": 1
+    },
+    "steer_right": {
+     "yaw_rate_rmse_deg_s": 2.5278923351238904,
+     "final_heading_error_deg": 1.4502899837543453,
+     "final_position_error_m": 0.1249107707586862,
+     "position_error_3s_m": null,
+     "segments": 1
+    },
+    "straighten": {
+     "yaw_rate_rmse_deg_s": 0.3197680304428957,
+     "final_heading_error_deg": 0.05049992649367141,
+     "final_position_error_m": 0.012560604554292237,
+     "position_error_3s_m": null,
+     "segments": 1
+    }
+   }
+  },
+  "candidate": {
+   "fresh_measured_speed": {
+    "all": {
+     "yaw_rate_rmse_deg_s": 0.21040163007035131,
+     "final_heading_error_deg": 0.08965893998635198,
+     "final_position_error_m": 0.11357064281166926,
+     "position_error_3s_m": 0.024139231899692647,
+     "segments": 116
+    },
+    "steer": {
+     "yaw_rate_rmse_deg_s": 0.1096877916990636,
+     "final_heading_error_deg": 0.051945827849139405,
+     "final_position_error_m": 0.020016783447613845,
+     "position_error_3s_m": 0.03142253918763404,
+     "segments": 15
+    },
+    "steer_doublet": {
+     "yaw_rate_rmse_deg_s": 0.36543475991032537,
+     "final_heading_error_deg": 0.09118164734421094,
+     "final_position_error_m": 0.04865773261223444,
+     "position_error_3s_m": 0.03190287959932809,
+     "segments": 26
+    },
+    "steer_fast": {
+     "yaw_rate_rmse_deg_s": 0.10544632471487526,
+     "final_heading_error_deg": 0.08338076205486185,
+     "final_position_error_m": 0.029171424811264175,
+     "position_error_3s_m": 0.05334608226653008,
+     "segments": 16
+    },
+    "steer_hold": {
+     "yaw_rate_rmse_deg_s": 0.1401772584738188,
+     "final_heading_error_deg": 0.1592115428028996,
+     "final_position_error_m": 0.37467951170555325,
+     "position_error_3s_m": 0.008395293795179198,
+     "segments": 28
+    },
+    "steer_low": {
+     "yaw_rate_rmse_deg_s": 0.26602406806252377,
+     "final_heading_error_deg": 0.03883883129938093,
+     "final_position_error_m": 0.00824855478474946,
+     "position_error_3s_m": 0.008586461319291618,
+     "segments": 31
+    }
+   },
+   "new_measured_speed": {
+    "yaw_rate_rmse_deg_s": 0.25349298715098306,
+    "final_heading_error_deg": 0.09811955709952287,
+    "final_position_error_m": 0.15055507889542877,
+    "position_error_3s_m": 0.015998793798013642,
+    "segments": 85
+   },
+   "new_open_loop": {
+    "yaw_rate_rmse_deg_s": 1.7570168054186994,
+    "final_heading_error_deg": 2.9486012085738738,
+    "final_position_error_m": 3.8002971582932004,
+    "position_error_3s_m": 0.5145999412647547,
+    "segments": 85
+   },
+   "seeds_11_13_measured_speed": {
+    "all": {
+     "yaw_rate_rmse_deg_s": 0.2520866429083338,
+     "final_heading_error_deg": 0.17303821111811907,
+     "final_position_error_m": 0.16265438630322193,
+     "position_error_3s_m": 0.009916844521100152,
+     "segments": 38
+    },
+    "steer": {
+     "yaw_rate_rmse_deg_s": 0.03632130869676773,
+     "final_heading_error_deg": 0.04334536497689811,
+     "final_position_error_m": 0.008566970379105893,
+     "position_error_3s_m": 0.018488829401024254,
+     "segments": 5
+    },
+    "steer_hold": {
+     "yaw_rate_rmse_deg_s": 0.12436674676735668,
+     "final_heading_error_deg": 0.14355402018028415,
+     "final_position_error_m": 0.3835234482323282,
+     "position_error_3s_m": 0.009648790636067108,
+     "segments": 13
+    },
+    "steer_low": {
+     "yaw_rate_rmse_deg_s": 0.41472464069783543,
+     "final_heading_error_deg": 0.23294834701471526,
+     "final_position_error_m": 0.02900615367280436,
+     "position_error_3s_m": 0.007731485841473217,
+     "segments": 20
+    }
+   },
+   "original_open_loop": {
+    "all": {
+     "yaw_rate_rmse_deg_s": 0.11987012556535644,
+     "final_heading_error_deg": 0.1481870130711422,
+     "final_position_error_m": 3.737640897553481,
+     "position_error_3s_m": 0.45167141743400224,
+     "segments": 60
+    },
+    "hand_brake": {
+     "yaw_rate_rmse_deg_s": 0.039695867575672276,
+     "final_heading_error_deg": 0.018381263860302643,
+     "final_position_error_m": 1.1912381929615,
+     "position_error_3s_m": 0.4613848814650564,
+     "segments": 4
+    },
+    "launch": {
+     "yaw_rate_rmse_deg_s": 0.03878018811765243,
+     "final_heading_error_deg": 0.05644183296067825,
+     "final_position_error_m": 5.805047687621719,
+     "position_error_3s_m": 0.5237150610587833,
+     "segments": 20
+    },
+    "reverse": {
+     "yaw_rate_rmse_deg_s": 0.004047027837448313,
+     "final_heading_error_deg": 0.005970763663450877,
+     "final_position_error_m": 0.09546921636121353,
+     "position_error_3s_m": 0.05606527006798786,
+     "segments": 6
+    },
+    "steer": {
+     "yaw_rate_rmse_deg_s": 0.3135618724404267,
+     "final_heading_error_deg": 0.40711302988608067,
+     "final_position_error_m": 1.3954091378879354,
+     "position_error_3s_m": 0.2791831620677296,
+     "segments": 18
+    },
+    "steer_fast": {
+     "yaw_rate_rmse_deg_s": 0.08199500926999016,
+     "final_heading_error_deg": 0.06382042408029855,
+     "final_position_error_m": 3.8647769385357345,
+     "position_error_3s_m": 0.6225307347648764,
+     "segments": 12
+    }
+   },
+   "muscle_driven": {
+    "yaw_rate_rmse_deg_s": 0.11107275454494062,
+    "final_heading_error_deg": 0.20813886292058403,
+    "final_position_error_m": 8.961529540688671,
+    "position_error_3s_m": 0.6457407231253371,
+    "segments": 29
+   },
+   "muscle_driven_phases": {
+    "steer_left": {
+     "yaw_rate_rmse_deg_s": 0.08266503159650816,
+     "final_heading_error_deg": 0.007072098894923329,
+     "final_position_error_m": 0.18388783537348904,
+     "position_error_3s_m": null,
+     "segments": 1
+    },
+    "steer_right": {
+     "yaw_rate_rmse_deg_s": 0.5105454771660305,
+     "final_heading_error_deg": 0.23095596685828923,
+     "final_position_error_m": 0.15484344764267463,
+     "position_error_3s_m": null,
+     "segments": 1
+    },
+    "straighten": {
+     "yaw_rate_rmse_deg_s": 0.17374414581768827,
+     "final_heading_error_deg": 0.012991850041316866,
+     "final_position_error_m": 0.012892192305438546,
+     "position_error_3s_m": null,
+     "segments": 1
+    }
+   }
+  },
+  "engine_rates": {
+   "fresh_measured_speed": {
+    "all": {
+     "yaw_rate_rmse_deg_s": 0.30254042871136844,
+     "final_heading_error_deg": 0.10178640722152162,
+     "final_position_error_m": 0.11757775627624498,
+     "position_error_3s_m": 0.024139231899692647,
+     "segments": 116
+    },
+    "steer": {
+     "yaw_rate_rmse_deg_s": 0.15692319453930723,
+     "final_heading_error_deg": 0.052211002777801586,
+     "final_position_error_m": 0.01912083731457709,
+     "position_error_3s_m": 0.03142253918763404,
+     "segments": 15
+    },
+    "steer_doublet": {
+     "yaw_rate_rmse_deg_s": 0.4335718942407147,
+     "final_heading_error_deg": 0.10003885504218175,
+     "final_position_error_m": 0.0524248690524523,
+     "position_error_3s_m": 0.03190287959932809,
+     "segments": 26
+    },
+    "steer_fast": {
+     "yaw_rate_rmse_deg_s": 0.11614434385041411,
+     "final_heading_error_deg": 0.08177711656088535,
+     "final_position_error_m": 0.029204816315140436,
+     "position_error_3s_m": 0.05334608226653008,
+     "segments": 16
+    },
+    "steer_hold": {
+     "yaw_rate_rmse_deg_s": 0.24372756784317762,
+     "final_heading_error_deg": 0.20156765808220722,
+     "final_position_error_m": 0.38678058530172676,
+     "position_error_3s_m": 0.008395293795179198,
+     "segments": 28
+    },
+    "steer_low": {
+     "yaw_rate_rmse_deg_s": 0.45299528615373114,
+     "final_heading_error_deg": 0.0380075369037465,
+     "final_position_error_m": 0.009355173623846582,
+     "position_error_3s_m": 0.008586461319291618,
+     "segments": 31
+    }
+   },
+   "new_measured_speed": {
+    "yaw_rate_rmse_deg_s": 0.37289666469592064,
+    "final_heading_error_deg": 0.11564066008640271,
+    "final_position_error_m": 0.1563960222899487,
+    "position_error_3s_m": 0.015998793798013642,
+    "segments": 85
+   },
+   "new_open_loop": {
+    "yaw_rate_rmse_deg_s": 1.7763995544336062,
+    "final_heading_error_deg": 2.955731302413648,
+    "final_position_error_m": 3.8011772325076785,
+    "position_error_3s_m": 0.5145999412647547,
+    "segments": 85
+   },
+   "seeds_11_13_measured_speed": {
+    "all": {
+     "yaw_rate_rmse_deg_s": 0.37929321499284424,
+     "final_heading_error_deg": 0.19047143833539817,
+     "final_position_error_m": 0.1665397508726769,
+     "position_error_3s_m": 0.009916844521100152,
+     "segments": 38
+    },
+    "steer": {
+     "yaw_rate_rmse_deg_s": 0.04614386972649174,
+     "final_heading_error_deg": 0.04278995771211089,
+     "final_position_error_m": 0.008469108833753977,
+     "position_error_3s_m": 0.018488829401024254,
+     "segments": 5
+    },
+    "steer_hold": {
+     "yaw_rate_rmse_deg_s": 0.24222722239014785,
+     "final_heading_error_deg": 0.18867923138415552,
+     "final_position_error_m": 0.3941384226196768,
+     "position_error_3s_m": 0.009648790636067108,
+     "segments": 13
+    },
+    "steer_low": {
+     "yaw_rate_rmse_deg_s": 0.5822762541555891,
+     "final_heading_error_deg": 0.2332526228735451,
+     "final_position_error_m": 0.028620184230704986,
+     "position_error_3s_m": 0.007731485841473217,
+     "segments": 20
+    }
+   },
+   "original_open_loop": {
+    "all": {
+     "yaw_rate_rmse_deg_s": 0.12806568085104456,
+     "final_heading_error_deg": 0.1482473184132206,
+     "final_position_error_m": 3.737706882812936,
+     "position_error_3s_m": 0.45167141743400224,
+     "segments": 60
+    },
+    "hand_brake": {
+     "yaw_rate_rmse_deg_s": 0.039695867575672276,
+     "final_heading_error_deg": 0.018381263860302643,
+     "final_position_error_m": 1.1912381929615,
+     "position_error_3s_m": 0.4613848814650564,
+     "segments": 4
+    },
+    "launch": {
+     "yaw_rate_rmse_deg_s": 0.03878018811765243,
+     "final_heading_error_deg": 0.05644183296067825,
+     "final_position_error_m": 5.805047687621719,
+     "position_error_3s_m": 0.5237150610587833,
+     "segments": 20
+    },
+    "reverse": {
+     "yaw_rate_rmse_deg_s": 0.004047027837448313,
+     "final_heading_error_deg": 0.005970763663450877,
+     "final_position_error_m": 0.09546921636121353,
+     "position_error_3s_m": 0.05606527006798786,
+     "segments": 6
+    },
+    "steer": {
+     "yaw_rate_rmse_deg_s": 0.3370180431671702,
+     "final_heading_error_deg": 0.40825877399271876,
+     "final_position_error_m": 1.3956596522217453,
+     "position_error_3s_m": 0.2791831620677296,
+     "segments": 18
+    },
+    "steer_fast": {
+     "yaw_rate_rmse_deg_s": 0.09115577221160882,
+     "final_heading_error_deg": 0.06261351161690473,
+     "final_position_error_m": 3.864769951483035,
+     "position_error_3s_m": 0.6225307347648764,
+     "segments": 12
+    }
+   },
+   "muscle_driven": {
+    "yaw_rate_rmse_deg_s": 0.117349274911637,
+    "final_heading_error_deg": 0.20933517256631648,
+    "final_position_error_m": 8.961653366339739,
+    "position_error_3s_m": 0.6457410021116406,
+    "segments": 29
+   },
+   "muscle_driven_phases": {
+    "steer_left": {
+     "yaw_rate_rmse_deg_s": 0.16002758361584166,
+     "final_heading_error_deg": 0.0548177689838667,
+     "final_position_error_m": 0.1861404673705995,
+     "position_error_3s_m": null,
+     "segments": 1
+    },
+    "steer_right": {
+     "yaw_rate_rmse_deg_s": 0.7075637296031814,
+     "final_heading_error_deg": 0.12131661895966772,
+     "final_position_error_m": 0.15770828472402218,
+     "position_error_3s_m": null,
+     "segments": 1
+    },
+    "straighten": {
+     "yaw_rate_rmse_deg_s": 0.3197680304428957,
+     "final_heading_error_deg": 0.05049992649367141,
+     "final_position_error_m": 0.012560604554292237,
+     "position_error_3s_m": null,
+     "segments": 1
+    }
+   }
+  },
+  "previous_constant_lag": {
+   "fresh_measured_speed": {
+    "all": {
+     "yaw_rate_rmse_deg_s": 0.2326860995268659,
+     "final_heading_error_deg": 0.08661933914472808,
+     "final_position_error_m": 0.11464695764103895,
+     "position_error_3s_m": 0.024139231899692647,
+     "segments": 116
+    },
+    "steer": {
+     "yaw_rate_rmse_deg_s": 0.10927928527509571,
+     "final_heading_error_deg": 0.05561541717095157,
+     "final_position_error_m": 0.019211636003547642,
+     "position_error_3s_m": 0.03142253918763404,
+     "segments": 15
+    },
+    "steer_doublet": {
+     "yaw_rate_rmse_deg_s": 0.38059838435997917,
+     "final_heading_error_deg": 0.0731554927023265,
+     "final_position_error_m": 0.0511743076617629,
+     "position_error_3s_m": 0.03190287959932809,
+     "segments": 26
+    },
+    "steer_fast": {
+     "yaw_rate_rmse_deg_s": 0.14389588884729826,
+     "final_heading_error_deg": 0.07987082339693684,
+     "final_position_error_m": 0.029007825493640126,
+     "position_error_3s_m": 0.05334608226653008,
+     "segments": 16
+    },
+    "steer_hold": {
+     "yaw_rate_rmse_deg_s": 0.16076365148213198,
+     "final_heading_error_deg": 0.16428831270350672,
+     "final_position_error_m": 0.3771062707771879,
+     "position_error_3s_m": 0.008395293795179198,
+     "segments": 28
+    },
+    "steer_low": {
+     "yaw_rate_rmse_deg_s": 0.2985456167091076,
+     "final_heading_error_deg": 0.038271318534812436,
+     "final_position_error_m": 0.008401462742592201,
+     "position_error_3s_m": 0.008586461319291618,
+     "segments": 31
+    }
+   },
+   "new_measured_speed": {
+    "yaw_rate_rmse_deg_s": 0.27623329342858705,
+    "final_heading_error_deg": 0.0939437123527102,
+    "final_position_error_m": 0.15226886939392337,
+    "position_error_3s_m": 0.015998793798013642,
+    "segments": 85
+   },
+   "new_open_loop": {
+    "yaw_rate_rmse_deg_s": 1.7690683896111121,
+    "final_heading_error_deg": 2.944251613031211,
+    "final_position_error_m": 3.8004786588643005,
+    "position_error_3s_m": 0.5145999412647547,
+    "segments": 85
+   },
+   "seeds_11_13_measured_speed": {
+    "all": {
+     "yaw_rate_rmse_deg_s": 0.28106459536330447,
+     "final_heading_error_deg": 0.1772111796823367,
+     "final_position_error_m": 0.16354862985703988,
+     "position_error_3s_m": 0.009916844521100152,
+     "segments": 38
+    },
+    "steer": {
+     "yaw_rate_rmse_deg_s": 0.040280370583796826,
+     "final_heading_error_deg": 0.04324855923713923,
+     "final_position_error_m": 0.00864346348115181,
+     "position_error_3s_m": 0.018488829401024254,
+     "segments": 5
+    },
+    "steer_hold": {
+     "yaw_rate_rmse_deg_s": 0.15180108274389434,
+     "final_heading_error_deg": 0.1530042985868786,
+     "final_position_error_m": 0.38593889997049424,
+     "position_error_3s_m": 0.009648790636067108,
+     "segments": 13
+    },
+    "steer_low": {
+     "yaw_rate_rmse_deg_s": 0.45194272328014506,
+     "final_heading_error_deg": 0.23409265934016774,
+     "final_position_error_m": 0.02891173641004707,
+     "position_error_3s_m": 0.007731485841473217,
+     "segments": 20
+    }
+   },
+   "original_open_loop": {
+    "all": {
+     "yaw_rate_rmse_deg_s": 0.13313982556652645,
+     "final_heading_error_deg": 0.14731586886009018,
+     "final_position_error_m": 3.7377944922004938,
+     "position_error_3s_m": 0.45167141743400224,
+     "segments": 60
+    },
+    "hand_brake": {
+     "yaw_rate_rmse_deg_s": 0.039695867575672276,
+     "final_heading_error_deg": 0.018381263860302643,
+     "final_position_error_m": 1.1912381929615,
+     "position_error_3s_m": 0.4613848814650564,
+     "segments": 4
+    },
+    "launch": {
+     "yaw_rate_rmse_deg_s": 0.03878018811765243,
+     "final_heading_error_deg": 0.05644183296067825,
+     "final_position_error_m": 5.805047687621719,
+     "position_error_3s_m": 0.5237150610587833,
+     "segments": 20
+    },
+    "reverse": {
+     "yaw_rate_rmse_deg_s": 0.004047027837448313,
+     "final_heading_error_deg": 0.005970763663450877,
+     "final_position_error_m": 0.09546921636121353,
+     "position_error_3s_m": 0.05606527006798786,
+     "segments": 6
+    },
+    "steer": {
+     "yaw_rate_rmse_deg_s": 0.3417846838306906,
+     "final_heading_error_deg": 0.40580626368391187,
+     "final_position_error_m": 1.39598205464319,
+     "position_error_3s_m": 0.2791831620677296,
+     "segments": 18
+    },
+    "steer_fast": {
+     "yaw_rate_rmse_deg_s": 0.10960266161858555,
+     "final_heading_error_deg": 0.06129297938876499,
+     "final_position_error_m": 3.864774042352078,
+     "position_error_3s_m": 0.6225307347648764,
+     "segments": 12
+    }
+   },
+   "muscle_driven": {
+    "yaw_rate_rmse_deg_s": 0.10909458574126997,
+    "final_heading_error_deg": 0.17805271747061513,
+    "final_position_error_m": 8.961963295660508,
+    "position_error_3s_m": 0.6457435582529314,
+    "segments": 29
+   },
+   "muscle_driven_phases": {
+    "steer_left": {
+     "yaw_rate_rmse_deg_s": 0.1066244165230658,
+     "final_heading_error_deg": 0.02154604111149183,
+     "final_position_error_m": 0.18457393489312499,
+     "position_error_3s_m": null,
+     "segments": 1
+    },
+    "steer_right": {
+     "yaw_rate_rmse_deg_s": 0.5529900917236236,
+     "final_heading_error_deg": 0.20580299157990112,
+     "final_position_error_m": 0.15550652134353796,
+     "position_error_3s_m": null,
+     "segments": 1
+    },
+    "straighten": {
+     "yaw_rate_rmse_deg_s": 0.20479250133363716,
+     "final_heading_error_deg": 0.020724556530154814,
+     "final_position_error_m": 0.012821100524570816,
+     "position_error_3s_m": null,
+     "segments": 1
+    }
+   }
+  }
+ },
+ "rule": {
+  "new_measured_speed": [
+   1.4895159785383127,
+   0.25349298715098306
+  ],
+  "reduction": 0.8298151944635465,
+  "new_by_kind": {
+   "steer_low": [
+    0.5585237466952032,
+    0.26602406806252377
+   ],
+   "steer_hold": [
+    1.2372639344747867,
+    0.1401772584738188
+   ],
+   "steer_doublet": [
+    2.71381745244133,
+    0.36543475991032537
+   ]
+  },
+  "sweeps": {
+   "steer": [
+    0.15692319453930723,
+    0.1096877916990636
+   ],
+   "steer_fast": [
+    0.11614434385041411,
+    0.10544632471487526
+   ]
+  },
+  "new_open_loop": [
+   2.6728132751748555,
+   1.7570168054186994
+  ],
+  "original": {
+   "yaw_rate_rmse_deg_s": [
+    0.12806568085104456,
+    0.11987012556535644
+   ],
+   "position_error_3s_m all": [
+    0.45167141743400224,
+    0.45167141743400224
+   ],
+   "position_error_3s_m hand_brake": [
+    0.4613848814650564,
+    0.4613848814650564
+   ],
+   "position_error_3s_m launch": [
+    0.5237150610587833,
+    0.5237150610587833
+   ],
+   "position_error_3s_m reverse": [
+    0.05606527006798786,
+    0.05606527006798786
+   ],
+   "position_error_3s_m steer": [
+    0.2791831620677296,
+    0.2791831620677296
+   ],
+   "position_error_3s_m steer_fast": [
+    0.6225307347648764,
+    0.6225307347648764
+   ]
+  },
+  "muscle_driven": {
+   "yaw_rate_rmse_deg_s": [
+    0.14393783875420355,
+    0.11107275454494062
+   ],
+   "position_error_3s_m": [
+    0.6457410021116406,
+    0.6457407231253371
+   ]
+  },
+  "checks": {
+   "control": true,
+   "a_new_reduction_at_least_25pct": true,
+   "b_each_new_kind_decreases": true,
+   "c_sweeps_within_5pct": true,
+   "d_new_open_loop_not_higher": true,
+   "e_original_within_5pct": true,
+   "f_muscle_driven_within_5pct": true
+  },
+  "adopt": true
+ }
+}

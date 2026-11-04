@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "myosuite-carla"
-version = "0.1.0"
+version = "0.1.1"
 description = "Physical driver controls connecting MyoSuite and CARLA UE5.8"
 authors = [{ name = "Mark Colley" }]
 readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
-dependencies = ["numpy>=1.24", "mujoco>=3.6", "gymnasium>=1.0,<1.3"]
+dependencies = ["numpy>=1.24", "mujoco>=3.6", "gymnasium>=1.0,<1.3", "shapely>=2"]
 
 [project.urls]
 Homepage = "https://github.com/M-Colley/myosuite-carla"
@@ -30,6 +30,8 @@ rl = ["stable-baselines3>=2.8,<3", "scipy>=1.10", "scikit-learn>=1.3", "pandas>=
 # embodied-ui devices and engines (myosuite_carla.interfaces); embodied-ui is
 # installed from its repository and needs MuJoCo 3.7 or newer.
 ui = ["embodied-ui>=0.1", "mujoco>=3.7"]
+# Synchronized CARLA, MuJoCo and human-state recording.
+video = ["imageio>=2.31", "imageio-ffmpeg>=0.4", "pillow>=10"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

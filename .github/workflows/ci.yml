@@ -63,6 +63,64 @@ jobs:
             bridge/dist/*
             bridge/coverage.xml
 
+  embodied-human:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: bridge
+      - uses: actions/checkout@v4
+        with:
+          repository: MyoHub/myosuite
+          ref: dev
+          path: myosuite
+      - uses: actions/checkout@v4
+        with:
+          repository: M-Colley/embodied-ui
+          ref: 605862bd551401bfce91afb4afcf280b2bef98fd
+          path: embodied-ui
+      - uses: actions/checkout@v4
+        with:
+          repository: M-Colley/embodied-human
+          ref: e938e90b7d38638fe2c588e5e7f7a6621e41eec2
+          path: embodied-human
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install integrated CPU dependencies
+        run: python -m pip install -e ./myosuite -e ./embodied-ui -e "./embodied-human[empirical]" -e "./bridge[test,analysis,rl]"
+      - name: Record dependency versions
+        run: |
+          python -m pip freeze
+          git -C myosuite rev-parse HEAD
+          git -C embodied-ui rev-parse HEAD
+          git -C embodied-human rev-parse HEAD
+      - name: Test bridge with optional interfaces and training
+        working-directory: bridge
+        run: python -m pytest tests -q --junitxml=test-results/integration-bridge.xml
+      - name: Test embodied human driving integration
+        working-directory: bridge
+        run: >-
+          python -m pytest
+          ../embodied-human/tests/test_driving.py
+          ../embodied-human/tests/test_body_sensing.py
+          ../embodied-human/tests/test_driving_campaign.py
+          ../embodied-human/tests/test_closed_loop_calibration.py
+          ../embodied-human/tests/test_actuation_evaluation.py
+          ../embodied-human/tests/test_driving_data.py
+          ../embodied-human/tests/test_driving_evaluation.py
+          ../embodied-human/tests/test_driving_profiles.py
+          ../embodied-human/tests/test_driving_protocols.py
+          ../embodied-human/tests/test_fixation_protocol.py
+          ../embodied-human/tests/test_fixation_task.py
+          -q --junitxml=test-results/integration-human.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: embodied-human-integration
+          path: bridge/test-results/integration-*.xml
+
   live:
     if: github.event_name == 'workflow_dispatch' && inputs.live_carla
     runs-on: [self-hosted, carla-ue58]

@@ -98,6 +98,47 @@ def test_recorder_builds_named_columns_and_body_arrays() -> None:
     )
 
 
+@pytest.mark.parametrize("integer_only_enums", [False, True])
+def test_body_recording_normalizes_mujoco_enum_values(
+    monkeypatch: pytest.MonkeyPatch, integer_only_enums: bool
+) -> None:
+    model = mujoco.MjModel.from_xml_string(MODEL)
+    data = mujoco.MjData(model)
+    data.qpos[:] = (0.01, 0.12, 0.05)
+    data.act[:] = (0.6, 0.2)
+    mujoco.mj_forward(model, data)
+    if integer_only_enums:
+
+        class IntegerEnum:
+            def __init__(self, value: int) -> None:
+                self.value = value
+
+            def __int__(self) -> int:
+                return self.value
+
+        monkeypatch.setattr(
+            mujoco,
+            "mjtJoint",
+            SimpleNamespace(
+                mjJNT_HINGE=IntegerEnum(int(mujoco.mjtJoint.mjJNT_HINGE)),
+                mjJNT_SLIDE=IntegerEnum(int(mujoco.mjtJoint.mjJNT_SLIDE)),
+            ),
+        )
+        monkeypatch.setattr(
+            mujoco,
+            "mjtDyn",
+            SimpleNamespace(mjDYN_MUSCLE=IntegerEnum(int(mujoco.mjtDyn.mjDYN_MUSCLE))),
+        )
+    recorder = DriveRecorder()
+    recorder.add(0.0, _telemetry(0, 0.0, 0.0), command={}, model=model, data=data)
+    result = recorder.recording()
+    assert result.joints == ("elbow_flexion_r", "knee_translation")
+    assert result.joint_kinds == ("hinge", "slide")
+    assert result.muscles == ("BIClong", "TRIlong")
+    np.testing.assert_array_equal(result.coordinates, [[0.01, 0.12]])
+    np.testing.assert_array_equal(result.activation, [[0.6, 0.2]])
+
+
 def test_recorder_rejects_changing_fields_and_empty_use() -> None:
     recorder = DriveRecorder(body=False)
     with pytest.raises(ValueError, match="Nothing"):
@@ -217,10 +258,11 @@ def test_parquet_and_mcap_exports(tmp_path: Path) -> None:
 
 def test_live_start_adds_geolocation() -> None:
     location = SimpleNamespace
+    # CARLA's +y points south: latitude grows towards -y (0.10.0 and 1.0).
     geo = SimpleNamespace(
         name="Town10HD_Opt",
         transform_to_geolocation=lambda loc: SimpleNamespace(
-            longitude=loc.x * 1e-5, latitude=49.0 + loc.y * 1e-5
+            longitude=loc.x * 1e-5, latitude=49.0 - loc.y * 1e-5
         ),
     )
     session = SimpleNamespace(
@@ -230,6 +272,7 @@ def test_live_start_adds_geolocation() -> None:
         world=SimpleNamespace(get_map=lambda: geo),
         vehicle=SimpleNamespace(type_id="vehicle.dodge.charger"),
         config=SimpleNamespace(fixed_delta_seconds=0.02),
+        server_version="1.0",
     )
     recorder = DriveRecorder(body=False)
     recorder.start(session, None)
@@ -237,5 +280,6 @@ def test_live_start_adds_geolocation() -> None:
         recorder.add(0.02 * index, _telemetry(index, 0.0, 100.0), command={})
     recording = recorder.recording()
     np.testing.assert_allclose(recording.columns["lon_deg"], 1e-3)
-    np.testing.assert_allclose(recording.columns["lat_deg"], [49, 49.00002, 49.00004])
+    np.testing.assert_allclose(recording.columns["lat_deg"], [49, 48.99998, 48.99996])
     assert recording.metadata["vehicle"] == "vehicle.dodge.charger"
+    assert recording.metadata["server_version"] == "1.0"

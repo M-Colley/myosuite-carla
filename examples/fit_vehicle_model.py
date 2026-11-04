@@ -50,12 +50,38 @@ def main() -> int:
     parser.add_argument("--wheelbase", type=float, default=3.075)
     parser.add_argument("--smoothing", type=float, default=1.0)
     parser.add_argument(
+        "--steer-exponent",
+        type=float,
+        default=None,
+        help="fix the steering input exponent (1: CARLA 1.0); identified if omitted",
+    )
+    parser.add_argument(
+        "--steer-rate-limit",
+        type=float,
+        nargs=2,
+        default=(0.0, 0.0),
+        metavar=("RISE", "FALL"),
+        help="steering input rate limit per second (Chaos: 2.5 5); 0 0 disables",
+    )
+    parser.add_argument(
+        "--steer-lag-slope",
+        type=float,
+        default=0.0,
+        help="growth of the steer time constant with speed, s per m/s",
+    )
+    parser.add_argument(
         "--output", type=Path, default=Path("artifacts/vehicle-surrogate.json")
     )
     args = parser.parse_args()
     train = _segments(args.train)
     params, fit = fit_vehicle_model(
-        train, wheelbase=args.wheelbase, smoothing=args.smoothing
+        train,
+        wheelbase=args.wheelbase,
+        smoothing=args.smoothing,
+        steer_exponent=args.steer_exponent,
+        steer_rise_rate=args.steer_rate_limit[0],
+        steer_fall_rate=args.steer_rate_limit[1],
+        steer_lag_slope=args.steer_lag_slope,
     )
     report = {
         "created_utc": datetime.now(timezone.utc).isoformat(),

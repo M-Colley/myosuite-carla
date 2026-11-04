@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-27",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "python": "3.12.13",
+  "versions": {
+    "numpy": "2.5.4",
+    "mujoco": "3.17.0",
+    "myo-sim": "0.2.3",
+    "myosuite": "3.0.0",
+    "embodied-ui": "0.1.0",
+    "embodied-human": "0.1.0",
+    "stable-baselines3": "2.9.0",
+    "torch": "2.14.1+cpu",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.9.1"
+  },
+  "myosuite": {
+    "base_dev": "230f198458b501c423a0892b78da60419ffc49a3",
+    "tested": "37c8b863fe448f8fff2b29eb62a53a269b79d16f",
+    "pull_request": "https://github.com/MyoHub/myosuite/pull/575"
+  },
+  "embodied_human": "9d38317ec9f0e07c5a393212ab5d8fae210f5ac8",
+  "embodied_ui": "605862bd551401bfce91afb4afcf280b2bef98fd",
+  "bridge_base": "85983b16cb2d0a5b70e29c7a5cd107d2214a5a9b",
+  "source_sha256": {
+    "src/myosuite_carla/__init__.py": "4297e8958ce74b50f972f23741b01a82d62a49d8973f5a51f5341cfa8970a4cd",
+    "src/myosuite_carla/bridge.py": "3e40ac49e42da4921b889bc42872aec945d9c6fc23a3ce7ba90949cec8d2455a",
+    "src/myosuite_carla/carla_scenario.py": "bcda92e733e67c5afaa7472de4f8934af6c58eb7a8a1b87a9fac983c56f0bcc4",
+    "src/myosuite_carla/cockpit.py": "e69efddef296b4fe5c00cd2b143eae3ef035ca0bd10f50fbe9b4f4e8a6667bb0",
+    "src/myosuite_carla/controls.py": "eea0a2a36d64426a1f22630f17c025d0bbd111211f052273ec1a5b934b0f1a88",
+    "src/myosuite_carla/driver_models.py": "5932f3ed1a738b80ecf457fd59636fd2a39fb1daf4cd6a82fb94549b6092da29",
+    "src/myosuite_carla/driving_env.py": "39a3bb778d568faa427a8bf41795062be2115b5bd33edd9e07ac787a84e94429",
+    "src/myosuite_carla/fullbody.py": "d93c0d33083390c6807381024fa446606e528495d34780b5b53f3b838e66caa6",
+    "src/myosuite_carla/fullbody_validation.py": "9c0f02b1d87f03006be8e96a0235f9b7298dac87b22aba9ae501c825f8965fea",
+    "src/myosuite_carla/human_comparison.py": "38be278a646d2debf140a0edd12ad0eb7ac912acf4e10459d089f478e74f87c3",
+    "src/myosuite_carla/inputs.py": "1707a4eee9938fa96002baded2e0d692f886a92495ac81dfac78b6563d3dd0d3",
+    "src/myosuite_carla/interfaces.py": "144e823e83f7ecdf98fe2db00e9b35d2d711605202804a0fdefb37992547eb46",
+    "src/myosuite_carla/ngsim.py": "3f1a9d5335bd455725f619a819c0f9d4cf7d8e0e89bf931270e56be390659504",
+    "src/myosuite_carla/presets.py": "4aa83c28ad9d03ca65fa5bbd9cacabded29b7be3e54e1fa6b4265642b28cd299",
+    "src/myosuite_carla/recording.py": "6b6bbe5c3235f2448e4e74a40733d29d7b5367a450d082e71bae415994eb34e3",
+    "src/myosuite_carla/scenario.py": "f7f094ed28c26c5dc609fe288d83f5a304310cf7381e06566f23a5f65eb9901f",
+    "src/myosuite_carla/session.py": "a966ce76657169588ced6a20d44e607123c2d4633f4d9bbcd6a5261d42161401",
+    "src/myosuite_carla/training.py": "e41a61207293b86b11b8f34a707291fc74a062c1831463c556933ab45512d2b2",
+    "src/myosuite_carla/training_sb3.py": "1d8ea0014ef443e5f94033ebabee6caac5397c25a9a65de4fceb1bb87c5edb03",
+    "src/myosuite_carla/validation.py": "a6e6dab19dcd3b11da8465f982cd9d237971ffbc107330747b23ecc4eb987131",
+    "src/myosuite_carla/vehicle_loads.py": "f8f9eee3c5f05b551a0616fe353e3a2f0b11e0ebddeda6d7a47f51e53d55f955",
+    "src/myosuite_carla/vehicle_model.py": "9c7ffc467a4ece961aee9a607e9005d481168192bad04cc4d079ad3faaa539ff",
+    "src/myosuite_carla/wrapper.py": "f359e974a2ad0b34d10d5313957c7b0fd950f218416435c18c5772fa23cfb388"
+  },
+  "results": {
+    "bridge": {
+      "passed": 372,
+      "skipped_live": 4
+    },
+    "embodied_human_driving": {
+      "passed": 5
+    },
+    "minimum_mujoco_3_6_focused": {
+      "passed": 5
+    }
+  },
+  "live_carla_run": false
+}

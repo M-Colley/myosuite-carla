@@ -78,3 +78,89 @@ def test_discriminability_separates_only_different_populations() -> None:
     floor = human_floor(np.vstack([same_a, same_b]), participants, drives)
     assert len(floor["auc"]) == 6 and floor["min"] <= floor["median"] <= floor["max"]
     assert set(summarize(same_a)) == set(FEATURES)
+
+
+def test_shared_sources_stay_together_across_populations(monkeypatch) -> None:
+    import sklearn.model_selection
+
+    actual = sklearn.model_selection.StratifiedGroupKFold
+    observed = []
+
+    class AuditedSplit(actual):
+        def split(self, features, labels, groups):
+            for train, test in super().split(features, labels, groups):
+                observed.append((train.copy(), test.copy(), groups.copy()))
+                yield train, test
+
+    monkeypatch.setattr(sklearn.model_selection, "StratifiedGroupKFold", AuditedSplit)
+    rng = np.random.default_rng(3)
+    first = rng.normal(size=(24, 2))
+    second = first + rng.normal(0, 0.2, first.shape)
+    sources = [f"driver:{i // 4}" for i in range(len(first))]
+    report = discriminability(first, second, sources, sources, grouping="shared")
+    assert report["grouping"] == "shared"
+    assert report["independent_groups"] == 6
+    assert report["shared_groups"] == 6
+    assert report["groups"] == [6, 6]
+    for train, test, groups in observed:
+        assert set(groups[train]).isdisjoint(set(groups[test]))
+        for source in sources:
+            indices = {i for i, value in enumerate(sources * 2) if value == source}
+            assert indices <= set(train) or indices <= set(test)
+
+
+def test_independent_grouping_preserves_population_namespaces() -> None:
+    rng = np.random.default_rng(4)
+    rows = rng.normal(size=(40, 2))
+    groups = [f"g{i // 10}" for i in range(len(rows))]
+    implicit = discriminability(rows, rows + 1, groups, groups)
+    explicit = discriminability(rows, rows + 1, groups, groups, grouping="independent")
+    assert implicit == explicit
+    assert implicit["independent_groups"] == 8
+    assert implicit["shared_groups"] == 0
+
+
+@pytest.mark.parametrize(
+    "sizes_a,sizes_b,folds",
+    [([20] * 6, [20] * 6, 5), ([1, 39], [1, 20, 5, 17, 6, 1, 13, 2, 9, 7], 5)],
+)
+def test_independent_folds_keep_each_population_with_unequal_source_sizes(
+    monkeypatch, sizes_a, sizes_b, folds
+) -> None:
+    import sklearn.model_selection
+
+    class LegacyGroupSplit:
+        def __init__(self, **kwargs):
+            pass
+
+        def split(self, features, labels, groups):
+            # Older group splitters can place rare-class groups in one fold.
+            yield np.flatnonzero(labels == 1), np.flatnonzero(labels == 0)
+
+    monkeypatch.setattr(
+        sklearn.model_selection, "StratifiedGroupKFold", LegacyGroupSplit
+    )
+    rng = np.random.default_rng(8)
+    populations = [rng.normal(size=(sum(sizes), 2)) for sizes in (sizes_a, sizes_b)]
+    identifiers = [
+        [f"group:{i}" for i, size in enumerate(sizes) for _ in range(size)]
+        for sizes in (sizes_a, sizes_b)
+    ]
+    report = discriminability(*populations, *identifiers, folds=folds)
+    assert report["splitter"] == "StratifiedKFold"
+    assert report["folds"] == min(folds, len(sizes_a), len(sizes_b))
+    for source_ids, assignments in zip(identifiers, report["fold_assignments"]):
+        assignments = np.asarray(assignments)
+        for source in set(source_ids):
+            assert len(set(assignments[np.asarray(source_ids) == source])) == 1
+        assert set(assignments) == set(range(report["folds"]))
+    for fold in report["fold_groups"]:
+        assert min(fold["train_populations"]) >= 1
+        assert min(fold["test_populations"]) >= 1
+
+
+@pytest.mark.parametrize("groups", [["one"] * 4, ["one", "one", "two"]])
+def test_shared_grouping_rejects_insufficient_or_misaligned_sources(groups) -> None:
+    rows = np.arange(8, dtype=float).reshape(4, 2)
+    with pytest.raises(ValueError):
+        discriminability(rows, rows + 1, groups, groups, grouping="shared")

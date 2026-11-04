@@ -1,0 +1,1249 @@
+{
+  "created_utc": "2026-10-27T23:16:10.579684+00:00",
+  "kind": "seeded live integration demonstration",
+  "python": "3.12.13",
+  "platform": "Windows-11-10.0.26300-SP0",
+  "recording_script_commit": "f578745452ea0ec24dda7f396280b4c5f5adfcdc",
+  "recording_script_sha256": "bba3f67e3bd9543499d6bcf88f641ccfe3d1a0d55878fa981127babb25f9762e",
+  "runtime_version": [
+    "Carla git hash:         ada75f920642e18cace0a9f85ecf9d4077ddb531",
+    "Content git hash:       a32a1930bc319caba3e0cde845e46e23b9136e81",
+    "UnrealEngine git hash:  6cf20383302899026a5e777219ba4206afe47d38"
+  ],
+  "myosuite_dev_base": "230f198458b501c423a0892b78da60419ffc49a3",
+  "myosuite_tested_revision": "37c8b863fe448f8fff2b29eb62a53a269b79d16f",
+  "head_rate_rps_unit_in_raw_reports": "rad/s",
+  "episodes": {
+    "lane-change": {
+      "status": "completed",
+      "started_utc": "2026-10-27T23:10:08.827935+00:00",
+      "human_import": "C:\\Users\\localadmin\\Desktop\\embodied-human\\src\\embodied_human\\__init__.py",
+      "human_source": {
+        "path": "C:\\Users\\localadmin\\Desktop\\embodied-human",
+        "revision": "ff631bf40a8feaee653966cdde6cd032ad3d1495",
+        "dirty": "M pyproject.toml\n M src/embodied_human/__init__.py\n M src/embodied_human/agents/body.py\n?? tests/test_body_sensing.py",
+        "source_sha256": {
+          "src/embodied_human/__init__.py": "6149f7f60e5dd74cb62162c36094043be68ac3496336da67b727de2d18256bc1",
+          "src/embodied_human/_vendor/__init__.py": "3ea93e001df8bb4be011f039b7d765cdb9e85c7edc859cf32a8cc7a6c95aa285",
+          "src/embodied_human/_vendor/mimo_touch.py": "613c56d3f1a612defbec2f0c8aef8eef864ac52e1e988a1870e38098b15f9ff7",
+          "src/embodied_human/affect.py": "dddc0f7b254eb5e31073e02957647b4c4266bf5c68a626530e54817619ee6786",
+          "src/embodied_human/agents/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "src/embodied_human/agents/body.py": "af50dbc7627fd6019e9f4950a3e0d8dcb029cabd096a256abf8f908cd05d84a6",
+          "src/embodied_human/agents/driver.py": "005602d58bf4a6548066b86c19adfe2d058284308fd62f75d89dbdec8774023b",
+          "src/embodied_human/agents/pointer.py": "73569771cdf503e91aab85b6b2e6f6c3b57d88750bc86e3987652ec64255727b",
+          "src/embodied_human/agents/road.py": "d6881e8f6af4b76e4795dfb1f153254014326e5e4ca2f6c2b6e77508951136a9",
+          "src/embodied_human/attention.py": "b5bf8bcac826d1e471181efef66c0b02c4e2951c91fae9ab93fe98506c9b3e2a",
+          "src/embodied_human/bench/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "src/embodied_human/bench/__main__.py": "3bbba614f6e4cb1d38b6b7f1ba2bd653f74c7041e928af09e43c0f8515398678",
+          "src/embodied_human/bench/benchmarks.py": "b969e954060aa409f913d90306a17997cdb11ed3ac15427ec658572ed7c4c977",
+          "src/embodied_human/bench/catalog.py": "f4f9adc4dc0f6bdfc7e612cac99f05b79a83ba5a2a6590716cde699729e7570b",
+          "src/embodied_human/bench/comparison.py": "a1bc4c5ec4ec778512252c976dfb1f4bacd21cb00f6fdfdf9949381341d9299c",
+          "src/embodied_human/bench/integrated.py": "6f236c4f3057ebd82ad8f0d0924d021d3a0d88845f193130f72af4219a521b05",
+          "src/embodied_human/bench/load.py": "4d2f578504d13713e4725133cd3c23e6a794b4ca29389be206da26c995157f3b",
+          "src/embodied_human/bench/metrics.py": "edee1ff526935aaef70c5e71db8f561fc52049bbcb9a5e6f7ec04f3e515c5917",
+          "src/embodied_human/bench/motivation.py": "9756bdec90375210457090f7989a214403ce6f256a9e50daf34657c4ba9b4a50",
+          "src/embodied_human/bench/protocol.py": "23818ee2dd42721ba4605fff60dd6fe763513530424903cce3f7da9f70d86c7b",
+          "src/embodied_human/bench/references.py": "e29fec06cf0b8ecab805dbc413ba1e08f9b34350f6697742f24a7edbb49a2bd5",
+          "src/embodied_human/bench/senses.py": "c0910750bb689fbe4cc9ad62ec9eb605f5728726aad83e0ccd9b48b894ec67ca",
+          "src/embodied_human/bench/studies.py": "418bc62e49fc282d991f7651c5d33746d1046f3cf2da137b6b5dde01c13b4a93",
+          "src/embodied_human/bench/validation.py": "0d9750d41c163f24ed745dc092c16861b747a12706ce366fd37362fc432194bd",
+          "src/embodied_human/builder/__init__.py": "fe59deddb68a12360ac42175151d2e428d4c567b6a105d11ffb8841dba9da03d",
+          "src/embodied_human/builder/__main__.py": "94b5022db235f3d18b38084f414174fc3a95a3fbb86902306a559967a4668d5b",
+          "src/embodied_human/builder/jobs.py": "8158a9bc9dcdba680f518315032e52c68e829ceba87df6afa2fa1684d2aa4fea",
+          "src/embodied_human/core.py": "52101fc6a81457d00fd9daee6aeaab0ada310e5612510a9238f75470c03e8efa",
+          "src/embodied_human/decision.py": "c3e00665f6953bf2a79a2596e81e65afb8795553a31761415b826cc7a79edfcb",
+          "src/embodied_human/estimation.py": "0f7c7e3e8e502225fb6df7b07117672488ef48a91ad5f8a5bb1f2637279209b2",
+          "src/embodied_human/experiment_protocols.py": "545a5692731fefa49edce3746375cda27f152d31016d0fbd1eb10a9d16287c36",
+          "src/embodied_human/experiments.py": "740f285b24c8d9f634363cd61dba35bfbb5b23e3bca9a656d6026e510155bc19",
+          "src/embodied_human/fatigue.py": "d10c621c2d4f6bd3803170edbd180a9402cd9c08a97d82c36c5a815a7b1731e5",
+          "src/embodied_human/hearing.py": "d7dac249d2b4b52c345bfd95e74ac87c3b4e1a4126ac7df930c03f289f53dffd",
+          "src/embodied_human/inference.py": "8fa99c4a4aade91067a0baad11d8927df8fb920f5fbd02cdc62c2bfe445072d9",
+          "src/embodied_human/memory.py": "9677918ff04465b88ec97477b5571942998e602824d348fef38042eb196ea5d9",
+          "src/embodied_human/memory_pyactup.py": "893484eaadf53550b5037fff3a6ec4c9d3ed793d1ef09969d7cf980dfe4c2dbe",
+          "src/embodied_human/motor.py": "8e97d9dc2c058c7ddb15b7578a1b2656940201474a2d493ffec83c299b403050",
+          "src/embodied_human/population.py": "fc9552dd1126c23c76f284a31e50d4e46480526d17face500040f3dc0a441e50",
+          "src/embodied_human/proprioception.py": "8317b83ab6dfc393bc8f1ae1f2e0cf0a15d159d2c18b5aaabe0d0e9f4f99f655",
+          "src/embodied_human/reporting.py": "51a1c32dff8a7b9beb1a7b5f1b56d4dca413e483a7beef11c9cd1b7622984f49",
+          "src/embodied_human/response.py": "d40a851c8784156efbe1508ce9102ef5319153f447485fa7e129c7db5a96e4b0",
+          "src/embodied_human/risk.py": "6e5dbd3c39130c42c0bae9e3ca34f716af48c0128ca55aea303496c88c2e596a",
+          "src/embodied_human/sensitivity.py": "318488e786c66eab0909bb2ccf4eba97e836aa90a5b807a38635eb52479765be",
+          "src/embodied_human/tasks/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "src/embodied_human/tasks/choice.py": "9a2c35d224b83dd226898155388846607992d9cefe08869a816b4c1a089b2885",
+          "src/embodied_human/tasks/drt.py": "952c6b10909cc9a8bf50d6c404d0bf351b85f64df98549f4bb2d0aa7131e92d5",
+          "src/embodied_human/tasks/load.py": "9e8d526a90eb95ca4ce40a995380137fe6261bd6c5c65fddd4087f2278ea5912",
+          "src/embodied_human/tasks/nback.py": "8d8b5404c7f8ceae579fedfa73928246100e64fdd436a55d4d1fe68d054ad02e",
+          "src/embodied_human/tasks/recall.py": "c507fda787c731530d203ce0f91ece90df40986ec3b2d750e4641113bf41ef4e",
+          "src/embodied_human/tasks/surt.py": "975b3d5ccbb18c4fb6fd3228a3505f490f24be784ed5c70ea6868dad2153afca",
+          "src/embodied_human/tasks/tapping.py": "da695ab60f3f40f8beb2319d71a8ecc49fa5d9df8d8f6e49a705d8254dd5df4b",
+          "src/embodied_human/touch.py": "fd17d71168648960bf5d04bfd00e8ae897be1f799b99fca6016c844870e97cfe",
+          "src/embodied_human/touch_contact.py": "0303ffa9407d8ab0b1701b89630fc1aeeab53d405cdf50dfc259e6e60a6e7253",
+          "src/embodied_human/trust.py": "7ea1e0d691c6fdcca3db3fd46ec6948a86d16f0b9902d1f8f1cf2206b55af566",
+          "src/embodied_human/vestibular.py": "84252f17c59ef544ce5d43bc21e09a1ba07eae7d85ac3eb44169f7fa33a68848",
+          "src/embodied_human/vision/__init__.py": "89e9d450549cfe778b66f2c34b5fc3845a3a9484fd390aa05d13db5d1e44064b",
+          "src/embodied_human/vision/eyes.py": "fc6ec2fd1b7ca744412fba31c24b42fb526b2215ef2c7b355f3654dab48d6203",
+          "src/embodied_human/vision/foveation.py": "dd479e85cfdffab70b63bd5e860ac1bec89160066a5a2a77db8f517eb8841d03",
+          "src/embodied_human/vision/objects.py": "fb2d6e876743de296425925037f5a1e34ec770e2d52fa1e52581723e5b862f5d"
+        }
+      },
+      "bridge_source": {
+        "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla",
+        "revision": "b5a7e1e731972b93d8dfe701a9281553274aae15",
+        "dirty": "M README.md\n M pyproject.toml\n?? examples/record_embodied_human.py",
+        "source_sha256": {
+          "src/myosuite_carla/__init__.py": "b10922f3c69e10eb5ccc4d977dcede76dd3ae16d9c90288909883865df0d91ca",
+          "src/myosuite_carla/bridge.py": "3e40ac49e42da4921b889bc42872aec945d9c6fc23a3ce7ba90949cec8d2455a",
+          "src/myosuite_carla/carla_scenario.py": "350695a6b9a8e5c77732c2a20381682482bd0fe02ac831c210b96cc9f7224b27",
+          "src/myosuite_carla/cockpit.py": "e69efddef296b4fe5c00cd2b143eae3ef035ca0bd10f50fbe9b4f4e8a6667bb0",
+          "src/myosuite_carla/controls.py": "eea0a2a36d64426a1f22630f17c025d0bbd111211f052273ec1a5b934b0f1a88",
+          "src/myosuite_carla/driver_models.py": "5932f3ed1a738b80ecf457fd59636fd2a39fb1daf4cd6a82fb94549b6092da29",
+          "src/myosuite_carla/driving_env.py": "b587780dbed1cf85c3d42afa905bbed70e3207ae69c5e72bbc1c58bd557dbaea",
+          "src/myosuite_carla/fullbody.py": "d93c0d33083390c6807381024fa446606e528495d34780b5b53f3b838e66caa6",
+          "src/myosuite_carla/fullbody_validation.py": "9c0f02b1d87f03006be8e96a0235f9b7298dac87b22aba9ae501c825f8965fea",
+          "src/myosuite_carla/human_comparison.py": "18c71a392977f250d71680631582ee319ec694da3ed98bd020852fdf7a33fa0e",
+          "src/myosuite_carla/inputs.py": "1707a4eee9938fa96002baded2e0d692f886a92495ac81dfac78b6563d3dd0d3",
+          "src/myosuite_carla/interfaces.py": "144e823e83f7ecdf98fe2db00e9b35d2d711605202804a0fdefb37992547eb46",
+          "src/myosuite_carla/ngsim.py": "1949d1b1b750037816bbd2b19d9a72f922c24a25b9e6f50d494272628012bbca",
+          "src/myosuite_carla/presets.py": "4aa83c28ad9d03ca65fa5bbd9cacabded29b7be3e54e1fa6b4265642b28cd299",
+          "src/myosuite_carla/recording.py": "dacf9e721223a051c8b628c124b5558ff566505e773771f2572ac640a92d2c20",
+          "src/myosuite_carla/scenario.py": "9dcb19e7564d556bcc39fc8779070921e47eb8ec4d6794f809d5400d7d84ab64",
+          "src/myosuite_carla/session.py": "a966ce76657169588ced6a20d44e607123c2d4633f4d9bbcd6a5261d42161401",
+          "src/myosuite_carla/training.py": "a91c1417c7c413f75635c1c8d836ffc2f0e4d585c19c351ec393557d4012d97d",
+          "src/myosuite_carla/training_sb3.py": "1d8ea0014ef443e5f94033ebabee6caac5397c25a9a65de4fceb1bb87c5edb03",
+          "src/myosuite_carla/validation.py": "a6e6dab19dcd3b11da8465f982cd9d237971ffbc107330747b23ecc4eb987131",
+          "src/myosuite_carla/vehicle_loads.py": "c83b970836d1a2c4183be6058f98a169fa0a2a90054167691a4f0b07a28da6f5",
+          "src/myosuite_carla/vehicle_model.py": "9c7ffc467a4ece961aee9a607e9005d481168192bad04cc4d079ad3faaa539ff",
+          "src/myosuite_carla/wrapper.py": "f359e974a2ad0b34d10d5313957c7b0fd950f218416435c18c5772fa23cfb388"
+        }
+      },
+      "myosuite_import": "C:\\Users\\localadmin\\Desktop\\myosuite-dev-review\\myosuite\\__init__.py",
+      "versions": {
+        "carla": "0.10.0",
+        "mujoco": "3.17.0",
+        "myosuite": "3.0.0",
+        "numpy": "2.5.4",
+        "embodied-human": "0.1.1",
+        "myosuite-carla": "0.1.1"
+      },
+      "muscles": 114,
+      "seed": 0,
+      "scenario_config": {
+        "name": "lane_change",
+        "lane": {
+          "points": [
+            [
+              83.07522583007812,
+              13.414804458618164
+            ],
+            [
+              81.07523345947266,
+              13.409248352050781
+            ],
+            [
+              79.07524108886719,
+              13.403690338134766
+            ],
+            [
+              77.07524871826172,
+              13.398134231567383
+            ],
+            [
+              75.07525634765625,
+              13.392576217651367
+            ],
+            [
+              73.07526397705078,
+              13.387020111083984
+            ],
+            [
+              71.07527160644531,
+              13.381462097167969
+            ],
+            [
+              69.07527923583984,
+              13.375905990600586
+            ],
+            [
+              67.07528686523438,
+              13.37034797668457
+            ],
+            [
+              65.0752944946289,
+              13.364791870117188
+            ],
+            [
+              63.0753059387207,
+              13.359233856201172
+            ],
+            [
+              61.075313568115234,
+              13.353677749633789
+            ],
+            [
+              59.075321197509766,
+              13.348119735717773
+            ],
+            [
+              57.07532501220703,
+              13.34256362915039
+            ],
+            [
+              55.07533264160156,
+              13.337007522583008
+            ],
+            [
+              53.075340270996094,
+              13.331451416015625
+            ],
+            [
+              51.075347900390625,
+              13.32589340209961
+            ],
+            [
+              49.075355529785156,
+              13.320335388183594
+            ],
+            [
+              47.07536315917969,
+              13.314777374267578
+            ],
+            [
+              45.07537078857422,
+              13.309221267700195
+            ],
+            [
+              43.07537841796875,
+              13.30366325378418
+            ],
+            [
+              41.07538986206055,
+              13.298107147216797
+            ],
+            [
+              39.07539749145508,
+              13.292549133300781
+            ],
+            [
+              37.07540512084961,
+              13.286993026733398
+            ],
+            [
+              35.07541275024414,
+              13.281436920166016
+            ],
+            [
+              33.075416564941406,
+              13.27587890625
+            ],
+            [
+              31.075422286987305,
+              13.270322799682617
+            ],
+            [
+              29.075429916381836,
+              13.264764785766602
+            ],
+            [
+              27.075439453125,
+              13.259208679199219
+            ],
+            [
+              25.075448989868164,
+              13.253652572631836
+            ],
+            [
+              23.075456619262695,
+              13.24809455871582
+            ],
+            [
+              21.075464248657227,
+              13.242538452148438
+            ],
+            [
+              19.075471878051758,
+              13.236980438232422
+            ],
+            [
+              17.07547950744629,
+              13.231424331665039
+            ],
+            [
+              15.075488090515137,
+              13.225866317749023
+            ],
+            [
+              13.075495719909668,
+              13.22031021118164
+            ],
+            [
+              11.0755033493042,
+              13.214752197265625
+            ],
+            [
+              9.07551097869873,
+              13.209196090698242
+            ],
+            [
+              7.0755181312561035,
+              13.203638076782227
+            ],
+            [
+              5.075525760650635,
+              13.198081970214844
+            ],
+            [
+              3.075535297393799,
+              13.192523956298828
+            ],
+            [
+              1.07554292678833,
+              13.186967849731445
+            ],
+            [
+              -0.9244493842124939,
+              13.18140983581543
+            ],
+            [
+              -2.9244418144226074,
+              13.175853729248047
+            ],
+            [
+              -4.924434185028076,
+              13.170295715332031
+            ],
+            [
+              -6.924426555633545,
+              13.164739608764648
+            ],
+            [
+              -8.924418449401855,
+              13.159181594848633
+            ],
+            [
+              -10.924410820007324,
+              13.15362548828125
+            ],
+            [
+              -12.924403190612793,
+              13.148067474365234
+            ],
+            [
+              -14.924395561218262,
+              13.142511367797852
+            ],
+            [
+              -16.924388885498047,
+              13.136953353881836
+            ],
+            [
+              -18.924381256103516,
+              13.131397247314453
+            ],
+            [
+              -20.924373626708984,
+              13.125839233398438
+            ],
+            [
+              -22.924365997314453,
+              13.120283126831055
+            ],
+            [
+              -24.924358367919922,
+              13.114725112915039
+            ],
+            [
+              -26.92435073852539,
+              13.109169006347656
+            ],
+            [
+              -28.92434310913086,
+              13.103612899780273
+            ],
+            [
+              -30.924335479736328,
+              13.098054885864258
+            ],
+            [
+              -32.92432403564453,
+              13.092498779296875
+            ],
+            [
+              -34.92431640625,
+              13.08694076538086
+            ],
+            [
+              -36.92430877685547,
+              13.081384658813477
+            ],
+            [
+              -38.92430114746094,
+              13.075826644897461
+            ],
+            [
+              -40.924293518066406,
+              13.070270538330078
+            ],
+            [
+              -42.924285888671875,
+              13.064712524414062
+            ],
+            [
+              -44.924278259277344,
+              13.05915641784668
+            ],
+            [
+              -46.92427062988281,
+              13.053598403930664
+            ],
+            [
+              -48.92426300048828,
+              13.048042297363281
+            ],
+            [
+              -50.92425537109375,
+              13.042486190795898
+            ],
+            [
+              -52.92424774169922,
+              13.036928176879883
+            ],
+            [
+              -54.92424011230469,
+              13.0313720703125
+            ],
+            [
+              -56.924232482910156,
+              13.025814056396484
+            ],
+            [
+              -58.924224853515625,
+              13.020257949829102
+            ],
+            [
+              -60.924217224121094,
+              13.014699935913086
+            ],
+            [
+              -62.92420959472656,
+              13.009143829345703
+            ],
+            [
+              -64.92420196533203,
+              13.003585815429688
+            ],
+            [
+              -66.92420196533203,
+              12.998027801513672
+            ],
+            [
+              -68.9241943359375,
+              12.992471694946289
+            ],
+            [
+              -70.92418670654297,
+              12.986913681030273
+            ],
+            [
+              -72.92417907714844,
+              12.98135757446289
+            ],
+            [
+              -74.9241714477539,
+              12.975799560546875
+            ],
+            [
+              -76.92416381835938,
+              12.970243453979492
+            ],
+            [
+              -78.92414855957031,
+              12.96468734741211
+            ],
+            [
+              -80.92414093017578,
+              12.959129333496094
+            ],
+            [
+              -82.92413330078125,
+              12.953573226928711
+            ],
+            [
+              -84.92412567138672,
+              12.948015213012695
+            ],
+            [
+              -86.92411804199219,
+              12.942459106445312
+            ],
+            [
+              -88.92411804199219,
+              12.93690013885498
+            ],
+            [
+              -90.82425689697266,
+              12.908716201782227
+            ],
+            [
+              -92.59061431884766,
+              12.691818237304688
+            ],
+            [
+              -94.3160400390625,
+              12.255939483642578
+            ],
+            [
+              -95.97348022460938,
+              11.60791015625
+            ]
+          ],
+          "width": 3.5
+        },
+        "start_s": 5.0,
+        "start_speed": 8.0,
+        "target_speed": 8.0,
+        "duration": 12.0,
+        "lead": null,
+        "takeover": null,
+        "lane_changes": [
+          {
+            "time": 3.0,
+            "offset": -3.5,
+            "duration": 4.0
+          }
+        ],
+        "road_half_width": 5.25,
+        "ego_footprint": {
+          "length": 4.8,
+          "width": 2.0,
+          "center": [
+            0.0,
+            0.0
+          ],
+          "yaw": 0.0
+        },
+        "source_group": null
+      },
+      "camera_frames_matched": 600,
+      "encoded_frames": 300,
+      "seconds": 11.999999999999833,
+      "terminated": false,
+      "truncated": true,
+      "events": [
+        {
+          "time": 0.0,
+          "type": "scenario_start",
+          "scenario": "lane_change"
+        },
+        {
+          "time": 3.0,
+          "type": "lane_change_request",
+          "offset": -3.5
+        }
+      ],
+      "collision_contacts": [],
+      "actors_restored": true,
+      "world_settings_restored": true,
+      "glance_metrics": {
+        "glances": 5.0,
+        "right_censored_glances": 1,
+        "right_censored_observed_s": 0.5999999999999872,
+        "mean_offroad_glance_s": 1.8599999999999732,
+        "sd_offroad_glance_s": 1.3882362911262254,
+        "p85_offroad_glance_s": 2.871999999999939,
+        "long_glance_share": 0.4,
+        "mean_eyes_off_road_per_screen_s": 4.099999999999945,
+        "attend_minimum_s": 0.0,
+        "returns_by_reason": {
+          "uncertainty": 4,
+          "maximum_glance": 1
+        }
+      },
+      "task_summary": {
+        "screens": 2.0,
+        "accuracy": 1.0,
+        "mean_screen_time_s": 4.959999999999939
+      },
+      "wall_seconds": 64.0479100998491,
+      "raw_report_sha256": "97104180cf278a8c28e52bfb569d9202f700dcef77c47cc82b287e1c44972cfa",
+      "vehicle_footprints": {
+        "ego": {
+          "length": 5.591163635253906,
+          "width": 2.1466238498687744,
+          "center": [
+            0.04105132818222046,
+            1.2826544481400005e-16
+          ],
+          "yaw": 0.0
+        },
+        "lead": {
+          "length": 4.8,
+          "width": 2.0,
+          "center": [
+            0.0,
+            0.0
+          ],
+          "yaw": 0.0
+        }
+      },
+      "initial_speed_mps": 7.799263145288277,
+      "final_speed_mps": 8.670101080093,
+      "initial_lateral_position_m": -0.0010197032229881382,
+      "final_lateral_position_m": -2.7134900884947806,
+      "final_target_error_m": 0.7865099115052194,
+      "maximum_target_error_m": 3.2171427095981713,
+      "minimum_gap_m": null,
+      "peak_measured_brake": 0.014459552553626822,
+      "maximum_applied_control_error": 1.4772240042315588e-08,
+      "scenario_collision_frames": 0,
+      "scenario_boundary_violation_frames": 0,
+      "video_sha256": "c2ed9385402845f7c0781fc98cb632ff5024b5231df2c792827b889a20d18b49"
+    },
+    "lead-brake": {
+      "status": "completed",
+      "started_utc": "2026-10-27T23:11:39.261876+00:00",
+      "human_import": "C:\\Users\\localadmin\\Desktop\\embodied-human\\src\\embodied_human\\__init__.py",
+      "human_source": {
+        "path": "C:\\Users\\localadmin\\Desktop\\embodied-human",
+        "revision": "ff631bf40a8feaee653966cdde6cd032ad3d1495",
+        "dirty": "M pyproject.toml\n M src/embodied_human/__init__.py\n M src/embodied_human/agents/body.py\n?? tests/test_body_sensing.py",
+        "source_sha256": {
+          "src/embodied_human/__init__.py": "6149f7f60e5dd74cb62162c36094043be68ac3496336da67b727de2d18256bc1",
+          "src/embodied_human/_vendor/__init__.py": "3ea93e001df8bb4be011f039b7d765cdb9e85c7edc859cf32a8cc7a6c95aa285",
+          "src/embodied_human/_vendor/mimo_touch.py": "613c56d3f1a612defbec2f0c8aef8eef864ac52e1e988a1870e38098b15f9ff7",
+          "src/embodied_human/affect.py": "dddc0f7b254eb5e31073e02957647b4c4266bf5c68a626530e54817619ee6786",
+          "src/embodied_human/agents/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "src/embodied_human/agents/body.py": "af50dbc7627fd6019e9f4950a3e0d8dcb029cabd096a256abf8f908cd05d84a6",
+          "src/embodied_human/agents/driver.py": "005602d58bf4a6548066b86c19adfe2d058284308fd62f75d89dbdec8774023b",
+          "src/embodied_human/agents/pointer.py": "73569771cdf503e91aab85b6b2e6f6c3b57d88750bc86e3987652ec64255727b",
+          "src/embodied_human/agents/road.py": "d6881e8f6af4b76e4795dfb1f153254014326e5e4ca2f6c2b6e77508951136a9",
+          "src/embodied_human/attention.py": "b5bf8bcac826d1e471181efef66c0b02c4e2951c91fae9ab93fe98506c9b3e2a",
+          "src/embodied_human/bench/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "src/embodied_human/bench/__main__.py": "3bbba614f6e4cb1d38b6b7f1ba2bd653f74c7041e928af09e43c0f8515398678",
+          "src/embodied_human/bench/benchmarks.py": "b969e954060aa409f913d90306a17997cdb11ed3ac15427ec658572ed7c4c977",
+          "src/embodied_human/bench/catalog.py": "f4f9adc4dc0f6bdfc7e612cac99f05b79a83ba5a2a6590716cde699729e7570b",
+          "src/embodied_human/bench/comparison.py": "a1bc4c5ec4ec778512252c976dfb1f4bacd21cb00f6fdfdf9949381341d9299c",
+          "src/embodied_human/bench/integrated.py": "6f236c4f3057ebd82ad8f0d0924d021d3a0d88845f193130f72af4219a521b05",
+          "src/embodied_human/bench/load.py": "4d2f578504d13713e4725133cd3c23e6a794b4ca29389be206da26c995157f3b",
+          "src/embodied_human/bench/metrics.py": "edee1ff526935aaef70c5e71db8f561fc52049bbcb9a5e6f7ec04f3e515c5917",
+          "src/embodied_human/bench/motivation.py": "9756bdec90375210457090f7989a214403ce6f256a9e50daf34657c4ba9b4a50",
+          "src/embodied_human/bench/protocol.py": "23818ee2dd42721ba4605fff60dd6fe763513530424903cce3f7da9f70d86c7b",
+          "src/embodied_human/bench/references.py": "e29fec06cf0b8ecab805dbc413ba1e08f9b34350f6697742f24a7edbb49a2bd5",
+          "src/embodied_human/bench/senses.py": "c0910750bb689fbe4cc9ad62ec9eb605f5728726aad83e0ccd9b48b894ec67ca",
+          "src/embodied_human/bench/studies.py": "418bc62e49fc282d991f7651c5d33746d1046f3cf2da137b6b5dde01c13b4a93",
+          "src/embodied_human/bench/validation.py": "0d9750d41c163f24ed745dc092c16861b747a12706ce366fd37362fc432194bd",
+          "src/embodied_human/builder/__init__.py": "fe59deddb68a12360ac42175151d2e428d4c567b6a105d11ffb8841dba9da03d",
+          "src/embodied_human/builder/__main__.py": "94b5022db235f3d18b38084f414174fc3a95a3fbb86902306a559967a4668d5b",
+          "src/embodied_human/builder/jobs.py": "8158a9bc9dcdba680f518315032e52c68e829ceba87df6afa2fa1684d2aa4fea",
+          "src/embodied_human/core.py": "52101fc6a81457d00fd9daee6aeaab0ada310e5612510a9238f75470c03e8efa",
+          "src/embodied_human/decision.py": "c3e00665f6953bf2a79a2596e81e65afb8795553a31761415b826cc7a79edfcb",
+          "src/embodied_human/estimation.py": "0f7c7e3e8e502225fb6df7b07117672488ef48a91ad5f8a5bb1f2637279209b2",
+          "src/embodied_human/experiment_protocols.py": "545a5692731fefa49edce3746375cda27f152d31016d0fbd1eb10a9d16287c36",
+          "src/embodied_human/experiments.py": "740f285b24c8d9f634363cd61dba35bfbb5b23e3bca9a656d6026e510155bc19",
+          "src/embodied_human/fatigue.py": "d10c621c2d4f6bd3803170edbd180a9402cd9c08a97d82c36c5a815a7b1731e5",
+          "src/embodied_human/hearing.py": "d7dac249d2b4b52c345bfd95e74ac87c3b4e1a4126ac7df930c03f289f53dffd",
+          "src/embodied_human/inference.py": "8fa99c4a4aade91067a0baad11d8927df8fb920f5fbd02cdc62c2bfe445072d9",
+          "src/embodied_human/memory.py": "9677918ff04465b88ec97477b5571942998e602824d348fef38042eb196ea5d9",
+          "src/embodied_human/memory_pyactup.py": "893484eaadf53550b5037fff3a6ec4c9d3ed793d1ef09969d7cf980dfe4c2dbe",
+          "src/embodied_human/motor.py": "8e97d9dc2c058c7ddb15b7578a1b2656940201474a2d493ffec83c299b403050",
+          "src/embodied_human/population.py": "fc9552dd1126c23c76f284a31e50d4e46480526d17face500040f3dc0a441e50",
+          "src/embodied_human/proprioception.py": "8317b83ab6dfc393bc8f1ae1f2e0cf0a15d159d2c18b5aaabe0d0e9f4f99f655",
+          "src/embodied_human/reporting.py": "51a1c32dff8a7b9beb1a7b5f1b56d4dca413e483a7beef11c9cd1b7622984f49",
+          "src/embodied_human/response.py": "d40a851c8784156efbe1508ce9102ef5319153f447485fa7e129c7db5a96e4b0",
+          "src/embodied_human/risk.py": "6e5dbd3c39130c42c0bae9e3ca34f716af48c0128ca55aea303496c88c2e596a",
+          "src/embodied_human/sensitivity.py": "318488e786c66eab0909bb2ccf4eba97e836aa90a5b807a38635eb52479765be",
+          "src/embodied_human/tasks/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "src/embodied_human/tasks/choice.py": "9a2c35d224b83dd226898155388846607992d9cefe08869a816b4c1a089b2885",
+          "src/embodied_human/tasks/drt.py": "952c6b10909cc9a8bf50d6c404d0bf351b85f64df98549f4bb2d0aa7131e92d5",
+          "src/embodied_human/tasks/load.py": "9e8d526a90eb95ca4ce40a995380137fe6261bd6c5c65fddd4087f2278ea5912",
+          "src/embodied_human/tasks/nback.py": "8d8b5404c7f8ceae579fedfa73928246100e64fdd436a55d4d1fe68d054ad02e",
+          "src/embodied_human/tasks/recall.py": "c507fda787c731530d203ce0f91ece90df40986ec3b2d750e4641113bf41ef4e",
+          "src/embodied_human/tasks/surt.py": "975b3d5ccbb18c4fb6fd3228a3505f490f24be784ed5c70ea6868dad2153afca",
+          "src/embodied_human/tasks/tapping.py": "da695ab60f3f40f8beb2319d71a8ecc49fa5d9df8d8f6e49a705d8254dd5df4b",
+          "src/embodied_human/touch.py": "fd17d71168648960bf5d04bfd00e8ae897be1f799b99fca6016c844870e97cfe",
+          "src/embodied_human/touch_contact.py": "0303ffa9407d8ab0b1701b89630fc1aeeab53d405cdf50dfc259e6e60a6e7253",
+          "src/embodied_human/trust.py": "7ea1e0d691c6fdcca3db3fd46ec6948a86d16f0b9902d1f8f1cf2206b55af566",
+          "src/embodied_human/vestibular.py": "84252f17c59ef544ce5d43bc21e09a1ba07eae7d85ac3eb44169f7fa33a68848",
+          "src/embodied_human/vision/__init__.py": "89e9d450549cfe778b66f2c34b5fc3845a3a9484fd390aa05d13db5d1e44064b",
+          "src/embodied_human/vision/eyes.py": "fc6ec2fd1b7ca744412fba31c24b42fb526b2215ef2c7b355f3654dab48d6203",
+          "src/embodied_human/vision/foveation.py": "dd479e85cfdffab70b63bd5e860ac1bec89160066a5a2a77db8f517eb8841d03",
+          "src/embodied_human/vision/objects.py": "fb2d6e876743de296425925037f5a1e34ec770e2d52fa1e52581723e5b862f5d"
+        }
+      },
+      "bridge_source": {
+        "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla",
+        "revision": "b5a7e1e731972b93d8dfe701a9281553274aae15",
+        "dirty": "M README.md\n M pyproject.toml\n?? examples/record_embodied_human.py",
+        "source_sha256": {
+          "src/myosuite_carla/__init__.py": "b10922f3c69e10eb5ccc4d977dcede76dd3ae16d9c90288909883865df0d91ca",
+          "src/myosuite_carla/bridge.py": "3e40ac49e42da4921b889bc42872aec945d9c6fc23a3ce7ba90949cec8d2455a",
+          "src/myosuite_carla/carla_scenario.py": "350695a6b9a8e5c77732c2a20381682482bd0fe02ac831c210b96cc9f7224b27",
+          "src/myosuite_carla/cockpit.py": "e69efddef296b4fe5c00cd2b143eae3ef035ca0bd10f50fbe9b4f4e8a6667bb0",
+          "src/myosuite_carla/controls.py": "eea0a2a36d64426a1f22630f17c025d0bbd111211f052273ec1a5b934b0f1a88",
+          "src/myosuite_carla/driver_models.py": "5932f3ed1a738b80ecf457fd59636fd2a39fb1daf4cd6a82fb94549b6092da29",
+          "src/myosuite_carla/driving_env.py": "b587780dbed1cf85c3d42afa905bbed70e3207ae69c5e72bbc1c58bd557dbaea",
+          "src/myosuite_carla/fullbody.py": "d93c0d33083390c6807381024fa446606e528495d34780b5b53f3b838e66caa6",
+          "src/myosuite_carla/fullbody_validation.py": "9c0f02b1d87f03006be8e96a0235f9b7298dac87b22aba9ae501c825f8965fea",
+          "src/myosuite_carla/human_comparison.py": "18c71a392977f250d71680631582ee319ec694da3ed98bd020852fdf7a33fa0e",
+          "src/myosuite_carla/inputs.py": "1707a4eee9938fa96002baded2e0d692f886a92495ac81dfac78b6563d3dd0d3",
+          "src/myosuite_carla/interfaces.py": "144e823e83f7ecdf98fe2db00e9b35d2d711605202804a0fdefb37992547eb46",
+          "src/myosuite_carla/ngsim.py": "1949d1b1b750037816bbd2b19d9a72f922c24a25b9e6f50d494272628012bbca",
+          "src/myosuite_carla/presets.py": "4aa83c28ad9d03ca65fa5bbd9cacabded29b7be3e54e1fa6b4265642b28cd299",
+          "src/myosuite_carla/recording.py": "dacf9e721223a051c8b628c124b5558ff566505e773771f2572ac640a92d2c20",
+          "src/myosuite_carla/scenario.py": "9dcb19e7564d556bcc39fc8779070921e47eb8ec4d6794f809d5400d7d84ab64",
+          "src/myosuite_carla/session.py": "a966ce76657169588ced6a20d44e607123c2d4633f4d9bbcd6a5261d42161401",
+          "src/myosuite_carla/training.py": "a91c1417c7c413f75635c1c8d836ffc2f0e4d585c19c351ec393557d4012d97d",
+          "src/myosuite_carla/training_sb3.py": "1d8ea0014ef443e5f94033ebabee6caac5397c25a9a65de4fceb1bb87c5edb03",
+          "src/myosuite_carla/validation.py": "a6e6dab19dcd3b11da8465f982cd9d237971ffbc107330747b23ecc4eb987131",
+          "src/myosuite_carla/vehicle_loads.py": "c83b970836d1a2c4183be6058f98a169fa0a2a90054167691a4f0b07a28da6f5",
+          "src/myosuite_carla/vehicle_model.py": "9c7ffc467a4ece961aee9a607e9005d481168192bad04cc4d079ad3faaa539ff",
+          "src/myosuite_carla/wrapper.py": "f359e974a2ad0b34d10d5313957c7b0fd950f218416435c18c5772fa23cfb388"
+        }
+      },
+      "myosuite_import": "C:\\Users\\localadmin\\Desktop\\myosuite-dev-review\\myosuite\\__init__.py",
+      "versions": {
+        "carla": "0.10.0",
+        "mujoco": "3.17.0",
+        "myosuite": "3.0.0",
+        "numpy": "2.5.4",
+        "embodied-human": "0.1.1",
+        "myosuite-carla": "0.1.1"
+      },
+      "muscles": 114,
+      "seed": 0,
+      "scenario_config": {
+        "name": "lead_brake",
+        "lane": {
+          "points": [
+            [
+              83.07522583007812,
+              13.414804458618164
+            ],
+            [
+              81.07523345947266,
+              13.409248352050781
+            ],
+            [
+              79.07524108886719,
+              13.403690338134766
+            ],
+            [
+              77.07524871826172,
+              13.398134231567383
+            ],
+            [
+              75.07525634765625,
+              13.392576217651367
+            ],
+            [
+              73.07526397705078,
+              13.387020111083984
+            ],
+            [
+              71.07527160644531,
+              13.381462097167969
+            ],
+            [
+              69.07527923583984,
+              13.375905990600586
+            ],
+            [
+              67.07528686523438,
+              13.37034797668457
+            ],
+            [
+              65.0752944946289,
+              13.364791870117188
+            ],
+            [
+              63.0753059387207,
+              13.359233856201172
+            ],
+            [
+              61.075313568115234,
+              13.353677749633789
+            ],
+            [
+              59.075321197509766,
+              13.348119735717773
+            ],
+            [
+              57.07532501220703,
+              13.34256362915039
+            ],
+            [
+              55.07533264160156,
+              13.337007522583008
+            ],
+            [
+              53.075340270996094,
+              13.331451416015625
+            ],
+            [
+              51.075347900390625,
+              13.32589340209961
+            ],
+            [
+              49.075355529785156,
+              13.320335388183594
+            ],
+            [
+              47.07536315917969,
+              13.314777374267578
+            ],
+            [
+              45.07537078857422,
+              13.309221267700195
+            ],
+            [
+              43.07537841796875,
+              13.30366325378418
+            ],
+            [
+              41.07538986206055,
+              13.298107147216797
+            ],
+            [
+              39.07539749145508,
+              13.292549133300781
+            ],
+            [
+              37.07540512084961,
+              13.286993026733398
+            ],
+            [
+              35.07541275024414,
+              13.281436920166016
+            ],
+            [
+              33.075416564941406,
+              13.27587890625
+            ],
+            [
+              31.075422286987305,
+              13.270322799682617
+            ],
+            [
+              29.075429916381836,
+              13.264764785766602
+            ],
+            [
+              27.075439453125,
+              13.259208679199219
+            ],
+            [
+              25.075448989868164,
+              13.253652572631836
+            ],
+            [
+              23.075456619262695,
+              13.24809455871582
+            ],
+            [
+              21.075464248657227,
+              13.242538452148438
+            ],
+            [
+              19.075471878051758,
+              13.236980438232422
+            ],
+            [
+              17.07547950744629,
+              13.231424331665039
+            ],
+            [
+              15.075488090515137,
+              13.225866317749023
+            ],
+            [
+              13.075495719909668,
+              13.22031021118164
+            ],
+            [
+              11.0755033493042,
+              13.214752197265625
+            ],
+            [
+              9.07551097869873,
+              13.209196090698242
+            ],
+            [
+              7.0755181312561035,
+              13.203638076782227
+            ],
+            [
+              5.075525760650635,
+              13.198081970214844
+            ],
+            [
+              3.075535297393799,
+              13.192523956298828
+            ],
+            [
+              1.07554292678833,
+              13.186967849731445
+            ],
+            [
+              -0.9244493842124939,
+              13.18140983581543
+            ],
+            [
+              -2.9244418144226074,
+              13.175853729248047
+            ],
+            [
+              -4.924434185028076,
+              13.170295715332031
+            ],
+            [
+              -6.924426555633545,
+              13.164739608764648
+            ],
+            [
+              -8.924418449401855,
+              13.159181594848633
+            ],
+            [
+              -10.924410820007324,
+              13.15362548828125
+            ],
+            [
+              -12.924403190612793,
+              13.148067474365234
+            ],
+            [
+              -14.924395561218262,
+              13.142511367797852
+            ],
+            [
+              -16.924388885498047,
+              13.136953353881836
+            ],
+            [
+              -18.924381256103516,
+              13.131397247314453
+            ],
+            [
+              -20.924373626708984,
+              13.125839233398438
+            ],
+            [
+              -22.924365997314453,
+              13.120283126831055
+            ],
+            [
+              -24.924358367919922,
+              13.114725112915039
+            ],
+            [
+              -26.92435073852539,
+              13.109169006347656
+            ],
+            [
+              -28.92434310913086,
+              13.103612899780273
+            ],
+            [
+              -30.924335479736328,
+              13.098054885864258
+            ],
+            [
+              -32.92432403564453,
+              13.092498779296875
+            ],
+            [
+              -34.92431640625,
+              13.08694076538086
+            ],
+            [
+              -36.92430877685547,
+              13.081384658813477
+            ],
+            [
+              -38.92430114746094,
+              13.075826644897461
+            ],
+            [
+              -40.924293518066406,
+              13.070270538330078
+            ],
+            [
+              -42.924285888671875,
+              13.064712524414062
+            ],
+            [
+              -44.924278259277344,
+              13.05915641784668
+            ],
+            [
+              -46.92427062988281,
+              13.053598403930664
+            ],
+            [
+              -48.92426300048828,
+              13.048042297363281
+            ],
+            [
+              -50.92425537109375,
+              13.042486190795898
+            ],
+            [
+              -52.92424774169922,
+              13.036928176879883
+            ],
+            [
+              -54.92424011230469,
+              13.0313720703125
+            ],
+            [
+              -56.924232482910156,
+              13.025814056396484
+            ],
+            [
+              -58.924224853515625,
+              13.020257949829102
+            ],
+            [
+              -60.924217224121094,
+              13.014699935913086
+            ],
+            [
+              -62.92420959472656,
+              13.009143829345703
+            ],
+            [
+              -64.92420196533203,
+              13.003585815429688
+            ],
+            [
+              -66.92420196533203,
+              12.998027801513672
+            ],
+            [
+              -68.9241943359375,
+              12.992471694946289
+            ],
+            [
+              -70.92418670654297,
+              12.986913681030273
+            ],
+            [
+              -72.92417907714844,
+              12.98135757446289
+            ],
+            [
+              -74.9241714477539,
+              12.975799560546875
+            ],
+            [
+              -76.92416381835938,
+              12.970243453979492
+            ],
+            [
+              -78.92414855957031,
+              12.96468734741211
+            ],
+            [
+              -80.92414093017578,
+              12.959129333496094
+            ],
+            [
+              -82.92413330078125,
+              12.953573226928711
+            ],
+            [
+              -84.92412567138672,
+              12.948015213012695
+            ],
+            [
+              -86.92411804199219,
+              12.942459106445312
+            ],
+            [
+              -88.92411804199219,
+              12.93690013885498
+            ],
+            [
+              -90.82425689697266,
+              12.908716201782227
+            ],
+            [
+              -92.59061431884766,
+              12.691818237304688
+            ],
+            [
+              -94.3160400390625,
+              12.255939483642578
+            ],
+            [
+              -95.97348022460938,
+              11.60791015625
+            ]
+          ],
+          "width": 3.5
+        },
+        "start_s": 5.0,
+        "start_speed": 8.0,
+        "target_speed": 8.0,
+        "duration": 12.0,
+        "lead": {
+          "gap": 20,
+          "speed": 8,
+          "brake_time": 4,
+          "deceleration": 2.5,
+          "brake_to": 0.0,
+          "resume_time": null,
+          "acceleration": 1.5,
+          "profile": [],
+          "footprint": {
+            "length": 4.8,
+            "width": 2.0,
+            "center": [
+              0.0,
+              0.0
+            ],
+            "yaw": 0.0
+          }
+        },
+        "takeover": null,
+        "lane_changes": [],
+        "road_half_width": 5.25,
+        "ego_footprint": {
+          "length": 4.8,
+          "width": 2.0,
+          "center": [
+            0.0,
+            0.0
+          ],
+          "yaw": 0.0
+        },
+        "source_group": null
+      },
+      "camera_frames_matched": 600,
+      "encoded_frames": 300,
+      "seconds": 11.999999999999833,
+      "terminated": false,
+      "truncated": true,
+      "events": [
+        {
+          "time": 0.0,
+          "type": "scenario_start",
+          "scenario": "lead_brake"
+        },
+        {
+          "time": 4.0,
+          "type": "lead_brake",
+          "deceleration": 2.5
+        }
+      ],
+      "collision_contacts": [],
+      "actors_restored": true,
+      "world_settings_restored": true,
+      "glance_metrics": {
+        "glances": 5.0,
+        "right_censored_glances": 1,
+        "right_censored_observed_s": 0.13999999999999702,
+        "mean_offroad_glance_s": 1.9879999999999705,
+        "sd_offroad_glance_s": 1.3908702311861794,
+        "p85_offroad_glance_s": 3.139999999999933,
+        "long_glance_share": 0.4,
+        "mean_eyes_off_road_per_screen_s": 4.189999999999943,
+        "attend_minimum_s": 0.0,
+        "returns_by_reason": {
+          "uncertainty": 4,
+          "maximum_glance": 1
+        }
+      },
+      "task_summary": {
+        "screens": 2.0,
+        "accuracy": 1.0,
+        "mean_screen_time_s": 5.049999999999937
+      },
+      "wall_seconds": 77.70046540000476,
+      "raw_report_sha256": "f40bcb172b0acfa6ca66c855cd429244a1ef7f453c9f91b95abe4baf28cb8a5f",
+      "vehicle_footprints": {
+        "ego": {
+          "length": 5.591163635253906,
+          "width": 2.1466238498687744,
+          "center": [
+            0.04105132818222046,
+            1.2826544481400005e-16
+          ],
+          "yaw": 0.0
+        },
+        "lead": {
+          "length": 4.891970157623291,
+          "width": 1.8356460332870483,
+          "center": [
+            -0.0062155150808393955,
+            -8.920164318632529e-16
+          ],
+          "yaw": 0.0
+        }
+      },
+      "initial_speed_mps": 7.7992631453626,
+      "final_speed_mps": 0.6530752287738427,
+      "initial_lateral_position_m": -0.0010197032229881382,
+      "final_lateral_position_m": 0.0708649932588922,
+      "final_target_error_m": 0.0708649932588922,
+      "maximum_target_error_m": 0.10570919466983453,
+      "minimum_gap_m": 2.6593302488225996,
+      "peak_measured_brake": 0.16910142128621652,
+      "maximum_applied_control_error": 1.4508323820106028e-08,
+      "scenario_collision_frames": 0,
+      "scenario_boundary_violation_frames": 0,
+      "video_sha256": "1829e7171f24b0561cbdd647d9fdc1677146a669d52b0fe4125d809620df98d0"
+    }
+  },
+  "limitations": [
+    "One seed and two 12 second trials.",
+    "Road perception uses parametric geometry.",
+    "The lead vehicle follows a scripted trajectory.",
+    "The head remains posture constrained.",
+    "Scenario road boundaries use a configured corridor.",
+    "The lane change retains residual lateral error at 12 seconds.",
+    "UE5.8 live validation remains pending."
+  ],
+  "combined_video": {
+    "local_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\embodied-human-live\\embodied-human-carla-0.10.mp4",
+    "sha256": "e7717b3558d89203dbfa4bdf616aa2069e11ba29b404ae01bc2df567fdfb5fb8",
+    "bytes": 17660553,
+    "seconds": 26.0,
+    "fps": 25.0,
+    "frames": 650,
+    "size": [
+      1920,
+      1080
+    ],
+    "composition": "Two independent episodes with one second title cards, concatenated without reencoding."
+  },
+  "archive": {
+    "path": "evidence/embodied-human-0.10-recordings.zip",
+    "sha256": "7148da539e9f943593b753335f844fc42bd9a48e419e85022f37d5fa66a3979e",
+    "bytes": 3276136
+  },
+  "post_run_rpc_probe": {
+    "client_version": "0.10.0",
+    "server_version": "0.10.0",
+    "frame": 62127,
+    "synchronous_mode": false,
+    "fixed_delta_seconds": null,
+    "remaining_vehicles_and_sensors": []
+  },
+  "server_stop": {
+    "remaining_owned_pids": [],
+    "stopped_owned_pids": [
+      45836,
+      24656
+    ],
+    "stopped_utc": "2026-10-27T23:15:50.7719367Z"
+  },
+  "regression": {
+    "command": "python -m pytest tests -q",
+    "passed": 421,
+    "skipped": 4,
+    "seconds": 205.26,
+    "live_tests_enabled": false,
+    "ruff": "passed",
+    "mypy": "passed",
+    "build": "passed"
+  }
+}

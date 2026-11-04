@@ -348,7 +348,7 @@ class DriverIntent:
 
 
 class _PressEdges:
-    """Presses of a button: above 60% travel for ``hold_samples`` readings.
+    """Presses above 60% travel for ``hold_samples`` distinct simulation times.
 
     A press is reported once, when it has been held long enough and its
     condition allows it, and ends when the travel falls below 30%. Holding
@@ -365,12 +365,17 @@ class _PressEdges:
         self.hold_samples = int(hold_samples)
         self._pressed = False
         self._held = 0
+        self._last_time: float | None = None
 
     def _release(self) -> None:
         self._pressed = False
         self._held = 0
 
     def _rising(self, data: mujoco.MjData, allowed: bool = True) -> bool:
+        time = float(data.time)
+        if time == self._last_time:
+            return False
+        self._last_time = time
         fraction = float(data.sensor(self.sensor).data[0]) / self.travel
         if fraction > 0.6 and not self._pressed:
             self._held += 1
@@ -406,6 +411,7 @@ class SequentialShifter(_PressEdges):
         """Return to automatic with the paddle considered released."""
         self.gear = 0
         self._release()
+        self._last_time = None
 
     def read_gear(self, model: mujoco.MjModel, data: mujoco.MjData) -> float:
         """Update from the paddle sensor and return the selected gear."""
@@ -450,6 +456,7 @@ class LatchingSwitch(_PressEdges):
         """Disengage with the button considered released."""
         self.engaged = False
         self._release()
+        self._last_time = None
 
     def read(self, model: mujoco.MjModel, data: mujoco.MjData) -> float:
         """Update from the button sensor and return 1 while engaged."""
@@ -1287,6 +1294,8 @@ class FullBodyDriver:
             for runtime in self.interfaces:
                 runtime.apply(self.data)
             mujoco.mj_step(self.model, self.data)
+        # Refresh derived state after the final integration for downstream sensing.
+        mujoco.mj_forward(self.model, self.data)
         self._expected_xfrc = self.data.xfrc_applied.copy()
         self._expected_qfrc = self.data.qfrc_applied.copy()
 

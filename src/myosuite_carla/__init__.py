@@ -33,7 +33,7 @@ from .recording import DriveRecorder, Recording
 from .session import CarlaSession, SessionConfig, SynchronizationError, VehicleTelemetry
 from .wrapper import CarlaWrapper
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 
 __all__ = [
     "Binding",

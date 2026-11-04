@@ -229,6 +229,7 @@ def main() -> int:
                     human["features"][:, valid],
                     model["groups"],
                     human_groups,
+                    grouping="independent",
                 )
                 if valid
                 else None

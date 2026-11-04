@@ -1,0 +1,71 @@
+{
+  "status": "verified",
+  "profiles_with_zero_replay_error": 4,
+  "video_checks": [
+    {
+      "file": "ngsim_1136_2-paired.mp4",
+      "frames": 500,
+      "fps": 25,
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "55180afd16d6ed7c5d1192f804f6ef67651b8dda6327ca1351ee435d276d6aee"
+    },
+    {
+      "file": "ngsim_1136_2-baseline.mp4",
+      "frames": 500,
+      "fps": 25,
+      "size": [
+        960,
+        1080
+      ],
+      "sha256": "f9043d41241217c314e191ee56b5276d447f841e6cd47678c1a5deb4943ab60e"
+    },
+    {
+      "file": "ngsim_1136_2-fitted.mp4",
+      "frames": 500,
+      "fps": 25,
+      "size": [
+        960,
+        1080
+      ],
+      "sha256": "c6018c644e2d6604ab73e6ca8c08fa97eff2765437ba9c236ac67114ad12ce97"
+    },
+    {
+      "file": "ngsim_1193_2-paired.mp4",
+      "frames": 500,
+      "fps": 25,
+      "size": [
+        1920,
+        1080
+      ],
+      "sha256": "a71649de3d7bbb948b6d7ea372589df2341c847a0b9e11a3ba290c7bc8f3f3b2"
+    },
+    {
+      "file": "ngsim_1193_2-baseline.mp4",
+      "frames": 500,
+      "fps": 25,
+      "size": [
+        960,
+        1080
+      ],
+      "sha256": "dc535c506d78232b57cc3a840a49d462834eaac2dda8ee89df10c7093bf5d732"
+    },
+    {
+      "file": "ngsim_1193_2-fitted.mp4",
+      "frames": 500,
+      "fps": 25,
+      "size": [
+        960,
+        1080
+      ],
+      "sha256": "61b21d7efe4bb0e3a3800b055e0d698b4382f451423f45fb5b880be8cb881cde"
+    }
+  ],
+  "montage_frames": 1000,
+  "montage_seconds": 40,
+  "montage_sha256": "77e24c6e16d73799ea8ddb48ae7909d04cd4fffa01edb8bd7994742b6e304e3c",
+  "selection": "first two fresh test source identifiers in sorted order",
+  "base_seed": 117
+}

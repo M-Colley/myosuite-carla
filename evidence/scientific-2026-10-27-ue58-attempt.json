@@ -1,0 +1,24 @@
+{
+  "status": "failed",
+  "started_utc": "2026-10-27T17:35:26.602115+00:00",
+  "host": "127.0.0.1",
+  "port": 2000,
+  "mujoco_version": "3.17.0",
+  "provenance": {
+    "expected_ref": "ue58-dev",
+    "asserted_ref": "unavailable",
+    "asserted_ref_matches_target": false,
+    "asserted_commit": null,
+    "source_verified": false
+  },
+  "requested_blueprint": null,
+  "scenarios": [],
+  "carla_module": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\.venv\\Lib\\site-packages\\carla.cp312-win_amd64.pyd",
+  "carla_distribution": "0.10.0",
+  "client_version": "0.10.0",
+  "error": {
+    "type": "RuntimeError",
+    "message": "No connection could be made because the target machine actively refused it."
+  },
+  "finished_utc": "2026-10-27T17:35:28.646958+00:00"
+}

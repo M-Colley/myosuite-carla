@@ -412,7 +412,8 @@ def run_live_validation(
         port: CARLA RPC port.
         timeout: RPC and tick timeout in seconds.
         blueprint: Explicit vehicle ID, or None to discover a four-wheel vehicle.
-        target_ref: Actual validation target; use "0.10.0" for a release trial.
+        target_ref: Actual validation target; use the release tag ("0.10.0",
+            "1.0") for a release trial.
         build_ref: Caller-declared source ref; any target mismatch is recorded.
         build_commit: Caller-declared source commit.
 

@@ -1,5 +1,410 @@
 # Validation record
 
+## Speed-dependent steering lag test on 2026-11-04
+
+The surrogate's steer time constant is now `steer_lag + steer_lag_slope |u|`, with `u` the speed before each frame. A zero slope reproduces the constant lag exactly: the archived analysis of seeds 18-21 reran identically. The candidate kept the engine's rate limit (rise 2.5, fall 5.0) and fitted the lag and slope jointly. The gain table, exponent and longitudinal parameters stayed at the default. The code, [design](evidence/steer-lag-speed-2026-11-04/design.md), [fit script](evidence/steer-lag-speed-2026-11-04/fit.py) and [analysis script](evidence/steer-lag-speed-2026-11-04/analyse.py) were committed in `6403eee` at 16:07:49 UTC, before the fit ran. The adoption rule was unchanged from the previous test. The fitted candidate was committed in `fc18954` at 16:08:16 UTC, before the test drives were recorded.
+
+**Fit.** The objective was the lateral fit's: the yaw-rate residual with the measured speed. It covered the steering segments of seeds 0, 3, 10, 12 and 14-21 (271 segments, 96,608 frames above 0.5 m/s), searched on a grid with 1000 segment bootstrap resamples ([fit](evidence/steer-lag-speed-2026-11-04/fit.json)):
+
+- **Lag at standstill:** 0.024 s (95% interval 0.020-0.028).
+- **Slope:** 0.0016 s per m/s (0.0010-0.0022). As predicted, the interval excludes zero.
+- **Time constant:** 0.026 s at 1 m/s, 0.032 s at 5 m/s and 0.040 s at 10 m/s, close to the earlier constant 0.039 s.
+- **Training error:** 0.376 deg/s, against 0.391 for the best constant lag. With `evaluate_vehicle_model`, the candidate scored 0.235 deg/s against 1.199 for the default, 0.325 for the engine rates with the default lag and 0.263 for the previous constant-lag candidate.
+
+The fit's fast path matched `evaluate_vehicle_model` to 2e-16 deg/s.
+
+**Test.** The CARLA 0.10.0 server ran with `-nullrhi` after 13.6 GB of commit memory was confirmed free; it held 3.9 GB, and at least 11 GB stayed free. Server and client reported `0.10.0` on `Town10HD_Opt`. Fresh seeds 22-25 were recorded from 16:09:25 to 16:10:17 UTC. Of 136 segments, 116 were kept: 31 low-speed sweeps, 28 holds, 26 doublets, 15 sweeps at 2-10 m/s and 16 at 8-14 m/s. The 20 discarded segments had 14 collisions and 6 roll strikes. The [data](evidence/steer-lag-speed-2026-11-04/data.zip) include every collection log.
+
+The candidate met every check, so `carla_nissan_patrol()` now holds it ([analysis](evidence/steer-lag-speed-2026-11-04/analysis.json)):
+
+| Check (measured speed unless noted) | Default | Candidate | Result |
+| --- | --- | --- | --- |
+| Control: fresh 2-10 m/s sweeps, open loop, ≤ 0.674 deg/s | 0.340 deg/s | — | pass |
+| (a) Low-speed sweeps, holds and doublets pooled, ≥ 25% lower | 1.490 deg/s | 0.254 deg/s (−83%) | pass |
+| (b) Low-speed sweeps | 0.559 | 0.266 (−52%) | pass |
+| (b) Holds | 1.237 | 0.140 (−89%) | pass |
+| (b) Doublets | 2.714 | 0.365 (−87%) | pass |
+| (c) 2-10 m/s sweeps, ≤ +5% | 0.157 | 0.110 (−30%) | pass |
+| (c) 8-14 m/s sweeps, ≤ +5% | 0.116 | 0.105 (−9%) | pass |
+| (d) Pooled (a) segments, open loop, not higher | 2.673 | 1.757 (−34%) | pass |
+| (e) Original held-out seeds 1, 2, 4, open loop, ≤ +5% | 0.128 deg/s; 3 s errors | 0.120 deg/s (−6%); 3 s errors unchanged | pass |
+| (f) Muscle-driven drives, open loop, ≤ +5% | 0.144 deg/s, 0.646 m | 0.111 deg/s, 0.646 m | pass |
+
+On the original held-out seeds, the 2-10 m/s sweeps went from 0.337 to 0.314 deg/s and the 8-14 m/s sweeps from 0.091 to 0.082. The 3 s position errors did not change, because these segments start steering after 3 s. The held-out open-loop speed error stays at 0.53 m/s, since longitudinal parameters are unchanged.
+
+Secondary results:
+
+- **Earlier candidates on seeds 22-25.** The engine-rate model with the default lag scored 0.453, 0.244 and 0.434 deg/s on low-speed sweeps, holds and doublets; its 2-10 and 8-14 m/s sweeps were unchanged. The previous constant-lag candidate scored 0.299, 0.161 and 0.381, but its 8-14 m/s sweeps rose again, to 0.144 (+24%).
+- **Seeds 11 and 13** (held out from every fit, inspected before). The candidate reduced the error from 0.869 to 0.252 deg/s.
+- **Full-body phases.** `steer_right` went from 2.53 to 0.51 deg/s, with its final heading error from 1.45° to 0.23°; `steer_left` went from 0.19 to 0.08 deg/s.
+
+This is the third test of the rate limit and the first candidate to pass. Its training data included seeds 14-21 from the two earlier tests, so seeds 22-25 are its only fresh evidence. The constant-lag variant failed on 8-14 m/s sweeps in two independent test sets, while the speed-dependent lag improved them. Results that built the default surrogate at run time, such as the 2026-10-28 closed-loop calibration, actuation comparison and trial videos, used earlier steering dynamics. They reproduce at their recorded bridge revisions.
+
+```powershell
+.venv/Scripts/python.exe evidence/steer-lag-speed-2026-11-04/fit.py --sysid artifacts/vehicle-sysid --wide artifacts/vehicle-sysid-wide --first artifacts/steer-rate-limit --second artifacts/steer-rate-lag --previous evidence/steer-rate-lag-2026-11-04/fit.json --output evidence/steer-lag-speed-2026-11-04/fit.json
+.venv/Scripts/python.exe examples/identify_vehicle.py --host 127.0.0.1 --seeds 22 23 24 25 --launch 0 --hand-brake 0 --reverse 0 --steer 4 --steer-fast 4 --steer-low 8 --steer-hold 8 --steer-doublet 10 --data artifacts/steer-lag-speed
+.venv/Scripts/python.exe evidence/steer-lag-speed-2026-11-04/analyse.py --candidate evidence/steer-lag-speed-2026-11-04/fit.json --previous evidence/steer-rate-lag-2026-11-04/fit.json --fresh artifacts/steer-lag-speed --wide artifacts/vehicle-sysid-wide --sysid artifacts/vehicle-sysid --muscle artifacts/scenario-lead_vehicle_braking-carla artifacts/scenario-takeover_request-carla artifacts/scenario-lane_change-carla artifacts/ue55-fullbody-loads --output evidence/steer-lag-speed-2026-11-04/analysis.json
+```
+
+With the new default and `Desktop/embodied-human/src` on `PYTHONPATH`, the bridge suite passed 520 tests with the four live tests skipped. Two new tests check the speed-dependent lag frame by frame and a fit with a fixed slope. The embodied human suite passed 561 tests with 24 optional tests skipped. Ruff, formatting and mypy passed.
+
+## Joint steering rise rate and lag test on 2026-11-04
+
+This run fitted the steering rise rate and lag together and tested them on fresh drives. The [design](evidence/steer-rate-lag-2026-11-04/design.md) and the [fit](evidence/steer-rate-lag-2026-11-04/fit.py) and [analysis](evidence/steer-rate-lag-2026-11-04/analyse.py) scripts were committed in `0c0acf0` at 15:06:15 UTC, before the fit ran. The fitted candidate was committed in `2d19c54` at 15:06:42 UTC, before the test drives were recorded. The gain table, exponent and longitudinal parameters stayed at the default, and the fall rate at 5.0.
+
+**Fit.** The objective was the lateral fit's: the yaw-rate residual with the measured speed. It covered the steering segments of seeds 0, 3, 10, 12 and 14-17 (152 segments, 54,068 frames above 0.5 m/s), searched on a grid. Resampling segments 1000 times gave 95% intervals:
+
+- **Rise rate:** 2.5 per second (2.45-2.6), the engine value.
+- **Lag:** 0.030 s (0.028-0.034), against 0.039 s in the default.
+- **Training error:** 0.397 deg/s, against 1.960 for the default and 0.450 for the engine rates with the default lag.
+
+The secondary split held its prediction. Segments below 3 m/s gave a lag of 0.026 s (0.022-0.034) and a rise rate of 2.45. Segments at or above 3 m/s gave 0.038 s (0.034-0.042) and 2.85 ([fit](evidence/steer-rate-lag-2026-11-04/fit.json)). The fit's fast path matched `evaluate_vehicle_model` to 8e-16 deg/s.
+
+**Test.** The CARLA 0.10.0 server ran with `-nullrhi`, as before. A first start at 15:07 UTC was stopped after 30 s, because the user's training jobs left under 2 GB of commit memory free. A second start at 15:13 UTC had about 18 GB free with the server loaded. Server and client reported `0.10.0` on `Town10HD_Opt`. Fresh seeds 18-21 were recorded from 15:14:55 to 15:17:10 UTC. Of 136 segments, 119 were kept: 30 low-speed sweeps, 29 holds, 32 doublets, 12 sweeps at 2-10 m/s and 16 at 8-14 m/s. The 17 discarded segments had 13 collisions and 4 roll strikes. The [data](evidence/steer-rate-lag-2026-11-04/data.zip) include every collection log.
+
+The candidate failed check (c), so the default is unchanged ([analysis](evidence/steer-rate-lag-2026-11-04/analysis.json)). The design had named (b) or (c) as where a speed-dependent delay would show.
+
+| Check (measured speed unless noted) | Default | Candidate | Result |
+| --- | --- | --- | --- |
+| Control: fresh 2-10 m/s sweeps, open loop, ≤ 0.674 deg/s | 0.329 deg/s | — | pass |
+| (a) Low-speed sweeps, holds and doublets pooled, ≥ 25% lower | 1.857 deg/s | 0.313 deg/s (−83%) | pass |
+| (b) Low-speed sweeps | 0.541 | 0.244 | pass |
+| (b) Holds | 1.690 | 0.235 | pass |
+| (b) Doublets | 3.091 | 0.438 | pass |
+| (c) 2-10 m/s sweeps, ≤ +5% | 0.146 | 0.106 | pass |
+| (c) 8-14 m/s sweeps, ≤ +5% | 0.095 | 0.133 (+39%) | fail |
+| (d) Pooled (a) segments, open loop, not higher | 2.832 | 1.570 | pass |
+| (e) Original held-out seeds 1, 2, 4, open loop, ≤ +5% | 0.128 deg/s; 3 s errors | 0.133 deg/s (+4%); 3 s errors unchanged | pass |
+| (f) Muscle-driven drives, open loop, ≤ +5% | 0.144 deg/s, 0.646 m | 0.109 deg/s, 0.646 m | pass |
+
+Secondary results:
+
+- **Engine rates on the new seeds.** The engine-rate model of the previous test (rise 2.5, fall 5.0, default lag) improved the low-speed sweeps this time, from 0.541 to 0.400 deg/s. Holds fell to 0.292 and doublets to 0.457. The 2-10 and 8-14 m/s sweeps were unchanged, since their commands never reach the limit. It was not the candidate here, so this does not adopt it.
+- **Seeds 11 and 13** (held out from every fit, inspected before). The candidate reduced the error from 0.869 to 0.281 deg/s, and the engine rates to 0.379.
+- **Full-body phases.** The candidate brought `steer_right` from 2.53 to 0.55 deg/s and `steer_left` from 0.19 to 0.11.
+
+**Post-hoc pooling.** This was added after the rule failed and belongs to neither design ([script](evidence/steer-rate-lag-2026-11-04/posthoc.py), [results](evidence/steer-rate-lag-2026-11-04/posthoc.json)). Over seeds 14-21, the engine-rate model lowered the measured-speed error in every kind its limit reaches: low-speed sweeps from 0.484 to 0.431 deg/s, holds from 1.726 to 0.304 and doublets from 2.517 to 0.393. The other kinds were unchanged. Its failure on seeds 14-17 therefore looks like sampling variation in the sweeps, but that needs its own test. Both runs agree that the steering delay grows with speed. A shorter constant lag helps at 1-3 m/s and hurts at 8-14 m/s, which a speed-dependent lag would have to resolve. Two follow-ups would each need fresh seeds and a fixed rule: the engine-rate model under the rule of `abf6f08`, or the rate limit with a speed-dependent lag.
+
+```powershell
+.venv/Scripts/python.exe evidence/steer-rate-lag-2026-11-04/fit.py --sysid artifacts/vehicle-sysid --wide artifacts/vehicle-sysid-wide --fresh artifacts/steer-rate-limit --output evidence/steer-rate-lag-2026-11-04/fit.json
+.venv/Scripts/python.exe examples/identify_vehicle.py --host 127.0.0.1 --seeds 18 19 20 21 --launch 0 --hand-brake 0 --reverse 0 --steer 4 --steer-fast 4 --steer-low 8 --steer-hold 8 --steer-doublet 10 --data artifacts/steer-rate-lag
+.venv/Scripts/python.exe evidence/steer-rate-lag-2026-11-04/analyse.py --candidate evidence/steer-rate-lag-2026-11-04/fit.json --fresh artifacts/steer-rate-lag --wide artifacts/vehicle-sysid-wide --sysid artifacts/vehicle-sysid --muscle artifacts/scenario-lead_vehicle_braking-carla artifacts/scenario-takeover_request-carla artifacts/scenario-lane_change-carla artifacts/ue55-fullbody-loads --output evidence/steer-rate-lag-2026-11-04/analysis.json
+.venv/Scripts/python.exe evidence/steer-rate-lag-2026-11-04/posthoc.py --candidate evidence/steer-rate-lag-2026-11-04/fit.json --first artifacts/steer-rate-limit --second artifacts/steer-rate-lag --output evidence/steer-rate-lag-2026-11-04/posthoc.json
+```
+
+No library code changed in this run. With `Desktop/embodied-human/src` on `PYTHONPATH`, the bridge suite passed 518 tests with the four live tests skipped. Ruff, formatting and mypy passed.
+
+## Steering input rate limit test on 2026-11-04
+
+The surrogate can now apply Chaos's steering input rate limit (`steer_rise_rate`, `steer_fall_rate`) to the command before its steering lag. Zero, the default, leaves the command unlimited. This run tested whether `carla_nissan_patrol()` should take the engine's rates (2.5 rising, 5.0 falling per second), with nothing refitted. The code, the [design](evidence/steer-rate-limit-2026-11-04/design.md) and its [analysis script](evidence/steer-rate-limit-2026-11-04/analyse.py) were committed in `abf6f08` at 14:46:47 UTC, before recording. The CARLA 0.10.0 server used for the wider identification ran again with `-nullrhi`, while two unrelated jobs kept the GPU fully busy. Server and client reported `0.10.0` on `Town10HD_Opt`. Fresh seeds 14-17 were recorded from 14:47:55 to 14:48:45 UTC. Each seed had 8 low-speed sweeps, 8 step-and-hold segments, 10 step doublets at 3-10 m/s and 3 control sweeps. Of 116 segments, 97 were kept. Of the 19 discarded (10 collisions, 9 roll strikes), 14 were doublets, 11 of them steering left first. The kept doublets therefore lean towards right-first steps and smaller lateral loads. The [data](evidence/steer-rate-limit-2026-11-04/data.zip) include every collection log.
+
+The candidate failed the rule on one check, so the default is unchanged ([analysis](evidence/steer-rate-limit-2026-11-04/analysis.json)). Measured-speed errors use the logged speed in place of the modelled one, which isolates the steering model.
+
+| Check | Default | Rate limit | Result |
+| --- | --- | --- | --- |
+| Control: fresh 2-10 m/s sweeps, open loop, ≤ 0.674 deg/s | 0.419 deg/s | 0.419 deg/s | pass |
+| (a) Measured-speed yaw-rate RMSE, 86 fresh segments, ≥ 25% lower | 1.364 deg/s | 0.363 deg/s (−73%) | pass |
+| (b) Lower in each kind: doublets (26) | 1.858 deg/s | 0.319 deg/s | pass |
+| (b) Lower in each kind: holds (29) | 1.761 deg/s | 0.315 deg/s | pass |
+| (b) Lower in each kind: low-speed sweeps (31) | 0.427 deg/s | 0.461 deg/s (+8%) | fail |
+| (c) Open-loop yaw-rate RMSE, fresh segments, not higher | 2.532 deg/s | 1.790 deg/s | pass |
+| (d) Original held-out seeds 1, 2, 4, ≤ +1% | 0.128 deg/s, 3 s errors | identical | pass |
+| (e) Muscle-driven drives, ≤ +5% | 0.144 deg/s, 0.646 m | 0.117 deg/s, 0.646 m | pass |
+
+The pre-stated secondary predictions held:
+
+- **Rates.** The measured-speed error was lowest at a rise rate of 2.75 (predicted 2.0-3.0; 0.302 against 0.363 deg/s at 2.5) and a fall rate of 5.0 (predicted 4.0-6.0). Without a fall limit it was 0.956 deg/s.
+- **Full-body steering.** The limit cut the `steer_right` phase's yaw-rate RMSE from 2.53 to 0.71 deg/s and its final heading error from 1.45° to 0.12°; `steer_left` went from 0.19 to 0.16 deg/s. These phases were inspected before, so this is weaker evidence than the fresh seeds. The onset that the exponent entry below attributed to missing tyre relaxation is instead the input rate limit.
+- **Refit.** Training seeds 0 and 3 never reach the limit, and a refit with `--steer-rate-limit 2.5 5` reproduced the default's parameters exactly.
+- **By steer band** (measured speed): the error fell from 1.149 to 0.247 deg/s at |S| ≤ 0.51, from 0.982 to 0.349 at 0.51-0.75 and from 2.227 to 0.638 above 0.75.
+
+**Post-hoc look at the sweeps.** This was added after the rule failed and is not part of the design ([script](evidence/steer-rate-limit-2026-11-04/diagnose.py), [results](evidence/steer-rate-limit-2026-11-04/diagnosis.json)). Only 12 of the 31 sweeps reach the limit; their peak command rates are 2.5-3.7 per second. Of these, 11 got worse and one better. With a rise rate of 2.75 the sweeps improve too (0.411 deg/s), and every kind's best rise rate lies at 2.75-3.0. With the limit but without the 0.039 s steering lag, which was fitted without the limit, the sweeps fall to 0.232 deg/s and holds stay at 0.333. Doublets, however, rise to 0.747 deg/s and the original held-out seeds from 0.095 to 0.170. The lag is needed at speed but too long at 1-3 m/s. That pattern fits a yaw response that slows with speed, as in a dynamic single-track model, which the kinematic surrogate's constant lag cannot represent. Two follow-ups would each need fresh seeds and their own rule: identifying the rise rate and lag jointly, and a speed-dependent steering delay.
+
+After the analysis, the limit was changed to return the command itself when inactive; before, it added round-off of order 1e-17. The refit check had differed by up to 2e-10 rad before this change and matched exactly after it. The rerun analysis and diagnosis matched the first run's outputs exactly.
+
+```powershell
+.venv/Scripts/python.exe examples/identify_vehicle.py --host 127.0.0.1 --seeds 14 15 16 17 --launch 0 --hand-brake 0 --reverse 0 --steer 3 --steer-low 8 --steer-hold 8 --steer-doublet 10 --data artifacts/steer-rate-limit
+.venv/Scripts/python.exe evidence/steer-rate-limit-2026-11-04/analyse.py --fresh artifacts/steer-rate-limit --sysid artifacts/vehicle-sysid --muscle artifacts/scenario-lead_vehicle_braking-carla artifacts/scenario-takeover_request-carla artifacts/scenario-lane_change-carla artifacts/ue55-fullbody-loads --output evidence/steer-rate-limit-2026-11-04/analysis.json
+.venv/Scripts/python.exe evidence/steer-rate-limit-2026-11-04/diagnose.py --fresh artifacts/steer-rate-limit --sysid artifacts/vehicle-sysid --output evidence/steer-rate-limit-2026-11-04/diagnosis.json
+.venv/Scripts/python.exe examples/fit_vehicle_model.py --train artifacts/vehicle-sysid/seed0 artifacts/vehicle-sysid/seed3 --steer-rate-limit 2.5 5 --output artifacts/steer-rate-limit/refit-check.json
+```
+
+With `Desktop/embodied-human/src` on `PYTHONPATH`, the bridge suite passed 518 tests with the four live tests skipped. Three new tests check Chaos's interpolation frame by frame, exact rollouts of rate-limited drives, and a fit with a fixed limit. The embodied human suite passed 561 tests with 24 optional tests skipped. Ruff, formatting and mypy passed.
+
+## Wider steering identification on 2026-11-04
+
+The [design](evidence/vehicle-sysid-wide-2026-11-04/design.md) was committed in `20e02ed` at 12:15:21 UTC before recording. It fixed the segments, the split, the analyses and the adoption rule. The CARLA 0.10.0 / UE5.5 package in `C:/Users/localadmin/Desktop/Carla-0.10.0-Win64-Shipping` (CARLA `ada75f920642e18cace0a9f85ecf9d4077ddb531`) ran with `-nullrhi`, so it held no GPU context while two unrelated GPU jobs kept the card busy. Server and client reported `0.10.0` on `Town10HD_Opt`. Seeds 10-13 were recorded from 12:16:19 to 12:16:49 UTC. Each seed had 10 low-speed sweeps (0.8-3 m/s, amplitude 0.4-1.0), 8 step-and-hold segments (±0.2-1.0) and 3 original 2-10 m/s sweeps as a control. Of 84 segments, 71 were kept. Nine collisions and four roll strikes were discarded, including 9 of 32 holds; 6 of these 9 holds had |S| of at least 0.68, so near full lock is under-sampled. The [data](evidence/vehicle-sysid-wide-2026-11-04/data.zip) include every collection log.
+
+**Control.** On the five held-out control sweeps the current default's yaw-rate RMSE was 0.075 deg/s, against a limit of 0.674. The session therefore reproduces the original one.
+
+**Steady state.** The settled road-wheel angles of 23 holds fit `g sgn(S) |S|^p` with p = 1.92 ± 0.05 and g = 0.94 rad. The current default (p = 1.974, identified only to |S| = 0.51) predicts them with an RMSE of 0.08° at |S| ≤ 0.51 (10 holds) and 0.09° at 0.51-0.75 (9 holds). At 0.75-1.0 the RMSE is 2.88° (4 holds, mean −0.73°). The retained linear fit misses by 1.98°, 7.96° and 19.9°.
+
+**Extrapolation and refit.** In open loop, the default's yaw-rate RMSE on the 33 held-out low-speed segments was 2.46 deg/s (linear fit 2.98). By band: 0.37 for narrow |S| at identified speed, 0.94 narrow and slow, 2.19 wide at identified speed, and 3.39 wide and slow (20 segments). The refit on seeds 0, 3, 10 and 12 identified p = 1.817 and a lag of 0.063 s. Its gains fell from 0.986 rad at 0-1 m/s to 0.70 rad above 15 m/s. It did not meet the rule, and the default is unchanged ([analysis](evidence/vehicle-sysid-wide-2026-11-04/analysis.json), [rejected fit](evidence/vehicle-sysid-wide-2026-11-04/rejected-refit.json)):
+
+| Check | Default | Refit | Result |
+| --- | --- | --- | --- |
+| (a) Held-out low-speed yaw-rate RMSE (seeds 11, 13) | 2.458 deg/s | 1.241 deg/s | pass |
+| (b) Original held-out yaw-rate RMSE (seeds 1, 2, 4), ≤ +5% | 0.128 deg/s | 0.238 deg/s (+86%) | fail |
+| (c) 3 s position error, original `steer` | 0.279 m | 0.333 m (+19%) | fail |
+| (c) 3 s position error, original `steer_fast` | 0.623 m | 0.895 m (+44%) | fail |
+| (c) 3 s position error, muscle-driven drives | 0.646 m | 0.792 m (+23%) | fail |
+
+The refit's other position groups improved: launches went from 0.524 to 0.290 m and hand-brake stops from 0.461 to 0.172 m. Reverse was unchanged within the tolerance (0.0561 to 0.0567 m).
+
+**Post-hoc diagnosis.** This analysis was added after the rule failed and is not part of the design ([script](evidence/vehicle-sysid-wide-2026-11-04/diagnose.py), [results](evidence/vehicle-sysid-wide-2026-11-04/diagnosis.json)). All errors below use the measured speed, as in the lateral fit.
+
+- **Speed error dominates.** With the measured speed, the default's yaw-rate RMSE on the new held-out segments falls from 2.46 to 1.10 deg/s, and the refit's to 1.08. So the refit's open-loop gain came from its longitudinal part. On the 30 original held-out steering segments its steering is worse (0.507 against 0.173 deg/s).
+- **Tyre relaxation does not explain the rest.** A road-wheel-angle lag with time constant `sigma / v`, fitted on seeds 10 and 12 (sigma = 0.091 m), raised the error on every set: training 1.04 to 1.26, new 1.10 to 1.28, original 0.173 to 0.232 deg/s.
+- **Chaos's steering input rate limit does.** The UE5.8 engine source (`ChaosVehicleMovementComponent`) limits the raw steering input before the curve: the magnitude rises at 2.5 per second and falls at 5.0 per second. CARLA's C++ in the 1.0 tag and `ue58-dev` overrides only the curve. The vehicle blueprints were not inspected. Applied to the commands with no fitted parameter, the limit cut the default's error from 1.04 to 0.44 deg/s on training seeds and from 1.10 to 0.48 on the held-out seeds. The original segments stayed at 0.173, because their sweeps never reach the limit. Dropping the 0.039 s lag as well gave 0.37 and 0.34 deg/s; the lag remains needed. The UE5.5 defaults were not read, but the parameter-free agreement indicates the same rates in 0.10.0.
+
+The rate limit is a candidate structural addition to the surrogate. It needs its own confirmatory test on fresh seeds before it changes the default. The refit's longitudinal improvement at low speed also needs one.
+
+```powershell
+.venv/Scripts/python.exe examples/identify_vehicle.py --host 127.0.0.1 --seeds 10 11 12 13 --launch 0 --hand-brake 0 --reverse 0 --steer 3 --steer-low 10 --steer-hold 8 --data artifacts/vehicle-sysid-wide
+.venv/Scripts/python.exe examples/fit_vehicle_model.py --train artifacts/vehicle-sysid/seed0 artifacts/vehicle-sysid/seed3 artifacts/vehicle-sysid-wide/seed10 artifacts/vehicle-sysid-wide/seed12 --test artifacts/vehicle-sysid/seed1 artifacts/vehicle-sysid/seed2 artifacts/vehicle-sysid/seed4 artifacts/vehicle-sysid-wide/seed11 artifacts/vehicle-sysid-wide/seed13 --test-by-phase artifacts/scenario-lead_vehicle_braking-carla artifacts/scenario-takeover_request-carla artifacts/scenario-lane_change-carla artifacts/ue55-fullbody-loads --output artifacts/vehicle-sysid-wide/refit.json
+.venv/Scripts/python.exe evidence/vehicle-sysid-wide-2026-11-04/analyse.py --wide artifacts/vehicle-sysid-wide --sysid artifacts/vehicle-sysid --linear evidence/ue55-vehicle-surrogate.json --refit evidence/vehicle-sysid-wide-2026-11-04/rejected-refit.json --muscle artifacts/scenario-lead_vehicle_braking-carla artifacts/scenario-takeover_request-carla artifacts/scenario-lane_change-carla artifacts/ue55-fullbody-loads --output evidence/vehicle-sysid-wide-2026-11-04/analysis.json
+.venv/Scripts/python.exe evidence/vehicle-sysid-wide-2026-11-04/diagnose.py --wide artifacts/vehicle-sysid-wide --sysid artifacts/vehicle-sysid --refit evidence/vehicle-sysid-wide-2026-11-04/rejected-refit.json --output evidence/vehicle-sysid-wide-2026-11-04/diagnosis.json
+```
+
+The archived analysis and diagnosis were regenerated after formatting the scripts and matched byte for byte. The recorder's new segment kinds default to zero, so earlier seeds draw the same values. With `Desktop/embodied-human/src` on `PYTHONPATH`, the bridge suite passed 515 tests with the four live tests skipped. The venv's editable `embodied_human` points to another checkout without `driving_evaluation`, which skips one more test. Ruff, formatting and mypy passed.
+
+## Steering exponent in the vehicle surrogate on 2026-11-04
+
+The surrogate's road-wheel angle is now `G(|u|) sgn(S) |S|^p`, with the exponent `p` identified jointly with the gain table and lag. The refit used the retained command, training seeds 0 and 3 (319 s) and held-out seeds 1, 2 and 4 (526 s) plus the muscle-driven CARLA drives. With `--steer-exponent 1` it reproduced the retained linear fit exactly (largest gain difference 0.0, identical held-out errors). Longitudinal parameters are unaffected.
+
+The adoption rule was set before fitting: the exponent fit replaces the default only if held-out yaw-rate RMSE decreases in both steering groups and neither the overall held-out yaw-rate RMSE nor any 3 s position error increases. The structural choice is not blind: the shape analysis of the CARLA 1.0 review below inspected all five seeds, and CARLA's source independently gives the squared curve. The exponent and gains were fitted on seeds 0 and 3 only.
+
+The identified exponent is 1.974. The gain table falls smoothly from 0.978 rad at standstill to 0.856 rad above 15 m/s, where the linear fit had needed 0.489 to 0.102 rad; most of its apparent speed dependence was the amplitude dependence of the squared curve. Steering lag is 0.039 s (linear fit 0.038 s). The training lateral residual fell from 0.93 to 0.15 deg/s.
+
+| Held-out set | Yaw-rate RMSE, linear | Yaw-rate RMSE, exponent | 3 s position error, linear → exponent |
+| --- | --- | --- | --- |
+| All 60 segments | 0.761 deg/s | 0.128 deg/s | 0.452 → 0.452 m |
+| Steering 2-10 m/s | 2.231 deg/s | 0.337 deg/s | 0.279 → 0.279 m |
+| Steering 8-14 m/s | 0.691 deg/s | 0.091 deg/s | 0.623 → 0.623 m |
+| Muscle-driven drives (29 segments) | 0.562 deg/s | 0.144 deg/s | 0.651 → 0.646 m |
+
+The rule was met and `carla_nissan_patrol()` now holds the exponent fit ([report](evidence/ue55-vehicle-surrogate-exponent.json)); the [linear report](evidence/ue55-vehicle-surrogate.json) is retained. Among the muscle-driven drives, the lane change's final heading error fell from 5.33° to 0.82° and the takeover's from 1.18° to 0.01°. One phase is worse: the full-body `steer_right` yaw-rate RMSE rose from 1.95 to 2.53 deg/s (final heading error 1.13° to 1.45°), while `steer_left` fell from 0.97 to 0.19 deg/s. Steering is identified from 2.4 to 13.6 m/s and up to steer 0.51; full lock extrapolates the power law. Parameters saved without `steer_exponent` load as linear. Results that built the default surrogate at run time, such as the 2026-10-28 closed-loop calibration, actuation comparison and trial videos, used the linear fit; they reproduce at their recorded bridge revisions, and rerunning them at this revision drives a different steering map. In both full-body steering phases the settled road-wheel angle matches the measurement within 0.1° (right 9.00° modelled, 8.90° measured; left −7.67°, −7.58°), so the `steer_right` increase comes from its one-second onset, which a kinematic model without tyre relaxation does not represent. These phases run at 1.1-2.2 m/s, below the identified range, where the lowest identified gain is held. With the new default, the bridge suite passed 515 tests with the four live tests skipped, and the embodied human suite passed 561 tests with 24 optional tests skipped; ruff and mypy passed. A new test recovers an exponent of 2 from squared synthetic drives.
+
+```powershell
+.venv/Scripts/python.exe examples/fit_vehicle_model.py --train artifacts/vehicle-sysid/seed0 artifacts/vehicle-sysid/seed3 --test artifacts/vehicle-sysid/seed1 artifacts/vehicle-sysid/seed2 artifacts/vehicle-sysid/seed4 --test-by-phase artifacts/scenario-lead_vehicle_braking-carla artifacts/scenario-takeover_request-carla artifacts/scenario-lane_change-carla artifacts/ue55-fullbody-loads --output artifacts/surrogate-refit-2026-11-04/exponent.json
+.venv/Scripts/python.exe examples/fit_vehicle_model.py <same arguments> --steer-exponent 1 --output artifacts/surrogate-refit-2026-11-04/linear.json
+```
+
+## CARLA 1.0 source review on 2026-11-04
+
+This is a source and data review, not a live run: no CARLA 1.0 server or wheel was executed. Upstream `carla-simulator/carla` was fetched read-only into the pinned worktree's repository. The `1.0` tag and branch `ue5/1.0` point to `ecb0af47fcd991c0ec6f48433df2a09721b2fec8` (2026-11-02), 40 commits after the reviewed `defabe35`; `ue58-dev` was at `a3c6d7f4f017cdce9f344219d17c3cdf4bb69374` (2026-11-04). CMake sets `CARLA_VERSION` to `1.0`. The GitHub releases list ended at 0.9.16. CARLA's download server returned a Linux `CARLA_1.0.tar.gz` of 13,985,818,522 bytes, last modified 2026-11-02 09:36:05 UTC, and 404 for the analogous Windows path.
+
+`LibCarla/source/carla/client` and `rpc` are unchanged from `defabe35`. The Python bindings changed only in `Control.cpp` (gear-ratio lists), OSM2ODR export and documentation, so the calls of the bridge and of `embodied-ui`'s `CarlaEngine` are unaffected. Behavioural changes found in the tag: forced linear steering input (`674a3a70e`, already in `defabe35`), the geolocation north axis (`2466fff9c`), runtime wheel physics control and friction triggers (`538ecebea`), and the version (`8d30115a8`). Of the nine client fixes in validation snapshot `ee5859b4`, the tag has an independent gear-ratio fix; PR 9999 was open and approved, the other seven closed unmerged.
+
+The retained 0.10.0 Nissan Patrol drives used Chaos's squared steering input curve. With the effective road-wheel angle `atan(L * yaw_rate / v)` fitted as `g * sign(s) * |s|**p`, the best exponent was 2.00 (2-4 m/s, 661 samples) and 1.95 in the 4-6, 6-8, 8-10 and 10-14 m/s bands (621, 902, 826 and 146 samples). A linear fit left 33, 139, 313, 49 and 17 times the squared error. The squared gain was 0.90 to 0.97 rad, and the per-sweep linear gain grew in proportion to the sweep amplitude (4-6 m/s: 0.083 rad at amplitude 0.10, 0.441 rad at 0.54). Within 19 single sweeps the median exponent was 1.95 (quartiles 1.95 and 1.95). The [analysis](evidence/carla-1.0-review/steer-input-curve.json) ran on seeds 0-4 of [the sysid archive](evidence/ue55-vehicle-sysid.zip) with the yaw rate one frame after the command:
+
+```powershell
+python -I evidence/carla-1.0-review/steer_input_curve.py evidence/ue55-vehicle-sysid.zip evidence/carla-1.0-review/steer-input-curve.json
+```
+
+`DriveRecorder` now stores the CARLA server version with each recording. The recording test double now increases latitude towards −y, matching 0.10.0 and 1.0. [COMPATIBILITY.md](COMPATIBILITY.md#carla-10) lists the consequences: the 0.10.0 surrogate, steering gains and wheel calibration need re-identification on 1.0, and live validation there remains pending. The bridge suite passed 513 tests with the four live tests skipped (127 s); ruff and mypy passed.
+
+## Actuator correction and independent evaluation on 2026-10-28
+
+The corrected actuator interface reduced mean test normalized trajectory MSE from 0.7686406859 to 0.6987135337 (9.10%). The paired change was −0.0699271523 (95% source bootstrap interval [−0.1654942475, 0.02120664355]). The interval includes zero. The result is `inconclusive_contextual_candidate`. Global defaults remain unchanged.
+
+| Mean source test metric | Legacy actuator interface | Corrected actuator interface |
+| --- | --- | --- |
+| Speed RMSE | 0.88229290 m/s | 0.83071484 m/s |
+| Bumper gap RMSE | 3.41394387 m | 3.59434404 m |
+| Acceleration RMSE | 0.85608742 m/s² | 0.75578731 m/s² |
+
+The experiment compared three fixed configurations on 32 development tracks sampled from the 112 previously inspected tracks. Arm A used legacy actuation and the baseline IDM. Arm B used the vehicle inverse and measured pedal feedback with the same IDM parameters. Arm C combined corrected actuation with the earlier component IDM fit. Development objective values were 1.03503493, 1.00556169, and 1.10160000, respectively. Development selection therefore chose B. The selected configuration was stored before test jobs began.
+
+The independent test used 24 fresh tracks outside all 112 inspected identities. Each track had one complete 20 second window and two common simulation seeds (117 and 118). The test contained 48 matched seed pairs and 96 physical episodes. Development contributed 96 episodes. All 192 episodes completed without collision, road departure, numerical failure, or incomplete coverage. Each worker reused one 114 muscle MyoSuite body. All worker protocols and surrogate vehicles were closed after execution.
+
+The primary score first averages metric RMSE across seeds within each source. It then squares normalized errors across speed, bumper gap, and acceleration. The fixed normalization scales remain 1 m/s, 5 m, and 1 m/s². Sources receive equal weights. The paired source bootstrap uses 5,000 resamples. Complete safe pairs and an upper 95% error change below zero are required for contextual acceptance. An independent audit reproduced all development distances, the selected arm, every episode RMSE, and the test interval.
+
+The engineering reference grid contained nine conditions per interface (18 trials). Initial speeds were 5, 10, and 15 m/s. Acceleration demands were −1, 0, and +1 m/s². Both interfaces were scored at common times after two seconds. Feasible reference acceleration becomes zero after the reference vehicle stops. Mean reference grid tracking RMSE decreased from 0.54323634 to 0.08542668 m/s². This metric was computed from the 18 saved traces after physical execution. The traces remained unchanged. This consistency check uses the same fitted vehicle model for inverse control and simulation.
+
+The comparison design was fixed before its simulation calls. Development selection was written at 16:17:36 UTC. Test workers started at approximately 16:17:37 UTC. Human source revision `e938e90b7d38638fe2c588e5e7f7a6621e41eec2` and bridge source revision `d545099dd1766c0f044cab74810620ff39e0381c` were committed at 16:17:46 UTC. The first completed test result was written at 16:17:47 UTC. The source commits occurred during the transition to testing. Runtime model source hashes remained unchanged throughout execution.
+
+The [fixed design](evidence/actuation-improvement-2026-10-28/design.json) and [study evidence archive](evidence/actuation-improvement-2026-10-28/study-evidence.zip) retain source assignments, configurations, all episodes, selection records, commands, and provenance. The local montage is `artifacts/actuation-improvement-videos/held-out-trials.mp4`. Its two illustrative sources, `ngsim:1136:2` and `ngsim:1193:2`, were chosen by ascending test source identifier. These videos show verified offline replays.
+
+The completed full suites passed 513 bridge tests with four live tests skipped and 561 human tests with 24 optional tests skipped. Ten targeted tracking and video checks also passed. Ruff and mypy passed for both packages. Formatting checks passed for the changed Python files. Wheel and source builds passed. The environment used Python 3.12.13, MuJoCo 3.17.0, NumPy 2.5.4, and SciPy 1.17.1. MyoSuite used development revision `37c8b863fe448f8fff2b29eb62a53a269b79d16f`.
+
+The longitudinal controller receives exact vehicle telemetry in this experiment. The human estimator covers lateral state. Recorded vehicles differ from the fitted Nissan Patrol surrogate. Perception error, vehicle heterogeneity, and broader driving conditions require further evaluation. Live CARLA validation of this correction remains pending.
+
+The configured reflex delay was 0.02 s at a 0.02 s control timestep. The history stores `max(1, round(perception_delay / dt))` observations and appends the current observation before reading its oldest entry. This setting adds zero history lag. The preserved timing is relevant when interpreting human response times.
+
+Hosted CI passed for the final evidence commits. [Bridge CI at `fedb997`](https://github.com/M-Colley/myosuite-carla/actions/runs/40729055945) passed its offline and integration jobs. [Human tests at `db886b3`](https://github.com/M-Colley/embodied-human/actions/runs/40729056025) and the [matched core benchmarks](https://github.com/M-Colley/embodied-human/actions/runs/40729056192) passed. The bridge live job was skipped.
+
+Commands ran from the standalone `myosuite-carla` repository:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../embodied-human/src').Path + [IO.Path]::PathSeparator + (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe examples/check_acceleration_tracking.py --out artifacts/actuation-improvement-2026-10-28/acceleration-tracking.json
+.venv/Scripts/python.exe ../embodied-human/examples/evaluate_actuation_improvement.py --source artifacts/ngsim/ngsim-i80-cars.csv --component-report evidence/empirical-driving-2026-10-28/ngsim.json --development-report evidence/empirical-driving-2026-10-28/ngsim.json --development-report artifacts/closed-loop-calibration-2026-10-28/run/fullreport.json --development-report artifacts/closed-loop-benchmark.json --out artifacts/actuation-improvement-2026-10-28/run --development-sources 32 --test-sources 24 --seed 20261029 --development-seed 17 --test-seeds 117 118 --seconds 20 --desired-speed 16 --bootstrap 5000 --workers 3
+.venv/Scripts/python.exe examples/record_empirical_trials.py --source artifacts/ngsim/ngsim-i80-cars.csv --report artifacts/actuation-improvement-2026-10-28/run/fullreport.json --out artifacts/actuation-improvement-videos --groups ngsim:1136:2 ngsim:1193:2 --base-seed 117
+.venv/Scripts/python.exe -m pytest tests -q
+.venv/Scripts/python.exe -m pytest ../embodied-human/tests -q
+```
+
+
+## Videos of the six test trials on 2026-10-28
+
+All six held out NGSIM trials were replayed with their original baseline and fitted configurations. Each paired clip lasts 20 seconds at 25 fps and measures 1920 by 1080 pixels. The montage lasts 120 seconds. Its local path is `artifacts/empirical-trial-videos/held-out-trials.mp4`. Baseline appears on the left. The rejected fitted candidate appears on the right. Each panel shows the actual MyoSuite body, measured controls, and schematic recorded and simulated trajectories.
+
+All 12 physical replays completed safely. Every replay used the original derived seed, 114 muscle body configuration, source window, desired speed, and controller parameters. The complete 201 sample time, speed, gap, and acceleration arrays and three RMSE values matched the calibration report with maximum absolute difference 0.0. The comparison tolerance was `1e-8`. Each replay executed 1,000 physics steps at 50 Hz and recorded 500 frames. The final physics endpoint remains in trajectory verification. Video sampling covers times 0 to 19.96 seconds.
+
+The [video manifest](evidence/empirical-trial-videos-2026-10-28/manifest.json) retains all seeds, parameters, source identities, numerical errors, cleanup checks, encoder versions, and file hashes. The [encoded media checks](evidence/empirical-trial-videos-2026-10-28/encoded-media-checks.json) confirm 500 decoded frames for each profile and pair and 3,000 frames for the montage. The [contact sheet](evidence/empirical-trial-videos-2026-10-28/all-trials-contact-sheet.png) shows every paired trial at 10 seconds. The [capture archive](evidence/empirical-trial-videos-2026-10-28/capture.zip) preserves the exact recorder and command. Videos remain in the local artifact cache. These clips depict offline replays through the fitted vehicle surrogate.
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../embodied-human/src').Path + [IO.Path]::PathSeparator + (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe examples/record_empirical_trials.py --source artifacts/ngsim/ngsim-i80-cars.csv --report artifacts/closed-loop-calibration-2026-10-28/run/fullreport.json --out artifacts/empirical-trial-videos
+```
+
+The recorder validates original source hashes and the frozen source selection before replay. Verified clips can be resumed. The five frame schedule tests passed. Ruff and formatting checks passed. Production package code and model parameters remain unchanged.
+
+The full bridge suite passed 459 tests and skipped four live tests in 133.46 seconds. Wheel and source builds passed. The source distribution contains the recorder, its tests, the manifest, and capture archive.
+
+## Physical closed loop calibration on 2026-10-28
+
+The first complete calibration executed 141 physical episodes safely. Validation selected candidate 3 with objective 1.12046, compared with baseline 1.23025. The six fresh test sources increased normalized trajectory MSE from 1.03338 to 1.16906. The paired increase was 0.13568 (95% bootstrap interval [−0.02073, 0.30352]). Mean source speed RMSE increased from 0.98997 to 1.03742 m/s. Gap RMSE increased from 4.44644 to 4.95188 m. Acceleration RMSE increased from 0.99246 to 1.00335 m/s². The candidate failed the predeclared acceptance rule. Global defaults remain unchanged.
+
+The [summary](evidence/closed-loop-calibration-2026-10-28/summary.json), [complete report archive](evidence/closed-loop-calibration-2026-10-28/reports.zip), and [test comparison figure](evidence/closed-loop-calibration-2026-10-28/closed-loop-comparison.png) preserve the outcome. The fixed design and source code were published in human revision `cbb05bf` and bridge revision `c09b2cf` before test evaluation. Runtime hashes remained identical throughout the run. An independent calculation reproduced all training and validation distances and the paired test interval. The archive contains every executed episode, including candidates rejected during selection.
+
+`ClosedLoopFollowingProtocol` now evaluates every fitted parameter candidate through the attentive human, MyoSuite muscles, and vehicle surrogate. It reuses one body and caches episodes by complete IDM settings, source window, and exact simulation seed. Source specific seeds remain stable across request ordering and batching. A failed, unsafe, or incomplete episode makes its objective infeasible. The compatibility function `closed_loop_following` retains its previous total trial limit and seed convention.
+
+The companion human calibration fixes a fresh source split before simulation. It excludes the 96 tracks from the previous campaign and the additional runtime measurement track. The new design uses six training, three validation, and six test sources. Every physical episode spans the full 20 second source window. Sixteen Sobol draws fit four IDM parameters. The baseline remains a validation candidate. Speed, bumper gap, and acceleration RMSE use assumed fixed normalization scales of 1 m/s, 5 m, and 1 m/s². Trials are averaged within source before squaring normalized errors. Sources receive equal weights.
+
+Contextual acceptance requires complete safe test pairs and a source paired bootstrap upper 95% error change below zero. The primary objective and rule are fixed before fitting. The test data never select parameters. Global defaults remain separate from contextual profiles. The fitted values describe the combined human controller and Nissan Patrol surrogate under the recorded conditions. Differences between NGSIM vehicles and the surrogate can affect these estimates.
+
+The complete bridge suite passed 454 tests and skipped four live tests in 118.06 seconds. The human suite passed 541 tests and skipped 24 optional tests in 87.13 seconds. Ruff, formatting, and mypy passed for the bridge. Human Ruff and mypy also passed. The physical run uses MyoSuite development revision `37c8b863fe448f8fff2b29eb62a53a269b79d16f`. The implementation preserves lazy optional imports and the public CPU bridge API.
+
+Wheel and source builds passed for both packages. Hosted checks passed for human source revision `cbb05bf` and bridge source revision `c09b2cf`. These include the matched human core benchmark comparison, integrated driving checks, and all Linux and Windows jobs. The opt in live job remained skipped. This fit still requires live CARLA evaluation.
+
+## Empirical driving comparison on 2026-10-28
+
+The embodied human empirical campaign processed five public datasets. DriveDNA Controlled remains pending after HTTP 403 with `GatedRepo`. The owner confirmed the access request is pending. All six sources have adapters and explicit status records. The [campaign summary](evidence/empirical-driving-2026-10-28/summary.json) records coverage, decisions, and evidence hashes. The full dataset reports are retained in embodied human's `evidence/empirical-driving-2026-10-28/reports.zip`.
+
+The new `empirical_following` module compares the existing IDM component against recorded NGSIM states. Source tracks remain grouped across partitions. A seeded selection uses 96 of the 4,346 available tracks before splitting into 58 training, 19 validation, and 19 test sources. Training and validation use 64 parameter draws. Desired speed remains fixed at 16 m/s. Mean trial acceleration RMSE decreases from 2.823 to 1.348 m/s² on the test sources.
+
+The physical check replays six held out leader trajectories through the actual `AttentiveDriver`, a cached MyoSuite body with 114 muscles, and the fitted CARLA 0.10 Nissan Patrol surrogate. Each source has a baseline and fitted replay with the same initial state and seed. All 12 episodes complete their 20 second windows without a collision or road departure. Speed RMSE increases from 0.8803 to 1.0177 m/s. Gap RMSE increases from 3.6497 to 4.5717 m. Acceleration RMSE increases from 0.9158 to 0.9566 m/s². The source paired speed error increase is 0.1374 m/s (95% bootstrap interval [0.0133, 0.2789]). The [complete report](evidence/empirical-driving-2026-10-28/ngsim.json) retains trajectories, configurations, source groups, seeds, and cleanup outcomes.
+
+The candidate is rejected after the closed loop regression. The Lehtonen fixation and RightGaze allocation candidates are also rejected after test regressions. Model defaults remain unchanged. Further calibration needs a closed loop objective and fresh evaluation data. The current held out results have been inspected and cannot support another independent selection claim.
+
+The complete bridge suite passed 434 tests and skipped four live tests in 201.02 seconds. The human suite passed 512 tests and skipped 24 optional tests. Sixteen subsequent campaign tests passed after adding runtime import provenance. Ruff, formatting, mypy, and wheel and source builds passed for the bridge. Python 3.12.13, MuJoCo 3.17.0, NumPy 2.5.4, SciPy 1.17.1, and pandas 3.0.6 were used. Actual MyoSuite imports used development revision `37c8b863fe448f8fff2b29eb62a53a269b79d16f`. Test output and JUnit records are retained beside the summary.
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../embodied-human/src').Path + [IO.Path]::PathSeparator + (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe -m pytest tests -q --junitxml=artifacts/empirical-driving-2026-10-28/bridge-tests.xml
+.venv/Scripts/python.exe ../embodied-human/examples/evaluate_driving_data.py --inputs artifacts/empirical-driving-2026-10-28/inputs.json --out artifacts/empirical-driving-2026-10-28/final --fit --samples 64 --seconds 30 --max-following-groups 96 --closed-loop-trials 6
+.venv/Scripts/python.exe -m ruff check src tests examples benchmarks
+.venv/Scripts/python.exe -m ruff format --check src tests examples benchmarks
+.venv/Scripts/python.exe -m mypy src/myosuite_carla --ignore-missing-imports --follow-imports=skip
+.venv/Scripts/python.exe -m build
+```
+
+These empirical runs use the offline vehicle surrogate. The earlier CARLA 0.10 live results remain separate. A matching UE5.8 server and client remain unavailable.
+
+## Local embodied human video on 2026-10-27
+
+The local `C:/Users/localadmin/Desktop/embodied-human` project drove a live CARLA 0.10.0 vehicle through `AttentiveDriver`. Two independent 12 second episodes used seed 0 and the SuRT visual search task. The recording combines the CARLA chase camera, MuJoCo body, measured controls, gaze state, and task display. The resulting local video is `artifacts/embodied-human-live/embodied-human-carla-0.10.mp4` (26 seconds, 1920 by 1080 pixels, 25 frames per second). Each episode starts with a one second title card.
+
+The [evidence manifest](evidence/embodied-human-0.10-video.json) identifies the actual import paths, source hashes, revisions, versions, runtime build metadata, video checksum, and measured outcomes. The [recording archive](evidence/embodied-human-0.10-recordings.zip) contains both complete frame reports, CSV recordings, source patches, the exact recording script, failure evidence, and cleanup records. The recording script is preserved in commit `f578745452ea0ec24dda7f396280b4c5f5adfcdc`. Subsequent changes handle fractional episode durations, label head angular velocity explicitly in radians per second, and include resolved vehicle footprints directly in the JSON report. A live 2.01 second request completed 101 simulation frames in 2.02 seconds after this correction.
+
+The server and Python client both reported `0.10.0`. The runtime was `C:/Users/localadmin/Desktop/Carla-0.10.0-Win64-Shipping`. Its `VERSION` file identifies CARLA revision `ada75f920642e18cace0a9f85ecf9d4077ddb531`, content revision `a32a1930bc319caba3e0cde845e46e23b9136e81`, and Unreal revision `6cf20383302899026a5e777219ba4206afe47d38`. This runtime uses UE5.5. MyoSuite used development base `230f198458b501c423a0892b78da60419ffc49a3` with the fatigue correction in `37c8b863fe448f8fff2b29eb62a53a269b79d16f`. The human source used base `ff631bf40a8feaee653966cdde6cd032ad3d1495` with the local head sensing correction. Its source patch and hashes are retained in the archive.
+
+Actual commands from the repository root were:
+
+```powershell
+$runtime = 'C:/Users/localadmin/Desktop/Carla-0.10.0-Win64-Shipping'
+Start-Process -FilePath "$runtime/CarlaUnreal.exe" -WorkingDirectory $runtime -ArgumentList '-RenderOffScreen','-nosound','-unattended','-notrace','-quality-level=Epic','-ResX=1280','-ResY=720','-carla-rpc-port=2000' -WindowStyle Hidden
+$env:PYTHONPATH = (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe examples/record_embodied_human.py --human-repo C:/Users/localadmin/Desktop/embodied-human --fast --scenario lane_change --seconds 12 --task surt --seed 0 --spawn 105 --output artifacts/embodied-human-live/lane-change.mp4 --record artifacts/embodied-human-live/lane-change-recording
+.venv/Scripts/python.exe examples/record_embodied_human.py --human-repo C:/Users/localadmin/Desktop/embodied-human --fast --scenario lead_brake --seconds 12 --task surt --seed 0 --spawn 105 --output artifacts/embodied-human-live/lead-brake.mp4 --record artifacts/embodied-human-live/lead-brake-recording
+```
+
+Both episodes completed 600 consecutive simulation frames at 50 Hz. Each camera frame matched the corresponding vehicle frame. Every applied throttle, brake, and steering control matched its command within `1e-5`. The fast body configuration retained 114 muscles and received vehicle loads. CARLA collision sensors recorded zero contacts. The footprint monitor recorded zero collisions and zero violations of the configured road corridor. All actors and captured world settings were restored. A final RPC probe confirmed an empty vehicle and sensor set and asynchronous simulation. The server processes started for this recording were then stopped.
+
+| Measured outcome | Lane change response | Lead braking |
+| --- | --- | --- |
+| Final speed | 8.670 m/s | 0.653 m/s |
+| Final lateral target error | 0.787 m | 0.071 m |
+| Maximum absolute lateral target error | 3.217 m | 0.106 m |
+| Minimum bumper gap | No lead vehicle | 2.659 m |
+| Peak measured brake input | 0.0145 | 0.1691 |
+
+The lane change retained a residual error at episode end. Its lateral position changed from approximately 0 m to minus 2.713 m against a minus 3.5 m target. Its footprint still crossed the assumed adjacent lane boundary at 12 seconds. In the braking episode, the lead began braking at 4 seconds. Ego speed decreased from 7.826 m/s at that event to 0.653 m/s at episode end. The vehicle remained moving. These results warrant a comparison across multiple seeds with and without the secondary task before changing driver parameters.
+
+Road perception used the human project's parametric geometry interface. The chase camera provided the video output. The lead actor followed a scripted trajectory. Gaze came from the attention model, and the MuJoCo head remained posture constrained. Road departure checks used a configured corridor of plus or minus 5.25 m. These results establish seeded integration behavior. Comparison with measured human driving remains required for human validity. UE5.8 live validation remains pending.
+
+The first camera attempt failed after one frame because a `sensor_tick` of 0.02 seconds skipped a capture. A zero interval now requests capture on every simulation tick. The retained failed report records the camera timeout and successful cleanup. A separate two second recording passed 100 aligned frames after the correction. The full bridge regression suite then passed 421 tests with four opt in live tests skipped. Ruff, mypy, and both distribution builds passed. The two video episodes provide the separate live evidence.
+
+## Scientific corrections on 2026-10-27
+
+Version 0.1.1 implements the three scientific corrections identified in the integration review. Vehicle contact uses oriented planar rectangles through Shapely 2.2.0. `VehicleFootprint` records length, width, local centre and local yaw. CARLA actors provide resolved bounding boxes. Events, terminal states and penalties share the geometric collision flag. The lead actor receives its next frame pose before the tick. Front trajectories and resolved projected lengths preserve bumper gaps during following analysis.
+
+`VehicleMotion.acceleration_at` computes reference acceleration, tangential acceleration, centripetal acceleration, Coriolis acceleration and relative point acceleration. Embodied human sensing evaluates this expression at the head centre of mass. The configured seat offset locates the vehicle reference point. Analytic checks cover angular acceleration, constant yaw rate, relative translation, head rotation, head centre of mass offsets and pitched or rolled vehicle frames. The body load model retains its documented omission of Coriolis forces and segment rotational inertia.
+
+Paired evaluations retain original source identities through `FollowingTrial.source_group`, scenario replay, resampling, windows and NPZ schema 2. Older archives remain readable. Shared grouping keeps each original source together across human and simulated populations. Evaluation reports retain source identities, fold assignments, classifier seeds and bootstrap settings. Paired intervals resample source means. Invalid alignment and insufficient independent sources raise errors.
+
+The final bridge suite reports **421 passed and 4 live tests skipped** ([output](evidence/scientific-2026-10-27-bridge.txt), [JUnit](evidence/scientific-2026-10-27-bridge.xml)). The minimum MuJoCo 3.6 suite reports **69 passed** ([output](evidence/scientific-2026-10-27-minimum.txt)). The isolated embodied human suite reports **452 passed and 24 optional tests skipped** ([output](evidence/scientific-2026-10-27-human.txt), [JUnit](evidence/scientific-2026-10-27-human.xml)). Ruff, formatting, mypy, the Python 3.10 mypy target and both package builds pass. The [environment record](evidence/scientific-2026-10-27-environment.json) includes source hashes and versions. The environment uses the MyoSuite `dev` revision and fatigue fix recorded below. Embodied human includes current `main` revision `ff631bf40a8feaee653966cdde6cd032ad3d1495`.
+
+Lead relevance uses lateral footprint extents and forward ordering in lane coordinates. The 100 seed default sampler check retains every same lane lead around curves. World polygons determine contact. This separation preserves both curved road following and adjacent lane passing.
+
+Hosted CI for the earlier bridge revision exposed platform differences in MuJoCo enum comparisons and NumPy typing. Recording now converts joint and actuator enums to builtin integers. A regression preserves both expected coordinates and muscle arrays under int convertible enum objects. Percentile spread uses indexed array elements. The Python 3.10 type target passes.
+
+The next hosted run passed Windows Python 3.13, Linux Python 3.14 and the combined embodied human job. Its Python 3.10 job exposed a scikit-learn 1.7.2 partition with one population missing from a test fold. Independent comparisons now stratify unique source groups with `StratifiedKFold`. Shared paired comparisons use `StratifiedGroupKFold`. The original failure reproduces with scikit-learn 1.7.2, and 15 corrected comparison and archive tests pass ([probe](evidence/scientific-2026-10-27-sklearn-1.7.2.txt), [tests](evidence/scientific-2026-10-27-sklearn-1.7.2-tests.txt)).
+
+The hosted run for `c74152f` passes every runtime test job. Its Python 3.10 type check exposes a NumPy 2.2.6 annotation that infers a scalar percentile result. The percentile result now passes through `np.asarray` before indexing. An isolated CPython 3.10.20 environment with NumPy 2.2.6 and mypy 2.4.0 reproduces the earlier error and passes all 23 source files after the correction ([before](evidence/numpy-2.2-typing-before.txt), [after](evidence/numpy-2.2-typing-after.txt)). The 15 focused tests pass, and every feature remains identical across ten seeded signal cases ([tests](evidence/numpy-2.2-typing-tests.txt), [numerical comparison](evidence/numpy-2.2-typing-numeric-parity.txt)). Ruff, formatting and both distribution builds pass.
+
+```powershell
+artifacts/typing-numpy226-review/venv/Scripts/python.exe -m mypy src/myosuite_carla --python-version 3.10 --ignore-missing-imports --follow-imports=skip --cache-dir artifacts/typing-numpy226-review/mypy-cache
+```
+
+The final commands were run from this repository, with the human suite run from its isolated sibling worktree:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe -m pytest tests -q --junitxml=test-results/scientific-improvements-suite.xml
+.venv-min/Scripts/python.exe -m pytest tests/test_scenario.py tests/test_carla_scenario.py tests/test_driving_env.py tests/test_vehicle_loads.py -q
+.venv/Scripts/python.exe -m ruff check src tests examples
+.venv/Scripts/python.exe -m ruff format --check src tests examples
+.venv/Scripts/python.exe -m mypy src/myosuite_carla --ignore-missing-imports --follow-imports=skip --python-version 3.10
+.venv/Scripts/python.exe -m build
+```
+
+UE5.8 live validation failed before any scenario ran. The local command returned connection refused at `127.0.0.1:2000` ([attempt](evidence/scientific-2026-10-27-ue58-attempt.json)). The [preflight](evidence/scientific-2026-10-27-ue58-preflight.json) records no listener and missing CARLA project binaries. The prepared engine is 5.8.0 at `0703595a`, and the CARLA source is `ee5859b4`. The installed client is the earlier 0.10.0 wheel. A matching UE5.8 server and client remain required. The [acquisition record](evidence/scientific-2026-10-27-runtime-acquisition.json) retains the official release and workflow checks.
+
+```powershell
+.venv/Scripts/python.exe examples/validate_carla.py --host 127.0.0.1 --port 2000 --timeout 5 --target-ref ue58-dev --build-ref unavailable --output artifacts/scientific-ue58-live-attempt.json
+```
+
+## Integration review on 2026-10-27
+
+The review used Windows, CPython 3.12.13, MuJoCo 3.17.0, NumPy 2.5.4, myo-sim 0.2.3 and Stable-Baselines3 2.9.0. MyoSuite was loaded from current `dev` commit `230f198458b501c423a0892b78da60419ffc49a3` with the fatigue reset fix in commit `37c8b863fe448f8fff2b29eb62a53a269b79d16f` ([upstream PR 575](https://github.com/MyoHub/myosuite/pull/575)). The sibling revisions were embodied-human `9d38317ec9f0e07c5a393212ab5d8fae210f5ac8` and embodied-ui `605862bd551401bfce91afb4afcf280b2bef98fd`.
+
+The final bridge suite reports **372 passed and 4 live tests skipped** ([output](evidence/review-2026-10-27-bridge.txt), [JUnit](evidence/review-2026-10-27-bridge.xml)). The embodied human driving suite reports **5 passed** ([output](evidence/review-2026-10-27-human.txt), [JUnit](evidence/review-2026-10-27-human.xml)). Ruff, formatting, mypy and both distribution builds pass. The [environment record](evidence/review-2026-10-27-summary.json) includes dependency versions, source hashes and sibling revisions. CI now runs the bridge with the optional interface and training dependencies alongside these pinned embodied human and embodied UI revisions.
+
+The fixes refresh derived MuJoCo state after each driver period, preserve button hold duration across repeated reads, reject malformed actions and invalid task distances, reset vehicle adapters, align lead placement with reported gap, support custom surrogate knots and TD3 cloning, preserve the requested style window and use the actual reflex evaluation baseline. Both live examples now release resources after setup failures. Lane sampling rejects traversal distances that would prevent progress.
+
+The upstream fatigue regression mutated caller supplied arrays during stepping. It also failed on readonly arrays and changed repeated seeded episodes. All three regression cases pass after copying the reset vector. MyoSuite's focused fatigue, wrapper, reset and noise suites report 270 passed, 10 skipped and 6 expected failures. All applicable precommit hooks pass. Its required model builder, CPU terms, fragment, parity and registry suite reports 312 passed, 2 skipped, 4 expected failures and 4 identical parity failures before and after the fix. The existing failures are `myoChallengeBaodingP2-v1`, `myoChallengeRelocateP1-v0`, `myoHandReorient8-v0` and `myoLegRoughTerrainWalk-v0`.
+
+The local commands use a separate MyoSuite worktree. Its source takes precedence over the existing editable installation:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path '../myosuite-dev-review').Path
+.venv/Scripts/python.exe -m pytest tests -q --junitxml=test-results/review-dev-suite.xml
+.venv/Scripts/python.exe -m pytest ../embodied-human/tests/test_driving.py -q --junitxml=test-results/review-embodied-human.xml
+.venv/Scripts/python.exe -m ruff check src tests examples
+.venv/Scripts/python.exe -m ruff format --check src tests examples
+.venv/Scripts/python.exe -m mypy src/myosuite_carla --ignore-missing-imports --follow-imports=skip
+.venv/Scripts/python.exe -m build
+```
+
+Five focused tests pass with the minimum MuJoCo 3.6.0. They cover derived state consistency in both driver presets, pedal isolation and steering in both directions. No live CARLA server was started for this review. The four live tests remain disabled. UE5.8 runtime validation remains pending.
+
+The subsequent scientific corrections address vehicle footprints, rotational head acceleration and shared source grouping. Their implementation and validation are recorded above.
+
+## Earlier validation
+
 Validated locally on Windows on 2026-10-23, with the researcher features below
 validated on 2026-10-24. The CARLA source
 contract is `ue58-dev` commit `defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5`;
@@ -9,7 +414,7 @@ This record accompanies Mark Colley's standalone `myosuite-carla` repository.
 The initial offline results below were obtained before extraction from the
 MyoSuite worktree; the commands use the equivalent standalone root layout.
 
-**Current result: 312 passed, no skips, 94% statement coverage** against an
+**Recorded live result: 312 passed, no skips, 94% statement coverage** against an
 actual CARLA **0.10.0 / Unreal Engine 5.5** server (CPython 3.12.13, NumPy
 2.5.4, MuJoCo 3.17.0); see
 [researcher features](#researcher-features-loads-recording-surrogate-task-and-conditions).

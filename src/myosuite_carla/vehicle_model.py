@@ -13,16 +13,24 @@ signed forward speed ``u`` and yaw rate ``r`` (positive turns right)::
 
     du/dt = D(T, |u|) - c0 sgn(u) - c1 u - c2 u |u|
             - (kb brake + kh hand_brake) sgn(u) - g sin(pitch)
-    r     = u tan(G(|u|) S) / L
+    r     = u tan(G(|u|) sgn(S) |S|^p) / L
 
-``T`` and ``S`` are throttle and steer after first-order lags. ``D`` is a
+``T`` and ``S`` are throttle and steer after first-order lags; before its lag
+the steer command passes Chaos's input rate limit, whose magnitude may grow
+at most ``steer_rise_rate`` and shrink at most ``steer_fall_rate`` per
+second (UE 5 defaults 2.5 and 5.0; zero leaves a direction unlimited). The
+steer time constant is ``steer_lag + steer_lag_slope |u|``; the slope stands
+in for yaw dynamics that slow down with speed. ``D`` is a
 non-negative drive-acceleration table over throttle and speed (negated in
 reverse), which absorbs the engine torque curve and automatic gearbox, and
 ``G`` an effective road-wheel angle table over speed, which absorbs the
-steering curve and tyre slip. Tables are interpolated linearly and held
-constant beyond their last knot. Braking never reverses the car. Load
-transfer, individual gear shifts, suspension and lateral slip dynamics are not
-modelled; the held-out errors in ``VALIDATION.md`` bound what that costs.
+speed-dependent steering curve and tyre slip. ``p`` is the shape of the
+steering input curve: CARLA 1.0 forces Chaos's linear curve (``p = 1``), while
+CARLA 0.10.0 used Chaos's default squared curve (``p = 2``). Tables are
+interpolated linearly and held constant beyond their last knot. Braking never
+reverses the car. Load transfer, individual gear shifts, suspension and lateral
+slip dynamics are not modelled; the held-out errors in ``VALIDATION.md`` bound
+what that costs.
 """
 
 from __future__ import annotations
@@ -30,7 +38,7 @@ from __future__ import annotations
 import importlib
 import math
 from collections.abc import Callable, Iterable, Mapping, Sequence
-from dataclasses import dataclass, fields
+from dataclasses import dataclass, fields, replace
 from typing import Any
 
 import numpy as np
@@ -66,13 +74,20 @@ class VehicleModelParams:
             column per speed knot, m/s^2.
         reverse_drive: Reverse drive acceleration per throttle knot, m/s^2.
         steer_gain: Effective road-wheel angle at full steer per speed knot, rad.
+        steer_exponent: Exponent p of the steering input curve, in [0.5, 3].
+        steer_rise_rate: Largest growth of the steer command's magnitude, 1/s;
+            0 does not limit it.
+        steer_fall_rate: Largest shrinkage of the steer command's magnitude,
+            1/s; 0 does not limit it.
         rolling: Rolling resistance c0, m/s^2.
         linear_drag: Linear resistance c1, 1/s.
         quadratic_drag: Aerodynamic resistance c2, 1/m.
         brake_decel: Deceleration kb at full brake, m/s^2.
         hand_brake_decel: Deceleration kh with the hand brake, m/s^2.
         throttle_lag: Throttle time constant, s.
-        steer_lag: Steer time constant, s.
+        steer_lag: Steer time constant at standstill, s.
+        steer_lag_slope: Growth of the steer time constant with speed,
+            s per m/s.
     """
 
     wheelbase: float = 3.075
@@ -83,6 +98,9 @@ class VehicleModelParams:
     )
     reverse_drive: tuple[float, ...] = tuple(2.0 * value for value in THROTTLE_KNOTS)
     steer_gain: tuple[float, ...] = (0.5,) * len(SPEED_KNOTS)
+    steer_exponent: float = 1.0
+    steer_rise_rate: float = 0.0
+    steer_fall_rate: float = 0.0
     rolling: float = 0.15
     linear_drag: float = 0.0
     quadratic_drag: float = 0.002
@@ -90,6 +108,7 @@ class VehicleModelParams:
     hand_brake_decel: float = 4.0
     throttle_lag: float = 0.2
     steer_lag: float = 0.1
+    steer_lag_slope: float = 0.0
 
     def __post_init__(self) -> None:
         for item in fields(self):
@@ -118,6 +137,8 @@ class VehicleModelParams:
         gains = np.asarray(self.steer_gain)
         if gains.shape != speeds.shape or np.any(gains <= 0) or np.any(gains >= 1.45):
             raise ValueError("steer_gain needs one angle in (0, 1.45) per speed knot")
+        if not 0.5 <= self.steer_exponent <= 3.0:
+            raise ValueError("steer_exponent must be within [0.5, 3]")
         if self.wheelbase <= 0:
             raise ValueError("wheelbase must be positive")
 
@@ -133,6 +154,11 @@ class VehicleModelParams:
         """Return the effective road-wheel angle at full steer for a speed."""
         return np.interp(np.abs(speed), self.speed_knots, self.steer_gain)
 
+    def steer_input(self, steer: Any) -> Any:
+        """Return the steering input curve sgn(S) |S|^p of a lagged steer."""
+        steer = np.asarray(steer, dtype=float)
+        return np.sign(steer) * np.abs(steer) ** self.steer_exponent
+
     def as_dict(self) -> dict[str, Any]:
         """Return the parameters as JSON-ready floats and lists."""
         return {
@@ -147,12 +173,57 @@ class VehicleModelParams:
     @classmethod
     def from_dict(cls, values: Mapping[str, Any]) -> VehicleModelParams:
         """Build parameters from :meth:`as_dict` output."""
+        # Parameters saved before the steering exponent, rate limit and lag
+        # slope existed are linear, unlimited and speed-independent.
+        values = {
+            "steer_exponent": 1.0,
+            "steer_rise_rate": 0.0,
+            "steer_fall_rate": 0.0,
+            "steer_lag_slope": 0.0,
+            **values,
+        }
         return cls(**{item.name: values[item.name] for item in fields(cls)})
+
+
+def _limit_step(
+    current: float, target: float, rise: float, fall: float, dt: float
+) -> float:
+    """One frame of Chaos's input rate limit (``InterpInputValue``)."""
+    delta = target - current
+    # Rising: the change grows the magnitude or leaves zero.
+    rising = (delta > 0) == (current > 0) or (delta != 0 and current == 0)
+    rate = rise if rising else fall
+    if rate <= 0 or abs(delta) <= rate * dt:
+        # Return the target itself so an inactive limit adds no round-off.
+        return target
+    value = current + math.copysign(rate * dt, delta)
+    # Round-off at a sign change would pick the rate of the next frame
+    # arbitrarily; land on zero as exact arithmetic does.
+    return 0.0 if abs(value) < 1e-9 else value
+
+
+def _rate_limit(
+    values: NDArray[np.float64], rise: float, fall: float, dt: float
+) -> NDArray[np.float64]:
+    """Rate-limited held input sequence, steady at its first value."""
+    out: NDArray[np.float64] = np.asarray(values, dtype=float).copy()
+    if rise <= 0 and fall <= 0:
+        return out
+    state = float(out[0]) if len(out) else 0.0
+    for index, value in enumerate(out):
+        state = _limit_step(state, float(value), rise, fall, dt)
+        out[index] = state
+    return out
+
+
+def _alpha(tau: float, dt: float) -> float:
+    """Per-frame gain of a first-order lag with time constant ``tau``."""
+    return 1.0 if tau <= 0 else 1.0 - math.exp(-dt / tau)
 
 
 def _lag(values: NDArray[np.float64], tau: float, dt: float) -> NDArray[np.float64]:
     """First-order lag of a held input sequence, steady at its first value."""
-    alpha = 1.0 if tau <= 0 else 1.0 - math.exp(-dt / tau)
+    alpha = _alpha(tau, dt)
     out: NDArray[np.float64] = np.empty(len(values), dtype=float)
     state = float(values[0]) if len(values) else 0.0
     for index, value in enumerate(values):
@@ -161,8 +232,32 @@ def _lag(values: NDArray[np.float64], tau: float, dt: float) -> NDArray[np.float
     return out
 
 
+def _steer_lag(
+    values: NDArray[np.float64],
+    params: VehicleModelParams,
+    lag: float,
+    speeds: NDArray[np.float64],
+    dt: float,
+) -> NDArray[np.float64]:
+    """Steer lag with time constant ``lag + steer_lag_slope |u|``.
+
+    ``speeds`` holds the speed before each frame; it is unused without a slope.
+    """
+    if params.steer_lag_slope <= 0:
+        return _lag(values, lag, dt)
+    out: NDArray[np.float64] = np.empty(len(values), dtype=float)
+    state = float(values[0]) if len(values) else 0.0
+    for index, value in enumerate(values):
+        tau = lag + params.steer_lag_slope * abs(float(speeds[index]))
+        state += _alpha(tau, dt) * (float(value) - state)
+        out[index] = state
+    return out
+
+
 def _yaw_rate(params: VehicleModelParams, speed: Any, steer: Any) -> Any:
-    angle = np.clip(params.road_wheel_angle(speed) * np.asarray(steer), -1.4, 1.4)
+    angle = np.clip(
+        params.road_wheel_angle(speed) * params.steer_input(steer), -1.4, 1.4
+    )
     return np.asarray(speed) * np.tan(angle) / params.wheelbase
 
 
@@ -243,7 +338,7 @@ class SurrogateVehicle:
         self._position = [x, y, z]
         self._yaw = math.radians(float(yaw))
         self._speed = float(speed)
-        self._throttle = self._steer = self._rate = 0.0
+        self._throttle = self._steer = self._input = self._rate = 0.0
         self._accel = self._lateral = 0.0
         self._frame = 0
         self._elapsed = 0.0
@@ -268,11 +363,19 @@ class SurrogateVehicle:
         if not isinstance(command, VehicleCommand):
             raise TypeError("command must be a VehicleCommand")
         params, dt = self.params, self.config.fixed_delta_seconds
+        self._input = _limit_step(
+            self._input,
+            command.steer,
+            params.steer_rise_rate,
+            params.steer_fall_rate,
+            dt,
+        )
+        steer_lag = params.steer_lag + params.steer_lag_slope * abs(self._speed)
         for name, target, tau in (
             ("_throttle", command.throttle, params.throttle_lag),
-            ("_steer", command.steer, params.steer_lag),
+            ("_steer", self._input, steer_lag),
         ):
-            alpha = 1.0 if tau <= 0 else 1.0 - math.exp(-dt / tau)
+            alpha = _alpha(tau, dt)
             value = getattr(self, name)
             setattr(self, name, value + alpha * (target - value))
         drive, opposing = _acceleration(
@@ -440,9 +543,17 @@ def segments_from_recording(
 
 
 def simulate(
-    params: VehicleModelParams, segment: DriveSegment, *, use_pitch: bool = True
+    params: VehicleModelParams,
+    segment: DriveSegment,
+    *,
+    use_pitch: bool = True,
+    measured_speed: bool = False,
 ) -> dict[str, NDArray[np.float64]]:
-    """Open-loop rollout from a segment's initial state with its commands."""
+    """Open-loop rollout from a segment's initial state with its commands.
+
+    With ``measured_speed`` the logged speed replaces the modelled one, as in
+    the lateral fit, so yaw and position errors isolate the steering model.
+    """
     dt = segment.dt
     count = len(segment.throttle) + 1
     out = {key: np.empty(count) for key in ("x", "y", "yaw_deg", "speed", "yaw_rate")}
@@ -450,10 +561,16 @@ def simulate(
     yaw = math.radians(float(segment.yaw_deg[0]))
     speed, rate = float(segment.speed[0]), float(segment.yaw_rate[0])
     throttle = _lag(segment.throttle, params.throttle_lag, dt)
-    steer = _lag(segment.steer, params.steer_lag, dt)
+    limited = _rate_limit(
+        segment.steer, params.steer_rise_rate, params.steer_fall_rate, dt
+    )
+    steer = float(limited[0]) if len(limited) else 0.0
     out["x"][0], out["y"][0], out["yaw_deg"][0] = x, y, math.degrees(yaw)
     out["speed"][0], out["yaw_rate"][0] = speed, rate
     for index in range(count - 1):
+        # The steer lag runs on the speed before the frame, as in step().
+        tau = params.steer_lag + params.steer_lag_slope * abs(speed)
+        steer += _alpha(tau, dt) * (float(limited[index]) - steer)
         pitch = float(segment.pitch_deg[index]) if use_pitch else 0.0
         drive, opposing = _acceleration(
             params,
@@ -465,7 +582,9 @@ def simulate(
             pitch,
         )
         new = _advance_speed(speed, drive, opposing, dt)
-        rate = float(_yaw_rate(params, new, steer[index]))
+        if measured_speed:
+            new = float(segment.speed[index + 1])
+        rate = float(_yaw_rate(params, new, steer))
         heading = yaw + 0.5 * rate * dt
         x += 0.5 * (speed + new) * math.cos(heading) * dt
         y += 0.5 * (speed + new) * math.sin(heading) * dt
@@ -537,14 +656,19 @@ def fit_vehicle_model(
     throttle_lags: Sequence[float] = tuple(np.linspace(0.0, 0.6, 25)),
     smoothing: float = 1.0,
     min_speed: float = 0.1,
+    steer_exponent: float | None = None,
+    steer_rise_rate: float = 0.0,
+    steer_fall_rate: float = 0.0,
+    steer_lag_slope: float = 0.0,
 ) -> tuple[VehicleModelParams, dict[str, Any]]:
     """Identify surrogate parameters from logged CARLA drives.
 
     The longitudinal terms are non-negative least squares on measured speed
     changes, with second-difference smoothing of the drive table across speed
     and throttle, for every candidate throttle lag; the lag with the smallest
-    data residual wins. The steering table and lag are bounded nonlinear least
-    squares on measured yaw rate above 0.5 m/s, also smoothed. Requires SciPy.
+    data residual wins. The steering table, lag and exponent are bounded
+    nonlinear least squares on measured yaw rate above 0.5 m/s, the table also
+    smoothed. Requires SciPy.
 
     Args:
         segments: Logged drives, e.g. from :func:`segments_from_recording`.
@@ -553,6 +677,13 @@ def fit_vehicle_model(
         throttle_lags: Candidate throttle time constants in seconds.
         smoothing: Weight of the table smoothness penalties.
         min_speed: Longitudinal samples need this speed before and after, m/s.
+        steer_exponent: Fixed steering input exponent, or None to identify it
+            within [0.5, 3]. The data separate it from the gain table only if
+            steering at each speed spans several amplitudes.
+        steer_rise_rate, steer_fall_rate: Fixed steering input rate limit
+            (UE 5 defaults 2.5 and 5.0 per second); 0 does not limit.
+        steer_lag_slope: Fixed growth of the steer time constant with the
+            measured speed, s per m/s; the lag at standstill is identified.
 
     Returns:
         Parameters and a fit report with residual RMS values and sample counts.
@@ -605,28 +736,39 @@ def fit_vehicle_model(
     rolling, linear, quadratic, brake, hand = coefficients[cells + count_t :]
 
     lateral_penalty = _second_differences(count_u)
+    identify_exponent = steer_exponent is None
+    limited = [
+        _rate_limit(segment.steer, steer_rise_rate, steer_fall_rate, segment.dt)
+        for segment in segments
+    ]
 
     def lateral_residual(theta: NDArray[np.float64]) -> NDArray[np.float64]:
-        gains, lag = theta[:-1], theta[-1]
-        trial = VehicleModelParams(
-            wheelbase=wheelbase, speed_knots=knots.speed_knots, steer_gain=gains
+        gains, lag = theta[:count_u], theta[count_u]
+        exponent = theta[-1] if steer_exponent is None else steer_exponent
+        trial = replace(
+            knots,
+            wheelbase=wheelbase,
+            steer_gain=gains,
+            steer_exponent=exponent,
+            steer_lag_slope=steer_lag_slope,
         )
         parts = []
-        for segment in segments:
+        for segment, commands in zip(segments, limited):
             speed = segment.speed[1:]
-            steer = _lag(segment.steer, lag, segment.dt)
+            steer = _steer_lag(commands, trial, lag, segment.speed[:-1], segment.dt)
             mask = np.abs(speed) > 0.5
             parts.append((_yaw_rate(trial, speed, steer) - segment.yaw_rate[1:])[mask])
         data = np.concatenate(parts)
         scale = smoothing * math.sqrt(len(data) / count_u) * 0.05
         return np.concatenate([data, scale * (lateral_penalty @ gains)])
 
-    lateral = optimize.least_squares(
-        lateral_residual,
-        x0=np.r_[np.full(count_u, 0.3), 0.1],
-        bounds=(np.r_[np.full(count_u, 0.005), 0.0], np.r_[np.full(count_u, 1.4), 1.0]),
-    )
-    gains, steer_lag = lateral.x[:-1].copy(), float(lateral.x[-1])
+    start = np.r_[np.full(count_u, 0.3), 0.1]
+    low, high = np.r_[np.full(count_u, 0.005), 0.0], np.r_[np.full(count_u, 1.4), 1.0]
+    if identify_exponent:
+        start, low, high = np.r_[start, 1.0], np.r_[low, 0.5], np.r_[high, 3.0]
+    lateral = optimize.least_squares(lateral_residual, x0=start, bounds=(low, high))
+    gains, steer_lag = lateral.x[:count_u].copy(), float(lateral.x[count_u])
+    exponent = float(lateral.x[-1]) if steer_exponent is None else float(steer_exponent)
     # Knots without steering data hold the nearest identified gain rather than
     # extrapolating the smoothing trend, which can drive gains to zero.
     speeds = np.concatenate([np.abs(segment.speed[1:]) for segment in segments])
@@ -645,6 +787,9 @@ def fit_vehicle_model(
         drive=drive,
         reverse_drive=reverse,
         steer_gain=gains,
+        steer_exponent=exponent,
+        steer_rise_rate=steer_rise_rate,
+        steer_fall_rate=steer_fall_rate,
         rolling=rolling,
         linear_drag=linear,
         quadratic_drag=quadratic,
@@ -652,11 +797,13 @@ def fit_vehicle_model(
         hand_brake_decel=hand,
         throttle_lag=throttle_lag,
         steer_lag=steer_lag,
+        steer_lag_slope=steer_lag_slope,
     )
     data_rows = len(lateral.fun) - len(lateral_penalty)
     throttles = np.concatenate([segment.throttle for segment in segments])
     reversing = np.concatenate([segment.reverse > 0.5 for segment in segments])
     report = {
+        "steer_exponent_identified": identify_exponent,
         "steer_knots_identified": [bool(value) for value in identified],
         "envelope": {
             "max_speed_mps": float(speeds.max()),
@@ -688,6 +835,7 @@ def evaluate_vehicle_model(
     *,
     horizons: Sequence[float] = (1.0, 3.0),
     group: Callable[[str], str] | None = None,
+    measured_speed: bool = False,
 ) -> dict[str, Any]:
     """Open-loop errors of the surrogate on logged drives.
 
@@ -700,13 +848,15 @@ def evaluate_vehicle_model(
         segments: Logged drives not used for fitting.
         horizons: Seconds after each segment start for position errors.
         group: Maps a segment name to a group for per-group summaries.
+        measured_speed: Roll out with the logged speed (see :func:`simulate`)
+            to isolate the steering model.
 
     Returns:
         Per-segment metrics and duration-weighted means, overall and by group.
     """
     rows = []
     for segment in segments:
-        rollout = simulate(params, segment)
+        rollout = simulate(params, segment, measured_speed=measured_speed)
         time = np.arange(len(segment.x)) * segment.dt
         speed_error = rollout["speed"] - segment.speed
         rate_error = np.degrees(rollout["yaw_rate"] - segment.yaw_rate)
@@ -774,11 +924,16 @@ def evaluate_vehicle_model(
     return result
 
 
-#: CARLA 0.10.0 (UE5.5) ``vehicle.nissan.patrol`` on Town10HD_Opt, fitted by
-#: ``examples/fit_vehicle_model.py`` to seeds 0 and 3 of
-#: ``evidence/ue55-vehicle-sysid.zip``. Held-out errors are in
-#: ``evidence/ue55-vehicle-surrogate.json`` and VALIDATION.md; steering is
-#: identified from about 2.4 to 13.6 m/s and reverse up to throttle 0.53.
+#: CARLA 0.10.0 (UE5.5) ``vehicle.nissan.patrol`` on Town10HD_Opt. The tables
+#: and steering exponent were fitted by ``examples/fit_vehicle_model.py`` to
+#: seeds 0 and 3 of ``evidence/ue55-vehicle-sysid.zip`` (held-out errors in
+#: ``evidence/ue55-vehicle-surrogate-exponent.json``). The steering rate limit
+#: is Chaos's default; the speed-dependent steer lag was fitted with it on 271
+#: steering segments and passed a test on fresh drives
+#: (``evidence/steer-lag-speed-2026-11-04``, VALIDATION.md, 2026-11-04). The
+#: steering gains are identified from about 2.4 to 13.6 m/s and confirmed to
+#: three-quarter lock at 0.8-3 m/s; reverse up to throttle 0.53. CARLA 1.0
+#: steers linearly and needs its own fit.
 _PATROL: dict[str, Any] = {
     "wheelbase": 3.075,
     "speed_knots": [0, 1, 2.5, 4, 6, 8, 11, 15, 20],
@@ -821,23 +976,27 @@ _PATROL: dict[str, Any] = {
     ],
     "reverse_drive": [0.14466, 0.98024, 1.8164, 2.65256],
     "steer_gain": [
-        0.489392,
-        0.489392,
-        0.386428,
-        0.282451,
-        0.261281,
-        0.31202,
-        0.205496,
-        0.101791,
-        0.101791,
+        0.978456,
+        0.978456,
+        0.959446,
+        0.940788,
+        0.92297,
+        0.904144,
+        0.881377,
+        0.855695,
+        0.855695,
     ],
+    "steer_exponent": 1.97384,
+    "steer_rise_rate": 2.5,
+    "steer_fall_rate": 5.0,
     "rolling": 0.287323,
     "linear_drag": 0,
     "quadratic_drag": 0.00660362,
     "brake_decel": 6.36968,
     "hand_brake_decel": 4.92694,
     "throttle_lag": 0.075,
-    "steer_lag": 0.037593,
+    "steer_lag": 0.024,
+    "steer_lag_slope": 0.0016,
 }
 
 

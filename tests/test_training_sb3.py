@@ -11,7 +11,7 @@ import pytest
 pytest.importorskip("stable_baselines3")
 pytest.importorskip("sklearn")
 
-from stable_baselines3 import PPO, SAC  # noqa: E402
+from stable_baselines3 import PPO, SAC, TD3  # noqa: E402
 from stable_baselines3.common.logger import configure  # noqa: E402
 
 from myosuite_carla.human_comparison import FOLLOWING_FEATURES  # noqa: E402
@@ -79,7 +79,7 @@ def test_style_reward_is_paid_once_the_discriminator_is_fit() -> None:
     assert callback.discriminator.fitted and len(callback.bank) == 20
 
 
-@pytest.mark.parametrize("algorithm", [PPO, SAC])
+@pytest.mark.parametrize("algorithm", [PPO, SAC, TD3])
 def test_behaviour_cloning_fits_an_expert(algorithm: Any) -> None:
     model = algorithm("MlpPolicy", "Pendulum-v1", seed=0)
     rng = np.random.default_rng(0)
@@ -94,8 +94,9 @@ def test_behaviour_cloning_fits_an_expert(algorithm: Any) -> None:
 def test_expert_collection_on_the_full_body_environment() -> None:
     pytest.importorskip("myosuite.core.model_builder")
     pytest.importorskip("myo_sim")
-    venv = make_vec_env(1, seed=0, mode="direct", vehicle_spread=0.0)
+    venv = make_vec_env(1, seed=0, mode="direct", vehicle_spread=0.0, style_window=3.0)
     try:
+        assert venv.get_attr("style_window") == [3.0]
         observations, labels = collect_expert(venv, 30)
         assert observations.shape == (30, venv.observation_space.shape[0])
         assert labels.shape == (30, 3) and np.all(np.abs(labels) <= 1.0)

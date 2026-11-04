@@ -190,19 +190,20 @@ def main() -> int:
             )
             if vehicle is None:
                 raise RuntimeError("Could not spawn the ego vehicle")
+            cleanup.append(vehicle.destroy)
             contacts: list[dict[str, Any]] = []
             sensor = world.spawn_actor(
                 world.get_blueprint_library().find("sensor.other.collision"),
                 carla.Transform(),
                 attach_to=vehicle,
             )
+            cleanup.append(sensor.destroy)
+            cleanup.append(sensor.stop)
             sensor.listen(
                 lambda event: contacts.append(
                     {"frame": int(event.frame), "other": event.other_actor.type_id}
                 )
             )
-            cleanup.append(sensor.stop)
-            cleanup.append(sensor.destroy)
             session = CarlaSession(
                 client,
                 vehicle,
@@ -210,13 +211,13 @@ def main() -> int:
                     fixed_delta_seconds=config.control_dt, timeout_seconds=args.timeout
                 ),
                 api=carla,
-                own_vehicle=True,
+                own_vehicle=False,
             )
             cleanup.append(session.close)
             session.start()
             monitor = ScenarioMonitor(scenario)
             lead = CarlaLeadVehicle(monitor, world, api=carla)
-            cleanup.insert(0, lead.destroy)
+            cleanup.append(lead.destroy)
             env = FullBodyDrivingEnv(
                 scenario,
                 driver=driver,
@@ -263,7 +264,7 @@ def main() -> int:
         report["error"] = {"type": type(error).__name__, "message": str(error)}
         raise
     finally:
-        for close in cleanup:
+        for close in reversed(cleanup):
             try:
                 close()
             except Exception as error:  # pragma: no cover - evidence only

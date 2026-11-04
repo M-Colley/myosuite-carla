@@ -139,6 +139,16 @@ class EngineVehicleSession:
             raise RuntimeError("Start the session before reading feedback")
         return self._telemetry
 
+    def reset(
+        self, seed: int | None = None, options: Mapping[str, Any] | None = None
+    ) -> VehicleTelemetry:
+        """Reset the engine episode and recover a failed session."""
+        self._failed = True
+        state = self.engine.reset(seed=seed, options=options)
+        self._telemetry = self._convert(state)
+        self._failed = False
+        return self._telemetry
+
     def step(self, command: VehicleCommand) -> VehicleTelemetry:
         """Apply one command, advance one period and return the telemetry."""
         from embodied_ui.engine import Command
@@ -228,25 +238,54 @@ class VehicleSessionEngine:
 
     Args:
         session: A :class:`CarlaSession` or :class:`SurrogateVehicle`.
+        reset_vehicle: Reset a live vehicle with ``(session, seed, options)``.
+            Surrogates restore the pose and speed captured at startup.
     """
 
     convention = "carla"
 
-    def __init__(self, session: Any) -> None:
+    def __init__(
+        self,
+        session: Any,
+        *,
+        reset_vehicle: Callable[[Any, int | None, Mapping[str, Any] | None], None]
+        | None = None,
+    ) -> None:
         self.session = session
         self.dt = float(session.config.fixed_delta_seconds)
         self._start: VehicleTelemetry | None = None
+        self._reset_vehicle = reset_vehicle
 
     def start(self, info: Any) -> Any:
         if not math.isclose(info.dt, self.dt, rel_tol=1e-9):
             raise ValueError("session dt differs from the vehicle session's")
         if not getattr(self.session, "active", False):
             self.session.start()
-        return self.reset()
+        self._start = self.session.snapshot()
+        return self._state(self._start)
 
     def reset(
         self, seed: int | None = None, options: Mapping[str, Any] | None = None
     ) -> Any:
+        from .vehicle_model import SurrogateVehicle
+
+        if self._start is None:
+            raise RuntimeError("Start the engine before resetting")
+        if self._reset_vehicle is not None:
+            self._reset_vehicle(self.session, seed, options)
+        elif isinstance(self.session, SurrogateVehicle):
+            initial = self._start
+            yaw = math.radians(initial.rotation[1])
+            speed = initial.velocity[0] * math.cos(yaw) + initial.velocity[
+                1
+            ] * math.sin(yaw)
+            self.session.reset(
+                location=initial.location, yaw=initial.rotation[1], speed=speed
+            )
+        else:
+            raise RuntimeError(
+                "reset_vehicle is required to reset a live vehicle session"
+            )
         telemetry = self.session.snapshot()
         return self._state(telemetry)
 

@@ -80,6 +80,33 @@ def test_one_full_body_model_contains_every_mechanism(driver: Any) -> None:
         assert gaps[key] > 1e-3
 
 
+@pytest.mark.parametrize("fast", [False, True])
+def test_advance_refreshes_sensors_and_body_state(driver: Any, fast: bool) -> None:
+    import mujoco
+
+    if fast:
+        from myosuite_carla import build_fullbody_driver
+
+        driver = build_fullbody_driver(FullBodyDriverConfig.fast())
+    driver.reset()
+    for _ in range(20):
+        driver.advance(DriverIntent(right_foot=0.03, steer=0.14))
+    model, data = driver.model, driver.data
+    names = driver.cockpit.names
+    joint = model.joint(names.throttle_joint).qposadr[0]
+    assert data.sensor(names.throttle_position).data[0] == data.qpos[joint]
+    before = {
+        name: getattr(data, name).copy()
+        for name in ("sensordata", "xpos", "cvel", "actuator_force")
+    }
+    time, qpos = data.time, data.qpos.copy()
+    mujoco.mj_forward(model, data)
+    assert data.time == time
+    np.testing.assert_array_equal(data.qpos, qpos)
+    for name, values in before.items():
+        np.testing.assert_allclose(getattr(data, name), values, rtol=1e-10, atol=1e-10)
+
+
 def test_rest_pose_releases_every_control(driver: Any) -> None:
     driver.reset()
     values, worst = drive(driver, DriverIntent(), 50)
@@ -209,10 +236,13 @@ def test_paddle_pulls_cycle_manual_gears(driver: Any) -> None:
 def test_sequential_shifter_counts_each_pull_once() -> None:
     shifter = SequentialShifter("paddle", travel=0.01, max_gear=2)
     reading = {"value": 0.0}
-    data = SimpleNamespace(sensor=lambda name: SimpleNamespace(data=[reading["value"]]))
+    data = SimpleNamespace(
+        time=0.0, sensor=lambda name: SimpleNamespace(data=[reading["value"]])
+    )
     sequence = [0.0, 0.007, 0.009, 0.009, 0.004, 0.002, 0.008, 0.0, 0.009, 0.0]
     gears = []
     for value in sequence:
+        data.time += 0.02
         reading["value"] = value
         gear = shifter.read_gear(None, data)
         assert shifter.read_gear(None, data) == gear
@@ -226,15 +256,41 @@ def test_sequential_shifter_counts_each_pull_once() -> None:
 def test_shifter_ignores_brushes_shorter_than_its_hold() -> None:
     shifter = SequentialShifter("paddle", travel=0.01, max_gear=3, hold_samples=3)
     reading = {"value": 0.0}
-    data = SimpleNamespace(sensor=lambda name: SimpleNamespace(data=[reading["value"]]))
+    data = SimpleNamespace(
+        time=0.0, sensor=lambda name: SimpleNamespace(data=[reading["value"]])
+    )
     gears = []
     for value in [0.009, 0.009, 0.0, 0.009, 0.009, 0.009, 0.009, 0.0]:
+        data.time += 0.02
         reading["value"] = value
         gears.append(shifter.read_gear(None, data))
     # A two-sample brush is ignored; a held pull shifts once, on its third sample.
     assert gears == [0, 0, 0, 0, 0, 1, 1, 1]
     with pytest.raises(ValueError):
         SequentialShifter("paddle", travel=0.01, max_gear=3, hold_samples=0)
+
+
+@pytest.mark.parametrize("mechanism", ["shifter", "switch"])
+def test_repeated_button_reads_preserve_the_hold_duration(mechanism: str) -> None:
+    from myosuite_carla.fullbody import LatchingSwitch
+
+    if mechanism == "shifter":
+        control = SequentialShifter("button", 0.01, max_gear=3, hold_samples=3)
+        read = control.read_gear
+    else:
+        control = LatchingSwitch("button", 0.01, hold_samples=3)
+        read = control.read
+    data = SimpleNamespace(time=0.0, sensor=lambda name: SimpleNamespace(data=[0.009]))
+    for time, expected in ((0.0, 0.0), (0.02, 0.0), (0.04, 1.0), (0.06, 1.0)):
+        data.time = time
+        for _ in range(5):
+            assert read(None, data) == expected
+    # Reset at the same simulation time starts a fresh hold.
+    control.reset()
+    for time, expected in ((0.06, 0.0), (0.08, 0.0), (0.10, 1.0)):
+        data.time = time
+        for _ in range(5):
+            assert read(None, data) == expected
 
 
 @pytest.mark.parametrize(

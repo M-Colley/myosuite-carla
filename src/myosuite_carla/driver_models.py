@@ -24,11 +24,13 @@ from __future__ import annotations
 import math
 from collections import deque
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Any
 
 import numpy as np
 
 from .fullbody import DriverIntent
+from .vehicle_model import VehicleModelParams, carla_nissan_patrol
 
 
 @dataclass(frozen=True)
@@ -126,6 +128,60 @@ def _inverse(table: tuple[tuple[float, float], ...], value: float) -> float:
 
 
 @dataclass(frozen=True)
+class AccelerationControlConfig:
+    """Vehicle inverse and measured pedal feedback for forward driving.
+
+    The vehicle table supplies the feedforward demand. The pedal gain and
+    excitation bound are engineering assumptions for the seated body.
+    """
+
+    vehicle: VehicleModelParams = field(default_factory=carla_nissan_patrol)
+    pedal_integral: float = 0.05
+    integral_limit: float = 0.02
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.vehicle, VehicleModelParams):
+            raise TypeError("vehicle must be VehicleModelParams")
+        if self.vehicle.brake_decel <= 0:
+            raise ValueError("the acceleration inverse requires positive brake_decel")
+        if np.any(np.diff(np.asarray(self.vehicle.drive), axis=0) < 0):
+            raise ValueError("drive acceleration must be monotonic in throttle")
+        for name in ("pedal_integral", "integral_limit"):
+            value = getattr(self, name)
+            if (
+                isinstance(value, bool)
+                or not isinstance(value, (int, float))
+                or not math.isfinite(value)
+                or value < 0
+            ):
+                raise ValueError(f"{name} must be finite and nonnegative")
+        if self.integral_limit > 1:
+            raise ValueError("integral_limit must not exceed one excitation unit")
+
+
+def acceleration_pedals(
+    acceleration: float, speed: float, config: AccelerationControlConfig
+) -> tuple[float, float]:
+    """Invert the level road vehicle model into exclusive forward pedal targets."""
+    if not math.isfinite(acceleration) or not math.isfinite(speed) or speed < 0:
+        raise ValueError("the acceleration inverse requires finite forward states")
+    vehicle = config.vehicle
+    if speed == 0 and acceleration <= 0:
+        return 0.0, float(np.clip(-acceleration / vehicle.brake_decel, 0, 1))
+    resistance = (
+        vehicle.rolling
+        + vehicle.linear_drag * speed
+        + vehicle.quadratic_drag * speed * speed
+    )
+    required_drive = acceleration + resistance
+    if required_drive <= 0:
+        return 0.0, float(np.clip(-required_drive / vehicle.brake_decel, 0, 1))
+    throttles = (0.0, *vehicle.throttle_knots)
+    drive = [vehicle.drive_acceleration(value, speed, False) for value in throttles]
+    return float(np.interp(required_drive, drive, throttles)), 0.0
+
+
+@dataclass(frozen=True)
 class ReflexDriverConfig:
     """Timing, pedal mapping and proprioceptive loop gains.
 
@@ -143,6 +199,7 @@ class ReflexDriverConfig:
         steer_integral: Integral gain of the wheel position loop, rad/s.
         pedal_integral: Integral gain of the pedal loops, excitation/s.
         max_steer_rate: Largest change of desired normalized steer per second.
+        acceleration_control: Optional vehicle inverse and measured pedal servo.
     """
 
     perception_delay: float = 0.2
@@ -159,6 +216,25 @@ class ReflexDriverConfig:
     steer_integral: float = 0.3
     pedal_integral: float = 0.05
     max_steer_rate: float = 0.8
+    acceleration_control: AccelerationControlConfig | None = None
+
+    @classmethod
+    def from_dict(cls, values: Mapping[str, Any]) -> ReflexDriverConfig:
+        """Restore a JSON configuration with its nested typed components."""
+        settings = dict(values)
+        if isinstance(settings.get("idm"), Mapping):
+            settings["idm"] = IdmConfig(**settings["idm"])
+        if isinstance(settings.get("steering"), Mapping):
+            settings["steering"] = TwoPointSteeringConfig(**settings["steering"])
+        if isinstance(settings.get("acceleration_control"), Mapping):
+            control = dict(settings["acceleration_control"])
+            if isinstance(control.get("vehicle"), Mapping):
+                control["vehicle"] = VehicleModelParams.from_dict(control["vehicle"])
+            settings["acceleration_control"] = AccelerationControlConfig(**control)
+        for name in ("throttle_map", "brake_map", "steer_map"):
+            if name in settings:
+                settings[name] = tuple(tuple(row) for row in settings[name])
+        return cls(**settings)
 
 
 class ReflexDriver:
@@ -181,6 +257,9 @@ class ReflexDriver:
         self._steer = 0.0
         self._steer_integral = 0.0
         self._pedal_integral = 0.0
+        self._throttle_integral = self._brake_integral = 0.0
+        #: Last requested normalized throttle and brake positions.
+        self.target_pedals = (0.0, 0.0)
         self._engaged = True
         #: Last desired acceleration (m/s^2) and normalized steer, offsets included.
         self.demand = (0.0, 0.0)
@@ -221,7 +300,9 @@ class ReflexDriver:
         if not self._engaged:
             self._previous = perceived
             self._steer = current.get("input_steer", 0.0)
+            self._throttle_integral = self._brake_integral = 0.0
             self.demand = (0.0, 0.0)
+            self.target_pedals = (0.0, 0.0)
             return DriverIntent()
         steering = config.steering
         previous = self._previous or perceived
@@ -264,6 +345,28 @@ class ReflexDriver:
             config.idm,
         ) + float(acceleration_offset)
         self.demand = (accel, desired)
+        if config.acceleration_control is not None:
+            if current.get("input_reverse", 0.0):
+                raise ValueError("the acceleration inverse supports forward driving")
+            throttle, brake = acceleration_pedals(
+                accel, current["speed_mps"], config.acceleration_control
+            )
+            self.target_pedals = (throttle, brake)
+            right, self._throttle_integral = self._track_pedal(
+                throttle,
+                current.get("input_throttle", 0.0),
+                config.throttle_map,
+                self._throttle_integral,
+                config.acceleration_control,
+            )
+            left, self._brake_integral = self._track_pedal(
+                brake,
+                current.get("input_brake", 0.0),
+                config.brake_map,
+                self._brake_integral,
+                config.acceleration_control,
+            )
+            return DriverIntent(right_foot=right, left_foot=left, steer=offset)
         right = left = 0.0
         if accel > -config.coast_band:
             throttle = float(
@@ -280,14 +383,43 @@ class ReflexDriver:
                 )
             )
             right = _inverse(config.throttle_map, throttle) + self._pedal_integral
+            self.target_pedals = (throttle, 0.0)
         else:
             self._pedal_integral = 0.0
             brake = float(
                 np.clip(config.brake_per_mps2 * (-accel - config.coast_band), 0.0, 1.0)
             )
             left = _inverse(config.brake_map, brake)
+            self.target_pedals = (0.0, brake)
         return DriverIntent(
             right_foot=float(np.clip(right, 0.0, 1.0)),
             left_foot=float(np.clip(left, 0.0, 1.0)),
             steer=offset,
         )
+
+    def _track_pedal(
+        self,
+        target: float,
+        measured: float,
+        table: tuple[tuple[float, float], ...],
+        integral: float,
+        config: AccelerationControlConfig,
+    ) -> tuple[float, float]:
+        """Track one measured mechanism and release inactive pedal memory."""
+        if not math.isfinite(measured):
+            raise ValueError("measured pedal positions must be finite")
+        if target <= 0:
+            return 0.0, 0.0
+        feedforward = _inverse(table, target)
+        error = target - measured
+        candidate = float(
+            np.clip(
+                integral + config.pedal_integral * error * self.dt,
+                -config.integral_limit,
+                config.integral_limit,
+            )
+        )
+        command = feedforward + candidate
+        if (command > 1 and error > 0) or (command < 0 and error < 0):
+            candidate = integral
+        return float(np.clip(feedforward + candidate, 0, 1)), candidate

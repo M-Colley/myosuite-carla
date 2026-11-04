@@ -95,6 +95,74 @@ def test_engine_vehicle_session_detects_clock_slips() -> None:
         session.step(VehicleCommand())
 
 
+def test_engine_vehicle_session_resets_engine_and_recovers_after_failure() -> None:
+    engine = LoopbackEngine(
+        DT,
+        unity_car,
+        reset=lambda seed: unity_car(
+            SimpleNamespace(controls={"vehicle.throttle": 0.0}), 0.0
+        ),
+    )
+    with EngineVehicleSession(engine, convention="unity") as session:
+        session.step(VehicleCommand(throttle=0.4))
+        session._failed = True
+        first = session.reset(seed=7)
+        assert session.active
+        assert first.frame == 0 and first.elapsed_seconds == 0.0
+        assert not engine.commands
+        assert session.step(VehicleCommand()).frame == 1
+
+
+def test_vehicle_session_engine_restores_initial_surrogate_state() -> None:
+    vehicle = SurrogateVehicle(location=(3.0, 4.0, 0.5), yaw=90.0, speed=2.0)
+    engine = VehicleSessionEngine(vehicle)
+    initial = engine.start(SimpleNamespace(dt=DT))
+    for k in range(100):
+        engine.step(SimpleNamespace(controls={"vehicle.throttle": 1.0}, time=k * DT))
+    reset = engine.reset(seed=7)
+    assert reset.frame == 0 and reset.time == 0.0
+    np.testing.assert_allclose(
+        reset.outputs["vehicle.pose"], initial.outputs["vehicle.pose"]
+    )
+    np.testing.assert_allclose(
+        reset.outputs["vehicle.velocity"], initial.outputs["vehicle.velocity"]
+    )
+    again = engine.step(SimpleNamespace(controls={"vehicle.throttle": 1.0}, time=0.0))
+    engine.reset(seed=7)
+    repeated = engine.step(
+        SimpleNamespace(controls={"vehicle.throttle": 1.0}, time=0.0)
+    )
+    assert repeated.outputs == again.outputs
+    engine.close()
+
+
+def test_vehicle_session_engine_uses_explicit_live_reset() -> None:
+    vehicle = SurrogateVehicle().start()
+    calls: list[Any] = []
+
+    def reset(session: Any, seed: int | None, options: Any) -> None:
+        calls.append((seed, options))
+        session.reset(speed=3.0)
+
+    engine = VehicleSessionEngine(vehicle, reset_vehicle=reset)
+    engine.start(SimpleNamespace(dt=DT))
+    state = engine.reset(seed=11, options={"trial": 2})
+    assert calls == [(11, {"trial": 2})]
+    assert state.outputs["vehicle.speed"] == pytest.approx(3.0)
+    engine.close()
+
+
+def test_vehicle_session_engine_requires_live_reset_callback() -> None:
+    with SurrogateVehicle() as vehicle:
+        borrowed = SimpleNamespace(
+            config=vehicle.config, active=True, snapshot=vehicle.snapshot
+        )
+        engine = VehicleSessionEngine(borrowed)
+        engine.start(SimpleNamespace(dt=DT))
+        with pytest.raises(RuntimeError, match="reset_vehicle is required"):
+            engine.reset(seed=1)
+
+
 def test_a_mujoco_pedal_drives_the_fitted_vehicle_surrogate() -> None:
     import mujoco
     from embodied_ui.probe import Probe

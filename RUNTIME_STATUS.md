@@ -1,5 +1,15 @@
 # CARLA runtime acquisition and UE5.8 status
 
+## Recheck on 2026-10-27
+
+The local UE5.8 engine source remains at `0703595a065dee51538720027ce9cc05bd464517`, with `Build.version` identifying 5.8.0. The prepared CARLA source remains at `ee5859b4e63a4b79c69b02e381c95fb5727e0874`. Its project has neither `CarlaUnreal.exe` nor `UnrealEditor-CarlaUnreal.dll`. Port 2000 has no listener. The live validation command returned connection refused before running a scenario. [Preflight](evidence/scientific-2026-10-27-ue58-preflight.json), [failed attempt](evidence/scientific-2026-10-27-ue58-attempt.json).
+
+The C: drive had 47.3 GB free. System commit had approximately 21.4 GB available. The earlier engine rebuild requires replacement of the outputs described below. A completed simulator and matching client are still absent. The installed client reports CARLA 0.10.0 and comes from the earlier UE5.5 package.
+
+The official `ue58-dev` download page still marks the 1.0.0 release link as pending. Its listed nightly uses UE5.5. The releases query returned 0.9.16 and 0.10.0 as its newest entries. The successful `ue58-dev` workflow query returned four dependency graph updates. The current simulator workflow was queued. The [acquisition record](evidence/scientific-2026-10-27-runtime-acquisition.json) retains source links and revisions. UE5.8 live validation remains incomplete.
+
+## Earlier runtime checks
+
 Checked on **2026-10-23 (Europe/Berlin)**. The requested `ue58-dev` source has
 been downloaded, and actual simulator validation passes on the available
 official **CARLA 0.10.0 / UE5.5** Windows release, on two physical PCs.

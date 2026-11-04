@@ -1,0 +1,62 @@
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:563: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:600: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:1416: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  body = _body_spec(config).compile()
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:563: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:600: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+objective 1: 6 sources, 6 physical episodes, 61.3 seconds
+objective 2: 6 sources, 12 physical episodes, 95.0 seconds
+objective 3: 6 sources, 18 physical episodes, 128.5 seconds
+objective 4: 6 sources, 24 physical episodes, 162.8 seconds
+objective 5: 6 sources, 30 physical episodes, 196.1 seconds
+objective 6: 6 sources, 36 physical episodes, 229.4 seconds
+objective 7: 6 sources, 42 physical episodes, 262.1 seconds
+objective 8: 6 sources, 48 physical episodes, 295.2 seconds
+objective 9: 6 sources, 54 physical episodes, 327.7 seconds
+objective 10: 6 sources, 60 physical episodes, 360.1 seconds
+objective 11: 6 sources, 66 physical episodes, 393.3 seconds
+objective 12: 6 sources, 72 physical episodes, 425.3 seconds
+objective 13: 6 sources, 78 physical episodes, 461.5 seconds
+objective 14: 6 sources, 84 physical episodes, 493.0 seconds
+objective 15: 6 sources, 90 physical episodes, 523.8 seconds
+objective 16: 6 sources, 96 physical episodes, 555.0 seconds
+objective 17: 3 sources, 99 physical episodes, 570.7 seconds
+objective 18: 3 sources, 102 physical episodes, 586.5 seconds
+objective 19: 3 sources, 105 physical episodes, 602.0 seconds
+objective 20: 3 sources, 108 physical episodes, 618.8 seconds
+objective 21: 3 sources, 111 physical episodes, 636.1 seconds
+objective 22: 6 sources, 117 physical episodes, 669.0 seconds
+objective 23: 6 sources, 123 physical episodes, 701.1 seconds
+objective 24: 3 sources, 126 physical episodes, 716.7 seconds
+objective 25: 3 sources, 129 physical episodes, 732.4 seconds
+objective 26: 6 sources, 135 physical episodes, 763.8 seconds
+objective 27: 6 sources, 141 physical episodes, 798.2 seconds
+rejected_after_test_regression
