@@ -316,9 +316,11 @@ tables, a steering input exponent, first-order lags, drag and brake terms.
 through a squared input curve (identified exponent 1.97); CARLA 1.0 steers
 linearly, so fit a 1.0 vehicle anew. Steering is identified from 2.4 to
 13.6 m/s and up to half lock. Low-speed holds confirm the settled angle to
-three-quarter lock, but the surrogate does not yet model Chaos's steering
-input rate limit (2.5 per second rising), so fast large steps at low speed are
-less accurate (see VALIDATION.md). Collect and fit your own vehicle with:
+three-quarter lock. The surrogate can also apply Chaos's steering input rate
+limit (`steer_rise_rate`, `steer_fall_rate`). With the engine's rates (2.5 and
+5.0 per second) it cut the steering error of fresh steps and doublets by about
+80%. It made one-period low-speed sweeps 8% worse, so `carla_nissan_patrol()`
+leaves it off (see VALIDATION.md). Collect and fit your own vehicle with:
 
 ```shell
 python examples/identify_vehicle.py --seeds 0 1 2 --steer-fast 0
@@ -326,7 +328,8 @@ python examples/fit_vehicle_model.py --train artifacts/vehicle-sysid/seed0 --tes
 ```
 
 `fit_vehicle_model.py` identifies the steering exponent unless
-`--steer-exponent` fixes it.
+`--steer-exponent` fixes it; `--steer-rate-limit RISE FALL` fits with a fixed
+rate limit.
 
 ## Driving task, scenarios and baseline driver
 

@@ -1,5 +1,42 @@
 # Validation record
 
+## Steering input rate limit test on 2026-11-04
+
+The surrogate can now apply Chaos's steering input rate limit (`steer_rise_rate`, `steer_fall_rate`) to the command before its steering lag. Zero, the default, leaves the command unlimited. This run tested whether `carla_nissan_patrol()` should take the engine's rates (2.5 rising, 5.0 falling per second), with nothing refitted. The code, the [design](evidence/steer-rate-limit-2026-11-04/design.md) and its [analysis script](evidence/steer-rate-limit-2026-11-04/analyse.py) were committed in `abf6f08` at 14:46:47 UTC, before recording. The CARLA 0.10.0 server used for the wider identification ran again with `-nullrhi`, while two unrelated jobs kept the GPU fully busy. Server and client reported `0.10.0` on `Town10HD_Opt`. Fresh seeds 14-17 were recorded from 14:47:55 to 14:48:45 UTC. Each seed had 8 low-speed sweeps, 8 step-and-hold segments, 10 step doublets at 3-10 m/s and 3 control sweeps. Of 116 segments, 97 were kept. Of the 19 discarded (10 collisions, 9 roll strikes), 14 were doublets, 11 of them steering left first. The kept doublets therefore lean towards right-first steps and smaller lateral loads. The [data](evidence/steer-rate-limit-2026-11-04/data.zip) include every collection log.
+
+The candidate failed the rule on one check, so the default is unchanged ([analysis](evidence/steer-rate-limit-2026-11-04/analysis.json)). Measured-speed errors use the logged speed in place of the modelled one, which isolates the steering model.
+
+| Check | Default | Rate limit | Result |
+| --- | --- | --- | --- |
+| Control: fresh 2-10 m/s sweeps, open loop, ≤ 0.674 deg/s | 0.419 deg/s | 0.419 deg/s | pass |
+| (a) Measured-speed yaw-rate RMSE, 86 fresh segments, ≥ 25% lower | 1.364 deg/s | 0.363 deg/s (−73%) | pass |
+| (b) Lower in each kind: doublets (26) | 1.858 deg/s | 0.319 deg/s | pass |
+| (b) Lower in each kind: holds (29) | 1.761 deg/s | 0.315 deg/s | pass |
+| (b) Lower in each kind: low-speed sweeps (31) | 0.427 deg/s | 0.461 deg/s (+8%) | fail |
+| (c) Open-loop yaw-rate RMSE, fresh segments, not higher | 2.532 deg/s | 1.790 deg/s | pass |
+| (d) Original held-out seeds 1, 2, 4, ≤ +1% | 0.128 deg/s, 3 s errors | identical | pass |
+| (e) Muscle-driven drives, ≤ +5% | 0.144 deg/s, 0.646 m | 0.117 deg/s, 0.646 m | pass |
+
+The pre-stated secondary predictions held:
+
+- **Rates.** The measured-speed error was lowest at a rise rate of 2.75 (predicted 2.0-3.0; 0.302 against 0.363 deg/s at 2.5) and a fall rate of 5.0 (predicted 4.0-6.0). Without a fall limit it was 0.956 deg/s.
+- **Full-body steering.** The limit cut the `steer_right` phase's yaw-rate RMSE from 2.53 to 0.71 deg/s and its final heading error from 1.45° to 0.12°; `steer_left` went from 0.19 to 0.16 deg/s. These phases were inspected before, so this is weaker evidence than the fresh seeds. The onset that the exponent entry below attributed to missing tyre relaxation is instead the input rate limit.
+- **Refit.** Training seeds 0 and 3 never reach the limit, and a refit with `--steer-rate-limit 2.5 5` reproduced the default's parameters exactly.
+- **By steer band** (measured speed): the error fell from 1.149 to 0.247 deg/s at |S| ≤ 0.51, from 0.982 to 0.349 at 0.51-0.75 and from 2.227 to 0.638 above 0.75.
+
+**Post-hoc look at the sweeps.** This was added after the rule failed and is not part of the design ([script](evidence/steer-rate-limit-2026-11-04/diagnose.py), [results](evidence/steer-rate-limit-2026-11-04/diagnosis.json)). Only 12 of the 31 sweeps reach the limit; their peak command rates are 2.5-3.7 per second. Of these, 11 got worse and one better. With a rise rate of 2.75 the sweeps improve too (0.411 deg/s), and every kind's best rise rate lies at 2.75-3.0. With the limit but without the 0.039 s steering lag, which was fitted without the limit, the sweeps fall to 0.232 deg/s and holds stay at 0.333. Doublets, however, rise to 0.747 deg/s and the original held-out seeds from 0.095 to 0.170. The lag is needed at speed but too long at 1-3 m/s. That pattern fits a yaw response that slows with speed, as in a dynamic single-track model, which the kinematic surrogate's constant lag cannot represent. Two follow-ups would each need fresh seeds and their own rule: identifying the rise rate and lag jointly, and a speed-dependent steering delay.
+
+After the analysis, the limit was changed to return the command itself when inactive; before, it added round-off of order 1e-17. The refit check had differed by up to 2e-10 rad before this change and matched exactly after it. The rerun analysis and diagnosis matched the first run's outputs exactly.
+
+```powershell
+.venv/Scripts/python.exe examples/identify_vehicle.py --host 127.0.0.1 --seeds 14 15 16 17 --launch 0 --hand-brake 0 --reverse 0 --steer 3 --steer-low 8 --steer-hold 8 --steer-doublet 10 --data artifacts/steer-rate-limit
+.venv/Scripts/python.exe evidence/steer-rate-limit-2026-11-04/analyse.py --fresh artifacts/steer-rate-limit --sysid artifacts/vehicle-sysid --muscle artifacts/scenario-lead_vehicle_braking-carla artifacts/scenario-takeover_request-carla artifacts/scenario-lane_change-carla artifacts/ue55-fullbody-loads --output evidence/steer-rate-limit-2026-11-04/analysis.json
+.venv/Scripts/python.exe evidence/steer-rate-limit-2026-11-04/diagnose.py --fresh artifacts/steer-rate-limit --sysid artifacts/vehicle-sysid --output evidence/steer-rate-limit-2026-11-04/diagnosis.json
+.venv/Scripts/python.exe examples/fit_vehicle_model.py --train artifacts/vehicle-sysid/seed0 artifacts/vehicle-sysid/seed3 --steer-rate-limit 2.5 5 --output artifacts/steer-rate-limit/refit-check.json
+```
+
+With `Desktop/embodied-human/src` on `PYTHONPATH`, the bridge suite passed 518 tests with the four live tests skipped. Three new tests check Chaos's interpolation frame by frame, exact rollouts of rate-limited drives, and a fit with a fixed limit. The embodied human suite passed 561 tests with 24 optional tests skipped. Ruff, formatting and mypy passed.
+
 ## Wider steering identification on 2026-11-04
 
 The [design](evidence/vehicle-sysid-wide-2026-11-04/design.md) was committed in `20e02ed` at 12:15:21 UTC before recording. It fixed the segments, the split, the analyses and the adoption rule. The CARLA 0.10.0 / UE5.5 package in `C:/Users/localadmin/Desktop/Carla-0.10.0-Win64-Shipping` (CARLA `ada75f920642e18cace0a9f85ecf9d4077ddb531`) ran with `-nullrhi`, so it held no GPU context while two unrelated GPU jobs kept the card busy. Server and client reported `0.10.0` on `Town10HD_Opt`. Seeds 10-13 were recorded from 12:16:19 to 12:16:49 UTC. Each seed had 10 low-speed sweeps (0.8-3 m/s, amplitude 0.4-1.0), 8 step-and-hold segments (±0.2-1.0) and 3 original 2-10 m/s sweeps as a control. Of 84 segments, 71 were kept. Nine collisions and four roll strikes were discarded, including 9 of 32 holds; 6 of these 9 holds had |S| of at least 0.68, so near full lock is under-sampled. The [data](evidence/vehicle-sysid-wide-2026-11-04/data.zip) include every collection log.

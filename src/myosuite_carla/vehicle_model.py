@@ -187,9 +187,10 @@ def _limit_step(
     # Rising: the change grows the magnitude or leaves zero.
     rising = (delta > 0) == (current > 0) or (delta != 0 and current == 0)
     rate = rise if rising else fall
-    if rate <= 0:
+    if rate <= 0 or abs(delta) <= rate * dt:
+        # Return the target itself so an inactive limit adds no round-off.
         return target
-    value = current + min(max(delta, -rate * dt), rate * dt)
+    value = current + math.copysign(rate * dt, delta)
     # Round-off at a sign change would pick the rate of the next frame
     # arbitrarily; land on zero as exact arithmetic does.
     return 0.0 if abs(value) < 1e-9 else value
@@ -884,7 +885,8 @@ def evaluate_vehicle_model(
 #: (2026-11-04). Held-out errors are in
 #: ``evidence/ue55-vehicle-surrogate-exponent.json`` and VALIDATION.md; steering
 #: is identified from about 2.4 to 13.6 m/s and reverse up to throttle 0.53.
-#: CARLA 1.0 steers linearly and needs its own fit.
+#: CARLA 1.0 steers linearly and needs its own fit. The steering input rate
+#: limit is off: it failed one check of its confirmatory test (VALIDATION.md).
 _PATROL: dict[str, Any] = {
     "wheelbase": 3.075,
     "speed_knots": [0, 1, 2.5, 4, 6, 8, 11, 15, 20],
