@@ -614,6 +614,7 @@ def _longitudinal_design(
     params: VehicleModelParams,
     throttle_lag: float,
     min_speed: float,
+    use_pitch: bool,
 ) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
     rows, targets = [], []
     throttle_knots = (0.0, *params.throttle_knots)
@@ -640,9 +641,9 @@ def _longitudinal_design(
                 -sign * segment.hand_brake,
             ]
         )
-        target = (after - before) / segment.dt + GRAVITY * np.sin(
-            np.radians(segment.pitch_deg[:-1])
-        )
+        target = (after - before) / segment.dt
+        if use_pitch:
+            target = target + GRAVITY * np.sin(np.radians(segment.pitch_deg[:-1]))
         rows.append(design[moving])
         targets.append(target[moving])
     return np.vstack(rows), np.concatenate(targets)
@@ -660,6 +661,8 @@ def fit_vehicle_model(
     steer_rise_rate: float = 0.0,
     steer_fall_rate: float = 0.0,
     steer_lag_slope: float = 0.0,
+    use_pitch: bool = True,
+    monotonic_drive: bool = False,
 ) -> tuple[VehicleModelParams, dict[str, Any]]:
     """Identify surrogate parameters from logged CARLA drives.
 
@@ -684,6 +687,11 @@ def fit_vehicle_model(
             (UE 5 defaults 2.5 and 5.0 per second); 0 does not limit.
         steer_lag_slope: Fixed growth of the steer time constant with the
             measured speed, s per m/s; the lag at standstill is identified.
+        use_pitch: Include measured body pitch in longitudinal fitting. Set
+            False for the flat road model used by SurrogateVehicle.
+        monotonic_drive: Fit nonnegative throttle increments so forward and
+            reverse drive magnitudes increase with throttle. The smoothness
+            penalty remains defined on the resulting physical drive tables.
 
     Returns:
         Parameters and a fit report with residual RMS values and sample counts.
@@ -697,6 +705,11 @@ def fit_vehicle_model(
     count_t, count_u = len(knots.throttle_knots), len(knots.speed_knots)
     cells = count_t * count_u
     smoothed = cells + count_t
+    transform = np.eye(smoothed + 5)
+    if monotonic_drive:
+        cumulative = np.tril(np.ones((count_t, count_t)))
+        transform[:cells, :cells] = np.kron(cumulative, np.eye(count_u))
+        transform[cells:smoothed, cells:smoothed] = cumulative
     # Smooth the forward table across speed and throttle and the reverse table
     # across throttle, so cells without data interpolate their neighbours.
     penalty = np.vstack(
@@ -714,18 +727,27 @@ def fit_vehicle_model(
     )
     best: tuple[float, float, NDArray[np.float64], int] | None = None
     for lag in throttle_lags:
-        design, target = _longitudinal_design(segments, knots, float(lag), min_speed)
+        design, target = _longitudinal_design(
+            segments, knots, float(lag), min_speed, use_pitch
+        )
         weight = smoothing * math.sqrt(len(target) / cells)
+        smooth = np.pad(weight * penalty, ((0, 0), (0, design.shape[1] - smoothed)))
+        fitted_design = design
+        if monotonic_drive:
+            fitted_design = design @ transform
+            smooth = smooth @ transform
         augmented = np.vstack(
             [
-                design,
-                np.pad(weight * penalty, ((0, 0), (0, design.shape[1] - smoothed))),
+                fitted_design,
+                smooth,
             ]
         )
         padded = np.concatenate([target, np.zeros(len(penalty))])
         coefficients, _ = optimize.nnls(
             augmented, padded, maxiter=50 * augmented.shape[1]
         )
+        if monotonic_drive:
+            coefficients = transform @ coefficients
         residual = float(np.linalg.norm(design @ coefficients - target))
         if best is None or residual < best[0]:
             best = (residual, float(lag), coefficients, len(target))
@@ -803,6 +825,8 @@ def fit_vehicle_model(
     throttles = np.concatenate([segment.throttle for segment in segments])
     reversing = np.concatenate([segment.reverse > 0.5 for segment in segments])
     report = {
+        "use_pitch": use_pitch,
+        "monotonic_drive": monotonic_drive,
         "steer_exponent_identified": identify_exponent,
         "steer_knots_identified": [bool(value) for value in identified],
         "envelope": {
@@ -836,6 +860,7 @@ def evaluate_vehicle_model(
     horizons: Sequence[float] = (1.0, 3.0),
     group: Callable[[str], str] | None = None,
     measured_speed: bool = False,
+    use_pitch: bool = True,
 ) -> dict[str, Any]:
     """Open-loop errors of the surrogate on logged drives.
 
@@ -850,13 +875,17 @@ def evaluate_vehicle_model(
         group: Maps a segment name to a group for per-group summaries.
         measured_speed: Roll out with the logged speed (see :func:`simulate`)
             to isolate the steering model.
+        use_pitch: Supply logged pitch throughout each rollout. Set False
+            to evaluate the flat road model used by SurrogateVehicle.
 
     Returns:
         Per-segment metrics and duration-weighted means, overall and by group.
     """
     rows = []
     for segment in segments:
-        rollout = simulate(params, segment, measured_speed=measured_speed)
+        rollout = simulate(
+            params, segment, measured_speed=measured_speed, use_pitch=use_pitch
+        )
         time = np.arange(len(segment.x)) * segment.dt
         speed_error = rollout["speed"] - segment.speed
         rate_error = np.degrees(rollout["yaw_rate"] - segment.yaw_rate)
@@ -898,7 +927,8 @@ def evaluate_vehicle_model(
 
     def summarise(selected: list[dict[str, Any]]) -> dict[str, float]:
         out: dict[str, float] = {}
-        for key in selected[0]:
+        keys = dict.fromkeys(key for row in selected for key in row)
+        for key in keys:
             if key in ("name", "seconds"):
                 continue
             present = [
@@ -911,6 +941,8 @@ def evaluate_vehicle_model(
         return out
 
     result: dict[str, Any] = {
+        "use_pitch": use_pitch,
+        "measured_speed": measured_speed,
         "segments": rows,
         "summary": summarise(rows) if rows else {},
     }

@@ -244,6 +244,70 @@ def test_fit_recovers_known_parameters_from_its_own_drives() -> None:
     assert set(result["by_group"]) == {"s1"}
 
 
+def test_flat_fitting_and_rollout_ignore_future_measured_pitch() -> None:
+    pytest.importorskip("scipy")
+    flat = _synthetic(9)[:2]
+    pitched = [
+        replace(segment, pitch_deg=np.linspace(-12.0, 12.0, len(segment.speed)))
+        for segment in flat
+    ]
+    options = {"smoothing": 0.05, "throttle_lags": (TRUTH.throttle_lag,)}
+    original, original_report = fit_vehicle_model(flat, use_pitch=False, **options)
+    altered, altered_report = fit_vehicle_model(pitched, use_pitch=False, **options)
+    assert altered == original
+    assert altered_report == original_report
+    assert altered_report["use_pitch"] is False
+    flat_metrics = evaluate_vehicle_model(TRUTH, flat, use_pitch=False)
+    altered_metrics = evaluate_vehicle_model(TRUTH, pitched, use_pitch=False)
+    assert flat_metrics == altered_metrics
+    conditional = evaluate_vehicle_model(TRUTH, pitched)
+    assert conditional["use_pitch"] is True
+    assert conditional["summary"]["speed_rmse_mps"] > 0.1
+    assert conditional == evaluate_vehicle_model(TRUTH, pitched, use_pitch=True)
+
+
+def test_monotonic_fit_supports_the_acceleration_inverse() -> None:
+    pytest.importorskip("scipy")
+    from myosuite_carla.driver_models import AccelerationControlConfig
+
+    nonmonotonic = replace(
+        TRUTH,
+        drive=tuple((value,) * len(SPEED_KNOTS) for value in (3.0, 1.0, 2.0, 2.5)),
+        reverse_drive=(1.5, 0.5, 1.2, 1.3),
+    )
+    train = _synthetic(4, nonmonotonic)
+    options = {"smoothing": 0.05, "throttle_lags": (TRUTH.throttle_lag,)}
+    unconstrained, _ = fit_vehicle_model(train, **options)
+    constrained, report = fit_vehicle_model(train, monotonic_drive=True, **options)
+    assert np.min(np.diff(unconstrained.drive, axis=0)) < -0.05
+    assert np.min(np.diff(constrained.drive, axis=0)) >= 0
+    assert np.min(np.diff(constrained.reverse_drive)) >= 0
+    assert report["monotonic_drive"] is True
+    assert AccelerationControlConfig(vehicle=constrained).vehicle == constrained
+
+
+def test_later_segments_supply_horizon_metrics_when_the_first_is_short() -> None:
+    segment = _synthetic(3)[0]
+    commands = ("throttle", "brake", "steer", "hand_brake", "reverse")
+    states = ("x", "y", "yaw_deg", "pitch_deg", "speed", "yaw_rate")
+    short = replace(
+        segment,
+        name="short",
+        **{name: getattr(segment, name)[:25] for name in commands},
+        **{name: getattr(segment, name)[:26] for name in states},
+    )
+    expected = evaluate_vehicle_model(TRUTH, [segment])["summary"]
+    result = evaluate_vehicle_model(TRUTH, [short, segment], group=lambda _: "all")
+    for key in (
+        "position_error_1s_m",
+        "baseline_error_1s_m",
+        "position_error_3s_m",
+        "baseline_error_3s_m",
+    ):
+        assert result["summary"][key] == pytest.approx(expected[key])
+        assert result["by_group"]["all"][key] == pytest.approx(expected[key])
+
+
 def test_fit_identifies_a_squared_steering_input_curve() -> None:
     pytest.importorskip("scipy")
     # CARLA 0.10.0 drove through Chaos's squared steering input curve.

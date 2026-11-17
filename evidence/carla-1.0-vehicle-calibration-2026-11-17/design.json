@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-17T14:02:41.065010+00:00",
+  "fixed_before_collection": true,
+  "target": {
+    "carla": "1.0",
+    "source": "1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5",
+    "map": "Carla/Maps/Town10HD_Opt",
+    "vehicle": "vehicle.nissan.patrol",
+    "dt_s": 0.02
+  },
+  "train_seeds": [
+    10,
+    11,
+    12
+  ],
+  "validation_seeds": [
+    20,
+    21
+  ],
+  "test_seeds": [
+    30,
+    31,
+    32
+  ],
+  "counts": {
+    "launch": 10,
+    "hand_brake": 2,
+    "reverse": 3,
+    "steer": 12,
+    "steer_fast": 6,
+    "steer_low": 4,
+    "steer_hold": 4,
+    "steer_doublet": 6
+  },
+  "max_road_pitch_deg": 1.0,
+  "nominal_max_lateral_acceleration_mps2": 3.0,
+  "collection_steer_exponent": 1.0,
+  "min_straight_m": 100.0,
+  "wheelbase_m": 3.075,
+  "wheelbase_role": "fixed nominal axle distance; steering gains are effective conditional parameters",
+  "smoothing": 1.0,
+  "use_pitch": false,
+  "measured_speed": false,
+  "monotonic_drive": true,
+  "candidates": [
+    {
+      "name": "C0",
+      "parameters": {
+        "steer_exponent": null,
+        "steer_rise_rate": 0.0,
+        "steer_fall_rate": 0.0,
+        "steer_lag_slope": 0.0
+      }
+    },
+    {
+      "name": "C1",
+      "parameters": {
+        "steer_exponent": null,
+        "steer_rise_rate": 0.0,
+        "steer_fall_rate": 0.0,
+        "steer_lag_slope": 0.01
+      }
+    },
+    {
+      "name": "C2",
+      "parameters": {
+        "steer_exponent": null,
+        "steer_rise_rate": 2.5,
+        "steer_fall_rate": 5.0,
+        "steer_lag_slope": 0.0
+      }
+    },
+    {
+      "name": "C3",
+      "parameters": {
+        "steer_exponent": null,
+        "steer_rise_rate": 2.5,
+        "steer_fall_rate": 5.0,
+        "steer_lag_slope": 0.01
+      }
+    },
+    {
+      "name": "C4",
+      "parameters": {
+        "steer_exponent": 1.0,
+        "steer_rise_rate": 0.0,
+        "steer_fall_rate": 0.0,
+        "steer_lag_slope": 0.0
+      }
+    },
+    {
+      "name": "C5",
+      "parameters": {
+        "steer_exponent": 1.0,
+        "steer_rise_rate": 0.0,
+        "steer_fall_rate": 0.0,
+        "steer_lag_slope": 0.01
+      }
+    },
+    {
+      "name": "C6",
+      "parameters": {
+        "steer_exponent": 1.0,
+        "steer_rise_rate": 2.5,
+        "steer_fall_rate": 5.0,
+        "steer_lag_slope": 0.0
+      }
+    },
+    {
+      "name": "C7",
+      "parameters": {
+        "steer_exponent": 1.0,
+        "steer_rise_rate": 2.5,
+        "steer_fall_rate": 5.0,
+        "steer_lag_slope": 0.01
+      }
+    }
+  ],
+  "primary": "mean across seed batches of equal family means of 0.5*((speed_rmse_mps/1)^2+(yaw_rate_rmse_deg_s/5)^2)",
+  "selection": "lowest validation primary among eight fixed candidates, only if below legacy baseline",
+  "acceptance": {
+    "paired_seed_percentile_bootstrap_upper_below_zero": true,
+    "resamples": 5000,
+    "confidence": 0.95,
+    "mean_speed_rmse_not_worse": true,
+    "mean_yaw_rmse_not_worse": true,
+    "mean_final_position_error_not_worse": true,
+    "family_primary_maximum": "1.25 * legacy family primary + 0.01",
+    "coverage": "each seed retains at least ceil(count/2) accepted segments of every family"
+  },
+  "bootstrap_seed": 20261117,
+  "resampling_unit": "three test seed batches",
+  "secondary": [
+    "full-segment final position error",
+    "per-family errors",
+    "constant velocity position baseline",
+    "discard fractions",
+    "observed speed/throttle/steering envelope"
+  ],
+  "limitations": [
+    "One vehicle and one map.",
+    "Three test seed batches provide pilot descriptive uncertainty.",
+    "Constant velocity comparison is initialized near rest.",
+    "Reverse throttle above 0.6 and steering above 14 m/s may lack support.",
+    "No human parameter or automation gain is fitted."
+  ],
+  "data_layout": {
+    "development": "development/seed<N>",
+    "test": "test/seed<N>"
+  }
+}

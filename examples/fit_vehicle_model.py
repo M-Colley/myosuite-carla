@@ -50,6 +50,16 @@ def main() -> int:
     parser.add_argument("--wheelbase", type=float, default=3.075)
     parser.add_argument("--smoothing", type=float, default=1.0)
     parser.add_argument(
+        "--no-pitch",
+        action="store_true",
+        help="fit and evaluate the flat road surrogate without logged pitch",
+    )
+    parser.add_argument(
+        "--monotonic-drive",
+        action="store_true",
+        help="constrain forward and reverse drive magnitude to increase with throttle",
+    )
+    parser.add_argument(
         "--steer-exponent",
         type=float,
         default=None,
@@ -82,6 +92,8 @@ def main() -> int:
         steer_rise_rate=args.steer_rate_limit[0],
         steer_fall_rate=args.steer_rate_limit[1],
         steer_lag_slope=args.steer_lag_slope,
+        use_pitch=not args.no_pitch,
+        monotonic_drive=args.monotonic_drive,
     )
     report = {
         "created_utc": datetime.now(timezone.utc).isoformat(),
@@ -90,15 +102,20 @@ def main() -> int:
         "test_data": [str(path) for path in args.test],
         "params": params.as_dict(),
         "fit": fit,
-        "train": evaluate_vehicle_model(params, train, group=_kind),
+        "train": evaluate_vehicle_model(
+            params, train, group=_kind, use_pitch=not args.no_pitch
+        ),
     }
     if args.test:
         report["held_out"] = evaluate_vehicle_model(
-            params, _segments(args.test), group=_kind
+            params, _segments(args.test), group=_kind, use_pitch=not args.no_pitch
         )
     if args.test_by_phase:
         report["held_out_phases"] = evaluate_vehicle_model(
-            params, _segments(args.test_by_phase), group=lambda name: name
+            params,
+            _segments(args.test_by_phase),
+            group=lambda name: name,
+            use_pitch=not args.no_pitch,
         )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=1), encoding="utf-8")
