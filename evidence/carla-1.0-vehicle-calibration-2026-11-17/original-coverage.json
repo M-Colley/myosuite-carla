@@ -1,0 +1,89 @@
+{
+  "status": "coverage_failed_before_fitting",
+  "failed_seed": 21,
+  "failed_family": "steer_hold",
+  "required": 2,
+  "retained": 1,
+  "batches": {
+    "seed10": {
+      "status": "completed",
+      "accepted": {
+        "launch": 10,
+        "hand_brake": 2,
+        "reverse": 3,
+        "steer": 10,
+        "steer_fast": 5,
+        "steer_low": 4,
+        "steer_hold": 2,
+        "steer_doublet": 5
+      },
+      "rejected": 6,
+      "started_utc": "2026-11-17T14:03:44.280670+00:00",
+      "finished_utc": "2026-11-17T14:09:56.816645+00:00"
+    },
+    "seed11": {
+      "status": "completed",
+      "accepted": {
+        "launch": 10,
+        "hand_brake": 2,
+        "reverse": 3,
+        "steer": 8,
+        "steer_fast": 6,
+        "steer_low": 4,
+        "steer_hold": 4,
+        "steer_doublet": 3
+      },
+      "rejected": 7,
+      "started_utc": "2026-11-17T14:09:56.818148+00:00",
+      "finished_utc": "2026-11-17T14:16:08.497360+00:00"
+    },
+    "seed12": {
+      "status": "completed",
+      "accepted": {
+        "launch": 10,
+        "hand_brake": 2,
+        "reverse": 3,
+        "steer": 11,
+        "steer_fast": 6,
+        "steer_low": 4,
+        "steer_hold": 3,
+        "steer_doublet": 5
+      },
+      "rejected": 3,
+      "started_utc": "2026-11-17T14:16:08.499360+00:00",
+      "finished_utc": "2026-11-17T14:22:12.533596+00:00"
+    },
+    "seed20": {
+      "status": "completed",
+      "accepted": {
+        "launch": 10,
+        "hand_brake": 2,
+        "reverse": 3,
+        "steer": 8,
+        "steer_fast": 6,
+        "steer_low": 4,
+        "steer_hold": 4,
+        "steer_doublet": 3
+      },
+      "rejected": 7,
+      "started_utc": "2026-11-17T14:22:12.534600+00:00",
+      "finished_utc": "2026-11-17T14:28:17.512361+00:00"
+    },
+    "seed21": {
+      "status": "completed",
+      "accepted": {
+        "launch": 10,
+        "hand_brake": 2,
+        "reverse": 3,
+        "steer": 9,
+        "steer_fast": 6,
+        "steer_low": 4,
+        "steer_hold": 1,
+        "steer_doublet": 3
+      },
+      "rejected": 9,
+      "started_utc": "2026-11-17T14:28:17.513366+00:00",
+      "finished_utc": "2026-11-17T14:34:13.894446+00:00"
+    }
+  }
+}
