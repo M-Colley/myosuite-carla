@@ -94,6 +94,7 @@ def batch_case(tmp_path, monkeypatch):
     directory.mkdir()
     return {
         "data": tmp_path,
+        "directory": directory,
         "design": design,
         "log": log,
         "recording": recording,
@@ -101,9 +102,11 @@ def batch_case(tmp_path, monkeypatch):
     }
 
 
-def load_case(case):
-    (case["data"] / "seed10" / "collection.json").write_text(json.dumps(case["log"]))
-    return EXAMPLE.load_batches(case["data"], [10], case["design"])
+def load_case(case, supplement_data=()):
+    (case["directory"] / "collection.json").write_text(json.dumps(case["log"]))
+    return EXAMPLE.load_batches(
+        case["data"], [10], case["design"], supplement_data=supplement_data
+    )
 
 
 def test_completed_matching_batch_preserves_accepted_coverage(batch_case):
@@ -114,6 +117,35 @@ def test_completed_matching_batch_preserves_accepted_coverage(batch_case):
         "accepted": {"launch": 1},
         "rejected": 1,
     }
+
+
+def test_batch_can_resolve_only_from_a_supplemental_root(batch_case):
+    supplemental = batch_case["data"]
+    batch_case["data"] = supplemental / "empty-primary"
+    batches, coverage = load_case(batch_case, supplement_data=[supplemental])
+    assert batches["10"] == batch_case["segments"]
+    assert coverage["10"]["accepted"] == {"launch": 1}
+
+
+def test_batch_requires_requested_seed_in_primary_or_supplements(batch_case):
+    root = batch_case["data"]
+    batch_case["data"] = root / "empty-primary"
+    with pytest.raises(ValueError, match="one directory for seed 10, found 0"):
+        load_case(batch_case, supplement_data=[root / "empty-supplement"])
+
+
+@pytest.mark.parametrize("primary_has_seed", [True, False])
+def test_batch_rejects_duplicate_seed_copies_across_roots(batch_case, primary_has_seed):
+    root = batch_case["data"]
+    duplicate = root / "duplicate"
+    (duplicate / "seed10").mkdir(parents=True)
+    if primary_has_seed:
+        supplements = [duplicate]
+    else:
+        batch_case["data"] = root / "empty-primary"
+        supplements = [root, duplicate]
+    with pytest.raises(ValueError, match="one directory for seed 10, found 2"):
+        load_case(batch_case, supplement_data=supplements)
 
 
 @pytest.mark.parametrize("source", ["log", "recording"])

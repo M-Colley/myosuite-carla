@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 from collections import Counter
+from collections.abc import Sequence
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -66,7 +67,10 @@ def source_score(rows: list[dict[str, Any]], families: list[str]) -> dict[str, A
 
 
 def load_batches(
-    data: Path, seeds: list[int], design: dict[str, Any]
+    data: Path,
+    seeds: list[int],
+    design: dict[str, Any],
+    supplement_data: Sequence[Path] = (),
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     def validate_metadata(metadata: dict[str, Any], source: str, seed: int) -> None:
         expected = {
@@ -93,7 +97,17 @@ def load_batches(
 
     batches, coverage = {}, {}
     for seed in seeds:
-        directory = data / f"seed{seed}"
+        directories = [
+            root / f"seed{seed}"
+            for root in (data, *supplement_data)
+            if (root / f"seed{seed}").is_dir()
+        ]
+        if len(directories) != 1:
+            raise ValueError(
+                f"Expected exactly one directory for seed {seed}, "
+                f"found {len(directories)}"
+            )
+        directory = directories[0]
         log = read_json(directory / "collection.json")
         validate_metadata(log, "collection log", seed)
         attempted_ids = [row["segment"] for row in log["segments"]]
@@ -163,6 +177,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--design", type=Path, required=True)
     parser.add_argument("--data", type=Path, required=True)
+    parser.add_argument(
+        "--supplement-data",
+        type=Path,
+        action="append",
+        default=[],
+        help="Additional training and validation root; may be repeated",
+    )
     parser.add_argument("--test-data", type=Path)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--stage", choices=("fit", "test"), required=True)
@@ -187,10 +208,10 @@ def main() -> int:
         if any((test_data / f"seed{s}").exists() for s in design["test_seeds"]):
             raise ValueError("Test batches must remain uncollected during selection")
         training, report["training_coverage"] = load_batches(
-            args.data, design["train_seeds"], design
+            args.data, design["train_seeds"], design, args.supplement_data
         )
         validation, report["validation_coverage"] = load_batches(
-            args.data, design["validation_seeds"], design
+            args.data, design["validation_seeds"], design, args.supplement_data
         )
         segments = [segment for batch in training.values() for segment in batch]
         report["legacy"] = evaluate(carla_nissan_patrol(), validation, families)
