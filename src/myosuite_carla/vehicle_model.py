@@ -663,6 +663,7 @@ def fit_vehicle_model(
     steer_lag_slope: float = 0.0,
     use_pitch: bool = True,
     monotonic_drive: bool = False,
+    fixed_longitudinal: VehicleModelParams | None = None,
 ) -> tuple[VehicleModelParams, dict[str, Any]]:
     """Identify surrogate parameters from logged CARLA drives.
 
@@ -692,15 +693,35 @@ def fit_vehicle_model(
         monotonic_drive: Fit nonnegative throttle increments so forward and
             reverse drive magnitudes increase with throttle. The smoothness
             penalty remains defined on the resulting physical drive tables.
+        fixed_longitudinal: Reuse these drive, drag, braking and throttle lag
+            parameters while fitting steering. Table knots must match an
+            explicit template, or are taken from this configuration.
 
     Returns:
         Parameters and a fit report with residual RMS values and sample counts.
     """
     if not segments:
         raise ValueError("Provide at least one segment")
+    if fixed_longitudinal is not None:
+        if not isinstance(fixed_longitudinal, VehicleModelParams):
+            raise TypeError("fixed_longitudinal must be VehicleModelParams")
+        if template is not None and (
+            template.speed_knots != fixed_longitudinal.speed_knots
+            or template.throttle_knots != fixed_longitudinal.throttle_knots
+        ):
+            raise ValueError("fixed_longitudinal knots must match the template")
+        if monotonic_drive and (
+            np.any(np.diff(np.asarray(fixed_longitudinal.drive), axis=0) < 0)
+            or np.any(np.diff(np.asarray(fixed_longitudinal.reverse_drive)) < 0)
+        ):
+            raise ValueError("fixed_longitudinal must be monotonic in throttle")
     optimize = importlib.import_module("scipy.optimize")
     knots = (
-        template if template is not None else VehicleModelParams(wheelbase=wheelbase)
+        template
+        if template is not None
+        else fixed_longitudinal
+        if fixed_longitudinal is not None
+        else VehicleModelParams(wheelbase=wheelbase)
     )
     count_t, count_u = len(knots.throttle_knots), len(knots.speed_knots)
     cells = count_t * count_u
@@ -726,28 +747,39 @@ def fit_vehicle_model(
         ]
     )
     best: tuple[float, float, NDArray[np.float64], int] | None = None
-    for lag in throttle_lags:
+    lags = (
+        throttle_lags
+        if fixed_longitudinal is None
+        else (fixed_longitudinal.throttle_lag,)
+    )
+    for lag in lags:
         design, target = _longitudinal_design(
             segments, knots, float(lag), min_speed, use_pitch
         )
-        weight = smoothing * math.sqrt(len(target) / cells)
-        smooth = np.pad(weight * penalty, ((0, 0), (0, design.shape[1] - smoothed)))
-        fitted_design = design
-        if monotonic_drive:
-            fitted_design = design @ transform
-            smooth = smooth @ transform
-        augmented = np.vstack(
-            [
-                fitted_design,
-                smooth,
+        if fixed_longitudinal is None:
+            weight = smoothing * math.sqrt(len(target) / cells)
+            smooth = np.pad(weight * penalty, ((0, 0), (0, design.shape[1] - smoothed)))
+            fitted_design = design
+            if monotonic_drive:
+                fitted_design = design @ transform
+                smooth = smooth @ transform
+            augmented = np.vstack([fitted_design, smooth])
+            padded = np.concatenate([target, np.zeros(len(penalty))])
+            coefficients, _ = optimize.nnls(
+                augmented, padded, maxiter=50 * augmented.shape[1]
+            )
+            if monotonic_drive:
+                coefficients = transform @ coefficients
+        else:
+            coefficients = np.r_[
+                np.asarray(fixed_longitudinal.drive).ravel(),
+                fixed_longitudinal.reverse_drive,
+                fixed_longitudinal.rolling,
+                fixed_longitudinal.linear_drag,
+                fixed_longitudinal.quadratic_drag,
+                fixed_longitudinal.brake_decel,
+                fixed_longitudinal.hand_brake_decel,
             ]
-        )
-        padded = np.concatenate([target, np.zeros(len(penalty))])
-        coefficients, _ = optimize.nnls(
-            augmented, padded, maxiter=50 * augmented.shape[1]
-        )
-        if monotonic_drive:
-            coefficients = transform @ coefficients
         residual = float(np.linalg.norm(design @ coefficients - target))
         if best is None or residual < best[0]:
             best = (residual, float(lag), coefficients, len(target))
@@ -827,6 +859,7 @@ def fit_vehicle_model(
     report = {
         "use_pitch": use_pitch,
         "monotonic_drive": monotonic_drive,
+        "longitudinal_fitted": fixed_longitudinal is None,
         "steer_exponent_identified": identify_exponent,
         "steer_knots_identified": [bool(value) for value in identified],
         "envelope": {

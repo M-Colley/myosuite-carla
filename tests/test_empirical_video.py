@@ -62,3 +62,62 @@ def test_earlier_video_reports_keep_their_original_controller_defaults():
     restored = _module().controller_configuration(asdict(IdmConfig()), 0.02, None)
     assert restored.perception_delay == 0.02
     assert restored.acceleration_control is None
+
+
+def test_video_restores_all_recorded_vehicle_parameters():
+    from dataclasses import replace
+
+    from myosuite_carla.driver_models import (
+        AccelerationControlConfig,
+        ReflexDriverConfig,
+    )
+    from myosuite_carla.vehicle_model import carla_nissan_patrol
+
+    parameters = replace(
+        carla_nissan_patrol(), steer_exponent=1, throttle_lag=0.07, rolling=0.75
+    )
+    controller = ReflexDriverConfig(
+        acceleration_control=AccelerationControlConfig(vehicle=parameters)
+    )
+    restored = _module().vehicle_configuration(
+        json.loads(json.dumps(parameters.as_dict())), controller
+    )
+    assert restored == parameters
+    assert _module().vehicle_configuration(None, controller) is None
+
+
+def test_video_rejects_vehicle_inverse_mismatch_before_allocating_the_environment(
+    monkeypatch, tmp_path
+):
+    from dataclasses import replace
+    from types import SimpleNamespace
+
+    pytest.importorskip("embodied_human")
+    from myosuite_carla import driving_env
+    from myosuite_carla.driver_models import (
+        AccelerationControlConfig,
+        ReflexDriverConfig,
+    )
+    from myosuite_carla.vehicle_model import carla_nissan_patrol
+
+    def unexpected_environment(*args, **kwargs):
+        pytest.fail("an inconsistent vehicle must fail before environment allocation")
+
+    monkeypatch.setattr(driving_env, "FullBodyDrivingEnv", unexpected_environment)
+    controller = ReflexDriverConfig(acceleration_control=AccelerationControlConfig())
+    driver = SimpleNamespace(config=SimpleNamespace(control_dt=0.02))
+    parameters = replace(carla_nissan_patrol(), steer_exponent=1)
+    with pytest.raises(ValueError, match="vehicle and acceleration inverse differ"):
+        _module().replay(
+            driver,
+            object(),
+            object(),
+            {},
+            asdict(controller.idm),
+            tmp_path / "trial.mp4",
+            25,
+            16,
+            asdict(controller),
+            parameters.as_dict(),
+        )
+    assert not list(tmp_path.iterdir())

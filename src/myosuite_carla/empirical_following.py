@@ -22,6 +22,7 @@ from numpy.typing import NDArray
 
 from .driver_models import IdmConfig, ReflexDriverConfig, idm_acceleration
 from .ngsim import RATE, FollowingTrial, following_trials, load_tracks, load_trials
+from .vehicle_model import VehicleModelParams, carla_nissan_patrol
 
 METRICS = ("acceleration_rmse", "acceleration_bias")
 FIXED_ERROR_SCALES = {"acceleration_rmse": 1.0, "acceleration_bias": 0.5}
@@ -305,6 +306,7 @@ def _run_closed_loop_episode(
     seed: int,
     config: ClosedLoopConfig,
     reflex_config: ReflexDriverConfig | None = None,
+    vehicle_parameters: VehicleModelParams | None = None,
 ) -> dict[str, Any]:
     """Run one muscle driven follower and retain completion and error evidence."""
     import embodied_human as eh
@@ -337,7 +339,18 @@ def _run_closed_loop_episode(
         record["full_source_horizon"] = math.isclose(
             scenario.duration, trial.duration, rel_tol=0, abs_tol=1e-8
         )
-        env = FullBodyDrivingEnv(scenario, driver=driver)
+        if vehicle_parameters is None:
+            env = FullBodyDrivingEnv(scenario, driver=driver)
+        else:
+            from .session import SessionConfig
+            from .vehicle_model import SurrogateVehicle
+
+            vehicle = SurrogateVehicle(
+                vehicle_parameters,
+                config=SessionConfig(fixed_delta_seconds=driver.config.control_dt),
+            )
+            env = FullBodyDrivingEnv(scenario, driver=driver, vehicle=vehicle)
+            record["vehicle_parameters"] = vehicle_parameters.as_dict()
         _, initial = env.reset(seed=seed)
         resolved_reflex = (
             ReflexDriverConfig(idm=parameters, perception_delay=env.dt)
@@ -453,7 +466,8 @@ class ClosedLoopFollowingProtocol:
 
     Every requested source contributes its fixed trial set. An incomplete or
     unsafe episode makes the objective infeasible. Episode caches bind the
-    complete IDM settings, source trial, and exact simulation seed.
+    complete IDM settings, vehicle parameters, source trial, and exact seed.
+    Explicit vehicle parameters apply to every baseline and fitted episode.
     """
 
     def __init__(
@@ -462,9 +476,25 @@ class ClosedLoopFollowingProtocol:
         *,
         config: ClosedLoopConfig = ClosedLoopConfig(),
         reflex_config: ReflexDriverConfig | None = None,
+        vehicle_parameters: VehicleModelParams | None = None,
     ) -> None:
         self.config = config
         supplied = reflex_config or ReflexDriverConfig(perception_delay=0.02)
+        if vehicle_parameters is not None:
+            if not isinstance(vehicle_parameters, VehicleModelParams):
+                raise TypeError("vehicle_parameters must be VehicleModelParams")
+            if (
+                supplied.acceleration_control is not None
+                and supplied.acceleration_control.vehicle != vehicle_parameters
+            ):
+                raise ValueError("vehicle parameters and acceleration inverse differ")
+        self._explicit_vehicle = vehicle_parameters is not None
+        self._vehicle_parameters = (
+            carla_nissan_patrol() if vehicle_parameters is None else vehicle_parameters
+        )
+        self._vehicle_identity = hashlib.sha256(
+            json.dumps(self._vehicle_parameters.as_dict(), sort_keys=True).encode()
+        ).hexdigest()
         self._reflex_config = replace(
             deepcopy(supplied),
             throttle_map=tuple((row[0], row[1]) for row in supplied.throttle_map),
@@ -507,7 +537,6 @@ class ClosedLoopFollowingProtocol:
         import embodied_human as eh
 
         from .fullbody import FullBodyDriverConfig, build_fullbody_driver
-        from .vehicle_model import carla_nissan_patrol
 
         driver_config = FullBodyDriverConfig.fast()
         self._driver = build_fullbody_driver(driver_config)
@@ -517,13 +546,33 @@ class ClosedLoopFollowingProtocol:
             "body_builds": 1,
             "muscles": self._driver.model.nu,
             "driver_config": asdict(driver_config),
-            "vehicle_parameters": carla_nissan_patrol().as_dict(),
+            "vehicle_parameters": self._vehicle_parameters.as_dict(),
         }
 
     @property
     def reflex_config(self) -> ReflexDriverConfig:
         """Return the immutable controller configuration bound to this cache."""
         return self._reflex_config
+
+    @property
+    def vehicle_parameters(self) -> VehicleModelParams:
+        """Return the immutable vehicle parameters shared by all profiles."""
+        return self._vehicle_parameters
+
+    def _vehicle_metadata(self) -> dict[str, Any]:
+        if not self._explicit_vehicle:
+            return {}
+        return {
+            "vehicle_parameters": self._vehicle_parameters.as_dict(),
+            "vehicle_config_sha256": self._vehicle_identity,
+        }
+
+    @property
+    def vehicle_label(self) -> str:
+        """Describe explicit parameters without inferring their source release."""
+        if self._explicit_vehicle:
+            return "offline vehicle surrogate with explicit parameters"
+        return "offline fitted CARLA 0.10.0 Nissan Patrol surrogate"
 
     @property
     def observed(self) -> dict[str, dict[str, float]]:
@@ -551,6 +600,7 @@ class ClosedLoopFollowingProtocol:
             "failure_policy": "any incomplete or unsafe episode is infeasible",
             "seed_policy": "SHA256 of base seed, source identity, and trial index",
             **deepcopy(self._body_metadata),
+            **self._vehicle_metadata(),
         }
 
     @property
@@ -602,6 +652,7 @@ class ClosedLoopFollowingProtocol:
             raise RuntimeError("closed loop protocol has been closed")
         key = (
             self._reflex_identity,
+            self._vehicle_identity,
             tuple(asdict(parameters).values()),
             group,
             trial_index,
@@ -621,6 +672,9 @@ class ClosedLoopFollowingProtocol:
             seed=seed,
             config=self.config,
             reflex_config=self._reflex_config,
+            vehicle_parameters=(
+                self._vehicle_parameters if self._explicit_vehicle else None
+            ),
         )
         self._cache[key] = deepcopy(record)
         return record
@@ -699,13 +753,14 @@ class ClosedLoopFollowingProtocol:
             "selected_trials": sum(len(self._trials[group]) for group in requested),
             "secondary_task": None,
             "controller": "embodied_human.agents.driver.AttentiveDriver",
-            "vehicle": "offline fitted CARLA 0.10.0 Nissan Patrol surrogate",
+            "vehicle": self.vehicle_label,
             "desired_speed_mps": self.desired_speed,
             "profiles": {key: asdict(value) for key, value in profiles.items()},
             "configuration": asdict(self.config),
             "reflex_config": asdict(self._reflex_config),
             "episodes": episodes,
             **deepcopy(self._body_metadata),
+            **self._vehicle_metadata(),
         }
 
 
@@ -718,11 +773,13 @@ def closed_loop_following(
     max_trials: int = 6,
     seed: int = 0,
     seconds: float | None = None,
+    vehicle_parameters: VehicleModelParams | None = None,
 ) -> dict[str, Any]:
     """Replay matched profiles for an explicitly supplied held out subset.
 
     This compatibility entry point preserves the original total trial limit
     and episode seed offsets. Calibration uses ClosedLoopFollowingProtocol.
+    Explicit vehicle parameters apply to both profiles.
     """
     if (
         not groups
@@ -747,6 +804,9 @@ def closed_loop_following(
         for group in order:
             if index < len(protocol.trials_for(group)) and len(chosen) < max_trials:
                 chosen.append((group, index))
+    session = ClosedLoopFollowingProtocol(
+        protocol, config=config, vehicle_parameters=vehicle_parameters
+    )
     report: dict[str, Any] = {
         "status": "unavailable",
         "role": "held_out_closed_loop",
@@ -756,12 +816,12 @@ def closed_loop_following(
         "selected_trials": len(chosen),
         "secondary_task": None,
         "controller": "embodied_human.agents.driver.AttentiveDriver",
-        "vehicle": "offline fitted CARLA 0.10.0 Nissan Patrol surrogate",
+        "vehicle": session.vehicle_label,
         "desired_speed_mps": protocol.desired_speed,
         "profiles": {name: asdict(value) for name, value in profiles.items()},
         "episodes": [],
+        **session._vehicle_metadata(),
     }
-    session = ClosedLoopFollowingProtocol(protocol, config=config)
     try:
         session._ensure_driver()
     except ImportError as error:

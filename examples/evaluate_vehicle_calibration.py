@@ -149,6 +149,7 @@ def main() -> int:
         segments = [segment for batch in training.values() for segment in batch]
         report["legacy"] = evaluate(carla_nissan_patrol(), validation, families)
         report["candidates"] = {}
+        fixed_longitudinal = None
         for candidate in design["candidates"]:
             name = candidate["name"]
             print(f"Fitting {name}", flush=True)
@@ -158,8 +159,11 @@ def main() -> int:
                 smoothing=design["smoothing"],
                 use_pitch=False,
                 monotonic_drive=True,
+                fixed_longitudinal=fixed_longitudinal,
                 **candidate["parameters"],
             )
+            if fixed_longitudinal is None:
+                fixed_longitudinal = params
             AccelerationControlConfig(vehicle=params)
             result = {
                 "parameters": params.as_dict(),

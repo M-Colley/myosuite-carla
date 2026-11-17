@@ -8,6 +8,8 @@ from pathlib import Path
 
 import pytest
 
+pytest.importorskip("scipy")
+
 SPEC = importlib.util.spec_from_file_location(
     "vehicle_calibration_example",
     Path(__file__).parents[1] / "examples/evaluate_vehicle_calibration.py",

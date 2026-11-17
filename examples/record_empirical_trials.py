@@ -249,6 +249,21 @@ def controller_configuration(
     return configuration
 
 
+def vehicle_configuration(explicit: dict[str, Any] | None, controller: Any) -> Any:
+    """Restore recorded dynamics and reject a conflicting acceleration inverse."""
+    from myosuite_carla.vehicle_model import VehicleModelParams
+
+    if explicit is None:
+        return None
+    parameters = VehicleModelParams.from_dict(explicit)
+    if (
+        controller.acceleration_control is not None
+        and controller.acceleration_control.vehicle != parameters
+    ):
+        raise ValueError("recorded vehicle and acceleration inverse differ")
+    return parameters
+
+
 def replay(
     driver: Any,
     body: BodyView,
@@ -259,6 +274,7 @@ def replay(
     fps: int,
     desired_speed: float,
     reflex_configuration: dict[str, Any] | None = None,
+    vehicle_parameters: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     import embodied_human as eh
     import numpy as np
@@ -268,8 +284,22 @@ def replay(
     from myosuite_carla.driving_env import FullBodyDrivingEnv
     from myosuite_carla.training import scenario_from_trial
 
+    configuration = controller_configuration(
+        parameters, driver.config.control_dt, reflex_configuration
+    )
+    restored_vehicle = vehicle_configuration(vehicle_parameters, configuration)
     scenario = scenario_from_trial(trial, desired_speed)
-    env = FullBodyDrivingEnv(scenario, driver=driver)
+    if restored_vehicle is None:
+        env = FullBodyDrivingEnv(scenario, driver=driver)
+    else:
+        from myosuite_carla.session import SessionConfig
+        from myosuite_carla.vehicle_model import SurrogateVehicle
+
+        vehicle = SurrogateVehicle(
+            restored_vehicle,
+            config=SessionConfig(fixed_delta_seconds=driver.config.control_dt),
+        )
+        env = FullBodyDrivingEnv(scenario, driver=driver, vehicle=vehicle)
     temporary = path.with_suffix(".unverified.mp4")
     panel = None
     result: dict[str, Any] = {
@@ -277,11 +307,10 @@ def replay(
         "seed": expected["seed"],
         "parameters": parameters,
     }
+    if restored_vehicle is not None:
+        result["vehicle_parameters"] = restored_vehicle.as_dict()
     try:
         _, initial = env.reset(seed=expected["seed"])
-        configuration = controller_configuration(
-            parameters, env.dt, reflex_configuration
-        )
         agent = AttentiveDriver(
             eh.build_human(seed=expected["seed"]),
             env,
@@ -523,6 +552,8 @@ def main() -> int:
                 )
                 explicit = (
                     report["closed_loop"].get("reflex_configurations", {}).get(label)
+                    or expected.get("reflex_config")
+                    or report["closed_loop"].get("reflex_config")
                 )
                 if (
                     label == "fitted"
@@ -545,6 +576,7 @@ def main() -> int:
                         args.fps,
                         config["desired_speed"],
                         explicit,
+                        report["closed_loop"].get("vehicle_parameters"),
                     )
                 )
             paired = args.out / f"{stem}-paired.mp4"

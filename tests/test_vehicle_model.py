@@ -286,6 +286,73 @@ def test_monotonic_fit_supports_the_acceleration_inverse() -> None:
     assert AccelerationControlConfig(vehicle=constrained).vehicle == constrained
 
 
+def test_fixed_longitudinal_parameters_are_preserved_while_steering_is_fitted(
+    monkeypatch,
+) -> None:
+    optimize = pytest.importorskip("scipy.optimize")
+
+    def reject_nnls(*args, **kwargs):
+        raise AssertionError("Fixed longitudinal parameters must skip NNLS")
+
+    monkeypatch.setattr(optimize, "nnls", reject_nnls)
+    fixed = replace(TRUTH, steer_gain=(0.1,) * len(SPEED_KNOTS), steer_lag=0.7)
+    params, report = fit_vehicle_model(
+        _synthetic(7),
+        fixed_longitudinal=fixed,
+        use_pitch=False,
+        monotonic_drive=True,
+        steer_exponent=1.0,
+        smoothing=0.05,
+    )
+    for name in (
+        "drive",
+        "reverse_drive",
+        "rolling",
+        "linear_drag",
+        "quadratic_drag",
+        "brake_decel",
+        "hand_brake_decel",
+        "throttle_lag",
+    ):
+        assert getattr(params, name) == getattr(fixed, name)
+    assert report["longitudinal_fitted"] is False
+    assert report["longitudinal_samples"] > 0
+    assert report["longitudinal_rms_mps2"] < 1e-8
+    assert params.steer_lag == pytest.approx(TRUTH.steer_lag, abs=0.03)
+    assert max(params.steer_gain) > 0.3
+
+
+def test_fixed_longitudinal_knots_are_inherited_or_checked() -> None:
+    pytest.importorskip("scipy")
+    custom = VehicleModelParams(
+        speed_knots=(0.0, 10.0),
+        throttle_knots=(0.5, 1.0),
+        drive=((1.0, 1.0), (3.0, 3.0)),
+        reverse_drive=(0.8, 1.5),
+        steer_gain=(0.5, 0.3),
+    )
+    train = _synthetic(1, custom)[:1]
+    params, report = fit_vehicle_model(train, fixed_longitudinal=custom)
+    assert params.speed_knots == custom.speed_knots
+    assert params.throttle_knots == custom.throttle_knots
+    assert params.drive == custom.drive
+    assert report["longitudinal_fitted"] is False
+    with pytest.raises(ValueError, match="knots"):
+        fit_vehicle_model(train, fixed_longitudinal=custom, template=TRUTH)
+
+
+@pytest.mark.parametrize("part", ["drive", "reverse_drive"])
+def test_fixed_longitudinal_checks_requested_throttle_monotonicity(part) -> None:
+    if part == "drive":
+        fixed = replace(TRUTH, drive=(TRUTH.drive[-1], *TRUTH.drive[1:]))
+    else:
+        fixed = replace(TRUTH, reverse_drive=(3.0, 0.5, 1.0, 1.5))
+    with pytest.raises(ValueError, match="monotonic"):
+        fit_vehicle_model(
+            _synthetic(5)[:1], fixed_longitudinal=fixed, monotonic_drive=True
+        )
+
+
 def test_later_segments_supply_horizon_metrics_when_the_first_is_short() -> None:
     segment = _synthetic(3)[0]
     commands = ("throttle", "brake", "steer", "hand_brake", "reverse")
