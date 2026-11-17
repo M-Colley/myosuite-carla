@@ -68,12 +68,41 @@ def source_score(rows: list[dict[str, Any]], families: list[str]) -> dict[str, A
 def load_batches(
     data: Path, seeds: list[int], design: dict[str, Any]
 ) -> tuple[dict[str, Any], dict[str, Any]]:
+    def validate_metadata(metadata: dict[str, Any], source: str, seed: int) -> None:
+        expected = {
+            "status": "completed",
+            "seed": seed,
+            "client_version": design["target"]["carla"],
+            "server_version": design["target"]["carla"],
+            "map": design["target"]["map"],
+            "blueprint": design["target"]["vehicle"],
+            "control_dt": design["target"]["dt_s"],
+            "min_straight_m": design["min_straight_m"],
+            "max_road_pitch_deg": design["max_road_pitch_deg"],
+            "max_lateral_acceleration_mps2": design[
+                "nominal_max_lateral_acceleration_mps2"
+            ],
+            "steer_input_exponent": design["collection_steer_exponent"],
+            "counts": design["counts"],
+        }
+        for field, value in expected.items():
+            if metadata.get(field) != value:
+                raise ValueError(
+                    f"Seed {seed} {source} {field} differs from the frozen design"
+                )
+
     batches, coverage = {}, {}
     for seed in seeds:
         directory = data / f"seed{seed}"
         log = read_json(directory / "collection.json")
-        if log["client_version"] != "1.0" or log["server_version"] != "1.0":
-            raise ValueError("The calibration requires a matched CARLA 1.0 runtime")
+        validate_metadata(log, "collection log", seed)
+        attempted_ids = [row["segment"] for row in log["segments"]]
+        if len(set(attempted_ids)) != len(attempted_ids) or any(
+            not row["segment"].startswith(f"s{seed}-")
+            or kind(row["segment"]) != row["kind"]
+            for row in log["segments"]
+        ):
+            raise ValueError(f"Invalid collection segment identities in seed {seed}")
         attempted = Counter(row["kind"] for row in log["segments"])
         kept = Counter(row["kind"] for row in log["segments"] if row["kept"])
         if dict(attempted) != design["counts"]:
@@ -83,9 +112,26 @@ def load_batches(
                 raise ValueError(
                     f"Insufficient accepted {family} trials in seed {seed}"
                 )
-        segments = segments_from_recording(Recording.load(directory))
-        if len(segments) != sum(kept.values()):
+        accepted = [row for row in log["segments"] if row["kept"]]
+        if any(
+            row.get("status") != "completed" or row.get("completed") is not True
+            for row in accepted
+        ):
+            raise ValueError(f"Accepted trials must be completed in seed {seed}")
+        recording = Recording.load(directory)
+        validate_metadata(recording.metadata, "recording metadata", seed)
+        if recording.metadata.get("vehicle") != design["target"]["vehicle"]:
+            raise ValueError(f"Seed {seed} recording vehicle differs from the design")
+        segments = segments_from_recording(recording)
+        if Counter(segment.name for segment in segments) != Counter(
+            row["segment"] for row in accepted
+        ):
             raise ValueError("Saved segments differ from the accepted collection log")
+        if any(
+            not np.isclose(segment.dt, design["target"]["dt_s"], rtol=1e-3, atol=1e-6)
+            for segment in segments
+        ):
+            raise ValueError(f"Saved segment dt differs from the design in seed {seed}")
         batches[str(seed)] = segments
         coverage[str(seed)] = {
             "attempted": dict(attempted),

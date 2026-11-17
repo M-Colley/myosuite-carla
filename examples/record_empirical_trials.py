@@ -7,7 +7,7 @@ import hashlib
 import json
 import math
 import subprocess
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -289,6 +289,17 @@ def replay(
     )
     restored_vehicle = vehicle_configuration(vehicle_parameters, configuration)
     scenario = scenario_from_trial(trial, desired_speed)
+    if "requested_duration_s" in expected:
+        duration = expected["requested_duration_s"]
+        if (
+            isinstance(duration, bool)
+            or not isinstance(duration, (int, float))
+            or not math.isfinite(duration)
+            or duration <= 0
+            or duration > scenario.duration + 1e-8
+        ):
+            raise ValueError("recorded duration must lie within the source trial")
+        scenario = replace(scenario, duration=float(duration))
     if restored_vehicle is None:
         env = FullBodyDrivingEnv(scenario, driver=driver)
     else:
