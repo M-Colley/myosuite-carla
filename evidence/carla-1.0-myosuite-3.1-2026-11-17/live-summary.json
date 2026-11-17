@@ -1,0 +1,438 @@
+{
+  "primary": {
+    "client_version": "1.0",
+    "server_version": "1.0",
+    "map": "Carla/Maps/Town10HD_Opt",
+    "provenance": {
+      "expected_ref": "1.0",
+      "asserted_ref": "1.0",
+      "asserted_ref_matches_target": true,
+      "asserted_commit": "1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5",
+      "runtime_matches_target": true,
+      "source_verified": false
+    },
+    "control_trials": [
+      {
+        "control": "throttle",
+        "passed": true,
+        "blueprint": "vehicle.nissan.patrol",
+        "start_speed_mps": 0.0,
+        "end_speed_mps": 2.2470486747676977,
+        "displacement_metres": 2.473645522881351,
+        "yaw_change_degrees": -0.00168609619140625,
+        "vehicle_destroyed": true,
+        "settings_restored": true
+      },
+      {
+        "control": "brake",
+        "passed": true,
+        "blueprint": "vehicle.nissan.patrol",
+        "start_speed_mps": 2.9637864546552786,
+        "end_speed_mps": 0.00023360043823073107,
+        "displacement_metres": 2.243345634580967,
+        "yaw_change_degrees": 0.00186920166015625,
+        "vehicle_destroyed": true,
+        "settings_restored": true
+      },
+      {
+        "control": "steering",
+        "passed": true,
+        "blueprint": "vehicle.nissan.patrol",
+        "start_speed_mps": 2.9637807304128594,
+        "end_speed_mps": 3.525799044990436,
+        "displacement_metres": 6.060975088995843,
+        "yaw_change_degrees": -52.13148880004883,
+        "vehicle_destroyed": true,
+        "settings_restored": true
+      }
+    ],
+    "fullbody": {
+      "muscles": 416,
+      "frames": 1194,
+      "checks": [
+        {
+          "name": "foot throttle accelerates",
+          "passed": true,
+          "detail": "0.00 -> 1.09 m/s over 1.53 m"
+        },
+        {
+          "name": "parking brake resists foot throttle",
+          "passed": true,
+          "detail": "0.01 m with parking brake vs 1.53 m released"
+        },
+        {
+          "name": "second switch press releases the parking brake",
+          "passed": true,
+          "detail": "hand_brake after the second press"
+        },
+        {
+          "name": "push-pull hands steer left under foot throttle",
+          "passed": true,
+          "detail": "-18.4 deg, steer -0.43"
+        },
+        {
+          "name": "push-pull hands steer right under foot throttle",
+          "passed": true,
+          "detail": "11.5 deg, steer 0.56"
+        },
+        {
+          "name": "foot brake stops the car",
+          "passed": true,
+          "detail": "2.22 -> 0.012 m/s"
+        },
+        {
+          "name": "reverse button press drives backwards",
+          "passed": true,
+          "detail": "-1.02 m along the heading"
+        },
+        {
+          "name": "second button press leaves reverse",
+          "passed": true,
+          "detail": "reverse flag after the second press"
+        },
+        {
+          "name": "paddle selects manual gear 1",
+          "passed": true,
+          "detail": "applied gears [1]"
+        },
+        {
+          "name": "paddle selects manual gear 2",
+          "passed": true,
+          "detail": "applied gears [2]"
+        },
+        {
+          "name": "paddle selects manual gear 3",
+          "passed": true,
+          "detail": "applied gears [3]"
+        },
+        {
+          "name": "paddle returns to automatic",
+          "passed": true,
+          "detail": "manual_gear_shift after the fourth pull"
+        },
+        {
+          "name": "parking brake stops the rolling car",
+          "passed": true,
+          "detail": "1.52 -> 0.00 m/s without the brake pedal"
+        }
+      ],
+      "settings_restored": true,
+      "actor_ids_restored": true,
+      "shift_lag_frames": {
+        "reverse": 3,
+        "gear": 2
+      }
+    },
+    "session_tests": [
+      {
+        "name": "test_1200_real_muscle_frames_remain_in_lockstep",
+        "status": "passed",
+        "frames": 1200,
+        "excitation": 0.015,
+        "control_dt": 0.02,
+        "muscles": [
+          "extn",
+          "adabR",
+          "adabL",
+          "mflx",
+          "dflx"
+        ],
+        "settings_before": {
+          "synchronous_mode": false,
+          "fixed_delta_seconds": null,
+          "substepping": true,
+          "max_substeps": 10,
+          "max_substep_delta_time": 0.01,
+          "no_rendering_mode": false
+        },
+        "blueprint": "vehicle.nissan.patrol",
+        "vehicle_id": 29,
+        "settling_frames": 75,
+        "start_frame": 1015732,
+        "final_frame": 1016932,
+        "simulated_seconds": 24.0,
+        "wall_seconds": 18.84753329999512,
+        "achieved_frames_per_wall_second": 63.6688091168042,
+        "frame_wall_seconds": {
+          "median": 0.015613149997079745,
+          "p95": 0.0163985050006886,
+          "max": 0.016803900012746453
+        },
+        "max_clock_drift_seconds": 5.364312194444665e-07,
+        "max_applied_control_error": 2.9513554600235636e-08,
+        "physical_peaks": {
+          "travel": 0.049894132253243774,
+          "contact_newtons": 31.446977173337828,
+          "muscle_newtons": 255.55376743497288
+        },
+        "displacement_metres": 69.21418585336936,
+        "final_speed_mps": 0.0,
+        "vehicle_destroyed": true,
+        "settings_after": {
+          "synchronous_mode": false,
+          "fixed_delta_seconds": null,
+          "substepping": true,
+          "max_substeps": 10,
+          "max_substep_delta_time": 0.01,
+          "no_rendering_mode": false
+        },
+        "settings_restored": true,
+        "actor_ids_restored": true
+      },
+      {
+        "name": "test_second_client_tick_invalidates_public_snapshot_and_brakes",
+        "status": "passed",
+        "settings_before": {
+          "synchronous_mode": false,
+          "fixed_delta_seconds": null,
+          "substepping": true,
+          "max_substeps": 10,
+          "max_substep_delta_time": 0.01,
+          "no_rendering_mode": false
+        },
+        "blueprint": "vehicle.nissan.patrol",
+        "vehicle_id": 30,
+        "settling_frames": 75,
+        "original_frame": 1017081,
+        "external_frame": 1017082,
+        "verification_frame": 1017083,
+        "detected_error": "Another client advanced CARLA during this step",
+        "session_invalidated": true,
+        "emergency_control": {
+          "throttle": 0.0,
+          "brake": 1.0,
+          "hand_brake": true
+        },
+        "vehicle_destroyed": true,
+        "settings_after": {
+          "synchronous_mode": false,
+          "fixed_delta_seconds": null,
+          "substepping": true,
+          "max_substeps": 10,
+          "max_substep_delta_time": 0.01,
+          "no_rendering_mode": false
+        },
+        "settings_restored": true,
+        "actor_ids_restored": true
+      }
+    ]
+  },
+  "dev": {
+    "client_version": "1.0",
+    "server_version": "1.0",
+    "map": "Carla/Maps/Town10HD_Opt",
+    "provenance": {
+      "expected_ref": "1.0",
+      "asserted_ref": "1.0",
+      "asserted_ref_matches_target": true,
+      "asserted_commit": "1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5",
+      "runtime_matches_target": true,
+      "source_verified": false
+    },
+    "control_trials": [
+      {
+        "control": "throttle",
+        "passed": true,
+        "blueprint": "vehicle.nissan.patrol",
+        "start_speed_mps": 0.0038618027017373775,
+        "end_speed_mps": 2.2372460618400694,
+        "displacement_metres": 2.4450432674137694,
+        "yaw_change_degrees": -0.001922607421875,
+        "vehicle_destroyed": true,
+        "settings_restored": true
+      },
+      {
+        "control": "brake",
+        "passed": true,
+        "blueprint": "vehicle.nissan.patrol",
+        "start_speed_mps": 2.963780519844479,
+        "end_speed_mps": 0.0002336927843729409,
+        "displacement_metres": 2.2433380057131322,
+        "yaw_change_degrees": 0.0018463134765625,
+        "vehicle_destroyed": true,
+        "settings_restored": true
+      },
+      {
+        "control": "steering",
+        "passed": true,
+        "blueprint": "vehicle.nissan.patrol",
+        "start_speed_mps": 2.963780708527013,
+        "end_speed_mps": 3.5258245482289987,
+        "displacement_metres": 6.060983179778121,
+        "yaw_change_degrees": -52.131595611572266,
+        "vehicle_destroyed": true,
+        "settings_restored": true
+      }
+    ],
+    "fullbody": {
+      "muscles": 416,
+      "frames": 1197,
+      "checks": [
+        {
+          "name": "foot throttle accelerates",
+          "passed": true,
+          "detail": "0.00 -> 1.09 m/s over 1.53 m"
+        },
+        {
+          "name": "parking brake resists foot throttle",
+          "passed": true,
+          "detail": "0.01 m with parking brake vs 1.53 m released"
+        },
+        {
+          "name": "second switch press releases the parking brake",
+          "passed": true,
+          "detail": "hand_brake after the second press"
+        },
+        {
+          "name": "push-pull hands steer left under foot throttle",
+          "passed": true,
+          "detail": "-18.4 deg, steer -0.43"
+        },
+        {
+          "name": "push-pull hands steer right under foot throttle",
+          "passed": true,
+          "detail": "11.4 deg, steer 0.56"
+        },
+        {
+          "name": "foot brake stops the car",
+          "passed": true,
+          "detail": "2.22 -> 0.012 m/s"
+        },
+        {
+          "name": "reverse button press drives backwards",
+          "passed": true,
+          "detail": "-1.02 m along the heading"
+        },
+        {
+          "name": "second button press leaves reverse",
+          "passed": true,
+          "detail": "reverse flag after the second press"
+        },
+        {
+          "name": "paddle selects manual gear 1",
+          "passed": true,
+          "detail": "applied gears [1]"
+        },
+        {
+          "name": "paddle selects manual gear 2",
+          "passed": true,
+          "detail": "applied gears [2]"
+        },
+        {
+          "name": "paddle selects manual gear 3",
+          "passed": true,
+          "detail": "applied gears [3]"
+        },
+        {
+          "name": "paddle returns to automatic",
+          "passed": true,
+          "detail": "manual_gear_shift after the fourth pull"
+        },
+        {
+          "name": "parking brake stops the rolling car",
+          "passed": true,
+          "detail": "1.53 -> 0.00 m/s without the brake pedal"
+        }
+      ],
+      "settings_restored": true,
+      "actor_ids_restored": true,
+      "shift_lag_frames": {
+        "reverse": 3,
+        "gear": 2
+      }
+    },
+    "session_tests": [
+      {
+        "name": "test_1200_real_muscle_frames_remain_in_lockstep",
+        "status": "passed",
+        "frames": 1200,
+        "excitation": 0.015,
+        "control_dt": 0.02,
+        "muscles": [
+          "extn",
+          "adabR",
+          "adabL",
+          "mflx",
+          "dflx"
+        ],
+        "settings_before": {
+          "synchronous_mode": false,
+          "fixed_delta_seconds": null,
+          "substepping": true,
+          "max_substeps": 10,
+          "max_substep_delta_time": 0.01,
+          "no_rendering_mode": false
+        },
+        "blueprint": "vehicle.nissan.patrol",
+        "vehicle_id": 34,
+        "settling_frames": 75,
+        "start_frame": 1479550,
+        "final_frame": 1480750,
+        "simulated_seconds": 24.0,
+        "wall_seconds": 18.841578399995342,
+        "achieved_frames_per_wall_second": 63.688931708624615,
+        "frame_wall_seconds": {
+          "median": 0.015622550010448322,
+          "p95": 0.016319509992899838,
+          "max": 0.016851499996846542
+        },
+        "max_clock_drift_seconds": 5.364312194444665e-07,
+        "max_applied_control_error": 2.9513554600235636e-08,
+        "physical_peaks": {
+          "travel": 0.049894132253243774,
+          "contact_newtons": 31.446977173337828,
+          "muscle_newtons": 255.55376743497288
+        },
+        "displacement_metres": 69.2070236144347,
+        "final_speed_mps": 1.163497969475501e-06,
+        "vehicle_destroyed": true,
+        "settings_after": {
+          "synchronous_mode": false,
+          "fixed_delta_seconds": null,
+          "substepping": true,
+          "max_substeps": 10,
+          "max_substep_delta_time": 0.01,
+          "no_rendering_mode": false
+        },
+        "settings_restored": true,
+        "actor_ids_restored": true
+      },
+      {
+        "name": "test_second_client_tick_invalidates_public_snapshot_and_brakes",
+        "status": "passed",
+        "settings_before": {
+          "synchronous_mode": false,
+          "fixed_delta_seconds": null,
+          "substepping": true,
+          "max_substeps": 10,
+          "max_substep_delta_time": 0.01,
+          "no_rendering_mode": false
+        },
+        "blueprint": "vehicle.nissan.patrol",
+        "vehicle_id": 35,
+        "settling_frames": 75,
+        "original_frame": 1480895,
+        "external_frame": 1480896,
+        "verification_frame": 1480897,
+        "detected_error": "Another client advanced CARLA during this step",
+        "session_invalidated": true,
+        "emergency_control": {
+          "throttle": 0.0,
+          "brake": 1.0,
+          "hand_brake": true
+        },
+        "vehicle_destroyed": true,
+        "settings_after": {
+          "synchronous_mode": false,
+          "fixed_delta_seconds": null,
+          "substepping": true,
+          "max_substeps": 10,
+          "max_substep_delta_time": 0.01,
+          "no_rendering_mode": false
+        },
+        "settings_restored": true,
+        "actor_ids_restored": true
+      }
+    ]
+  }
+}

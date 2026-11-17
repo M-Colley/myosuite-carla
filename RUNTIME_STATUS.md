@@ -6,7 +6,11 @@ The [official CARLA 1.0 release](https://github.com/carla-simulator/carla/releas
 
 The bridge has been updated for MyoSuite 3.1.0 and the development snapshot `c93329ec64bc8b544d0b3427bba6766377c3528e`. The primary environment imports MyoSuite 3.1.0, `myo-sim` 0.2.5 and MuJoCo 3.17.0. Release, development, minimum physics and embodied human integration checks passed. [VALIDATION.md](VALIDATION.md#carla-10-and-myosuite-31-on-2026-11-17) records the results.
 
-The Windows package is downloading into `artifacts/carla-1-myosuite31/CARLA_1.0.zip`. Installation and live validation remain in progress. The existing Desktop CARLA 0.10.0 package is retained until the replacement server and client are verified. The user requested removal of that old runtime.
+The package is installed at `C:/Users/localadmin/Desktop/Carla-1.0-Win64-Shipping`. Its 493 archive entries expanded to 15,832,865,292 bytes. All extracted files passed CRC checks. Its SHA256 is `bac25742f49fdc4023170d446493ce76a57502e8b6ae3a377c44887683a3ffcf`. The archive is retained at `artifacts/carla-1-myosuite31/CARLA_1.0.zip`. The bundled Python 3.12 Windows wheel has SHA256 `f4308ed738a549c796b4a4ac5f2fe5748c0d347fac1d54dad1dc672d6e4f1e10`.
+
+The client and server both report `1.0`. `Town10HD_Opt` loaded and the live control, session and full body tests passed. The complete primary suite passed 546 tests with one optional OpenSim skip. The development snapshot passed all four live tests. The final probe found no vehicles, asynchronous mode and an unset fixed timestep. The test server was then stopped.
+
+The replaced `C:/Users/localadmin/Desktop/Carla-0.10.0-Win64-Shipping` directory was removed after live acceptance. It contained 21,892,413,359 bytes in 15,208 files. The primary environment's 0.10 client was replaced with the bundled 1.0 wheel. The user environment variable `CARLA_ROOT` points to the new installation. Repository data, recordings and earlier validation evidence remain available. [Installation and removal records](evidence/carla-1.0-myosuite-3.1-2026-11-17/summary.json) retain the measured state.
 
 ## Recheck on 2026-10-27
 

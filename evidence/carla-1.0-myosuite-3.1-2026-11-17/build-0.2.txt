@@ -1,0 +1,477 @@
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=77
+  - wheel
+* Getting build dependencies for sdist...
+running egg_info
+writing src\myosuite_carla.egg-info\PKG-INFO
+writing dependency_links to src\myosuite_carla.egg-info\dependency_links.txt
+writing requirements to src\myosuite_carla.egg-info\requires.txt
+writing top-level names to src\myosuite_carla.egg-info\top_level.txt
+reading manifest file 'src\myosuite_carla.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+writing manifest file 'src\myosuite_carla.egg-info\SOURCES.txt'
+* Installed build dependency versions:
+  - setuptools==84.2.1
+  - wheel==0.48.0
+* Building sdist...
+running sdist
+running egg_info
+writing src\myosuite_carla.egg-info\PKG-INFO
+writing dependency_links to src\myosuite_carla.egg-info\dependency_links.txt
+writing requirements to src\myosuite_carla.egg-info\requires.txt
+writing top-level names to src\myosuite_carla.egg-info\top_level.txt
+reading manifest file 'src\myosuite_carla.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+writing manifest file 'src\myosuite_carla.egg-info\SOURCES.txt'
+running check
+creating myosuite_carla-0.2.0
+creating myosuite_carla-0.2.0\benchmarks
+creating myosuite_carla-0.2.0\constraints
+creating myosuite_carla-0.2.0\evidence
+creating myosuite_carla-0.2.0\evidence\actuation-improvement-2026-10-28
+creating myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+creating myosuite_carla-0.2.0\evidence\carla-1.0-review
+creating myosuite_carla-0.2.0\evidence\closed-loop-calibration-2026-10-28
+creating myosuite_carla-0.2.0\evidence\empirical-driving-2026-10-28
+creating myosuite_carla-0.2.0\evidence\empirical-trial-videos-2026-10-28
+creating myosuite_carla-0.2.0\evidence\source-review
+creating myosuite_carla-0.2.0\evidence\steer-lag-speed-2026-11-04
+creating myosuite_carla-0.2.0\evidence\steer-rate-lag-2026-11-04
+creating myosuite_carla-0.2.0\evidence\steer-rate-limit-2026-11-04
+creating myosuite_carla-0.2.0\evidence\vehicle-sysid-wide-2026-11-04
+creating myosuite_carla-0.2.0\examples
+creating myosuite_carla-0.2.0\src\myosuite_carla
+creating myosuite_carla-0.2.0\src\myosuite_carla.egg-info
+creating myosuite_carla-0.2.0\tests
+copying files to myosuite_carla-0.2.0...
+copying COMPATIBILITY.md -> myosuite_carla-0.2.0
+copying LICENSE -> myosuite_carla-0.2.0
+copying MANIFEST.in -> myosuite_carla-0.2.0
+copying NEW_PC_SETUP.md -> myosuite_carla-0.2.0
+copying README.md -> myosuite_carla-0.2.0
+copying RUNTIME_STATUS.md -> myosuite_carla-0.2.0
+copying VALIDATION.md -> myosuite_carla-0.2.0
+copying pyproject.toml -> myosuite_carla-0.2.0
+copying benchmarks\fullbody_parity.py -> myosuite_carla-0.2.0\benchmarks
+copying benchmarks\serialization.py -> myosuite_carla-0.2.0\benchmarks
+copying benchmarks\vector_rollout.py -> myosuite_carla-0.2.0\benchmarks
+copying constraints\myosuite-3.1.txt -> myosuite_carla-0.2.0\constraints
+copying constraints\windows-py312-live.txt -> myosuite_carla-0.2.0\constraints
+copying evidence\carla-0.10.0-live.json -> myosuite_carla-0.2.0\evidence
+copying evidence\carla-0.10.0-pytest.json -> myosuite_carla-0.2.0\evidence
+copying evidence\carla-0.10.0-suite.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\carla-0.10.0-suite.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\carla-async-delivery-failed.json -> myosuite_carla-0.2.0\evidence
+copying evidence\carla-build-preflight.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\carla-download-manifest.json -> myosuite_carla-0.2.0\evidence
+copying evidence\carla-download-preflight.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\carla-runtime-probe.json -> myosuite_carla-0.2.0\evidence
+copying evidence\deep-full-suite.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\deep-live-physical.json -> myosuite_carla-0.2.0\evidence
+copying evidence\deep-live-session.json -> myosuite_carla-0.2.0\evidence
+copying evidence\deep-minimum.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\deep-runtime-final-probe.json -> myosuite_carla-0.2.0\evidence
+copying evidence\embodied-human-0.10-recordings.zip -> myosuite_carla-0.2.0\evidence
+copying evidence\embodied-human-0.10-video.json -> myosuite_carla-0.2.0\evidence
+copying evidence\fresh-pc-checks.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\fresh-pc-cli.json -> myosuite_carla-0.2.0\evidence
+copying evidence\fresh-pc-client-install.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\fresh-pc-final-probe.json -> myosuite_carla-0.2.0\evidence
+copying evidence\fresh-pc-install.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\fresh-pc-live.json -> myosuite_carla-0.2.0\evidence
+copying evidence\fresh-pc-offline-demo.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\fresh-pc-python-finder.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\fresh-pc-suite.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\fresh-pc-suite.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\fullbody-parity.json -> myosuite_carla-0.2.0\evidence
+copying evidence\human-comparison.json -> myosuite_carla-0.2.0\evidence
+copying evidence\live-attempt.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ngsim-i80-following-summary.json -> myosuite_carla-0.2.0\evidence
+copying evidence\numpy-2.2-typing-after.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\numpy-2.2-typing-before.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\numpy-2.2-typing-numeric-parity.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\numpy-2.2-typing-tests.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\offline-audit-mujoco-3.6.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\offline-final-mujoco-3.6.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\offline-mujoco-3.16.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\offline-mujoco-3.6.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\review-2026-10-27-bridge.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\review-2026-10-27-bridge.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\review-2026-10-27-human.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\review-2026-10-27-human.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\review-2026-10-27-summary.json -> myosuite_carla-0.2.0\evidence
+copying evidence\scientific-2026-10-27-bridge.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\scientific-2026-10-27-bridge.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\scientific-2026-10-27-environment.json -> myosuite_carla-0.2.0\evidence
+copying evidence\scientific-2026-10-27-human.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\scientific-2026-10-27-human.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\scientific-2026-10-27-minimum.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\scientific-2026-10-27-runtime-acquisition.json -> myosuite_carla-0.2.0\evidence
+copying evidence\scientific-2026-10-27-sklearn-1.7.2-tests.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\scientific-2026-10-27-sklearn-1.7.2.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\scientific-2026-10-27-ue58-attempt.json -> myosuite_carla-0.2.0\evidence
+copying evidence\scientific-2026-10-27-ue58-preflight.json -> myosuite_carla-0.2.0\evidence
+copying evidence\second-pc-0.10.0-cli.json -> myosuite_carla-0.2.0\evidence
+copying evidence\second-pc-0.10.0-environment.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\second-pc-0.10.0-pip-freeze.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\second-pc-0.10.0-pytest.json -> myosuite_carla-0.2.0\evidence
+copying evidence\second-pc-0.10.0-suite.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\second-pc-0.10.0-suite.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\serialization-benchmark.json -> myosuite_carla-0.2.0\evidence
+copying evidence\training-pilot1.json -> myosuite_carla-0.2.0\evidence
+copying evidence\training-pilot2.json -> myosuite_carla-0.2.0\evidence
+copying evidence\training-pilot3.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-final-suite.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-final-suite.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-fullbody-drive.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-fullbody-loads.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-fullbody-video.py -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-interface-hazard.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-loads-live-suite.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-loads-live-suite.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-loads-mujoco-3.6.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-min-mujoco-3.6.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-muscle-drive-video.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-muscle-drive-video.py -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-nullrhi-session.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-nullrhi-suite.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-nullrhi-suite.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-policy-scenarios.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-rendered-cli.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-rendered-session.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-rendered-suite.txt -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-rendered-suite.xml -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-repeatability.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-scenarios.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-soak.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-soak.py -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-vehicle-matrix.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-vehicle-matrix.py -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-vehicle-surrogate-exponent.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-vehicle-surrogate.json -> myosuite_carla-0.2.0\evidence
+copying evidence\ue55-vehicle-sysid.zip -> myosuite_carla-0.2.0\evidence
+copying evidence\vector-rollout.json -> myosuite_carla-0.2.0\evidence
+copying evidence\actuation-improvement-2026-10-28\data-attribution.json -> myosuite_carla-0.2.0\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\design.json -> myosuite_carla-0.2.0\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\experimental-profile.json -> myosuite_carla-0.2.0\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\paired-source-errors.png -> myosuite_carla-0.2.0\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\provenance-before-test.json -> myosuite_carla-0.2.0\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\study-evidence.zip -> myosuite_carla-0.2.0\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\summary.json -> myosuite_carla-0.2.0\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\trial-contact-sheet.png -> myosuite_carla-0.2.0\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\video-manifest.json -> myosuite_carla-0.2.0\evidence\actuation-improvement-2026-10-28
+copying evidence\actuation-improvement-2026-10-28\video-verification.json -> myosuite_carla-0.2.0\evidence\actuation-improvement-2026-10-28
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\dev-tests.txt -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\dev-tests.xml -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\human-dev-tests.txt -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\human-dev-tests.xml -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\human-release-tests.txt -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\human-release-tests.xml -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\minimum-tests.txt -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\minimum-tests.xml -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\myosuite-focused-release.txt -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\myosuite-focused-release.xml -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\original-primary-packages.txt -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\primary-integrated-tests.txt -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\primary-integrated-tests.xml -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\release-dependency-collision.json -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\release-tests.txt -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\release-tests.xml -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\summary.json -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\venv-myosuite-dev-packages.txt -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\venv-myosuite-dev-runtime.json -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\venv-myosuite31-min-packages.txt -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\venv-myosuite31-min-runtime.json -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\venv-myosuite31-packages.txt -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-myosuite-3.1-2026-11-17\venv-myosuite31-runtime.json -> myosuite_carla-0.2.0\evidence\carla-1.0-myosuite-3.1-2026-11-17
+copying evidence\carla-1.0-review\steer-input-curve.json -> myosuite_carla-0.2.0\evidence\carla-1.0-review
+copying evidence\carla-1.0-review\steer_input_curve.py -> myosuite_carla-0.2.0\evidence\carla-1.0-review
+copying evidence\closed-loop-calibration-2026-10-28\bridge-tests.txt -> myosuite_carla-0.2.0\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\bridge-tests.xml -> myosuite_carla-0.2.0\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\calibration.txt -> myosuite_carla-0.2.0\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\closed-loop-comparison.png -> myosuite_carla-0.2.0\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\command.txt -> myosuite_carla-0.2.0\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\design.json -> myosuite_carla-0.2.0\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\human-tests.txt -> myosuite_carla-0.2.0\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\human-tests.xml -> myosuite_carla-0.2.0\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\provenance-before-evaluation.json -> myosuite_carla-0.2.0\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\provenance.json -> myosuite_carla-0.2.0\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\reports.zip -> myosuite_carla-0.2.0\evidence\closed-loop-calibration-2026-10-28
+copying evidence\closed-loop-calibration-2026-10-28\summary.json -> myosuite_carla-0.2.0\evidence\closed-loop-calibration-2026-10-28
+copying evidence\empirical-driving-2026-10-28\bridge-tests.txt -> myosuite_carla-0.2.0\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\bridge-tests.xml -> myosuite_carla-0.2.0\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\campaign-tests.txt -> myosuite_carla-0.2.0\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\campaign-tests.xml -> myosuite_carla-0.2.0\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\human-tests.txt -> myosuite_carla-0.2.0\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\human-tests.xml -> myosuite_carla-0.2.0\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\ngsim.json -> myosuite_carla-0.2.0\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\release-campaign.txt -> myosuite_carla-0.2.0\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-driving-2026-10-28\summary.json -> myosuite_carla-0.2.0\evidence\empirical-driving-2026-10-28
+copying evidence\empirical-trial-videos-2026-10-28\all-trials-contact-sheet.png -> myosuite_carla-0.2.0\evidence\empirical-trial-videos-2026-10-28
+copying evidence\empirical-trial-videos-2026-10-28\capture.zip -> myosuite_carla-0.2.0\evidence\empirical-trial-videos-2026-10-28
+copying evidence\empirical-trial-videos-2026-10-28\encoded-media-checks.json -> myosuite_carla-0.2.0\evidence\empirical-trial-videos-2026-10-28
+copying evidence\empirical-trial-videos-2026-10-28\manifest.json -> myosuite_carla-0.2.0\evidence\empirical-trial-videos-2026-10-28
+copying evidence\empirical-trial-videos-2026-10-28\test-results.txt -> myosuite_carla-0.2.0\evidence\empirical-trial-videos-2026-10-28
+copying evidence\empirical-trial-videos-2026-10-28\test-results.xml -> myosuite_carla-0.2.0\evidence\empirical-trial-videos-2026-10-28
+copying evidence\source-review\README.md -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\baseline-map_change_publication_races_consumers.log -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\baseline-pending_exception_publication_races_streaming.log -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\bridge-numpy1-tests-integrated.xml -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\bridge-numpy2-tests-integrated.xml -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\build-manifest.json -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\client-baseline-failure.json -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\client-tests-integrated.xml -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\client-tests-remaining.xml -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\episode-asan-ubsan.log -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\episode-build-manifest.txt -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\episode-tsan.log -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\future-atomic-asan-ubsan.log -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\future-atomic-tsan.log -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\native-wheel-bridge-smoke-numpy1.json -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\native-wheel-bridge-smoke-numpy2.json -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\native-wheel-bridge-smoke.py -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\network-test-fixed-repeat.log -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\network-test-fixed-repeat.xml -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\patch-source-map.json -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\python-api-tests-integrated.xml -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\python-client-version-fixed.log -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\python-client-version-original.log -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\stream-asan-ubsan.log -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\stream-getter-benchmark.json -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\stream-tsan.log -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\stream-windows-debug-repeat.log -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\stream-windows-debug-repeat.xml -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\source-review\stream-windows.xml -> myosuite_carla-0.2.0\evidence\source-review
+copying evidence\steer-lag-speed-2026-11-04\analyse.py -> myosuite_carla-0.2.0\evidence\steer-lag-speed-2026-11-04
+copying evidence\steer-lag-speed-2026-11-04\analysis.json -> myosuite_carla-0.2.0\evidence\steer-lag-speed-2026-11-04
+copying evidence\steer-lag-speed-2026-11-04\data.zip -> myosuite_carla-0.2.0\evidence\steer-lag-speed-2026-11-04
+copying evidence\steer-lag-speed-2026-11-04\design.md -> myosuite_carla-0.2.0\evidence\steer-lag-speed-2026-11-04
+copying evidence\steer-lag-speed-2026-11-04\fit.json -> myosuite_carla-0.2.0\evidence\steer-lag-speed-2026-11-04
+copying evidence\steer-lag-speed-2026-11-04\fit.py -> myosuite_carla-0.2.0\evidence\steer-lag-speed-2026-11-04
+copying evidence\steer-rate-lag-2026-11-04\analyse.py -> myosuite_carla-0.2.0\evidence\steer-rate-lag-2026-11-04
+copying evidence\steer-rate-lag-2026-11-04\analysis.json -> myosuite_carla-0.2.0\evidence\steer-rate-lag-2026-11-04
+copying evidence\steer-rate-lag-2026-11-04\data.zip -> myosuite_carla-0.2.0\evidence\steer-rate-lag-2026-11-04
+copying evidence\steer-rate-lag-2026-11-04\design.md -> myosuite_carla-0.2.0\evidence\steer-rate-lag-2026-11-04
+copying evidence\steer-rate-lag-2026-11-04\fit.json -> myosuite_carla-0.2.0\evidence\steer-rate-lag-2026-11-04
+copying evidence\steer-rate-lag-2026-11-04\fit.py -> myosuite_carla-0.2.0\evidence\steer-rate-lag-2026-11-04
+copying evidence\steer-rate-lag-2026-11-04\posthoc.json -> myosuite_carla-0.2.0\evidence\steer-rate-lag-2026-11-04
+copying evidence\steer-rate-lag-2026-11-04\posthoc.py -> myosuite_carla-0.2.0\evidence\steer-rate-lag-2026-11-04
+copying evidence\steer-rate-limit-2026-11-04\analyse.py -> myosuite_carla-0.2.0\evidence\steer-rate-limit-2026-11-04
+copying evidence\steer-rate-limit-2026-11-04\analysis.json -> myosuite_carla-0.2.0\evidence\steer-rate-limit-2026-11-04
+copying evidence\steer-rate-limit-2026-11-04\data.zip -> myosuite_carla-0.2.0\evidence\steer-rate-limit-2026-11-04
+copying evidence\steer-rate-limit-2026-11-04\design.md -> myosuite_carla-0.2.0\evidence\steer-rate-limit-2026-11-04
+copying evidence\steer-rate-limit-2026-11-04\diagnose.py -> myosuite_carla-0.2.0\evidence\steer-rate-limit-2026-11-04
+copying evidence\steer-rate-limit-2026-11-04\diagnosis.json -> myosuite_carla-0.2.0\evidence\steer-rate-limit-2026-11-04
+copying evidence\vehicle-sysid-wide-2026-11-04\analyse.py -> myosuite_carla-0.2.0\evidence\vehicle-sysid-wide-2026-11-04
+copying evidence\vehicle-sysid-wide-2026-11-04\analysis.json -> myosuite_carla-0.2.0\evidence\vehicle-sysid-wide-2026-11-04
+copying evidence\vehicle-sysid-wide-2026-11-04\data.zip -> myosuite_carla-0.2.0\evidence\vehicle-sysid-wide-2026-11-04
+copying evidence\vehicle-sysid-wide-2026-11-04\design.md -> myosuite_carla-0.2.0\evidence\vehicle-sysid-wide-2026-11-04
+copying evidence\vehicle-sysid-wide-2026-11-04\diagnose.py -> myosuite_carla-0.2.0\evidence\vehicle-sysid-wide-2026-11-04
+copying evidence\vehicle-sysid-wide-2026-11-04\diagnosis.json -> myosuite_carla-0.2.0\evidence\vehicle-sysid-wide-2026-11-04
+copying evidence\vehicle-sysid-wide-2026-11-04\rejected-refit.json -> myosuite_carla-0.2.0\evidence\vehicle-sysid-wide-2026-11-04
+copying examples\check_acceleration_tracking.py -> myosuite_carla-0.2.0\examples
+copying examples\compare_human.py -> myosuite_carla-0.2.0\examples
+copying examples\download_ngsim.py -> myosuite_carla-0.2.0\examples
+copying examples\drive_scenario.py -> myosuite_carla-0.2.0\examples
+copying examples\drive_with_interface.py -> myosuite_carla-0.2.0\examples
+copying examples\evaluate_policy.py -> myosuite_carla-0.2.0\examples
+copying examples\fit_vehicle_model.py -> myosuite_carla-0.2.0\examples
+copying examples\identify_vehicle.py -> myosuite_carla-0.2.0\examples
+copying examples\live_drive.py -> myosuite_carla-0.2.0\examples
+copying examples\offline_cockpit.py -> myosuite_carla-0.2.0\examples
+copying examples\record_embodied_human.py -> myosuite_carla-0.2.0\examples
+copying examples\record_empirical_trials.py -> myosuite_carla-0.2.0\examples
+copying examples\train_policy.py -> myosuite_carla-0.2.0\examples
+copying examples\validate_carla.py -> myosuite_carla-0.2.0\examples
+copying examples\validate_fullbody.py -> myosuite_carla-0.2.0\examples
+copying src\myosuite_carla\__init__.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\bridge.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\carla_scenario.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\cockpit.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\controls.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\driver_models.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\driving_env.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\empirical_following.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\fullbody.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\fullbody_validation.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\human_comparison.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\inputs.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\interfaces.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\ngsim.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\presets.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\recording.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\scenario.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\session.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\training.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\training_sb3.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\validation.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\vehicle_loads.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\vehicle_model.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla\wrapper.py -> myosuite_carla-0.2.0\src\myosuite_carla
+copying src\myosuite_carla.egg-info\PKG-INFO -> myosuite_carla-0.2.0\src\myosuite_carla.egg-info
+copying src\myosuite_carla.egg-info\SOURCES.txt -> myosuite_carla-0.2.0\src\myosuite_carla.egg-info
+copying src\myosuite_carla.egg-info\dependency_links.txt -> myosuite_carla-0.2.0\src\myosuite_carla.egg-info
+copying src\myosuite_carla.egg-info\requires.txt -> myosuite_carla-0.2.0\src\myosuite_carla.egg-info
+copying src\myosuite_carla.egg-info\top_level.txt -> myosuite_carla-0.2.0\src\myosuite_carla.egg-info
+copying tests\conftest.py -> myosuite_carla-0.2.0\tests
+copying tests\test_acceleration_control.py -> myosuite_carla-0.2.0\tests
+copying tests\test_acceleration_tracking.py -> myosuite_carla-0.2.0\tests
+copying tests\test_bridge.py -> myosuite_carla-0.2.0\tests
+copying tests\test_carla_runtime_target.py -> myosuite_carla-0.2.0\tests
+copying tests\test_carla_scenario.py -> myosuite_carla-0.2.0\tests
+copying tests\test_cockpit.py -> myosuite_carla-0.2.0\tests
+copying tests\test_conditions.py -> myosuite_carla-0.2.0\tests
+copying tests\test_driving_env.py -> myosuite_carla-0.2.0\tests
+copying tests\test_empirical_following.py -> myosuite_carla-0.2.0\tests
+copying tests\test_empirical_video.py -> myosuite_carla-0.2.0\tests
+copying tests\test_example_cleanup.py -> myosuite_carla-0.2.0\tests
+copying tests\test_examples.py -> myosuite_carla-0.2.0\tests
+copying tests\test_fullbody.py -> myosuite_carla-0.2.0\tests
+copying tests\test_human_comparison.py -> myosuite_carla-0.2.0\tests
+copying tests\test_inputs.py -> myosuite_carla-0.2.0\tests
+copying tests\test_interfaces.py -> myosuite_carla-0.2.0\tests
+copying tests\test_live_failure_report.py -> myosuite_carla-0.2.0\tests
+copying tests\test_live_fullbody.py -> myosuite_carla-0.2.0\tests
+copying tests\test_live_server.py -> myosuite_carla-0.2.0\tests
+copying tests\test_live_session.py -> myosuite_carla-0.2.0\tests
+copying tests\test_muscle_contact.py -> myosuite_carla-0.2.0\tests
+copying tests\test_ngsim.py -> myosuite_carla-0.2.0\tests
+copying tests\test_presets.py -> myosuite_carla-0.2.0\tests
+copying tests\test_recording.py -> myosuite_carla-0.2.0\tests
+copying tests\test_scenario.py -> myosuite_carla-0.2.0\tests
+copying tests\test_session.py -> myosuite_carla-0.2.0\tests
+copying tests\test_session_faults.py -> myosuite_carla-0.2.0\tests
+copying tests\test_training.py -> myosuite_carla-0.2.0\tests
+copying tests\test_training_sb3.py -> myosuite_carla-0.2.0\tests
+copying tests\test_validation.py -> myosuite_carla-0.2.0\tests
+copying tests\test_validation_selection.py -> myosuite_carla-0.2.0\tests
+copying tests\test_vehicle_loads.py -> myosuite_carla-0.2.0\tests
+copying tests\test_vehicle_model.py -> myosuite_carla-0.2.0\tests
+copying tests\test_wrapper_failures.py -> myosuite_carla-0.2.0\tests
+Writing myosuite_carla-0.2.0\setup.cfg
+Creating tar archive
+removing 'myosuite_carla-0.2.0' (and everything under it)
+* Building wheel from sdist
+* Creating isolated environment: venv+pip...
+* Installing packages in isolated environment:
+  - setuptools>=77
+  - wheel
+* Getting build dependencies for wheel...
+running egg_info
+writing src\myosuite_carla.egg-info\PKG-INFO
+writing dependency_links to src\myosuite_carla.egg-info\dependency_links.txt
+writing requirements to src\myosuite_carla.egg-info\requires.txt
+writing top-level names to src\myosuite_carla.egg-info\top_level.txt
+reading manifest file 'src\myosuite_carla.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+writing manifest file 'src\myosuite_carla.egg-info\SOURCES.txt'
+* Installed build dependency versions:
+  - setuptools==84.2.1
+  - wheel==0.48.0
+* Building wheel...
+running bdist_wheel
+running build
+running build_py
+creating build\lib\myosuite_carla
+copying src\myosuite_carla\bridge.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\carla_scenario.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\cockpit.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\controls.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\driver_models.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\driving_env.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\empirical_following.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\fullbody.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\fullbody_validation.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\human_comparison.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\inputs.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\interfaces.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\ngsim.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\presets.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\recording.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\scenario.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\session.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\training.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\training_sb3.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\validation.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\vehicle_loads.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\vehicle_model.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\wrapper.py -> build\lib\myosuite_carla
+copying src\myosuite_carla\__init__.py -> build\lib\myosuite_carla
+running egg_info
+writing src\myosuite_carla.egg-info\PKG-INFO
+writing dependency_links to src\myosuite_carla.egg-info\dependency_links.txt
+writing requirements to src\myosuite_carla.egg-info\requires.txt
+writing top-level names to src\myosuite_carla.egg-info\top_level.txt
+reading manifest file 'src\myosuite_carla.egg-info\SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+adding license file 'LICENSE'
+writing manifest file 'src\myosuite_carla.egg-info\SOURCES.txt'
+installing to build\bdist.win-amd64\wheel
+running install
+running install_lib
+creating build\bdist.win-amd64\wheel
+creating build\bdist.win-amd64\wheel\myosuite_carla
+copying build\lib\myosuite_carla\bridge.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\carla_scenario.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\cockpit.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\controls.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\driver_models.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\driving_env.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\empirical_following.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\fullbody.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\fullbody_validation.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\human_comparison.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\inputs.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\interfaces.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\ngsim.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\presets.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\recording.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\scenario.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\session.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\training.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\training_sb3.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\validation.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\vehicle_loads.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\vehicle_model.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\wrapper.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+copying build\lib\myosuite_carla\__init__.py -> build\bdist.win-amd64\wheel\.\myosuite_carla
+running install_egg_info
+Copying src\myosuite_carla.egg-info to build\bdist.win-amd64\wheel\.\myosuite_carla-0.2.0-py3.12.egg-info
+running install_scripts
+creating build\bdist.win-amd64\wheel\myosuite_carla-0.2.0.dist-info\WHEEL
+creating 'C:\\Users\\localadmin\\Desktop\\myosuite-carla\\dist\\.tmp-mukga5hj\\myosuite_carla-0.2.0-py3-none-any.whl' and adding 'build\\bdist.win-amd64\\wheel' to it
+adding 'myosuite_carla/__init__.py'
+adding 'myosuite_carla/bridge.py'
+adding 'myosuite_carla/carla_scenario.py'
+adding 'myosuite_carla/cockpit.py'
+adding 'myosuite_carla/controls.py'
+adding 'myosuite_carla/driver_models.py'
+adding 'myosuite_carla/driving_env.py'
+adding 'myosuite_carla/empirical_following.py'
+adding 'myosuite_carla/fullbody.py'
+adding 'myosuite_carla/fullbody_validation.py'
+adding 'myosuite_carla/human_comparison.py'
+adding 'myosuite_carla/inputs.py'
+adding 'myosuite_carla/interfaces.py'
+adding 'myosuite_carla/ngsim.py'
+adding 'myosuite_carla/presets.py'
+adding 'myosuite_carla/recording.py'
+adding 'myosuite_carla/scenario.py'
+adding 'myosuite_carla/session.py'
+adding 'myosuite_carla/training.py'
+adding 'myosuite_carla/training_sb3.py'
+adding 'myosuite_carla/validation.py'
+adding 'myosuite_carla/vehicle_loads.py'
+adding 'myosuite_carla/vehicle_model.py'
+adding 'myosuite_carla/wrapper.py'
+adding 'myosuite_carla-0.2.0.dist-info/licenses/LICENSE'
+adding 'myosuite_carla-0.2.0.dist-info/METADATA'
+adding 'myosuite_carla-0.2.0.dist-info/WHEEL'
+adding 'myosuite_carla-0.2.0.dist-info/top_level.txt'
+adding 'myosuite_carla-0.2.0.dist-info/RECORD'
+removing build\bdist.win-amd64\wheel
+Successfully built myosuite_carla-0.2.0.tar.gz and myosuite_carla-0.2.0-py3-none-any.whl

@@ -8,6 +8,8 @@ contact force becomes `carla.VehicleControl`. CARLA simulates the vehicle.
 
 **Compatibility target:** MyoSuite 3.1.0 or current `dev`, with CARLA 1.0 and its matching Python client. [VALIDATION.md](VALIDATION.md) records exact dependency versions, imported runtime paths, offline results and live measurements.
 
+Live validation passed against the official CARLA 1.0 package with a physics only server (`-nullrhi`). The complete primary suite passed 546 tests with one optional OpenSim skip. The MyoSuite development snapshot also passed all four live tests. The 416 muscle body passed all 13 driving checks. Applied controls, frame timing, actor cleanup and world restoration passed. The [retained evidence](evidence/carla-1.0-myosuite-3.1-2026-11-17/summary.json) identifies the exact package, client wheel and dependency sources.
+
 Earlier validation with a real CARLA 0.10.0 / UE5.5 server passed 312 tests
 with zero skips (94% statement coverage). One seated MyoSuite full body, loaded
 by gravity and the measured vehicle motion, operates throttle, brake,

@@ -1,0 +1,22 @@
+{
+  "status": "extracted_and_crc_verified",
+  "archive": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1-myosuite31\\CARLA_1.0.zip",
+  "archive_bytes": 13916909891,
+  "destination": "C:\\Users\\localadmin\\Desktop\\Carla-1.0-Win64-Shipping",
+  "expanded_bytes": 15832865292,
+  "free_bytes_before_extraction": 32105189376,
+  "files": 493,
+  "archive_prefix": "Carla-1.0-Win64-Shipping",
+  "archive_sha256": "bac25742f49fdc4023170d446493ce76a57502e8b6ae3a377c44887683a3ffcf",
+  "extracted_bytes": 15832865292,
+  "elapsed_seconds": 95.1495270729065,
+  "launcher": "C:\\Users\\localadmin\\Desktop\\Carla-1.0-Win64-Shipping\\CarlaUnreal.exe",
+  "wheel_files": [
+    "C:\\Users\\localadmin\\Desktop\\Carla-1.0-Win64-Shipping\\PythonAPI\\carla\\dist\\carla-1.0-cp310-cp310-win_amd64.whl",
+    "C:\\Users\\localadmin\\Desktop\\Carla-1.0-Win64-Shipping\\PythonAPI\\carla\\dist\\carla-1.0-cp311-cp311-win_amd64.whl",
+    "C:\\Users\\localadmin\\Desktop\\Carla-1.0-Win64-Shipping\\PythonAPI\\carla\\dist\\carla-1.0-cp312-cp312-win_amd64.whl",
+    "C:\\Users\\localadmin\\Desktop\\Carla-1.0-Win64-Shipping\\PythonAPI\\carla\\dist\\carla-1.0-cp313-cp313-win_amd64.whl",
+    "C:\\Users\\localadmin\\Desktop\\Carla-1.0-Win64-Shipping\\PythonAPI\\carla\\dist\\carla-1.0-cp314-cp314-win_amd64.whl",
+    "C:\\Users\\localadmin\\Desktop\\Carla-1.0-Win64-Shipping\\PythonAPI\\carla\\dist\\carla-1.0-cp315-cp315-win_amd64.whl"
+  ]
+}
