@@ -1,0 +1,13 @@
+{
+  "distributions": {
+    "myosuite": "3.1.0",
+    "myo-sim": "0.2.5",
+    "mjviser": "0.0.17",
+    "mujoco": "3.17.0",
+    "mujoco-core": "4.0.1"
+  },
+  "imported_mujoco": {
+    "version": "4.0.1",
+    "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\.venv-myosuite31\\Lib\\site-packages\\mujoco\\__init__.py"
+  }
+}

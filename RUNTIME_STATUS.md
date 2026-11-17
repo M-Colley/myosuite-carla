@@ -1,5 +1,13 @@
 # CARLA runtime acquisition and UE5.8 status
 
+## CARLA 1.0 release on 2026-11-17
+
+The [official CARLA 1.0 release](https://github.com/carla-simulator/carla/releases/tag/1.0) provides a Windows 11 package and matching Python client wheels. The release source is `1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5`. The Windows archive contains 13,916,909,891 bytes and uses Unreal Engine 5.8.
+
+The bridge has been updated for MyoSuite 3.1.0 and the development snapshot `c93329ec64bc8b544d0b3427bba6766377c3528e`. The primary environment imports MyoSuite 3.1.0, `myo-sim` 0.2.5 and MuJoCo 3.17.0. Release, development, minimum physics and embodied human integration checks passed. [VALIDATION.md](VALIDATION.md#carla-10-and-myosuite-31-on-2026-11-17) records the results.
+
+The Windows package is downloading into `artifacts/carla-1-myosuite31/CARLA_1.0.zip`. Installation and live validation remain in progress. The existing Desktop CARLA 0.10.0 package is retained until the replacement server and client are verified. The user requested removal of that old runtime.
+
 ## Recheck on 2026-10-27
 
 The local UE5.8 engine source remains at `0703595a065dee51538720027ce9cc05bd464517`, with `Build.version` identifying 5.8.0. The prepared CARLA source remains at `ee5859b4e63a4b79c69b02e381c95fb5727e0874`. Its project has neither `CarlaUnreal.exe` nor `UnrealEditor-CarlaUnreal.dll`. Port 2000 has no listener. The live validation command returned connection refused before running a scenario. [Preflight](evidence/scientific-2026-10-27-ue58-preflight.json), [failed attempt](evidence/scientific-2026-10-27-ue58-attempt.json).

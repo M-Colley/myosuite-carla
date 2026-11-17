@@ -24,6 +24,7 @@ from myosuite_carla import (
     VehicleCommand,
 )
 from myosuite_carla.validation import (
+    _check_runtime_target,
     _select_blueprint,
     _settings,
     _settle_vehicle,
@@ -61,7 +62,7 @@ def live_runtime() -> Iterator[tuple[Any, Any, dict[str, Any]]]:
     report: dict[str, Any] = {
         "status": "failed",
         "started_utc": datetime.now(timezone.utc).isoformat(),
-        "target_ref": os.environ.get("CARLA_TARGET_REF", "ue58-dev"),
+        "target_ref": os.environ.get("CARLA_TARGET_REF", "1.0"),
         "asserted_build_ref": os.environ.get("CARLA_BUILD_REF"),
         "source_verified": False,
         "mujoco_version": importlib.import_module("mujoco").__version__,
@@ -80,6 +81,7 @@ def live_runtime() -> Iterator[tuple[Any, Any, dict[str, Any]]]:
             map=client.get_world().get_map().name,
         )
         assert report["client_version"] == report["server_version"]
+        _check_runtime_target(report, report["target_ref"])
         yield carla, client, report
         if report["tests"] and all(
             case["status"] == "passed" for case in report["tests"]

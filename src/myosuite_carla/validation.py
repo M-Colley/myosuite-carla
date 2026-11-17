@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib
 import importlib.metadata
 import math
+import re
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -75,6 +76,29 @@ class MuscleDriver:
 def _require(condition: Any, message: str) -> None:
     if not condition:
         raise RuntimeError(message)
+
+
+def _check_runtime_target(report: dict[str, Any], target_ref: str) -> None:
+    """Reject a different release while retaining source refs as declarations.
+
+    CARLA 1.0 reports ``1.0`` for a release and ``1.0-<commit>[-dirty]``
+    for source builds. Version equality remains the separate exact build check.
+    A Git branch name cannot be verified through a runtime version string.
+    """
+    _require(bool(target_ref.strip()), "Validation target ref must not be empty")
+    release = re.fullmatch(r"v?(\d+(?:\.\d+)+)", target_ref.strip())
+    runtime = re.match(r"(\d+(?:\.\d+)+)(?:-|$)", report["server_version"])
+    matches = (
+        None
+        if release is None
+        else runtime is not None and runtime.group(1) == release.group(1)
+    )
+    report.setdefault("provenance", {})["runtime_matches_target"] = matches
+    _require(
+        matches is not False,
+        f"CARLA runtime {report['server_version']!r} does not match "
+        f"release target {target_ref!r}",
+    )
 
 
 def build_muscle_driver(control: str, *, contacts_enabled: bool = True) -> MuscleDriver:
@@ -396,7 +420,7 @@ def run_live_validation(
     *,
     timeout: float = 15,
     blueprint: str | None = None,
-    target_ref: str = "ue58-dev",
+    target_ref: str = "1.0",
     build_ref: str | None = None,
     build_commit: str | None = None,
 ) -> dict[str, Any]:
@@ -436,6 +460,7 @@ def run_live_validation(
                 None if build_ref is None else build_ref == target_ref
             ),
             "asserted_commit": build_commit,
+            "runtime_matches_target": None,
             "source_verified": False,
         },
         "requested_blueprint": blueprint,
@@ -457,6 +482,7 @@ def run_live_validation(
             report["client_version"] == report["server_version"],
             "CARLA client/server versions differ",
         )
+        _check_runtime_target(report, target_ref)
         world = client.get_world()
         report["map"] = world.get_map().name
         selected_blueprint = _select_blueprint(world, blueprint)

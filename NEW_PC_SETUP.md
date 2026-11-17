@@ -1,5 +1,75 @@
 # Test MyoSuite–CARLA on a fresh Windows PC
 
+## CARLA 1.0 and MyoSuite 3.1
+
+The current integration targets the [CARLA 1.0 Windows release](https://github.com/carla-simulator/carla/releases/tag/1.0), published on 2026-11-17. The simulator uses Unreal Engine 5.8. Its Python client is bundled in the same package. MyoSuite 3.1.0 supplies the public model builder and uses `myo-sim` 0.2.5. Python 3.12 is used for the local installation and tests.
+
+Create an isolated environment in the bridge checkout. During review, use the upgrade branch:
+
+```powershell
+$workRoot = 'C:\sim'
+New-Item -ItemType Directory -Force $workRoot | Out-Null
+Set-Location $workRoot
+git clone --branch codex/carla-1-myosuite-31 https://github.com/M-Colley/myosuite-carla.git
+Set-Location "$workRoot\myosuite-carla"
+py -3.12 -m venv .venv
+$python = (Resolve-Path '.venv\Scripts\python.exe').Path
+& $python -m pip install --upgrade pip
+& $python -m pip install -c constraints/myosuite-3.1.txt 'myosuite==3.1.0' -e '.[myosuite,test,lint,data,analysis,video]'
+& $python -m pip check
+& $python -c "import importlib.metadata as m,mujoco; from myosuite.core.model_builder import ModelBuilder; print(m.version('myosuite'),m.version('myo-sim'),mujoco.__version__); assert mujoco.__version__ == m.version('mujoco')"
+& $python -m pytest tests -q
+```
+
+The constraint excludes `mjviser` 0.0.17. Its `mujoco-core` dependency installs MuJoCo 4 into the same module directory as MuJoCo 3. An environment that already contains this dependency requires the following repair after the constrained installation:
+
+```powershell
+& $python -m pip uninstall -y mujoco-core
+& $python -m pip install --force-reinstall --no-deps 'mujoco>=3.6,<4'
+& $python -c "import importlib.metadata as m,mujoco; print(mujoco.__version__); assert mujoco.__version__ == m.version('mujoco')"
+& $python -m pip check
+```
+
+Download the official Windows server package. The release ZIP contains 13,916,909,891 bytes. Retain its SHA256 and check free space against the expanded archive size before extraction.
+
+```powershell
+New-Item -ItemType Directory -Force artifacts | Out-Null
+curl.exe --fail --location --output artifacts/CARLA_1.0.zip https://downloads.carlasim.com/Windows/CARLA_1.0.zip
+Get-FileHash -LiteralPath artifacts/CARLA_1.0.zip -Algorithm SHA256
+& $python -c "import zipfile; z=zipfile.ZipFile('artifacts/CARLA_1.0.zip'); print('expanded bytes',sum(i.file_size for i in z.infolist())); z.extractall('C:/sim/carla-1.0')"
+$launchers = @(Get-ChildItem -LiteralPath "$workRoot\carla-1.0" -Filter CarlaUnreal.exe -File -Recurse)
+if ($launchers.Count -ne 1) { throw 'Expected one CARLA server launcher' }
+$runtime = $launchers[0].Directory.FullName
+$wheels = @(Get-ChildItem -LiteralPath "$runtime\PythonAPI\carla\dist" -Filter '*cp312*win_amd64.whl')
+if ($wheels.Count -ne 1) { throw 'Expected one matching Python 3.12 Windows client wheel' }
+& $python -m pip install --force-reinstall --no-deps $wheels[0].FullName
+Get-FileHash -LiteralPath $wheels[0].FullName -Algorithm SHA256
+```
+
+Start one server. The following launch supports physics and control validation. Camera experiments require a rendered server.
+
+```powershell
+if (Get-NetTCPConnection -LocalPort 2000 -State Listen -ErrorAction SilentlyContinue) { throw 'Port 2000 already has a server' }
+$server = Start-Process -FilePath "$runtime\CarlaUnreal.exe" -WorkingDirectory $runtime -ArgumentList '-nullrhi','-nosound','-unattended','-notrace','-carla-rpc-port=2000' -WindowStyle Hidden -PassThru
+```
+
+Allow startup to finish, then check the RPC versions and run physical acceptance. The client and server strings must match. Release validation requires a 1.0 runtime, including a source build with a 1.0 commit suffix.
+
+```powershell
+& $python -c "import carla; c=carla.Client('127.0.0.1',2000); c.set_timeout(60); print(carla.__file__); print('client',c.get_client_version(),'server',c.get_server_version()); print('map',c.get_world().get_map().name)"
+$env:CARLA_BRIDGE_LIVE = '1'
+$env:CARLA_TARGET_REF = '1.0'
+$env:CARLA_BUILD_REF = '1.0'
+$env:CARLA_BUILD_COMMIT = '1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5'
+& $python examples/validate_carla.py --target-ref 1.0 --build-ref 1.0 --output artifacts/carla-1.0-controls.json
+& $python examples/validate_fullbody.py --target-ref 1.0 --build-ref 1.0 --output artifacts/carla-1.0-fullbody.json
+& $python -m pytest tests/test_live_server.py tests/test_live_session.py tests/test_live_fullbody.py -v
+```
+
+For MyoSuite development, clone its `dev` branch into a sibling directory and install it with the same constraint. The tested development revision is `c93329ec64bc8b544d0b3427bba6766377c3528e`. Record the actual checkout and imported module paths whenever testing a later revision. The [compatibility contract](COMPATIBILITY.md#carla-10) records the CARLA 1.0 steering change. Vehicle parameters fitted on CARLA 0.10 retain that calibration identity and require separate identification on 1.0.
+
+## Earlier Windows installation records
+
 This guide targets **Windows 11 x64**. Checked on 2026-10-23. It covers two
 different server choices; keep their results separate:
 

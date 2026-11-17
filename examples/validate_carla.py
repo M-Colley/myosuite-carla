@@ -1,6 +1,6 @@
 """Run actual CARLA acceptance checks and retain measured JSON evidence.
 
-The default target is ue58-dev. For supplementary UE5.5 release testing, use
+The default target is CARLA 1.0. For supplementary UE5.5 release testing, use
 --target-ref 0.10.0 --build-ref 0.10.0 and keep that evidence separate.
 Vehicle selection queries the running server; --blueprint overrides discovery.
 """
@@ -30,8 +30,8 @@ def main() -> int:
     )
     parser.add_argument(
         "--target-ref",
-        default=os.environ.get("CARLA_TARGET_REF", "ue58-dev"),
-        help="Actual validation target, e.g. ue58-dev or 0.10.0 (UE5.5)",
+        default=os.environ.get("CARLA_TARGET_REF", "1.0"),
+        help="Validation target, e.g. 1.0, ue58-dev or 0.10.0 (UE5.5)",
     )
     parser.add_argument("--build-ref", default=os.environ.get("CARLA_BUILD_REF"))
     parser.add_argument("--build-commit", default=os.environ.get("CARLA_BUILD_COMMIT"))

@@ -1,0 +1,66 @@
+{
+  "status": "offline_checks_passed",
+  "date": "2026-11-17",
+  "carla_release": "1.0",
+  "carla_release_commit": "1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5",
+  "myosuite_release": "3.1.0",
+  "myosuite_release_commit": "d914c4aa1eea568dd45bcc3d760a83dc9362c093",
+  "myosuite_dev_commit": "c93329ec64bc8b544d0b3427bba6766377c3528e",
+  "myo_sim": "0.2.5",
+  "embodied_human_test_source": "e938e90b7d38638fe2c588e5e7f7a6621e41eec2",
+  "embodied_ui_test_source": "605862bd551401bfce91afb4afcf280b2bef98fd",
+  "checks": {
+    "release-tests": {
+      "tests": 533.0,
+      "failures": 0.0,
+      "errors": 0.0,
+      "skipped": 11.0,
+      "time": 184.043
+    },
+    "dev-tests": {
+      "tests": 533.0,
+      "failures": 0.0,
+      "errors": 0.0,
+      "skipped": 11.0,
+      "time": 185.298
+    },
+    "minimum-tests": {
+      "tests": 533.0,
+      "failures": 0.0,
+      "errors": 0.0,
+      "skipped": 12.0,
+      "time": 182.88
+    },
+    "human-release-tests": {
+      "tests": 120.0,
+      "failures": 0.0,
+      "errors": 0.0,
+      "skipped": 0.0,
+      "time": 39.871
+    },
+    "human-dev-tests": {
+      "tests": 120.0,
+      "failures": 0.0,
+      "errors": 0.0,
+      "skipped": 0.0,
+      "time": 41.183
+    },
+    "primary-integrated-tests": {
+      "tests": 547.0,
+      "failures": 0.0,
+      "errors": 0.0,
+      "skipped": 5.0,
+      "time": 173.181
+    },
+    "myosuite-focused-release": {
+      "tests": 88.0,
+      "failures": 0.0,
+      "errors": 0.0,
+      "skipped": 0.0,
+      "time": 70.247
+    }
+  },
+  "live_validation": "pending_package_download",
+  "old_runtime_removal": "pending_new_runtime_verification",
+  "scientific_calibration": "Existing Nissan Patrol surrogate retains CARLA 0.10.0 calibration identity."
+}

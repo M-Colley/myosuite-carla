@@ -1,5 +1,42 @@
 # Validation record
 
+## CARLA 1.0 and MyoSuite 3.1 on 2026-11-17
+
+The bridge passes its offline tests against MyoSuite 3.1.0 and current development source. Both retain the public model builder, muscle condition and motor noise APIs used by this package. The model assets were upgraded to `myo-sim` 0.2.5. CARLA 1.0 is the default live validation target. The actual server installation and live measurements are recorded separately from these offline results.
+
+| Environment | Python | MuJoCo | Passed | Skipped |
+| --- | --- | --- | --- | --- |
+| MyoSuite 3.1.0 release | 3.12.13 | 3.17.0 | 522 | 11 |
+| MyoSuite dev `c93329ec` | 3.12.13 | 3.17.0 | 522 | 11 |
+| MyoSuite 3.1.0 minimum physics | 3.10.20 | 3.6.0 | 521 | 12 |
+| Primary environment with local embodied human and UI | 3.12.13 | 3.17.0 | 542 | 5 |
+| Human driving integration with release | 3.12.13 | 3.17.0 | 120 | 0 |
+| Human driving integration with dev | 3.12.13 | 3.17.0 | 120 | 0 |
+
+The focused real physics suite passed 88 tests with zero skips. It covered cockpit composition, actual muscle contact, full body control, state refresh, strength scaling, fatigue and seeded motor noise. The isolated full suites skipped optional human, UI, training and OpenSim dependencies, alongside four disabled live tests. The primary environment included the local human and UI projects and training dependencies. It skipped OpenSim and the four live tests. No missing MyoSuite import was accepted as physical validation.
+
+The release source is [`d914c4aa1eea568dd45bcc3d760a83dc9362c093`](https://github.com/MyoHub/myosuite/tree/d914c4aa1eea568dd45bcc3d760a83dc9362c093). The development source is [`c93329ec64bc8b544d0b3427bba6766377c3528e`](https://github.com/MyoHub/myosuite/tree/c93329ec64bc8b544d0b3427bba6766377c3528e). The optional integration checks used human source `e938e90b7d38638fe2c588e5e7f7a6621e41eec2` and UI source `605862bd551401bfce91afb4afcf280b2bef98fd`. The primary environment preserves its existing editable links to `embodied-human-kinematics` and `embodied-ui` on this PC.
+
+A fresh unconstrained release installation reproduced a dependency collision. Distribution metadata listed `mujoco` 3.17.0, while importing `mujoco` returned 4.0.1. `mjviser` 0.0.17 had installed `mujoco-core` 4.0.1 into the same module directory. Removing `mujoco-core`, selecting `mjviser` 0.0.16 and reinstalling MuJoCo restored the 3.17.0 runtime. The new optional extra and shared constraint prevent this resolver outcome. CI additionally checks imported runtime versions and the absence of `mujoco-core`. Current MyoSuite dev already includes the viewer upper bound.
+
+The CARLA runtime guard rejects a matched 0.10 client and server when validation requests release 1.0. It accepts release 1.0 and matching source build suffixes. Exact client and server build equality remains required. Existing explicit 0.10 targets remain available. Source branch names remain caller declarations. All fitted vehicle parameters retain their original CARLA 0.10 calibration identity.
+
+Ruff, formatting, mypy across 24 source files and distribution builds passed. Importing `myosuite_carla` leaves CARLA and MyoSuite unimported. The [retained summary](evidence/carla-1.0-myosuite-3.1-2026-11-17/summary.json) links environment records, test output, JUnit results and the dependency collision evidence.
+
+The constrained installation can be reproduced from the bridge root:
+
+```powershell
+uv venv --python 3.12 .venv-myosuite31
+uv pip install --python .venv-myosuite31/Scripts/python.exe -c constraints/myosuite-3.1.txt 'myosuite==3.1.0' -e '.[myosuite,test,lint,data,analysis,video]'
+.venv-myosuite31/Scripts/python.exe -m pytest tests -q --junitxml=artifacts/carla-1-myosuite31/release-tests.xml
+uv venv --python 3.12 .venv-myosuite-dev
+uv pip install --python .venv-myosuite-dev/Scripts/python.exe -c constraints/myosuite-3.1.txt -e artifacts/dependencies/myosuite-dev -e '.[myosuite,test,lint,data,analysis,video]'
+.venv-myosuite-dev/Scripts/python.exe -m pytest tests -q --junitxml=artifacts/carla-1-myosuite31/dev-tests.xml
+uv venv --python 3.10 .venv-myosuite31-min
+uv pip install --python .venv-myosuite31-min/Scripts/python.exe -c constraints/myosuite-3.1.txt 'myosuite==3.1.0' 'mujoco==3.6.0' -e '.[myosuite,test,lint]'
+.venv-myosuite31-min/Scripts/python.exe -m pytest tests -q --junitxml=artifacts/carla-1-myosuite31/minimum-tests.xml
+```
+
 ## Speed-dependent steering lag test on 2026-11-04
 
 The surrogate's steer time constant is now `steer_lag + steer_lag_slope |u|`, with `u` the speed before each frame. A zero slope reproduces the constant lag exactly: the archived analysis of seeds 18-21 reran identically. The candidate kept the engine's rate limit (rise 2.5, fall 5.0) and fitted the lag and slope jointly. The gain table, exponent and longitudinal parameters stayed at the default. The code, [design](evidence/steer-lag-speed-2026-11-04/design.md), [fit script](evidence/steer-lag-speed-2026-11-04/fit.py) and [analysis script](evidence/steer-lag-speed-2026-11-04/analyse.py) were committed in `6403eee` at 16:07:49 UTC, before the fit ran. The adoption rule was unchanged from the previous test. The fitted candidate was committed in `fc18954` at 16:08:16 UTC, before the test drives were recorded.

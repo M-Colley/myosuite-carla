@@ -1,4 +1,4 @@
-"""Opt-in verification against the user's matching CARLA UE5.8 build."""
+"""Opt-in verification against the user's matching CARLA server build."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ pytestmark = [
     pytest.mark.carla,
     pytest.mark.skipif(
         os.environ.get("CARLA_BRIDGE_LIVE") != "1",
-        reason="Set CARLA_BRIDGE_LIVE=1 with a matching UE5.8 server",
+        reason="Set CARLA_BRIDGE_LIVE=1 with a matching CARLA server",
     ),
 ]
 
@@ -27,7 +27,7 @@ def test_real_muscles_accelerate_brake_and_turn_a_real_carla_vehicle() -> None:
             int(os.environ.get("CARLA_PORT", 2000)),
             timeout=float(os.environ.get("CARLA_TIMEOUT", 15)),
             blueprint=os.environ.get("CARLA_BLUEPRINT"),
-            target_ref=os.environ.get("CARLA_TARGET_REF", "ue58-dev"),
+            target_ref=os.environ.get("CARLA_TARGET_REF", "1.0"),
             build_ref=os.environ.get("CARLA_BUILD_REF"),
             build_commit=os.environ.get("CARLA_BUILD_COMMIT"),
         )

@@ -22,6 +22,7 @@ from .fullbody import (
 from .session import CarlaSession, SessionConfig
 from .validation import (
     LiveValidationError,
+    _check_runtime_target,
     _require,
     _select_blueprint,
     _settings,
@@ -257,7 +258,7 @@ def run_fullbody_validation(
     *,
     timeout: float = 30,
     blueprint: str | None = None,
-    target_ref: str = "ue58-dev",
+    target_ref: str = "1.0",
     build_ref: str | None = None,
     build_commit: str | None = None,
     observer: DriveObserver | None = None,
@@ -290,6 +291,7 @@ def run_fullbody_validation(
                 None if build_ref is None else build_ref == target_ref
             ),
             "asserted_commit": build_commit,
+            "runtime_matches_target": None,
             "source_verified": False,
         },
         "phases": [],
@@ -297,7 +299,9 @@ def run_fullbody_validation(
     }
     session = None
     try:
+        _require(bool(target_ref.strip()), "Validation target ref must not be empty")
         carla = importlib.import_module("carla")
+        report["carla_module"] = str(getattr(carla, "__file__", None))
         try:
             report["carla_distribution"] = importlib.metadata.version("carla")
         except importlib.metadata.PackageNotFoundError:
@@ -310,6 +314,7 @@ def run_fullbody_validation(
             report["client_version"] == report["server_version"],
             "CARLA client/server versions differ",
         )
+        _check_runtime_target(report, target_ref)
         world = client.get_world()
         report["map"] = world.get_map().name
         original = _settings(world)
