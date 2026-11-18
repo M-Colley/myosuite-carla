@@ -1,0 +1,35 @@
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:563: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:600: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:1416: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  body = _body_spec(config).compile()
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:563: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:600: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+  model = spec.compile()
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+WARNING: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+
+Saved evidence\carla-1.0-vehicle-calibration-2026-11-17\embodied-following-1.json

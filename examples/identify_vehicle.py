@@ -9,19 +9,22 @@ sinusoidal steering sweep at 2-10 m/s (``steer``) or 8-14 m/s
 (``steer_hold``) at 0.8-3 m/s up to full lock; or a step doublet
 (``steer_doublet``: a held step, the opposite step and release) at 3-10 m/s.
 Levels, speeds, amplitudes and frequencies are drawn from each seed. Segments
-with a collision or a roll above 3 degrees (a curb strike) are discarded.
-Every frame of each seed is exported with ``DriveRecorder`` to
-``--data/seed<N>`` with a ``collection.json`` log; fit with
+with a collision or a roll above 3 degrees are excluded from fitting.
+All attempted trajectories are retained under ``seed<N>/attempts``.
+Accepted frames are exported with ``DriveRecorder`` to ``--data/seed<N>``
+with a ``collection.json`` log; fit with
 ``examples/fit_vehicle_model.py``.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import os
 import sys
+from contextlib import ExitStack
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -39,8 +42,12 @@ from myosuite_carla import (
 DT = 0.02
 
 
-def _straight(town: Any, transform: Any, limit: float = 300.0) -> float:
+def _straight(
+    town: Any, transform: Any, limit: float = 300.0, *, max_road_pitch: float = 1.0
+) -> float:
     waypoint = town.get_waypoint(transform.location)
+    if waypoint is None or abs(waypoint.transform.rotation.pitch) > max_road_pitch:
+        return 0.0
     start = waypoint.transform.rotation.yaw
     distance = 0.0
     while distance < limit:
@@ -48,7 +55,7 @@ def _straight(town: Any, transform: Any, limit: float = 300.0) -> float:
         if not following:
             break
         turn = (following[0].transform.rotation.yaw - start + 180) % 360 - 180
-        if abs(turn) > 3:
+        if abs(turn) > 3 or abs(following[0].transform.rotation.pitch) > max_road_pitch:
             break
         distance += 2.0
         waypoint = following[0]
@@ -58,7 +65,19 @@ def _straight(town: Any, transform: Any, limit: float = 300.0) -> float:
 class Segment:
     """Stateful command program for one manoeuvre; returns None when done."""
 
-    def __init__(self, kind: str, rng: np.random.Generator, budget: float) -> None:
+    def __init__(
+        self,
+        kind: str,
+        rng: np.random.Generator,
+        budget: float,
+        *,
+        steer_exponent: float = 1.0,
+        max_lateral_acceleration: float = 3.0,
+    ) -> None:
+        if not math.isfinite(steer_exponent) or not 0.5 <= steer_exponent <= 3:
+            raise ValueError("steering input exponent must be within [0.5, 3]")
+        if not math.isfinite(max_lateral_acceleration) or max_lateral_acceleration <= 0:
+            raise ValueError("maximum lateral acceleration must be finite and positive")
         self.kind = kind
         self.budget = budget
         self.stage = "rest"
@@ -75,6 +94,16 @@ class Segment:
             self.target = float(rng.uniform(8.0, 14.0))
             self.amplitude = float(rng.uniform(0.03, 0.25))
             self.frequency = float(rng.uniform(0.4, 0.9))
+        if kind in ("steer", "steer_fast") and steer_exponent != 2:
+            lateral = float(
+                rng.uniform(
+                    min(0.3, max_lateral_acceleration / 2), max_lateral_acceleration
+                )
+            )
+            angle = math.atan(lateral * 3.075 / self.target**2)
+            self.amplitude = float(
+                np.clip((angle / 0.92) ** (1 / steer_exponent), 0.01, 1.0)
+            )
         self.hold = 0.0
         if kind in ("steer_low", "steer_hold"):
             self.target = float(rng.uniform(0.8, 3.0))
@@ -84,6 +113,12 @@ class Segment:
             else:
                 side = float(rng.choice((-1.0, 1.0)))
                 self.amplitude = side * float(rng.uniform(0.2, 1.0))
+            limit = (
+                math.atan(max_lateral_acceleration * 3.075 / self.target**2) / 0.92
+            ) ** (1 / steer_exponent)
+            self.amplitude = math.copysign(
+                min(abs(self.amplitude), limit), self.amplitude
+            )
             # Bound the heading excursion near 0.6 rad per half sweep or
             # hold, taking the road-wheel angle as at most 0.98 rad times
             # the steer (linear, so conservative).
@@ -92,13 +127,25 @@ class Segment:
             self.hold = float(np.clip(0.6 / rate, 0.6, 2.5))
         if kind == "steer_doublet":
             self.target = float(rng.uniform(3.0, 10.0))
-            lateral = float(rng.uniform(0.5, 3.0))
-            # Steer for that steady lateral acceleration on the squared curve
-            # with a 0.92 rad gain; each half turns the heading about 0.25 rad.
+            lateral = float(
+                rng.uniform(
+                    min(0.5, max_lateral_acceleration / 2), max_lateral_acceleration
+                )
+            )
+            # Invert the selected input curve for the target lateral acceleration.
             angle = math.atan(lateral * 3.075 / self.target**2)
             side = float(rng.choice((-1.0, 1.0)))
-            self.amplitude = side * float(np.clip(math.sqrt(angle / 0.92), 0.05, 0.8))
+            self.amplitude = side * float(
+                np.clip((angle / 0.92) ** (1.0 / steer_exponent), 0.05, 0.8)
+            )
             self.hold = float(np.clip(0.25 * self.target / lateral, 0.4, 1.5))
+        if kind.startswith("steer"):
+            limit = (
+                math.atan(max_lateral_acceleration * 3.075 / self.target**2) / 0.92
+            ) ** (1 / steer_exponent)
+            self.amplitude = math.copysign(
+                min(abs(self.amplitude), limit), self.amplitude
+            )
 
     def _next(self, stage: str) -> None:
         self.stage, self.stage_frames = stage, 0
@@ -106,8 +153,8 @@ class Segment:
     def command(self, speed: float, step: float) -> VehicleCommand | None:
         self.frames += 1
         self.stage_frames += 1
-        self.travelled += abs(speed) * DT
-        time = self.stage_frames * DT
+        self.travelled += abs(speed) * step
+        time = self.stage_frames * step
         stopping = speed * speed / 8.0 + 2.0 * abs(speed) + 12.0
         room = self.budget - self.travelled - stopping
         if self.stage == "rest":
@@ -188,10 +235,15 @@ def _run_seed(
     session: CarlaSession,
     api: Any,
     vehicle: Any,
-    spawns: list[tuple[Any, float]],
+    spawns: list[tuple[Any, float, float]],
     seed: int,
     counts: dict[str, int],
     collisions: list[int],
+    *,
+    steer_exponent: float,
+    max_lateral_acceleration: float,
+    directory: Path,
+    metadata: dict[str, Any],
 ) -> tuple[list[Recording], list[dict[str, Any]]]:
     rng = np.random.default_rng(seed)
     kinds = [kind for kind, count in counts.items() for _ in range(count)]
@@ -201,58 +253,113 @@ def _run_seed(
     long = [item for item in spawns if item[1] >= 140.0] or spawns
     for index, kind in enumerate(kinds):
         candidates = long if kind in ("steer_fast", "steer_doublet") else spawns
-        spawn, budget = candidates[int(rng.integers(len(candidates)))]
-        vehicle.set_transform(spawn)
-        vehicle.set_target_velocity(api.Vector3D(0.0, 0.0, 0.0))
-        vehicle.set_target_angular_velocity(api.Vector3D(0.0, 0.0, 0.0))
-        for _ in range(75):
-            session.step(VehicleCommand(brake=1.0, hand_brake=True))
-        collisions.clear()
-        program = Segment(kind, rng, budget)
+        spawn, budget, road_pitch = candidates[int(rng.integers(len(candidates)))]
+        program = Segment(
+            kind,
+            rng,
+            budget,
+            steer_exponent=steer_exponent,
+            max_lateral_acceleration=max_lateral_acceleration,
+        )
         recorder = DriveRecorder(body=False)
         label = f"s{seed}-{index:02d}-{kind}"
-        telemetry = session.snapshot()
         max_roll = 0.0
         command = VehicleCommand()
-        while True:
-            velocity = np.asarray(telemetry.velocity)
-            yaw = math.radians(telemetry.rotation[1])
-            speed = float(velocity[0] * math.cos(yaw) + velocity[1] * math.sin(yaw))
-            next_command = program.command(speed, DT)
-            recorder.add(
-                telemetry.elapsed_seconds,
-                telemetry,
-                command=command.as_dict(),
-                phase=label,
+        completed = False
+        entry: dict[str, Any] = {
+            "segment": label,
+            "kind": kind,
+            "straight_m": budget,
+            "road_pitch_deg": road_pitch,
+            "kept": False,
+            "status": "failed",
+            "level": program.level,
+            "brake": program.brake,
+            "target_speed": program.target,
+            "steer_amplitude": program.amplitude,
+            "steer_frequency": program.frequency,
+            "steer_hold_s": program.hold,
+            "steer_input_exponent": steer_exponent,
+        }
+        log.append(entry)
+        try:
+            collisions.clear()
+            vehicle.set_transform(spawn)
+            vehicle.set_target_velocity(api.Vector3D(0.0, 0.0, 0.0))
+            vehicle.set_target_angular_velocity(api.Vector3D(0.0, 0.0, 0.0))
+            for _ in range(75):
+                session.step(VehicleCommand(brake=1.0, hand_brake=True))
+            entry["settling_collision_frames"] = list(collisions)
+            collisions.clear()
+            telemetry = session.snapshot()
+            while True:
+                velocity = np.asarray(telemetry.velocity)
+                yaw = math.radians(telemetry.rotation[1])
+                speed = float(velocity[0] * math.cos(yaw) + velocity[1] * math.sin(yaw))
+                next_command = program.command(speed, DT)
+                recorder.add(
+                    telemetry.elapsed_seconds,
+                    telemetry,
+                    command=command.as_dict(),
+                    phase=label,
+                )
+                max_roll = max(max_roll, abs(telemetry.rotation[2]))
+                if collisions or max_roll > 3 or program.frames > 1500:
+                    break
+                if next_command is None:
+                    completed = True
+                    break
+                command = next_command
+                telemetry = session.step(command)
+            for _ in range(3):
+                session.step(VehicleCommand(brake=1.0))
+            valid = completed and not collisions and max_roll <= 3
+            entry.update(kept=valid, status="completed" if valid else "rejected")
+            if valid:
+                kept.append(recorder.recording())
+        except Exception as error:
+            entry["error"] = {"type": type(error).__name__, "message": str(error)}
+            raise
+        finally:
+            entry.update(
+                frames=len(recorder),
+                collision=bool(collisions),
+                collision_frames=list(collisions),
+                max_roll_deg=max_roll,
+                program_stage=program.stage,
+                completed=completed,
+                frame_limit_exceeded=program.frames > 1500,
             )
-            if next_command is None or program.frames > 1500:
-                break
-            command = next_command
-            telemetry = session.step(command)
-            max_roll = max(max_roll, abs(telemetry.rotation[2]))
-        for _ in range(3):
-            session.step(VehicleCommand(brake=1.0))
-        valid = not collisions and max_roll <= 3.0 and program.frames <= 1500
-        log.append(
-            {
-                "segment": label,
-                "kind": kind,
-                "frames": len(recorder),
-                "straight_m": budget,
-                "collision": bool(collisions),
-                "max_roll_deg": max_roll,
-                "kept": valid,
-                "level": program.level,
-                "brake": program.brake,
-                "target_speed": program.target,
-                "steer_amplitude": program.amplitude,
-                "steer_frequency": program.frequency,
-                "steer_hold_s": program.hold,
-            }
-        )
-        if valid:
-            kept.append(recorder.recording())
-        print(f"{label}: {len(recorder)} frames, kept={valid}", flush=True)
+            try:
+                if len(recorder):
+                    attempt = recorder.recording()
+                    attempt.metadata.update(metadata)
+                    attempt.metadata.update(entry, seed=seed)
+                    entry["recording"] = f"attempts/{label}"
+                    attempt.save(directory / "attempts" / label, formats=("csv",))
+            except Exception as error:
+                entry.update(
+                    kept=False,
+                    status="failed",
+                    error={"type": type(error).__name__, "message": str(error)},
+                )
+                raise
+            finally:
+                (directory / "collection.json").write_text(
+                    json.dumps(
+                        {
+                            **metadata,
+                            "status": "failed"
+                            if entry["status"] == "failed"
+                            else "running",
+                            "segments": log,
+                        },
+                        indent=1,
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
+        print(f"{label}: {len(recorder)} frames, kept={entry['kept']}", flush=True)
     return kept, log
 
 
@@ -267,6 +374,14 @@ def main() -> int:
     parser.add_argument("--blueprint", default="vehicle.nissan.patrol")
     parser.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2])
     parser.add_argument("--min-straight", type=float, default=100.0)
+    parser.add_argument("--max-road-pitch", type=float, default=1.0)
+    parser.add_argument("--max-lateral-acceleration", type=float, default=3.0)
+    parser.add_argument(
+        "--steer-exponent",
+        type=float,
+        default=None,
+        help="input exponent; inferred as 1 for CARLA 1.0 or 2 for 0.10 if omitted",
+    )
     parser.add_argument("--launch", type=int, default=10)
     parser.add_argument("--hand-brake", type=int, default=2)
     parser.add_argument("--reverse", type=int, default=3)
@@ -277,37 +392,6 @@ def main() -> int:
     parser.add_argument("--steer-doublet", type=int, default=0)
     parser.add_argument("--data", type=Path, default=Path("artifacts/vehicle-sysid"))
     args = parser.parse_args()
-    import carla
-
-    client = carla.Client(args.host, args.port)
-    client.set_timeout(args.timeout)
-    world = client.get_world()
-    if world.get_settings().synchronous_mode:
-        raise SystemExit("Stop the existing synchronous client first")
-    town = world.get_map()
-    spawns = [
-        (spawn, length)
-        for spawn in town.get_spawn_points()
-        if (length := _straight(town, spawn)) >= args.min_straight
-    ]
-    blueprint = world.get_blueprint_library().find(args.blueprint)
-    vehicle = world.try_spawn_actor(blueprint, spawns[0][0])
-    if vehicle is None:
-        raise SystemExit("Could not spawn the vehicle")
-    collisions: list[int] = []
-    sensor = world.spawn_actor(
-        world.get_blueprint_library().find("sensor.other.collision"),
-        carla.Transform(),
-        attach_to=vehicle,
-    )
-    sensor.listen(lambda event: collisions.append(int(event.frame)))
-    session = CarlaSession(
-        client,
-        vehicle,
-        SessionConfig(fixed_delta_seconds=DT, timeout_seconds=args.timeout),
-        api=carla,
-        own_vehicle=True,
-    )
     counts = {
         "launch": args.launch,
         "hand_brake": args.hand_brake,
@@ -318,48 +402,161 @@ def main() -> int:
         "steer_hold": args.steer_hold,
         "steer_doublet": args.steer_doublet,
     }
-    common = {
-        "server_version": client.get_server_version(),
-        "client_version": client.get_client_version(),
-        "map": town.name,
+    if any(count < 0 for count in counts.values()) or not sum(counts.values()):
+        parser.error("manoeuvre counts must be nonnegative with a positive total")
+    if any(seed < 0 for seed in args.seeds) or len(set(args.seeds)) != len(args.seeds):
+        parser.error("seeds must be unique and nonnegative")
+    if (
+        not math.isfinite(args.min_straight)
+        or args.min_straight <= 0
+        or not math.isfinite(args.timeout)
+        or args.timeout <= 0
+        or not math.isfinite(args.max_road_pitch)
+        or not 0 <= args.max_road_pitch < 90
+        or not math.isfinite(args.max_lateral_acceleration)
+        or args.max_lateral_acceleration <= 0
+        or (
+            args.steer_exponent is not None
+            and (
+                not math.isfinite(args.steer_exponent)
+                or not 0.5 <= args.steer_exponent <= 3
+            )
+        )
+    ):
+        parser.error("invalid timing, road pitch, acceleration or exponent setting")
+    if args.data.exists() and any(args.data.iterdir()):
+        parser.error(
+            "the output directory must be empty; existing evidence is retained"
+        )
+    args.data.mkdir(parents=True, exist_ok=True)
+    for seed in args.seeds:
+        (args.data / f"seed{seed}").mkdir()
+    common: dict[str, Any] = {
         "blueprint": args.blueprint,
-        "spawn_points_used": len(spawns),
         "min_straight_m": args.min_straight,
+        "max_road_pitch_deg": args.max_road_pitch,
+        "max_lateral_acceleration_mps2": args.max_lateral_acceleration,
         "counts": counts,
+        "seeds": args.seeds,
+        "control_dt": DT,
         "command": "examples/identify_vehicle.py " + " ".join(sys.argv[1:]),
+        "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "started_utc": datetime.now(timezone.utc).isoformat(),
+        "status": "failed",
     }
     try:
-        session.start()
-        for seed in args.seeds:
-            started = datetime.now(timezone.utc).isoformat()
-            kept, log = _run_seed(
-                session, carla, vehicle, spawns, seed, counts, collisions
-            )
-            directory = args.data / f"seed{seed}"
-            if kept:
-                recording = Recording.concatenate(kept)
-                recording.metadata.update(
-                    map=town.name, vehicle=args.blueprint, seed=seed
+        import carla
+
+        client = carla.Client(args.host, args.port)
+        client.set_timeout(args.timeout)
+        common.update(
+            server_version=client.get_server_version(),
+            client_version=client.get_client_version(),
+            carla_module=str(getattr(carla, "__file__", None)),
+        )
+        if common["server_version"] != common["client_version"]:
+            raise RuntimeError("CARLA client and server builds differ")
+        exponent = args.steer_exponent
+        if exponent is None:
+            release = common["server_version"].split("-", 1)[0]
+            exponent = {"1.0": 1.0, "1.0.0": 1.0, "0.10.0": 2.0}.get(release)
+            if exponent is None:
+                raise ValueError(
+                    "this CARLA release requires an explicit steer exponent"
                 )
-                recording.save(directory, formats=("csv",))
-            directory.mkdir(parents=True, exist_ok=True)
-            (directory / "collection.json").write_text(
-                json.dumps(
-                    {
-                        **common,
-                        "seed": seed,
-                        "started_utc": started,
-                        "finished_utc": datetime.now(timezone.utc).isoformat(),
-                        "segments": log,
-                    },
-                    indent=1,
-                ),
-                encoding="utf-8",
+        common["steer_input_exponent"] = exponent
+        world = client.get_world()
+        if world.get_settings().synchronous_mode:
+            raise RuntimeError("Stop the existing synchronous client first")
+        town = world.get_map()
+        spawns = [
+            (
+                spawn,
+                length,
+                float(town.get_waypoint(spawn.location).transform.rotation.pitch),
             )
+            for spawn in town.get_spawn_points()
+            if (length := _straight(town, spawn, max_road_pitch=args.max_road_pitch))
+            >= args.min_straight
+        ]
+        common.update(map=town.name, spawn_points_used=len(spawns))
+        if not spawns:
+            raise RuntimeError(
+                "No spawn point satisfies the straight road and pitch limits"
+            )
+        with ExitStack() as cleanup:
+            blueprint = world.get_blueprint_library().find(args.blueprint)
+            vehicle = world.try_spawn_actor(blueprint, spawns[0][0])
+            if vehicle is None:
+                raise RuntimeError("Could not spawn the vehicle")
+            cleanup.callback(vehicle.destroy)
+            collisions: list[int] = []
+            sensor = world.spawn_actor(
+                world.get_blueprint_library().find("sensor.other.collision"),
+                carla.Transform(),
+                attach_to=vehicle,
+            )
+            cleanup.callback(sensor.destroy)
+            sensor.listen(lambda event: collisions.append(int(event.frame)))
+            cleanup.callback(sensor.stop)
+            session = CarlaSession(
+                client,
+                vehicle,
+                SessionConfig(fixed_delta_seconds=DT, timeout_seconds=args.timeout),
+                api=carla,
+                own_vehicle=False,
+            )
+            cleanup.callback(session.close)
+            session.start()
+            for seed in args.seeds:
+                directory = args.data / f"seed{seed}"
+                metadata = {
+                    **common,
+                    "seed": seed,
+                    "status": "running",
+                    "started_utc": datetime.now(timezone.utc).isoformat(),
+                }
+                kept, log = _run_seed(
+                    session,
+                    carla,
+                    vehicle,
+                    spawns,
+                    seed,
+                    counts,
+                    collisions,
+                    steer_exponent=exponent,
+                    max_lateral_acceleration=args.max_lateral_acceleration,
+                    directory=directory,
+                    metadata=metadata,
+                )
+                if kept:
+                    recording = Recording.concatenate(kept)
+                    recording.metadata.update(
+                        common, vehicle=args.blueprint, seed=seed, status="completed"
+                    )
+                    recording.save(directory, formats=("csv",))
+                (directory / "collection.json").write_text(
+                    json.dumps(
+                        {
+                            **metadata,
+                            "status": "completed",
+                            "finished_utc": datetime.now(timezone.utc).isoformat(),
+                            "segments": log,
+                        },
+                        indent=1,
+                    )
+                    + "\n",
+                    encoding="utf-8",
+                )
+        common["status"] = "completed"
+    except Exception as error:
+        common["error"] = {"type": type(error).__name__, "message": str(error)}
+        raise
     finally:
-        sensor.stop()
-        sensor.destroy()
-        session.close()
+        common["finished_utc"] = datetime.now(timezone.utc).isoformat()
+        (args.data / "run.json").write_text(
+            json.dumps(common, indent=1) + "\n", encoding="utf-8"
+        )
     return 0
 
 

@@ -105,18 +105,20 @@ Windows package was found. No CARLA 1.0 server has been run with this bridge.
   two-point steering gains and the calibration of cabin wheel travel to `steer`.
   The surrogate now identifies the exponent (`steer_exponent`, 1.97 for the
   0.10.0 Patrol); its earlier linear table misspecified 0.10.0 and had
-  4 to 8 times the held-out yaw-rate error (see VALIDATION.md). Re-identify the
-  vehicle on 1.0, where the exponent should come out near 1, before using it
-  there. Chaos also rate-limits the raw steering input (UE5.8 engine
+  4 to 8 times the held-out yaw-rate error (see VALIDATION.md). The explicit
+  `carla_1_0_nissan_patrol()` fit identifies an effective exponent of 0.971.
+  Chaos also rate-limits the raw steering input (UE5.8 engine
   defaults: the magnitude rises at 2.5 and falls at 5.0 per second). CARLA's
   C++ in the 1.0 tag and `ue58-dev` overrides only the curve. The vehicle
   blueprints were not inspected, so the 1.0 rates are unconfirmed. On 0.10.0
   a joint fit recovered a rise rate of 2.5, and `carla_nissan_patrol()` now
-  applies these rates with a steer lag that grows with speed (see
-  VALIDATION.md). Check both on 1.0 before reusing them.
-- **Vehicle physics.** UE5.8 Chaos and the 1.0 vehicle content differ from
-  UE5.5. All fitted drive, brake, drag and lag parameters were identified on
-  0.10.0 and need re-identification on 1.0.
+  applies these rates with a steer lag that grows with speed. The 1.0
+  validation selected the same rate limits with a greater lag slope.
+  [Calibration results](evidence/carla-1.0-vehicle-calibration-2026-11-17)
+- **Vehicle physics.** The explicit 1.0 Nissan Patrol preset includes drive,
+  brake, drag and lag terms fitted on the official 1.0 package. Its evaluation
+  uses three seed batches on `Town10HD_Opt`. Use a separate calibration for
+  other vehicle blueprints.
 - **Geolocation.** `Map.transform_to_geolocation` in `defabe35` passed CARLA's
   `y` (south) as the northing, so latitude grew southwards; upstream
   `2466fff9c` (in the tag) corrected it. 0.10.0 and 1.0 both increase latitude

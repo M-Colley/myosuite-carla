@@ -162,8 +162,9 @@ class FullBodyDrivingEnv(gym.Env[NDArray[np.float32], NDArray[np.float32]]):
         driver: An existing driver; built from ``driver_config`` otherwise.
         driver_config: Configuration used when ``driver`` is not given.
         vehicle: Session-like vehicle; defaults to a :class:`SurrogateVehicle`.
-        reset_vehicle: Places ``vehicle`` at the scenario start; required for a
-            CARLA session (see :func:`~myosuite_carla.carla_scenario.teleport`).
+        reset_vehicle: Places ``vehicle`` at the scenario start; supplied
+            surrogates use the default reset. Required for a CARLA session
+            (see :func:`~myosuite_carla.carla_scenario.teleport`).
         hooks: Bridge control hooks, e.g. a ``CarlaLeadVehicle``.
         automation: Gains of the pre-takeover automation.
         recorder: Optional recorder of every frame and the scenario events.
@@ -196,7 +197,8 @@ class FullBodyDrivingEnv(gym.Env[NDArray[np.float32], NDArray[np.float32]]):
         dt = self.driver.config.control_dt
         if vehicle is None:
             vehicle = SurrogateVehicle(config=SessionConfig(fixed_delta_seconds=dt))
-            reset_vehicle = reset_vehicle or _reset_surrogate
+        if reset_vehicle is None and isinstance(vehicle, SurrogateVehicle):
+            reset_vehicle = _reset_surrogate
         if reset_vehicle is None:
             raise ValueError("reset_vehicle is required for a non-surrogate vehicle")
         self.vehicle = vehicle

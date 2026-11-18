@@ -1,0 +1,10 @@
+{
+  "utc": "2026-11-18T09:22:43.395381+00:00",
+  "server": "1.0",
+  "client": "1.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "synchronous_mode": false,
+  "fixed_delta_seconds": null,
+  "vehicles": [],
+  "collision_sensors": []
+}

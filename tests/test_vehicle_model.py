@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 from dataclasses import replace
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -16,6 +18,7 @@ from myosuite_carla.vehicle_model import (
     THROTTLE_KNOTS,
     SurrogateVehicle,
     VehicleModelParams,
+    carla_1_0_nissan_patrol,
     carla_nissan_patrol,
     evaluate_vehicle_model,
     fit_vehicle_model,
@@ -98,6 +101,33 @@ def test_params_validate_and_round_trip_through_json() -> None:
     with pytest.raises(ValueError, match="steer_exponent"):
         VehicleModelParams(steer_exponent=0.2)
     assert isinstance(carla_nissan_patrol(), VehicleModelParams)
+
+
+def test_versioned_patrol_preset_preserves_selection_and_legacy_defaults() -> None:
+    from myosuite_carla.driver_models import AccelerationControlConfig
+
+    evidence = Path(__file__).parents[1] / "evidence"
+    frozen = json.loads(
+        (
+            evidence / "carla-1.0-vehicle-calibration-2026-11-17/frozen-selection.json"
+        ).read_text(encoding="utf-8")
+    )
+    params = carla_1_0_nissan_patrol()
+    assert frozen["selected"] == "C3"
+    assert params.as_dict() == frozen["parameters"]
+    assert (
+        VehicleModelParams.from_dict(json.loads(json.dumps(params.as_dict()))) == params
+    )
+    assert AccelerationControlConfig(vehicle=params).vehicle is params
+    assert SurrogateVehicle(params).params is params
+    legacy = carla_nissan_patrol()
+    assert params != legacy
+    assert SurrogateVehicle().params == legacy
+    assert AccelerationControlConfig().vehicle == legacy
+    digest = hashlib.sha256(json.dumps(legacy.as_dict(), sort_keys=True).encode())
+    assert digest.hexdigest() == (
+        "c9ed0aa941d8e4c23a0616b430bd1c0482b3b91a631eadaf11fb969dd1543e08"
+    )
 
 
 def test_parameters_saved_without_an_exponent_load_as_linear() -> None:
@@ -242,6 +272,137 @@ def test_fit_recovers_known_parameters_from_its_own_drives() -> None:
     assert summary["speed_rmse_mps"] < 0.1
     assert summary["position_error_3s_m"] < 0.2 * summary["baseline_error_3s_m"]
     assert set(result["by_group"]) == {"s1"}
+
+
+def test_flat_fitting_and_rollout_ignore_future_measured_pitch() -> None:
+    pytest.importorskip("scipy")
+    flat = _synthetic(9)[:2]
+    pitched = [
+        replace(segment, pitch_deg=np.linspace(-12.0, 12.0, len(segment.speed)))
+        for segment in flat
+    ]
+    options = {"smoothing": 0.05, "throttle_lags": (TRUTH.throttle_lag,)}
+    original, original_report = fit_vehicle_model(flat, use_pitch=False, **options)
+    altered, altered_report = fit_vehicle_model(pitched, use_pitch=False, **options)
+    assert altered == original
+    assert altered_report == original_report
+    assert altered_report["use_pitch"] is False
+    flat_metrics = evaluate_vehicle_model(TRUTH, flat, use_pitch=False)
+    altered_metrics = evaluate_vehicle_model(TRUTH, pitched, use_pitch=False)
+    assert flat_metrics == altered_metrics
+    conditional = evaluate_vehicle_model(TRUTH, pitched)
+    assert conditional["use_pitch"] is True
+    assert conditional["summary"]["speed_rmse_mps"] > 0.1
+    assert conditional == evaluate_vehicle_model(TRUTH, pitched, use_pitch=True)
+
+
+def test_monotonic_fit_supports_the_acceleration_inverse() -> None:
+    pytest.importorskip("scipy")
+    from myosuite_carla.driver_models import AccelerationControlConfig
+
+    nonmonotonic = replace(
+        TRUTH,
+        drive=tuple((value,) * len(SPEED_KNOTS) for value in (3.0, 1.0, 2.0, 2.5)),
+        reverse_drive=(1.5, 0.5, 1.2, 1.3),
+    )
+    train = _synthetic(4, nonmonotonic)
+    options = {"smoothing": 0.05, "throttle_lags": (TRUTH.throttle_lag,)}
+    unconstrained, _ = fit_vehicle_model(train, **options)
+    constrained, report = fit_vehicle_model(train, monotonic_drive=True, **options)
+    assert np.min(np.diff(unconstrained.drive, axis=0)) < -0.05
+    assert np.min(np.diff(constrained.drive, axis=0)) >= 0
+    assert np.min(np.diff(constrained.reverse_drive)) >= 0
+    assert report["monotonic_drive"] is True
+    assert AccelerationControlConfig(vehicle=constrained).vehicle == constrained
+
+
+def test_fixed_longitudinal_parameters_are_preserved_while_steering_is_fitted(
+    monkeypatch,
+) -> None:
+    optimize = pytest.importorskip("scipy.optimize")
+
+    def reject_nnls(*args, **kwargs):
+        raise AssertionError("Fixed longitudinal parameters must skip NNLS")
+
+    monkeypatch.setattr(optimize, "nnls", reject_nnls)
+    fixed = replace(TRUTH, steer_gain=(0.1,) * len(SPEED_KNOTS), steer_lag=0.7)
+    params, report = fit_vehicle_model(
+        _synthetic(7),
+        fixed_longitudinal=fixed,
+        use_pitch=False,
+        monotonic_drive=True,
+        steer_exponent=1.0,
+        smoothing=0.05,
+    )
+    for name in (
+        "drive",
+        "reverse_drive",
+        "rolling",
+        "linear_drag",
+        "quadratic_drag",
+        "brake_decel",
+        "hand_brake_decel",
+        "throttle_lag",
+    ):
+        assert getattr(params, name) == getattr(fixed, name)
+    assert report["longitudinal_fitted"] is False
+    assert report["longitudinal_samples"] > 0
+    assert report["longitudinal_rms_mps2"] < 1e-8
+    assert params.steer_lag == pytest.approx(TRUTH.steer_lag, abs=0.03)
+    assert max(params.steer_gain) > 0.3
+
+
+def test_fixed_longitudinal_knots_are_inherited_or_checked() -> None:
+    pytest.importorskip("scipy")
+    custom = VehicleModelParams(
+        speed_knots=(0.0, 10.0),
+        throttle_knots=(0.5, 1.0),
+        drive=((1.0, 1.0), (3.0, 3.0)),
+        reverse_drive=(0.8, 1.5),
+        steer_gain=(0.5, 0.3),
+    )
+    train = _synthetic(1, custom)[:1]
+    params, report = fit_vehicle_model(train, fixed_longitudinal=custom)
+    assert params.speed_knots == custom.speed_knots
+    assert params.throttle_knots == custom.throttle_knots
+    assert params.drive == custom.drive
+    assert report["longitudinal_fitted"] is False
+    with pytest.raises(ValueError, match="knots"):
+        fit_vehicle_model(train, fixed_longitudinal=custom, template=TRUTH)
+
+
+@pytest.mark.parametrize("part", ["drive", "reverse_drive"])
+def test_fixed_longitudinal_checks_requested_throttle_monotonicity(part) -> None:
+    if part == "drive":
+        fixed = replace(TRUTH, drive=(TRUTH.drive[-1], *TRUTH.drive[1:]))
+    else:
+        fixed = replace(TRUTH, reverse_drive=(3.0, 0.5, 1.0, 1.5))
+    with pytest.raises(ValueError, match="monotonic"):
+        fit_vehicle_model(
+            _synthetic(5)[:1], fixed_longitudinal=fixed, monotonic_drive=True
+        )
+
+
+def test_later_segments_supply_horizon_metrics_when_the_first_is_short() -> None:
+    segment = _synthetic(3)[0]
+    commands = ("throttle", "brake", "steer", "hand_brake", "reverse")
+    states = ("x", "y", "yaw_deg", "pitch_deg", "speed", "yaw_rate")
+    short = replace(
+        segment,
+        name="short",
+        **{name: getattr(segment, name)[:25] for name in commands},
+        **{name: getattr(segment, name)[:26] for name in states},
+    )
+    expected = evaluate_vehicle_model(TRUTH, [segment])["summary"]
+    result = evaluate_vehicle_model(TRUTH, [short, segment], group=lambda _: "all")
+    for key in (
+        "position_error_1s_m",
+        "baseline_error_1s_m",
+        "position_error_3s_m",
+        "baseline_error_3s_m",
+    ):
+        assert result["summary"][key] == pytest.approx(expected[key])
+        assert result["by_group"]["all"][key] == pytest.approx(expected[key])
 
 
 def test_fit_identifies_a_squared_steering_input_curve() -> None:

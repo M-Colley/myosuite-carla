@@ -10,6 +10,25 @@ The bridge suite passed 539 tests on each of three stacks. MyoSuite 3.1.0 and My
 
 The candidate used MyoSuite development commit `fc0892c9c3a82163c4219dc9c5b6ba76ffd0fd04` and model commit `dd8663bbd5af22dc49c6c38b958e0288eaeafde5`. We applied the [MuJoCo constraints](constraints/myosuite-3.1.txt) on Windows with Python 3.12.13 and MuJoCo 3.17.0. CI checks the proposed model's actuator and joint identities and runs the native physics and driving tests. Hosted execution and live CARLA behavior for the proposed model remain unverified. [CI configuration](.github/workflows/ci.yml).
 
+## CARLA 1.0 Nissan Patrol calibration on 2026-11-18
+
+The explicit `carla_1_0_nissan_patrol()` preset met every predefined acceptance check on three final CARLA 1.0 batches. These batches retained 132 of 141 trials. Each seed met its coverage threshold in all eight manoeuvre families. The following values give equal weight to families within each seed and to the three seeds. [Test report](evidence/carla-1.0-vehicle-calibration-2026-11-17/test-report.json) [Figures](evidence/carla-1.0-vehicle-calibration-2026-11-17/figures)
+
+| Metric | CARLA 0.10 preset | CARLA 1.0 preset |
+| --- | ---: | ---: |
+| Primary error | 0.51886 | 0.31086 |
+| Speed RMSE (m/s) | 0.53673 | 0.46375 |
+| Yaw rate RMSE (°/s) | 2.83379 | 1.21440 |
+| Final position error (m) | 3.37796 | 2.81573 |
+
+The primary error fell 40.1%. The mean paired change was −0.20800 (95% seed batch percentile bootstrap interval [−0.22406, −0.18333], 5,000 resamples). Seven families improved. Launch error rose from 0.51742 to 0.60639 and remained below its predefined limit of 0.65678. Three seed batches provide pilot evidence for the Nissan Patrol on `Town10HD_Opt`. The training data represent steering primarily at 1.34 to 11.07 m/s (5th to 95th percentiles). Peak reverse throttle in training was 0.572. Further data would be required to estimate errors at higher steering speeds or reverse throttle. [Protocol and results](evidence/carla-1.0-vehicle-calibration-2026-11-17/README.md)
+
+The collector used the official Windows shipping package and its matching Python wheel. Client and server both reported `1.0`. The vendor package identifies CARLA commit `1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5`. The launcher used `-nullrhi -nosound -unattended -notrace -carla-rpc-port=2000`. The collector used a 0.02 s fixed step. The final cleanup restored asynchronous mode and removed the vehicle and collision sensor. The experiment server was stopped after verifying that state. [Runtime identity](evidence/carla-1.0-myosuite-3.1-2026-11-17) [Commands](evidence/carla-1.0-vehicle-calibration-2026-11-17/README.md#reproduction) [Cleanup](evidence/carla-1.0-vehicle-calibration-2026-11-17/checks/after-test-world.json)
+
+Validation seed 21 failed steering hold coverage before fitting. Reserve seed 22 replaced the whole batch under the published amendment. The selected parameters were published before final test collection in commit `74b5889454852708f24c312a98b01dd8fd58b497`. An RPC error interrupted test seed 31. The whole seed was replayed on the same package. Its first 35 trial programmes matched the interrupted prefix exactly. Both original and recovered recordings are available with file checksums. [Design amendment](evidence/carla-1.0-vehicle-calibration-2026-11-17/design-v2.json) [Test recovery](evidence/carla-1.0-vehicle-calibration-2026-11-17/test-recovery.md)
+
+MyoSuite 3.1.0 and dev commit `c93329ec64bc8b544d0b3427bba6766377c3528e` each passed 616 offline tests on the frozen selection commit. Each suite had six skips for optional dependencies and disabled live tests. Both environments completed the scripted physical following check with the accepted vehicle, the 114 muscle body and a matching acceleration inverse. The check used two 2 s episodes per environment. Human controller parameters require a separate empirical comparison. [Release suite](evidence/carla-1.0-vehicle-calibration-2026-11-17/checks/full-calibration-0.txt) [Development suite](evidence/carla-1.0-vehicle-calibration-2026-11-17/checks/full-calibration-1.txt) [Embodied human checks](evidence/carla-1.0-vehicle-calibration-2026-11-17/README.md#recorded-data)
+
 ## CARLA 1.0 and MyoSuite 3.1 on 2026-11-17
 
 The bridge passes offline and live validation against MyoSuite 3.1.0 and current development source. Both retain the public model builder, muscle condition and motor noise APIs used by this package. The model assets were upgraded to `myo-sim` 0.2.5. The official CARLA 1.0 Windows package was installed and tested with its bundled client. The replaced CARLA 0.10 runtime was removed after acceptance.

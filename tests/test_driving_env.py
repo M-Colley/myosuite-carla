@@ -62,6 +62,76 @@ def test_spaces_names_and_reset_contract(driver: Any) -> None:
     assert env.intent([2.0, -1.0, 0.9, 0, 0, 0]).steer == 0.5
 
 
+def test_supplied_surrogate_resets_pose_speed_and_control_history(driver: Any) -> None:
+    from dataclasses import replace
+
+    from myosuite_carla import VehicleCommand
+    from myosuite_carla.driving_env import FullBodyDrivingEnv
+    from myosuite_carla.scenario import Lane, Scenario
+    from myosuite_carla.session import SessionConfig
+    from myosuite_carla.vehicle_model import SurrogateVehicle, carla_nissan_patrol
+
+    parameters = replace(carla_nissan_patrol(), throttle_lag=0.17, steer_exponent=1.0)
+    timing = SessionConfig(fixed_delta_seconds=driver.config.control_dt)
+    scenario = Scenario(
+        lane=Lane.straight(start=(30.0, -20.0), yaw=35.0),
+        start_s=12.0,
+        start_speed=4.0,
+    )
+    vehicle = SurrogateVehicle(parameters, timing, speed=7.0).start()
+    for _ in range(10):
+        vehicle.step(VehicleCommand(throttle=0.8, steer=0.5))
+    env = FullBodyDrivingEnv(scenario, driver=driver, vehicle=vehicle)
+    x, y, yaw = scenario.start_pose()
+    with SurrogateVehicle(
+        parameters, timing, location=(x, y, 0.0), yaw=yaw, speed=scenario.start_speed
+    ) as fresh:
+        try:
+            env.reset(seed=4)
+            assert env.vehicle is vehicle
+            assert vehicle.params is parameters
+            assert vehicle.snapshot() == fresh.snapshot()
+            _, _, _, _, info = env.step(np.zeros(6))
+            assert vehicle.snapshot() == fresh.step(VehicleCommand(**info["command"]))
+            env.reset(seed=4)
+            fresh.reset((x, y, 0.0), yaw, scenario.start_speed)
+            assert vehicle.snapshot() == fresh.snapshot()
+        finally:
+            env.close()
+
+
+def test_supplied_surrogate_preserves_explicit_reset_callback(driver: Any) -> None:
+    from myosuite_carla.driving_env import FullBodyDrivingEnv
+    from myosuite_carla.vehicle_model import SurrogateVehicle
+
+    vehicle = SurrogateVehicle()
+    calls = []
+
+    def place(selected: Any, scenario: Any) -> None:
+        calls.append((selected, scenario))
+        selected.reset(location=(50.0, 0.0, 0.0), speed=2.0)
+        selected.start()
+
+    env = FullBodyDrivingEnv(driver=driver, vehicle=vehicle, reset_vehicle=place)
+    try:
+        env.reset(seed=4)
+        assert calls == [(vehicle, env.scenario)]
+        assert vehicle.snapshot().location == (50.0, 0.0, 0.0)
+        assert vehicle.snapshot().speed == 2.0
+    finally:
+        env.close()
+
+
+def test_non_surrogate_vehicle_requires_reset_callback() -> None:
+    from types import SimpleNamespace
+
+    from myosuite_carla.driving_env import FullBodyDrivingEnv
+
+    driver = SimpleNamespace(config=SimpleNamespace(control_dt=0.02))
+    with pytest.raises(ValueError, match="reset_vehicle is required"):
+        FullBodyDrivingEnv(driver=driver, vehicle=object())
+
+
 def test_collision_events_termination_and_reward_share_footprint_geometry(
     driver: Any,
 ) -> None:
