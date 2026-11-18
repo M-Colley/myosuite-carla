@@ -1,0 +1,14 @@
+[
+  {
+    "ProcessId": 47896,
+    "ParentProcessId": 692,
+    "CreationDate": "2026-11-17T13:50:53.129658+00:00",
+    "CommandLine": "\"C:\\Users\\localadmin\\Desktop\\Carla-1.0-Win64-Shipping\\CarlaUnreal.exe\" -nullrhi -nosound -unattended -notrace -carla-rpc-port=2000"
+  },
+  {
+    "ProcessId": 46436,
+    "ParentProcessId": 47896,
+    "CreationDate": "2026-11-17T13:50:53.162638+00:00",
+    "CommandLine": "\"C:\\Users\\localadmin\\Desktop\\Carla-1.0-Win64-Shipping\\CarlaUnreal\\Binaries\\Win64\\CarlaUnreal-Win64-Shipping.exe\" CarlaUnreal -nullrhi -nosound -unattended -notrace -carla-rpc-port=2000"
+  }
+]

@@ -90,7 +90,7 @@ the tested MyoSuite revision and CARLA API contract.
 
 Use the client wheel from the same CARLA 1.0 server package. The [official release](https://github.com/carla-simulator/carla/releases/tag/1.0) supplies wheels inside `PythonAPI/carla/dist`. Session startup requires identical client and server build strings. Live validation also checks that the runtime matches the requested release. A matched 0.10 client and server therefore fail validation requested for 1.0. Source builds retain their commit suffixes in the version comparison.
 
-CARLA 1.0 uses a linear steering input curve. The retained CARLA 0.10 vehicle surrogate was fitted with a nearly squared curve. Vehicle, steering and human controller calibrations require separate evaluation on 1.0 ([details](COMPATIBILITY.md#carla-10)).
+CARLA 1.0 uses a linear steering input curve. `carla_1_0_nissan_patrol()` supplies the corresponding fitted vehicle dynamics. Human steering and controller gains require separate evaluation on 1.0. [Compatibility](COMPATIBILITY.md#carla-10) [Calibration evidence](evidence/carla-1.0-vehicle-calibration-2026-11-17)
 
 ## Compose the physical driver
 
@@ -322,7 +322,7 @@ parameters fitted to designed CARLA 0.10.0 drives. On 526 s of held-out drives
 the open-loop speed error is 0.53 m/s, the yaw-rate error 0.12 deg/s, and the
 position error 3 s ahead is 0.45 m against 6.0 m for constant-velocity
 extrapolation. CARLA 0.10.0 steers through a squared input curve (identified
-exponent 1.97); CARLA 1.0 steers linearly, so fit a 1.0 vehicle anew. The
+exponent 1.97). The
 steering gains are identified from 2.4 to 13.6 m/s and up to half lock;
 low-speed holds confirm the settled angle to three-quarter lock. The steer
 command is rate-limited as in Chaos (2.5 per second rising, 5.0 falling), and
@@ -339,6 +339,19 @@ python examples/fit_vehicle_model.py --train artifacts/vehicle-sysid/seed0 --tes
 `fit_vehicle_model.py` identifies the steering exponent unless
 `--steer-exponent` fixes it; `--steer-rate-limit RISE FALL` and
 `--steer-lag-slope` fit with a fixed rate limit and lag slope.
+
+Select `carla_1_0_nissan_patrol()` for the CARLA 1.0 Nissan Patrol on `Town10HD_Opt`. It reduced the primary error by 40.1% across 132 retained test trials. The default `SurrogateVehicle()` and `AccelerationControlConfig()` use the CARLA 0.10 parameters for reproducibility. [Validation results](VALIDATION.md#carla-10-nissan-patrol-calibration-on-2026-11-18)
+
+```python
+from myosuite_carla.driver_models import AccelerationControlConfig, ReflexDriverConfig
+from myosuite_carla.vehicle_model import SurrogateVehicle, carla_1_0_nissan_patrol
+
+params = carla_1_0_nissan_patrol()
+vehicle = SurrogateVehicle(params)
+reflex = ReflexDriverConfig(acceleration_control=AccelerationControlConfig(vehicle=params))
+```
+
+Pass `vehicle` to `FullBodyDrivingEnv`. Use `reflex` when constructing the `ReflexDriver` for `AttentiveDriver`. For empirical following, pass `vehicle_parameters=params` and `reflex_config=reflex` to `ClosedLoopFollowingProtocol`. Both profiles use the same parameters. The report records them for video replay.
 
 ## Driving task, scenarios and baseline driver
 

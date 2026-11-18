@@ -1,5 +1,6 @@
 """Observed state IDM fitting preserves source groups and independent targets."""
 
+import json
 from dataclasses import replace
 from typing import Any
 
@@ -236,11 +237,13 @@ def test_closed_loop_settings_reject_invalid_physical_objectives(settings) -> No
         ClosedLoopConfig(**settings)
 
 
-def _fake_physical_protocol(monkeypatch, trials):
+def _fake_physical_protocol(monkeypatch, trials, **settings):
     import myosuite_carla.empirical_following as module
 
     protocol = ClosedLoopFollowingProtocol(
-        FollowingProtocol(trials), config=ClosedLoopConfig(trials_per_source=2)
+        FollowingProtocol(trials),
+        config=ClosedLoopConfig(trials_per_source=2),
+        **settings,
     )
     executions = []
 
@@ -380,6 +383,101 @@ def test_physical_protocol_binds_a_controller_snapshot_and_resolved_idm(monkeypa
     assert captured[1][0].time_headway == 2.3
 
 
+def test_vehicle_parameters_bind_cache_execution_and_serialized_reports(monkeypatch):
+    import myosuite_carla.empirical_following as module
+    from myosuite_carla.vehicle_model import carla_nissan_patrol
+
+    trial = _trial("a")
+    legacy, executions, execute = _fake_physical_protocol(monkeypatch, [trial])
+    parameters = replace(carla_nissan_patrol(), steer_exponent=1, throttle_lag=0.07)
+    protocol = ClosedLoopFollowingProtocol(
+        FollowingProtocol([trial]),
+        config=legacy.config,
+        vehicle_parameters=parameters,
+    )
+    captured = []
+
+    def record_vehicle(*args, **kwargs):
+        captured.append(kwargs["vehicle_parameters"])
+        return execute(*args, **kwargs)
+
+    monkeypatch.setattr(module, "_run_closed_loop_episode", record_vehicle)
+    monkeypatch.setattr(protocol, "_ensure_driver", lambda: None)
+    legacy({}, legacy.groups, 0)
+    protocol._cache = legacy._cache.copy()
+    protocol({}, protocol.groups, 0)
+    assert len(executions) == 2
+    assert captured == [None, parameters]
+    assert protocol.vehicle_parameters is parameters
+    with pytest.raises(AttributeError):
+        protocol.vehicle_parameters = carla_nissan_patrol()
+    report = protocol.report_pair(
+        {}, {"time_headway": 2}, groups=protocol.groups, seed=0
+    )
+    assert len(executions) == 3
+    assert captured[-1] is parameters
+    assert report["vehicle_parameters"] == parameters.as_dict()
+    assert report["vehicle_config_sha256"] == protocol.metadata["vehicle_config_sha256"]
+    assert "0.10" not in report["vehicle"]
+    assert "0.10" in legacy.report_pair({}, {}, groups=legacy.groups)["vehicle"]
+    serialized = json.loads(json.dumps(report))
+    serialized["vehicle_parameters"]["drive"][0][0] = 999
+    assert protocol.metadata["vehicle_parameters"] == parameters.as_dict()
+
+
+def test_explicit_vehicle_rejects_a_conflicting_acceleration_inverse():
+    from myosuite_carla.driver_models import (
+        AccelerationControlConfig,
+        ReflexDriverConfig,
+    )
+    from myosuite_carla.vehicle_model import carla_nissan_patrol
+
+    parameters = replace(carla_nissan_patrol(), steer_exponent=1)
+    source = FollowingProtocol([_trial("a")])
+    with pytest.raises(ValueError, match="inverse differ"):
+        ClosedLoopFollowingProtocol(
+            source,
+            vehicle_parameters=parameters,
+            reflex_config=ReflexDriverConfig(
+                acceleration_control=AccelerationControlConfig()
+            ),
+        )
+    protocol = ClosedLoopFollowingProtocol(
+        source,
+        vehicle_parameters=parameters,
+        reflex_config=ReflexDriverConfig(
+            acceleration_control=AccelerationControlConfig(vehicle=parameters)
+        ),
+    )
+    assert protocol.reflex_config.acceleration_control.vehicle == parameters
+
+
+def test_compatibility_evaluation_passes_and_reports_explicit_vehicle(monkeypatch):
+    import myosuite_carla.empirical_following as module
+    from myosuite_carla.vehicle_model import carla_nissan_patrol
+
+    trial = _trial("a")
+    _, executions, execute = _fake_physical_protocol(monkeypatch, [trial])
+    parameters = replace(carla_nissan_patrol(), steer_exponent=1)
+    captured = []
+
+    def record_vehicle(*args, **kwargs):
+        captured.append(kwargs["vehicle_parameters"])
+        return execute(*args, **kwargs)
+
+    monkeypatch.setattr(module, "_run_closed_loop_episode", record_vehicle)
+    monkeypatch.setattr(ClosedLoopFollowingProtocol, "_ensure_driver", lambda _: None)
+    source = FollowingProtocol([trial])
+    report = closed_loop_following(
+        source, {}, {}, groups=source.groups, vehicle_parameters=parameters
+    )
+    assert report["status"] == "completed"
+    assert len(executions) == 1
+    assert captured == [parameters]
+    assert report["vehicle_parameters"] == parameters.as_dict()
+    assert "0.10" not in report["vehicle"]
+
+
 @pytest.mark.parametrize(
     "change",
     [
@@ -438,6 +536,64 @@ def test_reusable_physical_protocol_runs_the_actual_body_and_releases_vehicles()
         )
         assert all(row["full_source_horizon"] for row in pair["episodes"])
     assert protocol.diagnostics["closed"] is True
+
+
+def test_explicit_vehicle_drives_the_physical_episodes_and_resets(monkeypatch):
+    pytest.importorskip("embodied_human")
+    pytest.importorskip("myosuite.core.model_builder")
+    from myosuite_carla import driving_env
+    from myosuite_carla.controls import VehicleCommand
+    from myosuite_carla.vehicle_model import SurrogateVehicle, carla_nissan_patrol
+
+    parameters = replace(
+        carla_nissan_patrol(), steer_exponent=1, rolling=0.75, throttle_lag=0.07
+    )
+    vehicles = []
+    checked_steps = []
+
+    class MeasuredEnvironment(driving_env.FullBodyDrivingEnv):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            assert self.vehicle.params is parameters
+            vehicles.append(self.vehicle)
+            self.reference = SurrogateVehicle(parameters, config=self.vehicle.config)
+
+        def reset(self, **kwargs):
+            result = super().reset(**kwargs)
+            x, y, yaw = self.scenario.start_pose()
+            self.reference.reset((x, y, 0), yaw, self.scenario.start_speed)
+            self.reference.start()
+            assert self.vehicle.snapshot() == self.reference.snapshot()
+            return result
+
+        def step(self, action):
+            result = super().step(action)
+            reference = self.reference.step(VehicleCommand(**result[-1]["command"]))
+            assert self.vehicle.snapshot() == reference
+            checked_steps.append(reference.frame)
+            return result
+
+        def close(self):
+            super().close()
+            self.reference.close()
+
+    monkeypatch.setattr(driving_env, "FullBodyDrivingEnv", MeasuredEnvironment)
+    source = FollowingProtocol([_trial("source", seconds=1)])
+    with ClosedLoopFollowingProtocol(
+        source, config=ClosedLoopConfig(seconds=1), vehicle_parameters=parameters
+    ) as protocol:
+        pair = protocol.report_pair(
+            {}, {"time_headway": 2}, groups=protocol.groups, seed=100
+        )
+        assert pair["status"] == "completed"
+        assert pair["vehicle_parameters"] == parameters.as_dict()
+        assert all(
+            row["vehicle_parameters"] == parameters.as_dict()
+            for row in pair["episodes"]
+        )
+    assert len(vehicles) == 2
+    assert len(checked_steps) == 100
+    assert all(not vehicle.active for vehicle in vehicles)
 
 
 @pytest.mark.parametrize("failure", ["collision", "off_road"])

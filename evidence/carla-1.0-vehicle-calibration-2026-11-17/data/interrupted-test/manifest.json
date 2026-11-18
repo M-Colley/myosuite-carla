@@ -1,0 +1,861 @@
+{
+  "schema_version": 1,
+  "compression": "ZIP_DEFLATED",
+  "level": 6,
+  "archives": {
+    "test": {
+      "source_root": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test",
+      "collector_status": "failed",
+      "file": "test.zip",
+      "bytes": 9904040,
+      "sha256": "172e76f1578d29985edaf01c2dc87c208ef600421dbb394e795bd66f300ca64d",
+      "members": {
+        "run.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\run.json",
+          "bytes": 1337,
+          "sha256": "8eb4ca83efa63fa6816d60610072766954ca4425762ad5e7b0567f6bde2c6b6d"
+        },
+        "seed30/attempts/s30-00-steer_fast/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-00-steer_fast\\datapackage.json",
+          "bytes": 8305,
+          "sha256": "b871c43fc06bbbf4e1d06e5c3a796fa4341ea25683c08c364ba0c9d0e44e53d0"
+        },
+        "seed30/attempts/s30-00-steer_fast/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-00-steer_fast\\frames.csv",
+          "bytes": 177779,
+          "sha256": "98bdc17fcb2e95fe3c86ef935bca9a9378adbd40aee7c22a573c873c90ccbbff"
+        },
+        "seed30/attempts/s30-01-reverse/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-01-reverse\\datapackage.json",
+          "bytes": 8298,
+          "sha256": "0595756b74056d028b342804920a39a36b479f1bd85ffce10c0998c301bf1faa"
+        },
+        "seed30/attempts/s30-01-reverse/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-01-reverse\\frames.csv",
+          "bytes": 117060,
+          "sha256": "425ef495a9b86e02383c4d2d2dbe79ffa568a689ef1bdba7dcc63831a6feda6b"
+        },
+        "seed30/attempts/s30-02-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-02-steer\\datapackage.json",
+          "bytes": 8297,
+          "sha256": "31fea41fa766f4606237f5b46b5e34e6fb9494dcfffe87b2e311ce955e3a9b23"
+        },
+        "seed30/attempts/s30-02-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-02-steer\\frames.csv",
+          "bytes": 225672,
+          "sha256": "b7fc5f9092f9849618dfdc8c629dbeb02d5d6cd51772542dfc0559c41ecaa3a8"
+        },
+        "seed30/attempts/s30-03-steer_fast/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-03-steer_fast\\datapackage.json",
+          "bytes": 8307,
+          "sha256": "22f0ed32fc3b305f6bc3fa39e367bb8bc106193190f0066758aaef4dc68edd47"
+        },
+        "seed30/attempts/s30-03-steer_fast/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-03-steer_fast\\frames.csv",
+          "bytes": 301876,
+          "sha256": "dfadd9e1125c454a4ec5242d5f02b5e369a8fe926c99544edb81161c6b1b58ab"
+        },
+        "seed30/attempts/s30-04-steer_doublet/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-04-steer_doublet\\datapackage.json",
+          "bytes": 8341,
+          "sha256": "65e8fc5b42ce944270064f3147266d30e2b2e2fb8eac360cf2ac243ade26e405"
+        },
+        "seed30/attempts/s30-04-steer_doublet/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-04-steer_doublet\\frames.csv",
+          "bytes": 158041,
+          "sha256": "ef83fc2d697898cdc9744e8fbb22f2e8b5ee53519d4e1e8f3e3fcda26cff2d29"
+        },
+        "seed30/attempts/s30-05-steer_hold/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-05-steer_hold\\datapackage.json",
+          "bytes": 8324,
+          "sha256": "6b1aeca09682df8f426177a9c5d3f09d5897178850ea1c44d6bad50d0c1d765f"
+        },
+        "seed30/attempts/s30-05-steer_hold/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-05-steer_hold\\frames.csv",
+          "bytes": 182524,
+          "sha256": "346a9805672b2f7e558428d12e269be0879b91c8f3cf7e27765bcbaaf42cbb2d"
+        },
+        "seed30/attempts/s30-06-steer_doublet/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-06-steer_doublet\\datapackage.json",
+          "bytes": 8323,
+          "sha256": "3d379c7f6b88648f47731d5f55de27d398407e71506df8e0e44810b9f02a9980"
+        },
+        "seed30/attempts/s30-06-steer_doublet/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-06-steer_doublet\\frames.csv",
+          "bytes": 167246,
+          "sha256": "3ca26840325be2a2752f678e2871204662029ce38bd57f8cf82ab522c6677e09"
+        },
+        "seed30/attempts/s30-07-steer_doublet/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-07-steer_doublet\\datapackage.json",
+          "bytes": 8326,
+          "sha256": "28af0bde1195512c9b8628f5acb86e8936148273b41c706c6e34dce35fa1203b"
+        },
+        "seed30/attempts/s30-07-steer_doublet/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-07-steer_doublet\\frames.csv",
+          "bytes": 195371,
+          "sha256": "4028cd14e7a9649af73ee087f57304bc1521256ca8b8e6010396b32300fc2804"
+        },
+        "seed30/attempts/s30-08-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-08-steer\\datapackage.json",
+          "bytes": 8294,
+          "sha256": "72082c7141dadf718ee894667b27e2d3decae21328c84d0739b4931e23dba37e"
+        },
+        "seed30/attempts/s30-08-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-08-steer\\frames.csv",
+          "bytes": 144201,
+          "sha256": "3856d9dede40e29a1d69ef4fb08dbe8c314f153a73aee6b0ebc5aa5e11ef7a18"
+        },
+        "seed30/attempts/s30-09-steer_doublet/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-09-steer_doublet\\datapackage.json",
+          "bytes": 8329,
+          "sha256": "0f22f6bc38f6ed642c71c8304df43dac6b311a6eefe3552c4369e0f556d4e281"
+        },
+        "seed30/attempts/s30-09-steer_doublet/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-09-steer_doublet\\frames.csv",
+          "bytes": 181227,
+          "sha256": "a883b2fc7f8086aaf89cb69873575909d007ccf73f8eeda7bc7f55ab2c5e2bee"
+        },
+        "seed30/attempts/s30-10-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-10-steer\\datapackage.json",
+          "bytes": 8298,
+          "sha256": "87845088050720e05c75c80468c9aaf85ca00ab88c0422aae019cdeb6896c3b3"
+        },
+        "seed30/attempts/s30-10-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-10-steer\\frames.csv",
+          "bytes": 214928,
+          "sha256": "0dcba1ddd314e911956e037c42515acd61a13fc1a992aa16dfc03347d5740ce2"
+        },
+        "seed30/attempts/s30-11-reverse/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-11-reverse\\datapackage.json",
+          "bytes": 8300,
+          "sha256": "604a38f802fd62b171db34fc40e0f4febdf286d7bbd2cd8c3efe3eb8dda12811"
+        },
+        "seed30/attempts/s30-11-reverse/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-11-reverse\\frames.csv",
+          "bytes": 110916,
+          "sha256": "06482811f49df2e7138bf1db221f8c6fe3da2fcc4f750e0781f18b48b8f4ab28"
+        },
+        "seed30/attempts/s30-12-steer_fast/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-12-steer_fast\\datapackage.json",
+          "bytes": 8307,
+          "sha256": "77d5585aadc00bca8a3604595606652652950dba972d3e38013f677a7d6600fa"
+        },
+        "seed30/attempts/s30-12-steer_fast/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-12-steer_fast\\frames.csv",
+          "bytes": 238870,
+          "sha256": "c497950df1f7555bb09f89b63ae82b77f9c108931a7b086d6ddcca27b83af7d9"
+        },
+        "seed30/attempts/s30-13-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-13-launch\\datapackage.json",
+          "bytes": 8297,
+          "sha256": "cf81302383e0be4caa64f5b441c6e4b2cf4c990418be21f6d45fcce5df333039"
+        },
+        "seed30/attempts/s30-13-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-13-launch\\frames.csv",
+          "bytes": 192394,
+          "sha256": "02d756103f755fec8a94e1bf42d099c6d275cce75515f5e5517cf12e8859229f"
+        },
+        "seed30/attempts/s30-14-steer_fast/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-14-steer_fast\\datapackage.json",
+          "bytes": 8305,
+          "sha256": "6216490866318bf35c2fa0e2b626bde3c1361a2deba8dab1d619bc23b8e5ffe4"
+        },
+        "seed30/attempts/s30-14-steer_fast/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-14-steer_fast\\frames.csv",
+          "bytes": 210865,
+          "sha256": "397d2f9dcbfa8ca147a7aff1c5f6bffbdeea5e11908d071e3db5e17802c7c6a9"
+        },
+        "seed30/attempts/s30-15-steer_low/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-15-steer_low\\datapackage.json",
+          "bytes": 8320,
+          "sha256": "0a31e8109a4dc1ea015297a54ad9ecb305d8edd0ba42510b79f8952c870f30e6"
+        },
+        "seed30/attempts/s30-15-steer_low/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-15-steer_low\\frames.csv",
+          "bytes": 172972,
+          "sha256": "b11e6559695151ff76c3c1efbb7eb68439793c0154f077b538330769f158e954"
+        },
+        "seed30/attempts/s30-16-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-16-launch\\datapackage.json",
+          "bytes": 8300,
+          "sha256": "ab523b5d6f5abd678f7f70168bf7e8a89ab1cf89dcaf333a961c2dfa6390505e"
+        },
+        "seed30/attempts/s30-16-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-16-launch\\frames.csv",
+          "bytes": 244190,
+          "sha256": "e0c638f53fc658474a233e9ecbcbfb651fd630694a9a9e5d2ffdd5f30348173c"
+        },
+        "seed30/attempts/s30-17-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-17-steer\\datapackage.json",
+          "bytes": 8295,
+          "sha256": "46686b8a60b12954a1514c49016e18494f23360eb977541495b33df10e846622"
+        },
+        "seed30/attempts/s30-17-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-17-steer\\frames.csv",
+          "bytes": 209588,
+          "sha256": "3ff602a3ed1c71d2622f61ff40cf1386fc4a528b7b06b40b1d7b45cf68eac231"
+        },
+        "seed30/attempts/s30-18-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-18-launch\\datapackage.json",
+          "bytes": 8298,
+          "sha256": "1d49d452f7e3950b0a7acdc5e0045e61cbab4875b6a08f7ab699e58e514f2b73"
+        },
+        "seed30/attempts/s30-18-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-18-launch\\frames.csv",
+          "bytes": 276946,
+          "sha256": "433235c4558f4ed28d268c38e5d0933d5824250966f24b11b26cde369f3bb223"
+        },
+        "seed30/attempts/s30-19-steer_fast/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-19-steer_fast\\datapackage.json",
+          "bytes": 8307,
+          "sha256": "f062d37af40346d11bb920c47bf47d75ed1d20ed520fb6b697110885cb6f4eb3"
+        },
+        "seed30/attempts/s30-19-steer_fast/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-19-steer_fast\\frames.csv",
+          "bytes": 321251,
+          "sha256": "223d717a660b69bf66cf41d167c75b1d9eb14aaf8659524fd24c180fabc0e710"
+        },
+        "seed30/attempts/s30-20-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-20-launch\\datapackage.json",
+          "bytes": 8300,
+          "sha256": "5504c612bfc10472df1fe1c19eff4947a5ad3989c800a4bb49df8a41ff381743"
+        },
+        "seed30/attempts/s30-20-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-20-launch\\frames.csv",
+          "bytes": 262261,
+          "sha256": "fd0aada6d4c175aadac463a9af26643645dd322a5eb1ccfb174ad284dbcabbe6"
+        },
+        "seed30/attempts/s30-21-steer_doublet/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-21-steer_doublet\\datapackage.json",
+          "bytes": 8311,
+          "sha256": "cf5634857033ec162c2136d1aa4b2e86c60c2a526895a5559dd4db294959139e"
+        },
+        "seed30/attempts/s30-21-steer_doublet/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-21-steer_doublet\\frames.csv",
+          "bytes": 283985,
+          "sha256": "0a3c23cf4d47666c4908ed8b746a8ff3d17aeec81771bde348e7492e7deb5e4d"
+        },
+        "seed30/attempts/s30-22-steer_doublet/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-22-steer_doublet\\datapackage.json",
+          "bytes": 8328,
+          "sha256": "8d04c374486a0424dc8d376abab8ac176cdebe9b0b09aaa94ecc9681f5e73343"
+        },
+        "seed30/attempts/s30-22-steer_doublet/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-22-steer_doublet\\frames.csv",
+          "bytes": 245332,
+          "sha256": "949f58a95f4e31ef0e5218600caa7e67a7a4906042efeac29836c275b330146b"
+        },
+        "seed30/attempts/s30-23-steer_low/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-23-steer_low\\datapackage.json",
+          "bytes": 8318,
+          "sha256": "8b902818ed3b3237056e8c2c2e33e16d3f72a3f2326a9f04f34ec7d7475890f9"
+        },
+        "seed30/attempts/s30-23-steer_low/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-23-steer_low\\frames.csv",
+          "bytes": 175596,
+          "sha256": "618dc68dd848eaebecc3b306000c6f3be1a4209f44fc1095622fc6967cb721fe"
+        },
+        "seed30/attempts/s30-24-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-24-launch\\datapackage.json",
+          "bytes": 8298,
+          "sha256": "3960f42978eedd714c6bde908c851c0a22560c4a912cd2af3a4f725e7d455d2b"
+        },
+        "seed30/attempts/s30-24-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-24-launch\\frames.csv",
+          "bytes": 256102,
+          "sha256": "8feacbb452682bfb708c85d712f2e4eefca1ec23ed95e8e3c7e9f2df5f08a937"
+        },
+        "seed30/attempts/s30-25-hand_brake/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-25-hand_brake\\datapackage.json",
+          "bytes": 8306,
+          "sha256": "8f9a7e6eedc71efc9b484480c4d675c9773e2c72aab45017572b151a29440513"
+        },
+        "seed30/attempts/s30-25-hand_brake/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-25-hand_brake\\frames.csv",
+          "bytes": 119863,
+          "sha256": "232706d66d03543604b524708d705bc4c02896ce31147a54751f1e5a139d2c31"
+        },
+        "seed30/attempts/s30-26-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-26-steer\\datapackage.json",
+          "bytes": 8294,
+          "sha256": "9890c7669164e7b8014c5f3db637528e7af5699641af4e18413a9c9d38b7f307"
+        },
+        "seed30/attempts/s30-26-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-26-steer\\frames.csv",
+          "bytes": 175030,
+          "sha256": "2b00da0d8a4c23e39f2a8550370f87c29cc7c07dc18d460b95b1022408dc0499"
+        },
+        "seed30/attempts/s30-27-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-27-launch\\datapackage.json",
+          "bytes": 8298,
+          "sha256": "abde81b3258d6900c037dd5ffa47022d482f1f7104eb0f1a50cda63823047613"
+        },
+        "seed30/attempts/s30-27-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-27-launch\\frames.csv",
+          "bytes": 210611,
+          "sha256": "efaed242f37ae28552b15fcaa7acbdc15032d2cfd0bd133281668db40374bdb8"
+        },
+        "seed30/attempts/s30-28-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-28-steer\\datapackage.json",
+          "bytes": 8298,
+          "sha256": "8e858c924f44ef857fb5d9d9f0c4d30f0439ef4609fbd919334624ea9bef645f"
+        },
+        "seed30/attempts/s30-28-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-28-steer\\frames.csv",
+          "bytes": 127997,
+          "sha256": "10b51d68e9999eff30020085bc921d681de4b9ec0e99ec40543a7eca98c555a2"
+        },
+        "seed30/attempts/s30-29-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-29-steer\\datapackage.json",
+          "bytes": 8293,
+          "sha256": "778b136ea72730abd3e3797ed63d57562c053d38e0c76a02841046acd2e4a264"
+        },
+        "seed30/attempts/s30-29-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-29-steer\\frames.csv",
+          "bytes": 150969,
+          "sha256": "b41ed9cd86e890577a6c0f9e61897dd3561d4117eb5fc0e851fce2ee66b05c7f"
+        },
+        "seed30/attempts/s30-30-steer_hold/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-30-steer_hold\\datapackage.json",
+          "bytes": 8320,
+          "sha256": "7a893147ce01a1b95a4fd51cb9d8a3ba93a20d00ea7b9dbdd0120b47432969b7"
+        },
+        "seed30/attempts/s30-30-steer_hold/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-30-steer_hold\\frames.csv",
+          "bytes": 220427,
+          "sha256": "a2dbb9956203530577743699e1095a2390dd6c2797b84b764dec0db73d4410c2"
+        },
+        "seed30/attempts/s30-31-hand_brake/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-31-hand_brake\\datapackage.json",
+          "bytes": 8305,
+          "sha256": "7b5addf705293b4133e37f978ce7eb60815579b378176e0fe3e6834f161bc97c"
+        },
+        "seed30/attempts/s30-31-hand_brake/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-31-hand_brake\\frames.csv",
+          "bytes": 131690,
+          "sha256": "9bb12d26c25605406eefde8dc7dc0da534fba8274c9a88774a45316e181e5914"
+        },
+        "seed30/attempts/s30-32-steer_hold/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-32-steer_hold\\datapackage.json",
+          "bytes": 8320,
+          "sha256": "199aa5488ea798912c244f87abc9ebae7b8f2c1137ff299254cd260551805151"
+        },
+        "seed30/attempts/s30-32-steer_hold/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-32-steer_hold\\frames.csv",
+          "bytes": 207542,
+          "sha256": "f4f007fa2e45aa0a3c7ecc5e663b33a8dfb8e4ff8b6e67330c5376a6b6edb6c9"
+        },
+        "seed30/attempts/s30-33-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-33-steer\\datapackage.json",
+          "bytes": 8296,
+          "sha256": "b3e0e43b9bb511d937d570e0035289362c588350937047957fc55a73549a0b88"
+        },
+        "seed30/attempts/s30-33-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-33-steer\\frames.csv",
+          "bytes": 230200,
+          "sha256": "d840313446180edc2f003be2d54143f20e93f2c75f23e02d1d0e5d6cdef066f4"
+        },
+        "seed30/attempts/s30-34-steer_hold/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-34-steer_hold\\datapackage.json",
+          "bytes": 8320,
+          "sha256": "4b5c2881db490ec49d83d857de5d6a48fb97c30a11aee83c9e9500e3c9b5c5a9"
+        },
+        "seed30/attempts/s30-34-steer_hold/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-34-steer_hold\\frames.csv",
+          "bytes": 218294,
+          "sha256": "1bc92c1b795ed1517d16f3f7d894d5237d1bb6809d3a92b0fd63600155374bf3"
+        },
+        "seed30/attempts/s30-35-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-35-steer\\datapackage.json",
+          "bytes": 8295,
+          "sha256": "d32555ddd316690f13a2a761676631edc19f107ec2a385d98d8f16f1eab4408c"
+        },
+        "seed30/attempts/s30-35-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-35-steer\\frames.csv",
+          "bytes": 189246,
+          "sha256": "1017052c69dcd5bee7c8a452fbaa24787acda93f256f8706c526be959fc4539c"
+        },
+        "seed30/attempts/s30-36-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-36-launch\\datapackage.json",
+          "bytes": 8299,
+          "sha256": "4da71509d87fb041735db92fa2fc2c292071e216f66a225154e1b0bf5a7371f6"
+        },
+        "seed30/attempts/s30-36-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-36-launch\\frames.csv",
+          "bytes": 215639,
+          "sha256": "2e61d8f57d7b0c9beb853345b4ac7abd4eb96481f9467c5b69ca1144d68cda04"
+        },
+        "seed30/attempts/s30-37-steer_low/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-37-steer_low\\datapackage.json",
+          "bytes": 8318,
+          "sha256": "b54438f98785ea9f5a582dea773071555480c785411ee1f632f6be347276b7e3"
+        },
+        "seed30/attempts/s30-37-steer_low/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-37-steer_low\\frames.csv",
+          "bytes": 163124,
+          "sha256": "38e85aedd05b1ac7fea2a46456884544d34e6e2c4e5fce9e131aa9db18b0373f"
+        },
+        "seed30/attempts/s30-38-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-38-launch\\datapackage.json",
+          "bytes": 8297,
+          "sha256": "1df9d6ddecbd80a4bf2839711eb8f255820b04adee6d70437933a18801e7c6f4"
+        },
+        "seed30/attempts/s30-38-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-38-launch\\frames.csv",
+          "bytes": 250104,
+          "sha256": "25c82e5698cbfc81fced12ec5cd92f9b778d9f5684200143983097def152b2e8"
+        },
+        "seed30/attempts/s30-39-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-39-steer\\datapackage.json",
+          "bytes": 8295,
+          "sha256": "53c43c42d1a379a3208966d1a0232bc3ace6291a1f70aa31e894fb7a8b2abe66"
+        },
+        "seed30/attempts/s30-39-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-39-steer\\frames.csv",
+          "bytes": 141534,
+          "sha256": "ef276fad2cf182f3457c97176b273d75c0e714a2a20120ee00b899abcf611fa9"
+        },
+        "seed30/attempts/s30-40-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-40-launch\\datapackage.json",
+          "bytes": 8296,
+          "sha256": "c387c77cbb2c34a7ffd961f0a4ed9d569d9d4604f3d8a33f15dc3abc9fe2ef51"
+        },
+        "seed30/attempts/s30-40-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-40-launch\\frames.csv",
+          "bytes": 193331,
+          "sha256": "e1194ec5f0a87fa3962067ac2b6e569b27d428fe932ea301a744e3aa11117d86"
+        },
+        "seed30/attempts/s30-41-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-41-launch\\datapackage.json",
+          "bytes": 8298,
+          "sha256": "3e0a8da7a7d84b8944a8604cba35c95bc6cbcf63c75d08220617256f3912cf97"
+        },
+        "seed30/attempts/s30-41-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-41-launch\\frames.csv",
+          "bytes": 305169,
+          "sha256": "93765bb5cbd532dc05b84835da19f8df284341ac963bfbd40fb4ee294477ede3"
+        },
+        "seed30/attempts/s30-42-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-42-steer\\datapackage.json",
+          "bytes": 8295,
+          "sha256": "956555c0618d5aa6782ffa5ca289c19393d0012305df690f718deaad429e0215"
+        },
+        "seed30/attempts/s30-42-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-42-steer\\frames.csv",
+          "bytes": 192818,
+          "sha256": "64ac49a77232e755b22f4b7c6751d7ffcdbd74928de8d5f91fd5fbc822f4add4"
+        },
+        "seed30/attempts/s30-43-steer_fast/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-43-steer_fast\\datapackage.json",
+          "bytes": 8303,
+          "sha256": "9191ed1c9c23463bb41f71937c3a934e10b3da5621eb5ab078316733912b38db"
+        },
+        "seed30/attempts/s30-43-steer_fast/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-43-steer_fast\\frames.csv",
+          "bytes": 177009,
+          "sha256": "b9160671f7159cba58a392046cd3a8d520351e3abce33f8d4fc998d20a7ade29"
+        },
+        "seed30/attempts/s30-44-reverse/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-44-reverse\\datapackage.json",
+          "bytes": 8299,
+          "sha256": "063d71f7902ca87086d56dc9797eceb69c9a888ff576195970f0acea60a6231f"
+        },
+        "seed30/attempts/s30-44-reverse/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-44-reverse\\frames.csv",
+          "bytes": 108897,
+          "sha256": "b30f8a5dee48987f04a898d4c3fdf5e686720aa81b8c9a7a0d046005a551821c"
+        },
+        "seed30/attempts/s30-45-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-45-steer\\datapackage.json",
+          "bytes": 8323,
+          "sha256": "06ed79549b5cab6b86fe0ef5cea7d9535ed5c6238c9435d3c424f82e2e2c7ac5"
+        },
+        "seed30/attempts/s30-45-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-45-steer\\frames.csv",
+          "bytes": 121793,
+          "sha256": "a90150e77a8f5d4ce1f267e35bae6e4f5b1917fcedd2656305c8c03dd2bc2c05"
+        },
+        "seed30/attempts/s30-46-steer_low/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-46-steer_low\\datapackage.json",
+          "bytes": 8317,
+          "sha256": "890a5b1bcf3eb9be7961eee6d464c5b4cc48d3476d97edd118378a220f51cbe1"
+        },
+        "seed30/attempts/s30-46-steer_low/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\attempts\\s30-46-steer_low\\frames.csv",
+          "bytes": 198756,
+          "sha256": "836a7893c1d5de12f1939f68ce6ec4ea5d988b02178eef0d498c3483f41468c6"
+        },
+        "seed30/collection.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\collection.json",
+          "bytes": 34157,
+          "sha256": "68dc3a17e6a860909cf14b15bbac57736b0705d73683294dc0d11a59538e61fb"
+        },
+        "seed30/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\datapackage.json",
+          "bytes": 7707,
+          "sha256": "3e9fe61f3246e1f67cf6c66a5bb26abe8daf0130aadd4bb5d596983dd56caf7f"
+        },
+        "seed30/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed30\\frames.csv",
+          "bytes": 8532288,
+          "sha256": "cea3c9298ef278725afe0937c6d143c8637ba40927fed81213e8af44118f8b68"
+        },
+        "seed31/attempts/s31-00-steer_low/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-00-steer_low\\datapackage.json",
+          "bytes": 8318,
+          "sha256": "fd6d3c01cc3bd41d97288b35dbaed8611ab890080e60e5305e4db3e493ce0d8b"
+        },
+        "seed31/attempts/s31-00-steer_low/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-00-steer_low\\frames.csv",
+          "bytes": 181320,
+          "sha256": "25d1a606108950e79283783aa93b6d0d801d6b1b6a0ea093efbfb18a397e5c55"
+        },
+        "seed31/attempts/s31-01-steer_low/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-01-steer_low\\datapackage.json",
+          "bytes": 8318,
+          "sha256": "faf5255d02c65822893a9e9cf1f9ea5641e0d50cfa57dab6055de66b2f693642"
+        },
+        "seed31/attempts/s31-01-steer_low/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-01-steer_low\\frames.csv",
+          "bytes": 191739,
+          "sha256": "0a380113223662d6f37e79c477c126879472f60c76ffaec6cacb418ec53df26f"
+        },
+        "seed31/attempts/s31-02-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-02-steer\\datapackage.json",
+          "bytes": 8296,
+          "sha256": "0128a6698ed1f4d18a95fc5c93ac3b6f08bb8bcbe3547651219dcef563502f64"
+        },
+        "seed31/attempts/s31-02-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-02-steer\\frames.csv",
+          "bytes": 164757,
+          "sha256": "98f842db4a0236ff0875a6457a755b4a6828fb896efae6ec43f2a36888c446a9"
+        },
+        "seed31/attempts/s31-03-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-03-steer\\datapackage.json",
+          "bytes": 8293,
+          "sha256": "fa2942703da3ede669b869a283fc0491d7060f3bb38334fd4254d91592e45174"
+        },
+        "seed31/attempts/s31-03-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-03-steer\\frames.csv",
+          "bytes": 152192,
+          "sha256": "17512645ec171d39b4abd4a42f4ad2536ec0cc0f30e60fd7672a202f8ca5eda0"
+        },
+        "seed31/attempts/s31-04-steer_hold/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-04-steer_hold\\datapackage.json",
+          "bytes": 8318,
+          "sha256": "ad08ddb7eecc533f8ac94478776be400aa2da3bf9e1f3f0254584151612ec501"
+        },
+        "seed31/attempts/s31-04-steer_hold/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-04-steer_hold\\frames.csv",
+          "bytes": 193980,
+          "sha256": "374ed120d152b41c50538fc14c9df9e3843066da9fa39efbe5089d0f6db0d7b7"
+        },
+        "seed31/attempts/s31-05-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-05-steer\\datapackage.json",
+          "bytes": 8296,
+          "sha256": "1aea5044c420ce56a5a172d9879f1a3dfb81027cabae21c4b7560b8d29571e50"
+        },
+        "seed31/attempts/s31-05-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-05-steer\\frames.csv",
+          "bytes": 177235,
+          "sha256": "d8cb761b251087447e1df560368dfed48257c38f3ec162e0ec979d51b2c1a76d"
+        },
+        "seed31/attempts/s31-06-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-06-steer\\datapackage.json",
+          "bytes": 8278,
+          "sha256": "345d2c76e94741c2a1ab5c5de0ebffbe34d845451030a20b8fcc17c31e25721b"
+        },
+        "seed31/attempts/s31-06-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-06-steer\\frames.csv",
+          "bytes": 150944,
+          "sha256": "bdb0f11e92b1f400521a145b67073ec2a81995ad84bfb7ec7bec42d726a6691f"
+        },
+        "seed31/attempts/s31-07-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-07-launch\\datapackage.json",
+          "bytes": 8296,
+          "sha256": "2850a46470d5c5b9f80d4d2a4c64bbfeff70f6458aeb52bf1e29cfdc57b4808c"
+        },
+        "seed31/attempts/s31-07-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-07-launch\\frames.csv",
+          "bytes": 339017,
+          "sha256": "02b76047c49a79a38a9457a0b6a08582342380a46b116553c6d65c48aa3d934b"
+        },
+        "seed31/attempts/s31-08-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-08-steer\\datapackage.json",
+          "bytes": 8297,
+          "sha256": "dbc8f19947235d5e8e13128ab9109329e58be340a53ac88b80f7e34486a819b0"
+        },
+        "seed31/attempts/s31-08-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-08-steer\\frames.csv",
+          "bytes": 174212,
+          "sha256": "32b2ec1b78aa4f56be7237cc839a458db032eaf6803b31d3c770d7f72ba21769"
+        },
+        "seed31/attempts/s31-09-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-09-launch\\datapackage.json",
+          "bytes": 8296,
+          "sha256": "e1949ecc0ccdf551c06983268ef65f8da273d12c7d68270df67977cbe2be7b64"
+        },
+        "seed31/attempts/s31-09-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-09-launch\\frames.csv",
+          "bytes": 278647,
+          "sha256": "29c737fd1c5e8a74cc5478aa7dae721fceebf3fddc69dc3a33ec5b6088a18ed4"
+        },
+        "seed31/attempts/s31-10-reverse/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-10-reverse\\datapackage.json",
+          "bytes": 8299,
+          "sha256": "84e477e41507f60a5e5b54a6f1c4c51fc44183e03d3cdd5ac9a18422a6489062"
+        },
+        "seed31/attempts/s31-10-reverse/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-10-reverse\\frames.csv",
+          "bytes": 116939,
+          "sha256": "95ea286d287719fb98df1681aeb9016b4ba0148123d02181bba70525958519fd"
+        },
+        "seed31/attempts/s31-11-steer_fast/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-11-steer_fast\\datapackage.json",
+          "bytes": 8304,
+          "sha256": "a0109ae364d553005aaa739decd716844233d1c26d13ef5c1389374a715bffeb"
+        },
+        "seed31/attempts/s31-11-steer_fast/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-11-steer_fast\\frames.csv",
+          "bytes": 157081,
+          "sha256": "656a2ba3843abb01fec1b9b90a526e426b4f3a1aff91ad5ff027c9f5f7befdb3"
+        },
+        "seed31/attempts/s31-12-steer_doublet/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-12-steer_doublet\\datapackage.json",
+          "bytes": 8311,
+          "sha256": "12679792de0eda9e6559c9f1c074d5e3e589e0a298113369686f871f0abefd5d"
+        },
+        "seed31/attempts/s31-12-steer_doublet/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-12-steer_doublet\\frames.csv",
+          "bytes": 273070,
+          "sha256": "876a17d331d008e12f3cb10c8d29800dee2e18eaa531584ec5563609c0e64ea1"
+        },
+        "seed31/attempts/s31-13-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-13-launch\\datapackage.json",
+          "bytes": 8296,
+          "sha256": "59d603a6a31f2cd7089deb0f10446a0350f72d11671d53ebd3da2d6f73cc2c1b"
+        },
+        "seed31/attempts/s31-13-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-13-launch\\frames.csv",
+          "bytes": 297852,
+          "sha256": "4f62128f837b860af3c26243dcaff5489d1ec4a979cda1ba4f84e9458f9d012b"
+        },
+        "seed31/attempts/s31-14-steer_fast/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-14-steer_fast\\datapackage.json",
+          "bytes": 8305,
+          "sha256": "c4e031a042544c99cb661e49884230ce0f3b8eb9f49c78bf1d9b529006ea04f8"
+        },
+        "seed31/attempts/s31-14-steer_fast/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-14-steer_fast\\frames.csv",
+          "bytes": 283170,
+          "sha256": "4dc3f98c49de2123f5b9329660ce4b01e1352b734928494b641ba6abf63a03d4"
+        },
+        "seed31/attempts/s31-15-hand_brake/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-15-hand_brake\\datapackage.json",
+          "bytes": 8305,
+          "sha256": "27c0f26c624af55052fb1aba42ca23f2071a7d7bbaefdaf8c4188921f05f5b45"
+        },
+        "seed31/attempts/s31-15-hand_brake/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-15-hand_brake\\frames.csv",
+          "bytes": 131645,
+          "sha256": "b2b3b5b70486b9af1e5a7f6cda0cc53b0c99cbf281adb028a0c2b17dd67fd732"
+        },
+        "seed31/attempts/s31-16-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-16-steer\\datapackage.json",
+          "bytes": 8295,
+          "sha256": "f301c395d4e141801d17be82f395df7db4e1b2c0376c45b68cd80c62717b6c44"
+        },
+        "seed31/attempts/s31-16-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-16-steer\\frames.csv",
+          "bytes": 169633,
+          "sha256": "3efbd0613183195f82a4fc05158583c8ea5ff54a0cfd5211928b4a656e741599"
+        },
+        "seed31/attempts/s31-17-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-17-launch\\datapackage.json",
+          "bytes": 8296,
+          "sha256": "9127d8b6b69d4b6e5a7b0e6f496df921693af8694752ca752306194923223575"
+        },
+        "seed31/attempts/s31-17-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-17-launch\\frames.csv",
+          "bytes": 244591,
+          "sha256": "2429ea4cd7e9b48e44a41fb7cc962be4430ce4ba1100382f44ea1f9f22e5fa6b"
+        },
+        "seed31/attempts/s31-18-steer/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-18-steer\\datapackage.json",
+          "bytes": 8295,
+          "sha256": "7c63c6705af6aae8b745752f9e593638bc38de02b51218c630784c794ee9468f"
+        },
+        "seed31/attempts/s31-18-steer/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-18-steer\\frames.csv",
+          "bytes": 208185,
+          "sha256": "c7a8cce4c28b2195069a7ffe917a67f6cdd8ac57d34cd885db034c8c9a2472dd"
+        },
+        "seed31/attempts/s31-19-steer_hold/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-19-steer_hold\\datapackage.json",
+          "bytes": 8320,
+          "sha256": "93383c0fa980e43725e028953b20fd0b015165952c4142ab7b8c3ee07ece3eb1"
+        },
+        "seed31/attempts/s31-19-steer_hold/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-19-steer_hold\\frames.csv",
+          "bytes": 186322,
+          "sha256": "6476ffb80d407620272f01b63e096da37157d0a0ae4bfd7c6d1b8d55ac9270cf"
+        },
+        "seed31/attempts/s31-20-steer_fast/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-20-steer_fast\\datapackage.json",
+          "bytes": 8304,
+          "sha256": "accab9fe57a5706192619c7035664b319d30dc263a0cae0798adc2f5eae3a217"
+        },
+        "seed31/attempts/s31-20-steer_fast/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-20-steer_fast\\frames.csv",
+          "bytes": 184194,
+          "sha256": "d598f2c5f8ca139ffde33b5c4ebcf57c2f563f5d48452dd30e4e143ca26d99f5"
+        },
+        "seed31/attempts/s31-21-steer_hold/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-21-steer_hold\\datapackage.json",
+          "bytes": 8305,
+          "sha256": "67001bac22b8b5e594e8e560f2836844dad8597ebc238d526ec35e19d8a1c079"
+        },
+        "seed31/attempts/s31-21-steer_hold/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-21-steer_hold\\frames.csv",
+          "bytes": 198578,
+          "sha256": "854834f1ec54e5cb998394a92e50092054288353d792f1c52c536cad8dc1819f"
+        },
+        "seed31/attempts/s31-22-hand_brake/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-22-hand_brake\\datapackage.json",
+          "bytes": 8305,
+          "sha256": "e90a2e944fa2f0754aa3f2e022b7c38757c314df4abb21cbccf78b4f6e17dc92"
+        },
+        "seed31/attempts/s31-22-hand_brake/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-22-hand_brake\\frames.csv",
+          "bytes": 131648,
+          "sha256": "c6df4acc63680ceb058cb29d930a26c5d416417293e093d2294b0de3fec28402"
+        },
+        "seed31/attempts/s31-23-steer_doublet/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-23-steer_doublet\\datapackage.json",
+          "bytes": 8309,
+          "sha256": "94c50162cc4f1b29aa603610ab9aafd0cfe781d869d5d9bfe9df6b2b5932ab4a"
+        },
+        "seed31/attempts/s31-23-steer_doublet/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-23-steer_doublet\\frames.csv",
+          "bytes": 278629,
+          "sha256": "a3635e3b4eea31a39a59669774d71ae0860f751d54fdaf4e188faaa02bc0af08"
+        },
+        "seed31/attempts/s31-24-steer_hold/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-24-steer_hold\\datapackage.json",
+          "bytes": 8306,
+          "sha256": "bba81d60fd7bf366da6d7a0037ce2247acc38541496c218cac670fcd06fbe17b"
+        },
+        "seed31/attempts/s31-24-steer_hold/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-24-steer_hold\\frames.csv",
+          "bytes": 198233,
+          "sha256": "d568ce2b07ade16581091127c4fd5f87c80514ca83d4013fe42901e219d89a49"
+        },
+        "seed31/attempts/s31-25-steer_low/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-25-steer_low\\datapackage.json",
+          "bytes": 8318,
+          "sha256": "2a9736171f4c41f21efd3f1656fd6389b5054474742af3a8ae32445c494ba10c"
+        },
+        "seed31/attempts/s31-25-steer_low/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-25-steer_low\\frames.csv",
+          "bytes": 184998,
+          "sha256": "330c44490953191a9cfaa75875080eaf087d9606a9a6a334c90a24fdddaa6b31"
+        },
+        "seed31/attempts/s31-26-steer_doublet/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-26-steer_doublet\\datapackage.json",
+          "bytes": 8312,
+          "sha256": "0bc9976640c08d12265f3f0806157bd68088f814c6c377f77b48bf1a92293c15"
+        },
+        "seed31/attempts/s31-26-steer_doublet/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-26-steer_doublet\\frames.csv",
+          "bytes": 217585,
+          "sha256": "8a3a187875b6b643dfe87b3147803acca831e465896fe25912f36f6833e0b58e"
+        },
+        "seed31/attempts/s31-27-reverse/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-27-reverse\\datapackage.json",
+          "bytes": 8301,
+          "sha256": "8333e96ef32a4b8e044ffb6f71dbb02c858734844c007f0a189eef39d3ba9ce9"
+        },
+        "seed31/attempts/s31-27-reverse/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-27-reverse\\frames.csv",
+          "bytes": 111214,
+          "sha256": "212983a63d426d21c733e7443495788425a9541022fd40330f2d25f9d0cac2dc"
+        },
+        "seed31/attempts/s31-28-steer_fast/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-28-steer_fast\\datapackage.json",
+          "bytes": 8305,
+          "sha256": "f8586433d934337b0ea8fe1d6fc4e6911c9b15f3d05940c1ae8e964f2b02e718"
+        },
+        "seed31/attempts/s31-28-steer_fast/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-28-steer_fast\\frames.csv",
+          "bytes": 167917,
+          "sha256": "b47ddafd5125b62fdef3888f04054c5c9dffe9c492e68f4ab959a1916858c0e3"
+        },
+        "seed31/attempts/s31-29-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-29-launch\\datapackage.json",
+          "bytes": 8297,
+          "sha256": "986d3461bcea2d3198a8b8424bdd4f225fec541599244a0e82278cfa02c85ad8"
+        },
+        "seed31/attempts/s31-29-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-29-launch\\frames.csv",
+          "bytes": 274276,
+          "sha256": "b504ff11f54706b10334280e311092f3aebe10e5417eff6f5462c21a106c1212"
+        },
+        "seed31/attempts/s31-30-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-30-launch\\datapackage.json",
+          "bytes": 8297,
+          "sha256": "e796374ecedd57f4566d1ef45329ee8352bea27ead169651f0a96c0dce04bdf5"
+        },
+        "seed31/attempts/s31-30-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-30-launch\\frames.csv",
+          "bytes": 264986,
+          "sha256": "ce1150e7c30b29576d565044905f98733a6f103746185569d5de308817eb672c"
+        },
+        "seed31/attempts/s31-31-steer_doublet/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-31-steer_doublet\\datapackage.json",
+          "bytes": 8344,
+          "sha256": "796e0d232822d957cf4c2a6c2b68e38a4b0581f2cf64f90c11bd7e90e91ce065"
+        },
+        "seed31/attempts/s31-31-steer_doublet/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-31-steer_doublet\\frames.csv",
+          "bytes": 155507,
+          "sha256": "fe143b89a6980369054596b844580b1b2af5a5049965969b6c04dab5b77112b5"
+        },
+        "seed31/attempts/s31-32-steer_doublet/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-32-steer_doublet\\datapackage.json",
+          "bytes": 8326,
+          "sha256": "1bd40753948d52394c23cb84ebfa80565d017ebe50c033abb36d5cb45757327a"
+        },
+        "seed31/attempts/s31-32-steer_doublet/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-32-steer_doublet\\frames.csv",
+          "bytes": 178261,
+          "sha256": "54bde45ecff7c60cc44fa70bf5c532785bd23edb9f385dcb11db92bc17cc9252"
+        },
+        "seed31/attempts/s31-33-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-33-launch\\datapackage.json",
+          "bytes": 8296,
+          "sha256": "6a1a457cf18d88a8f14ff8fe0f9904c1df366a259ed45950b3805ce7ffd83642"
+        },
+        "seed31/attempts/s31-33-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-33-launch\\frames.csv",
+          "bytes": 283315,
+          "sha256": "869734b0857a55848b9d3d904feb782703935a798f689134cac6793a7854c816"
+        },
+        "seed31/attempts/s31-34-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-34-launch\\datapackage.json",
+          "bytes": 8442,
+          "sha256": "f807eb50173f7f159b84de754d74ce4b91e18db0bd1bfd1bc7ea6bdb1ef10a04"
+        },
+        "seed31/attempts/s31-34-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\attempts\\s31-34-launch\\frames.csv",
+          "bytes": 202992,
+          "sha256": "8b8e4b64b3629751480611aeb4ff9d4e5779c4b20069b7235a914b92af0f404a"
+        },
+        "seed31/collection.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\artifacts\\carla-1.0-calibration-2026-11-17\\test\\seed31\\collection.json",
+          "bytes": 25770,
+          "sha256": "561cf54d3ef66cb4a4edcf5c9c0166c5e9fe72c6dbff93f4d2f885417a122b41"
+        }
+      }
+    }
+  }
+}

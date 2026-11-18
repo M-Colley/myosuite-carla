@@ -1,0 +1,2 @@
+# Preserve experiment bytes used by the recorded SHA256 checksums.
+evidence/carla-1.0-vehicle-calibration-2026-11-17/** -text

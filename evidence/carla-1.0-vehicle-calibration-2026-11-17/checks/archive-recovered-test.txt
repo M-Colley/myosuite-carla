@@ -1,0 +1,2 @@
+Verified test-recovery.zip: 195 files
+Saved C:\Users\localadmin\Desktop\myosuite-carla\evidence\carla-1.0-vehicle-calibration-2026-11-17\data\recovered-test\manifest.json

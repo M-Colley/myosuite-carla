@@ -1,0 +1,97 @@
+s30-00-steer_fast: 368 frames, kept=True
+s30-01-reverse: 240 frames, kept=True
+s30-02-steer: 466 frames, kept=True
+s30-03-steer_fast: 627 frames, kept=True
+s30-04-steer_doublet: 325 frames, kept=False
+s30-05-steer_hold: 372 frames, kept=False
+s30-06-steer_doublet: 343 frames, kept=True
+s30-07-steer_doublet: 404 frames, kept=True
+s30-08-steer: 300 frames, kept=True
+s30-09-steer_doublet: 378 frames, kept=False
+s30-10-steer: 444 frames, kept=True
+s30-11-reverse: 226 frames, kept=True
+s30-12-steer_fast: 494 frames, kept=True
+s30-13-launch: 400 frames, kept=True
+s30-14-steer_fast: 435 frames, kept=True
+s30-15-steer_low: 348 frames, kept=True
+s30-16-launch: 526 frames, kept=True
+s30-17-steer: 436 frames, kept=True
+s30-18-launch: 572 frames, kept=True
+s30-19-steer_fast: 662 frames, kept=True
+s30-20-launch: 536 frames, kept=True
+s30-21-steer_doublet: 580 frames, kept=True
+s30-22-steer_doublet: 499 frames, kept=True
+s30-23-steer_low: 354 frames, kept=True
+s30-24-launch: 526 frames, kept=True
+s30-25-hand_brake: 251 frames, kept=True
+s30-26-steer: 363 frames, kept=True
+s30-27-launch: 438 frames, kept=True
+s30-28-steer: 265 frames, kept=False
+s30-29-steer: 312 frames, kept=True
+s30-30-steer_hold: 453 frames, kept=True
+s30-31-hand_brake: 277 frames, kept=True
+s30-32-steer_hold: 424 frames, kept=True
+s30-33-steer: 476 frames, kept=True
+s30-34-steer_hold: 448 frames, kept=True
+s30-35-steer: 396 frames, kept=True
+s30-36-launch: 448 frames, kept=True
+s30-37-steer_low: 331 frames, kept=True
+s30-38-launch: 518 frames, kept=True
+s30-39-steer: 294 frames, kept=True
+s30-40-launch: 405 frames, kept=True
+s30-41-launch: 635 frames, kept=True
+s30-42-steer: 401 frames, kept=True
+s30-43-steer_fast: 366 frames, kept=True
+s30-44-reverse: 226 frames, kept=True
+s30-45-steer: 258 frames, kept=False
+s30-46-steer_low: 406 frames, kept=True
+s31-00-steer_low: 371 frames, kept=True
+s31-01-steer_low: 392 frames, kept=True
+s31-02-steer: 340 frames, kept=True
+s31-03-steer: 318 frames, kept=True
+s31-04-steer_hold: 395 frames, kept=True
+s31-05-steer: 368 frames, kept=True
+s31-06-steer: 311 frames, kept=True
+s31-07-launch: 707 frames, kept=True
+s31-08-steer: 357 frames, kept=True
+s31-09-launch: 569 frames, kept=True
+s31-10-reverse: 242 frames, kept=True
+s31-11-steer_fast: 325 frames, kept=True
+s31-12-steer_doublet: 559 frames, kept=True
+s31-13-launch: 620 frames, kept=True
+s31-14-steer_fast: 587 frames, kept=True
+s31-15-hand_brake: 277 frames, kept=True
+s31-16-steer: 354 frames, kept=True
+s31-17-launch: 509 frames, kept=True
+s31-18-steer: 430 frames, kept=True
+s31-19-steer_hold: 379 frames, kept=True
+s31-20-steer_fast: 380 frames, kept=True
+s31-21-steer_hold: 399 frames, kept=True
+s31-22-hand_brake: 277 frames, kept=True
+s31-23-steer_doublet: 569 frames, kept=True
+s31-24-steer_hold: 400 frames, kept=True
+s31-25-steer_low: 378 frames, kept=True
+s31-26-steer_doublet: 445 frames, kept=True
+s31-27-reverse: 226 frames, kept=True
+s31-28-steer_fast: 347 frames, kept=True
+s31-29-launch: 574 frames, kept=True
+s31-30-launch: 553 frames, kept=True
+s31-31-steer_doublet: 320 frames, kept=False
+s31-32-steer_doublet: 365 frames, kept=True
+s31-33-launch: 588 frames, kept=True
+Traceback (most recent call last):
+  File "C:\Users\localadmin\Desktop\myosuite-carla\examples\identify_vehicle.py", line 564, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "C:\Users\localadmin\Desktop\myosuite-carla\examples\identify_vehicle.py", line 519, in main
+    kept, log = _run_seed(
+                ^^^^^^^^^^
+  File "C:\Users\localadmin\Desktop\myosuite-carla\examples\identify_vehicle.py", line 313, in _run_seed
+    telemetry = session.step(command)
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\session.py", line 287, in step
+    self._apply(command)
+  File "C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\session.py", line 273, in _apply
+    responses = self.client.apply_batch_sync([batch_command], False)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: resource unavailable try again: resource unavailable try again

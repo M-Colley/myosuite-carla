@@ -614,6 +614,7 @@ def _longitudinal_design(
     params: VehicleModelParams,
     throttle_lag: float,
     min_speed: float,
+    use_pitch: bool,
 ) -> tuple[NDArray[np.float64], NDArray[np.float64]]:
     rows, targets = [], []
     throttle_knots = (0.0, *params.throttle_knots)
@@ -640,9 +641,9 @@ def _longitudinal_design(
                 -sign * segment.hand_brake,
             ]
         )
-        target = (after - before) / segment.dt + GRAVITY * np.sin(
-            np.radians(segment.pitch_deg[:-1])
-        )
+        target = (after - before) / segment.dt
+        if use_pitch:
+            target = target + GRAVITY * np.sin(np.radians(segment.pitch_deg[:-1]))
         rows.append(design[moving])
         targets.append(target[moving])
     return np.vstack(rows), np.concatenate(targets)
@@ -660,6 +661,9 @@ def fit_vehicle_model(
     steer_rise_rate: float = 0.0,
     steer_fall_rate: float = 0.0,
     steer_lag_slope: float = 0.0,
+    use_pitch: bool = True,
+    monotonic_drive: bool = False,
+    fixed_longitudinal: VehicleModelParams | None = None,
 ) -> tuple[VehicleModelParams, dict[str, Any]]:
     """Identify surrogate parameters from logged CARLA drives.
 
@@ -684,19 +688,49 @@ def fit_vehicle_model(
             (UE 5 defaults 2.5 and 5.0 per second); 0 does not limit.
         steer_lag_slope: Fixed growth of the steer time constant with the
             measured speed, s per m/s; the lag at standstill is identified.
+        use_pitch: Include measured body pitch in longitudinal fitting. Set
+            False for the flat road model used by SurrogateVehicle.
+        monotonic_drive: Fit nonnegative throttle increments so forward and
+            reverse drive magnitudes increase with throttle. The smoothness
+            penalty remains defined on the resulting physical drive tables.
+        fixed_longitudinal: Reuse these drive, drag, braking and throttle lag
+            parameters while fitting steering. Table knots must match an
+            explicit template, or are taken from this configuration.
 
     Returns:
         Parameters and a fit report with residual RMS values and sample counts.
     """
     if not segments:
         raise ValueError("Provide at least one segment")
+    if fixed_longitudinal is not None:
+        if not isinstance(fixed_longitudinal, VehicleModelParams):
+            raise TypeError("fixed_longitudinal must be VehicleModelParams")
+        if template is not None and (
+            template.speed_knots != fixed_longitudinal.speed_knots
+            or template.throttle_knots != fixed_longitudinal.throttle_knots
+        ):
+            raise ValueError("fixed_longitudinal knots must match the template")
+        if monotonic_drive and (
+            np.any(np.diff(np.asarray(fixed_longitudinal.drive), axis=0) < 0)
+            or np.any(np.diff(np.asarray(fixed_longitudinal.reverse_drive)) < 0)
+        ):
+            raise ValueError("fixed_longitudinal must be monotonic in throttle")
     optimize = importlib.import_module("scipy.optimize")
     knots = (
-        template if template is not None else VehicleModelParams(wheelbase=wheelbase)
+        template
+        if template is not None
+        else fixed_longitudinal
+        if fixed_longitudinal is not None
+        else VehicleModelParams(wheelbase=wheelbase)
     )
     count_t, count_u = len(knots.throttle_knots), len(knots.speed_knots)
     cells = count_t * count_u
     smoothed = cells + count_t
+    transform = np.eye(smoothed + 5)
+    if monotonic_drive:
+        cumulative = np.tril(np.ones((count_t, count_t)))
+        transform[:cells, :cells] = np.kron(cumulative, np.eye(count_u))
+        transform[cells:smoothed, cells:smoothed] = cumulative
     # Smooth the forward table across speed and throttle and the reverse table
     # across throttle, so cells without data interpolate their neighbours.
     penalty = np.vstack(
@@ -713,19 +747,39 @@ def fit_vehicle_model(
         ]
     )
     best: tuple[float, float, NDArray[np.float64], int] | None = None
-    for lag in throttle_lags:
-        design, target = _longitudinal_design(segments, knots, float(lag), min_speed)
-        weight = smoothing * math.sqrt(len(target) / cells)
-        augmented = np.vstack(
-            [
-                design,
-                np.pad(weight * penalty, ((0, 0), (0, design.shape[1] - smoothed))),
+    lags = (
+        throttle_lags
+        if fixed_longitudinal is None
+        else (fixed_longitudinal.throttle_lag,)
+    )
+    for lag in lags:
+        design, target = _longitudinal_design(
+            segments, knots, float(lag), min_speed, use_pitch
+        )
+        if fixed_longitudinal is None:
+            weight = smoothing * math.sqrt(len(target) / cells)
+            smooth = np.pad(weight * penalty, ((0, 0), (0, design.shape[1] - smoothed)))
+            fitted_design = design
+            if monotonic_drive:
+                fitted_design = design @ transform
+                smooth = smooth @ transform
+            augmented = np.vstack([fitted_design, smooth])
+            padded = np.concatenate([target, np.zeros(len(penalty))])
+            coefficients, _ = optimize.nnls(
+                augmented, padded, maxiter=50 * augmented.shape[1]
+            )
+            if monotonic_drive:
+                coefficients = transform @ coefficients
+        else:
+            coefficients = np.r_[
+                np.asarray(fixed_longitudinal.drive).ravel(),
+                fixed_longitudinal.reverse_drive,
+                fixed_longitudinal.rolling,
+                fixed_longitudinal.linear_drag,
+                fixed_longitudinal.quadratic_drag,
+                fixed_longitudinal.brake_decel,
+                fixed_longitudinal.hand_brake_decel,
             ]
-        )
-        padded = np.concatenate([target, np.zeros(len(penalty))])
-        coefficients, _ = optimize.nnls(
-            augmented, padded, maxiter=50 * augmented.shape[1]
-        )
         residual = float(np.linalg.norm(design @ coefficients - target))
         if best is None or residual < best[0]:
             best = (residual, float(lag), coefficients, len(target))
@@ -803,6 +857,9 @@ def fit_vehicle_model(
     throttles = np.concatenate([segment.throttle for segment in segments])
     reversing = np.concatenate([segment.reverse > 0.5 for segment in segments])
     report = {
+        "use_pitch": use_pitch,
+        "monotonic_drive": monotonic_drive,
+        "longitudinal_fitted": fixed_longitudinal is None,
         "steer_exponent_identified": identify_exponent,
         "steer_knots_identified": [bool(value) for value in identified],
         "envelope": {
@@ -836,6 +893,7 @@ def evaluate_vehicle_model(
     horizons: Sequence[float] = (1.0, 3.0),
     group: Callable[[str], str] | None = None,
     measured_speed: bool = False,
+    use_pitch: bool = True,
 ) -> dict[str, Any]:
     """Open-loop errors of the surrogate on logged drives.
 
@@ -850,13 +908,17 @@ def evaluate_vehicle_model(
         group: Maps a segment name to a group for per-group summaries.
         measured_speed: Roll out with the logged speed (see :func:`simulate`)
             to isolate the steering model.
+        use_pitch: Supply logged pitch throughout each rollout. Set False
+            to evaluate the flat road model used by SurrogateVehicle.
 
     Returns:
         Per-segment metrics and duration-weighted means, overall and by group.
     """
     rows = []
     for segment in segments:
-        rollout = simulate(params, segment, measured_speed=measured_speed)
+        rollout = simulate(
+            params, segment, measured_speed=measured_speed, use_pitch=use_pitch
+        )
         time = np.arange(len(segment.x)) * segment.dt
         speed_error = rollout["speed"] - segment.speed
         rate_error = np.degrees(rollout["yaw_rate"] - segment.yaw_rate)
@@ -898,7 +960,8 @@ def evaluate_vehicle_model(
 
     def summarise(selected: list[dict[str, Any]]) -> dict[str, float]:
         out: dict[str, float] = {}
-        for key in selected[0]:
+        keys = dict.fromkeys(key for row in selected for key in row)
+        for key in keys:
             if key in ("name", "seconds"):
                 continue
             present = [
@@ -911,6 +974,8 @@ def evaluate_vehicle_model(
         return out
 
     result: dict[str, Any] = {
+        "use_pitch": use_pitch,
+        "measured_speed": measured_speed,
         "segments": rows,
         "summary": summarise(rows) if rows else {},
     }
@@ -933,7 +998,7 @@ def evaluate_vehicle_model(
 #: (``evidence/steer-lag-speed-2026-11-04``, VALIDATION.md, 2026-11-04). The
 #: steering gains are identified from about 2.4 to 13.6 m/s and confirmed to
 #: three-quarter lock at 0.8-3 m/s; reverse up to throttle 0.53. CARLA 1.0
-#: steers linearly and needs its own fit.
+#: has a separate fitted preset below.
 _PATROL: dict[str, Any] = {
     "wheelbase": 3.075,
     "speed_knots": [0, 1, 2.5, 4, 6, 8, 11, 15, 20],
@@ -1003,3 +1068,95 @@ _PATROL: dict[str, Any] = {
 def carla_nissan_patrol() -> VehicleModelParams:
     """Return the surrogate identified for CARLA 0.10.0's Nissan Patrol."""
     return VehicleModelParams.from_dict(_PATROL)
+
+
+#: CARLA 1.0 (UE5.8) ``vehicle.nissan.patrol`` on Town10HD_Opt, candidate C3.
+#: Full precision parameters are preserved in
+#: ``evidence/carla-1.0-vehicle-calibration-2026-11-17/frozen-selection.json``.
+#: Selection and independent test results are recorded in ``fit-report.json``
+#: and ``test-report.json`` in the same directory. The steering exponent is
+#: the selected effective model parameter.
+_PATROL_1_0: dict[str, Any] = {
+    "wheelbase": 3.075,
+    "speed_knots": [0.0, 1.0, 2.5, 4.0, 6.0, 8.0, 11.0, 15.0, 20.0],
+    "throttle_knots": [0.25, 0.5, 0.75, 1.0],
+    "drive": [
+        [
+            0.09438937178635569,
+            0.18972057876624326,
+            0.2872408750890336,
+            0.44887350978271595,
+            0.6479181505607112,
+            0.8265217131993938,
+            0.9762416438859721,
+            1.1391112734223507,
+            1.3082501929412893,
+        ],
+        [
+            0.7178910874277288,
+            0.9948369067314335,
+            1.3679749306245537,
+            1.8798598952296186,
+            2.330714731295173,
+            2.573044713355567,
+            2.614337006088568,
+            2.6101046721356096,
+            2.5938530842218124,
+        ],
+        [
+            1.3736384093849798,
+            1.9069108770651846,
+            2.577018878942993,
+            3.409364992626544,
+            4.1094913089618395,
+            4.4265530534659305,
+            4.3485670643766525,
+            4.117314503209102,
+            3.8756718194521143,
+        ],
+        [
+            2.07186980080167,
+            2.882621167444341,
+            3.8362738050383114,
+            5.0224692474053985,
+            5.997739170415901,
+            6.377329514267615,
+            6.156334250811415,
+            5.659461971757522,
+            5.158978627924107,
+        ],
+    ],
+    "reverse_drive": [
+        0.3309311094990647,
+        0.9706306035520047,
+        1.6105574485331298,
+        2.250484293514255,
+    ],
+    "steer_gain": [
+        0.9671183493924813,
+        0.9671183493924813,
+        0.9347382582806371,
+        0.909348419806357,
+        0.8907760548444505,
+        0.8746871156620434,
+        0.8599122033968012,
+        0.8469827713089422,
+        0.8469827713089422,
+    ],
+    "steer_exponent": 0.9710941521174783,
+    "steer_rise_rate": 2.5,
+    "steer_fall_rate": 5.0,
+    "rolling": 0.26151369907707717,
+    "linear_drag": 0.0,
+    "quadratic_drag": 0.005088590406164401,
+    "brake_decel": 6.4933400436739435,
+    "hand_brake_decel": 4.875545383891894,
+    "throttle_lag": 0.075,
+    "steer_lag": 4.03431560642913e-23,
+    "steer_lag_slope": 0.01,
+}
+
+
+def carla_1_0_nissan_patrol() -> VehicleModelParams:
+    """Return the surrogate identified for CARLA 1.0's Nissan Patrol."""
+    return VehicleModelParams.from_dict(_PATROL_1_0)
