@@ -4,24 +4,13 @@ This is Mark Colley's standalone
 [`myosuite-carla`](https://github.com/M-Colley/myosuite-carla) package. It depends
 on MyoSuite and CARLA without modifying either project's package layout.
 
-The integration targets CARLA's **`ue58-dev`** branch for Unreal Engine 5.8,
-which becomes **CARLA 1.0**. The API review was made against commit
-[`defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5`](https://github.com/carla-simulator/carla/tree/defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5)
-(2026-10-22) and repeated on 2026-11-04 against the `1.0` tag; see
-[CARLA 1.0](#carla-10). Actual live validation has passed against the published
-CARLA 0.10.0 / UE5.5 release; UE5.8 and CARLA 1.0 runtime validation remain
-pending. See [VALIDATION.md](VALIDATION.md) for measurements and build provenance.
+The integration targets the published **CARLA 1.0 / Unreal Engine 5.8** release. The release tag resolves to [`1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5`](https://github.com/carla-simulator/carla/tree/1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5). The earlier CARLA 0.10.0 / UE5.5 runtime remains an explicit validation target. [VALIDATION.md](VALIDATION.md) records measurements and build provenance for each target.
 
 ## MyoSuite dependency
 
-Cockpit composition requires `myosuite.core.model_builder.ModelBuilder` from
-MyoSuite's `dev` branch. The offline validation used MyoSuite commit
-`c0af9c656de2aa1807924e63d0d5320d77aa1ebd` (package version `3.0.0`). Install a
-separate `dev` checkout in editable mode as shown in [README.md](README.md).
-There is no implicit PyPI MyoSuite dependency: a release carrying a numerically
-compatible version may have a different API. The standalone package itself
-supports Python 3.10+, MuJoCo 3.6+ and Gymnasium 1.0 through 1.2; your CARLA wheel
-may restrict the Python minor version and platform further.
+Cockpit composition requires the public `myosuite.core.model_builder.ModelBuilder` API. It is available in the released MyoSuite 3.1.0 ([source `d914c4aa`](https://github.com/MyoHub/myosuite/tree/d914c4aa1eea568dd45bcc3d760a83dc9362c093)) and current development snapshot ([`c93329ec`](https://github.com/MyoHub/myosuite/tree/c93329ec64bc8b544d0b3427bba6766377c3528e)). Both use `myo-sim` 0.2.5. The bridge uses their public model composition, muscle condition and motor noise APIs. Install the optional `myosuite` extra for the release or a separate editable development checkout. Importing the bridge keeps these dependencies lazy.
+
+The supported physics range is MuJoCo 3.6 through major version 3. Gymnasium 1.0 through 1.2 and Python 3.10 or newer remain supported. The CARLA wheel can further restrict the Python version and platform. The shared installation constraint excludes `mjviser` 0.0.17, whose `mujoco-core` dependency overwrites the MuJoCo 3 module. Runtime validation compares the imported MuJoCo version with the installed distribution. The earlier validation snapshots below retain their original dependency revisions.
 
 The 2026-10-27 integration review also checked current MyoSuite `dev` commit `230f198458b501c423a0892b78da60419ffc49a3`. The final integration tests include the fatigue reset fix from [MyoSuite PR 575](https://github.com/MyoHub/myosuite/pull/575). Embodied human driving and embodied UI composition use their public CPU APIs. Vehicle adapters restore the initial surrogate pose and speed on reset. `VehicleSessionEngine` requires an explicit `reset_vehicle(session, seed, options)` callback for live vehicle resets.
 
@@ -75,6 +64,10 @@ version is `1.0`, without a patch component. Record the CARLA source
 commit alongside experiment results.
 
 ## CARLA 1.0
+
+The published release was checked on 2026-11-17 at [`1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5`](https://github.com/carla-simulator/carla/releases/tag/1.0). Its official Windows package is `CARLA_1.0.zip` (13,916,909,891 bytes). The matching Python wheels are bundled under `PythonAPI/carla/dist`. Release clients report `1.0`. Source builds report `1.0-<commit>` with an optional `-dirty` suffix. `CarlaSession` requires identical client and server strings. The validation runners additionally reject a runtime whose numeric release differs from the requested release target. A source branch name remains a caller declaration.
+
+The preceding tag was reviewed before publication. Its source and runtime availability were recorded on 2026-11-04:
 
 Re-checked on 2026-11-04 against the
 [`1.0` tag](https://github.com/carla-simulator/carla/tree/ecb0af47fcd991c0ec6f48433df2a09721b2fec8)

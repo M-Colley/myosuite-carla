@@ -1,0 +1,133 @@
+{
+  "status": "passed",
+  "date": "2026-11-17",
+  "carla_release": "1.0",
+  "carla_release_commit": "1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5",
+  "myosuite_release": "3.1.0",
+  "myosuite_release_commit": "d914c4aa1eea568dd45bcc3d760a83dc9362c093",
+  "myosuite_dev_commit": "c93329ec64bc8b544d0b3427bba6766377c3528e",
+  "myo_sim": "0.2.5",
+  "embodied_human_test_source": "e938e90b7d38638fe2c588e5e7f7a6621e41eec2",
+  "embodied_ui_test_source": "605862bd551401bfce91afb4afcf280b2bef98fd",
+  "checks": {
+    "release-tests": {
+      "tests": 533,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 11,
+      "time": 184.043
+    },
+    "dev-tests": {
+      "tests": 533,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 11,
+      "time": 185.298
+    },
+    "minimum-tests": {
+      "tests": 533,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 12,
+      "time": 182.88
+    },
+    "human-release-tests": {
+      "tests": 120,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "time": 39.871
+    },
+    "human-dev-tests": {
+      "tests": 120,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "time": 41.183
+    },
+    "primary-integrated-tests": {
+      "tests": 547,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 5,
+      "time": 173.181
+    },
+    "myosuite-focused-release": {
+      "tests": 88,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "time": 70.247
+    },
+    "live-primary-tests": {
+      "tests": 547,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 1,
+      "time": 435.22
+    },
+    "live-dev-tests": {
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "time": 92.68
+    }
+  },
+  "live_validation": "passed_release_and_dev",
+  "old_runtime_removal": "removed",
+  "scientific_calibration": "Existing Nissan Patrol surrogate retains CARLA 0.10.0 calibration identity.",
+  "runtime_root": "C:/Users/localadmin/Desktop/Carla-1.0-Win64-Shipping",
+  "runtime_mode": "physics only, -nullrhi",
+  "client_version": "1.0",
+  "server_version": "1.0",
+  "code_ci": {
+    "commit": "334f0b3ee6288d5e25dc9bfd99a2b5978ee48ef2",
+    "run": "https://github.com/M-Colley/myosuite-carla/actions/runs/44065954237",
+    "offline_jobs": 6,
+    "human_integration_jobs": 2,
+    "status": "success"
+  },
+  "live_measurements": {
+    "fullbody_muscles": 416,
+    "fullbody_frames": 1194,
+    "fullbody_checks": 13,
+    "session_frames": 1200,
+    "session_simulated_seconds": 24.0,
+    "max_clock_drift_seconds": 5.364312194444665e-07,
+    "max_applied_control_error": 2.9513554600235636e-08,
+    "actor_cleanup": true,
+    "settings_restoration": true
+  },
+  "server_stopped_after_validation": true,
+  "live_reports_archive": {
+    "file": "live-reports.zip",
+    "sha256": "3ec0bedb29ddc991160d3c80e8ec579ebe39dfbc88c4417f45acb39236b846a3",
+    "members": {
+      "live-dev-controls.json": {
+        "sha256": "c372743c4fff02c3cdda3aa5e7cde571710e48647a977b9f10f1f26cbcfc20b1",
+        "bytes": 1328209
+      },
+      "live-primary-controls.json": {
+        "sha256": "4e29286b18f9338ba9ffb29270acc028d46a1e8f7105dd339982e5c14326dbcf",
+        "bytes": 1390624
+      },
+      "live-dev-fullbody.json": {
+        "sha256": "3f5d3fca2d1acd201ace407415a454e551b5c6ef0e11e6185bcdfb5b08e6ed51",
+        "bytes": 1763211
+      },
+      "live-primary-fullbody.json": {
+        "sha256": "637a72d005f0d67dab8fb03c33f77d2bcaa1422884e70ee5a0dc0cb67b0ef437",
+        "bytes": 1759826
+      },
+      "live-dev-session.json": {
+        "sha256": "513fba8eca6133dd884a2f008ee4e7ef0bfc694a4ca9d9372b4d02f5ec69591a",
+        "bytes": 13231
+      },
+      "live-primary-session.json": {
+        "sha256": "bcdb72f22cec2017746cbff7e1b2672189f914285159164d83552f92d9499a0c",
+        "bytes": 13198
+      }
+    }
+  }
+}

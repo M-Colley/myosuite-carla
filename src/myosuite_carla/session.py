@@ -188,7 +188,8 @@ class CarlaSession:
             if self.client_version != self.server_version:
                 raise RuntimeError(
                     f"CARLA client {self.client_version!r} and server "
-                    f"{self.server_version!r} differ; install the matching UE5.8 wheel"
+                    f"{self.server_version!r} differ; install the wheel supplied "
+                    "with this CARLA server build"
                 )
             if not str(self.vehicle.type_id).startswith("vehicle."):
                 raise ValueError("Expected a CARLA vehicle actor")

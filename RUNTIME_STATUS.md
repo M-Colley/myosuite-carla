@@ -1,5 +1,17 @@
 # CARLA runtime acquisition and UE5.8 status
 
+## CARLA 1.0 release on 2026-11-17
+
+The [official CARLA 1.0 release](https://github.com/carla-simulator/carla/releases/tag/1.0) provides a Windows 11 package and matching Python client wheels. The release source is `1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5`. The Windows archive contains 13,916,909,891 bytes and uses Unreal Engine 5.8.
+
+The bridge has been updated for MyoSuite 3.1.0 and the development snapshot `c93329ec64bc8b544d0b3427bba6766377c3528e`. The primary environment imports MyoSuite 3.1.0, `myo-sim` 0.2.5 and MuJoCo 3.17.0. Release, development, minimum physics and embodied human integration checks passed. [VALIDATION.md](VALIDATION.md#carla-10-and-myosuite-31-on-2026-11-17) records the results.
+
+The package is installed at `C:/Users/localadmin/Desktop/Carla-1.0-Win64-Shipping`. Its 493 archive entries expanded to 15,832,865,292 bytes. All extracted files passed CRC checks. Its SHA256 is `bac25742f49fdc4023170d446493ce76a57502e8b6ae3a377c44887683a3ffcf`. The archive is retained at `artifacts/carla-1-myosuite31/CARLA_1.0.zip`. The bundled Python 3.12 Windows wheel has SHA256 `f4308ed738a549c796b4a4ac5f2fe5748c0d347fac1d54dad1dc672d6e4f1e10`.
+
+The client and server both report `1.0`. `Town10HD_Opt` loaded and the live control, session and full body tests passed. The complete primary suite passed 546 tests with one optional OpenSim skip. The development snapshot passed all four live tests. The final probe found no vehicles, asynchronous mode and an unset fixed timestep. The test server was then stopped.
+
+The replaced `C:/Users/localadmin/Desktop/Carla-0.10.0-Win64-Shipping` directory was removed after live acceptance. It contained 21,892,413,359 bytes in 15,208 files. The primary environment's 0.10 client was replaced with the bundled 1.0 wheel. The user environment variable `CARLA_ROOT` points to the new installation. Repository data, recordings and earlier validation evidence remain available. [Installation and removal records](evidence/carla-1.0-myosuite-3.1-2026-11-17/summary.json) retain the measured state.
+
 ## Recheck on 2026-10-27
 
 The local UE5.8 engine source remains at `0703595a065dee51538720027ce9cc05bd464517`, with `Build.version` identifying 5.8.0. The prepared CARLA source remains at `ee5859b4e63a4b79c69b02e381c95fb5727e0874`. Its project has neither `CarlaUnreal.exe` nor `UnrealEditor-CarlaUnreal.dll`. Port 2000 has no listener. The live validation command returned connection refused before running a scenario. [Preflight](evidence/scientific-2026-10-27-ue58-preflight.json), [failed attempt](evidence/scientific-2026-10-27-ue58-attempt.json).

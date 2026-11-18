@@ -1,0 +1,6 @@
+# Use with a MyoSuite 3.1 release or development CPU installation.
+# Keep the bridge's supported MuJoCo 3 runtime.
+mujoco>=3.6,<4
+# mjviser 0.0.17 depends on mujoco-core 4.0.1. Its files overwrite the mujoco
+# module while the mujoco 3 distribution metadata remains installed.
+mjviser<0.0.17

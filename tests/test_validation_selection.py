@@ -138,6 +138,7 @@ def test_release_report_records_actual_target_and_reuses_selected_vehicle(
         "asserted_ref": "0.10.0+local",
         "asserted_ref_matches_target": False,
         "asserted_commit": None,
+        "runtime_matches_target": True,
         "source_verified": False,
     }
 

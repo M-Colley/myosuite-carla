@@ -1,0 +1,10 @@
+{
+  "path": "C:\\Users\\localadmin\\Desktop\\Carla-0.10.0-Win64-Shipping",
+  "bytes": 21892413359,
+  "files": 15208,
+  "version_file": "Carla git hash:         ada75f920642e18cace0a9f85ecf9d4077ddb531\nContent git hash:       a32a1930bc319caba3e0cde845e46e23b9136e81\nUnrealEngine git hash:  6cf20383302899026a5e777219ba4206afe47d38\n",
+  "version_sha256": "c5f5263f47e03ba51efb586ecd1e3bdff5145423e9b8239be4d6ae66b443965d",
+  "replacement": "C:/Users/localadmin/Desktop/Carla-1.0-Win64-Shipping",
+  "removal_status": "removed",
+  "removed_utc": "2026-11-17T11:08:53Z"
+}

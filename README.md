@@ -2,11 +2,15 @@
 
 Mark Colley's [`myosuite-carla`](https://github.com/M-Colley/myosuite-carla) is a
 standalone installable package connecting a physical MuJoCo
-driver to a CARLA **Unreal Engine 5.8 `ue58-dev`** vehicle. Muscles move the limbs;
+driver to a **CARLA 1.0 / Unreal Engine 5.8** vehicle. Muscles move the limbs;
 limbs contact passive pedals and a steering wheel; measured mechanism travel or
 contact force becomes `carla.VehicleControl`. CARLA simulates the vehicle.
 
-**Validation status:** with a real CARLA 0.10.0 / UE5.5 server, 312 tests pass
+**Compatibility target:** MyoSuite 3.1.0 or current `dev`, with CARLA 1.0 and its matching Python client. [VALIDATION.md](VALIDATION.md) records exact dependency versions, imported runtime paths, offline results and live measurements.
+
+Live validation passed against the official CARLA 1.0 package with a physics only server (`-nullrhi`). The complete primary suite passed 546 tests with one optional OpenSim skip. The MyoSuite development snapshot also passed all four live tests. The 416 muscle body passed all 13 driving checks. Applied controls, frame timing, actor cleanup and world restoration passed. The [retained evidence](evidence/carla-1.0-myosuite-3.1-2026-11-17/summary.json) identifies the exact package, client wheel and dependency sources.
+
+Earlier validation with a real CARLA 0.10.0 / UE5.5 server passed 312 tests
 with zero skips (94% statement coverage). One seated MyoSuite full body, loaded
 by gravity and the measured vehicle motion, operates throttle, brake,
 push-pull steering, reverse, sequential gears and the parking brake in a
@@ -14,8 +18,7 @@ single live drive, with all 13 physical checks passing in both the default and
 the fast configuration. The same body drives lead-vehicle braking, takeover and
 lane-change scenarios in CARLA without collision. The single-finger acceptance
 fixtures pass on two Windows PCs, all 11 four-wheel vehicles, a rendered server
-and a 15,000-frame soak. Actual **UE5.8** validation remains pending a runnable
-build; see [measured results](VALIDATION.md) and [runtime status](RUNTIME_STATUS.md).
+and a 15,000-frame soak. See [measured results](VALIDATION.md) and [runtime status](RUNTIME_STATUS.md) for the corresponding builds.
 
 The package provides:
 
@@ -45,20 +48,31 @@ The package provides:
 
 ## Install
 
-For a clean Windows PC, follow [NEW_PC_SETUP.md](NEW_PC_SETUP.md): prerequisites,
-private-repository authentication, pinned dependencies, UE5.8 source building
-or the tested UE5.5 download, server startup, live tests and troubleshooting.
+For a clean Windows PC, follow [NEW_PC_SETUP.md](NEW_PC_SETUP.md) for the CARLA 1.0 package, MyoSuite installation, matching client wheel, server startup and live tests. Use the Python minor version supplied by the server's wheel. Python 3.12 is used for the local validation.
 
-Use the Python minor version supported by your CARLA UE5.8 build. Clone this
-package and MyoSuite into separate directories. MyoSuite's **`dev` branch** is
-required for the `myosuite.core.model_builder.ModelBuilder` API; a version number
-alone does not establish compatibility with that API.
+MyoSuite 3.1.0 includes the public `myosuite.core.model_builder.ModelBuilder` API. Install the release with the `myosuite` extra:
+
+```shell
+python -m pip install -c constraints/myosuite-3.1.txt -e ".[myosuite,test,data,analysis]"
+python -m pip install /path/to/CARLA-1.0/PythonAPI/carla/dist/<matching-wheel>.whl
+```
+
+For MyoSuite development, keep its source checkout separate and install it into the same environment:
 
 ```shell
 git clone --branch dev https://github.com/MyoHub/myosuite.git ../myosuite
-python -m pip install -e ../myosuite
-python -m pip install -e ".[test,data,analysis]"
-python -m pip install /path/to/your/ue58-build/PythonAPI/carla/dist/<matching-wheel>.whl
+python -m pip install -c constraints/myosuite-3.1.txt -e ../myosuite -e ".[myosuite,test,data,analysis]"
+```
+
+The constraint keeps `mjviser` below 0.0.17. That viewer release installs `mujoco-core` 4 into the same module namespace as MuJoCo 3. A fresh unconstrained MyoSuite 3.1 installation reproduced this conflict. The bridge requires MuJoCo 3.6 or newer within major version 3. CI checks the imported MuJoCo version against its installed distribution.
+
+An environment that already contains `mujoco-core` needs its overlapping files removed and MuJoCo 3 restored after applying the constrained installation:
+
+```shell
+python -m pip uninstall -y mujoco-core
+python -m pip install --force-reinstall --no-deps "mujoco>=3.6,<4"
+python -c "import importlib.metadata as m, mujoco; print(mujoco.__version__); assert mujoco.__version__ == m.version('mujoco')"
+python -m pip check
 ```
 
 The `data` extra (pandas, pyarrow, mcap) enables Parquet and MCAP exports; the
@@ -74,15 +88,9 @@ separately. Importing `myosuite_carla` does not import CARLA or MyoSuite, start 
 server, or register environments. See [COMPATIBILITY.md](COMPATIBILITY.md) for
 the tested MyoSuite revision and CARLA API contract.
 
-**Use the client wheel from the same build as the UE5.8 server.** CARLA's
-[UE5.8 quick start](https://github.com/carla-simulator/carla/blob/defabe35d1ad47c4231d4f7fb1f4e46ac2e08ec5/Docs/start_quickstart.md)
-warns against `pip install carla` for this branch. Version equality is checked at
-session startup but cannot distinguish commits with identical version strings.
-See [COMPATIBILITY.md](COMPATIBILITY.md) for the pinned upstream API contract.
-The branch becomes CARLA 1.0. The Python API calls the bridge makes are
-unchanged there, but its linear steering response differs from 0.10.0, so
-vehicle and steering parameters fitted on 0.10.0 need re-identification
-([details](COMPATIBILITY.md#carla-10)). No 1.0 server has been run yet.
+Use the client wheel from the same CARLA 1.0 server package. The [official release](https://github.com/carla-simulator/carla/releases/tag/1.0) supplies wheels inside `PythonAPI/carla/dist`. Session startup requires identical client and server build strings. Live validation also checks that the runtime matches the requested release. A matched 0.10 client and server therefore fail validation requested for 1.0. Source builds retain their commit suffixes in the version comparison.
+
+CARLA 1.0 uses a linear steering input curve. The retained CARLA 0.10 vehicle surrogate was fitted with a nearly squared curve. Vehicle, steering and human controller calibrations require separate evaluation on 1.0 ([details](COMPATIBILITY.md#carla-10)).
 
 ## Compose the physical driver
 
@@ -573,10 +581,10 @@ The offline demo uses a scripted contact probe for a deterministic mechanism
 check, not a trained driver policy.
 
 Actual CARLA validation requires the matching client wheel and an already
-running UE5.8 server with no other synchronous owner. Run the acceptance CLI:
+running CARLA 1.0 server with no other synchronous owner. Run the acceptance CLI:
 
 ```shell
-python examples/validate_carla.py --host 127.0.0.1 --port 2000 --build-ref ue58-dev --build-commit ACTUAL_COMMIT_SHA --output artifacts/carla-live.json
+python examples/validate_carla.py --host 127.0.0.1 --port 2000 --target-ref 1.0 --build-ref 1.0 --build-commit ACTUAL_COMMIT_SHA --output artifacts/carla-live.json
 ```
 
 Use the server build's actual commit. The runner uses real MyoSuite muscle
@@ -604,7 +612,8 @@ The same checks are available through explicitly enabled pytest. PowerShell:
 
 ```powershell
 $env:CARLA_BRIDGE_LIVE = "1"
-$env:CARLA_BUILD_REF = "ue58-dev"
+$env:CARLA_TARGET_REF = "1.0"
+$env:CARLA_BUILD_REF = "1.0"
 $env:CARLA_BUILD_COMMIT = "ACTUAL_COMMIT_SHA"
 $env:CARLA_LIVE_OUTPUT = "artifacts/carla-live.json"
 python -m pytest tests/test_live_server.py -v
@@ -612,19 +621,11 @@ python -m pytest tests/test_live_server.py -v
 
 On POSIX set the equivalent environment variables before running pytest.
 Optional `CARLA_HOST` and `CARLA_PORT` select the server; `CARLA_TARGET_REF`
-selects the report's validation target (default `ue58-dev`). The test spawns and
+selects the report's validation target (default `1.0`). The test spawns and
 destroys its own vehicles and requires an unoccupied straight road spawn with
 35 m of road ahead. Offline success does not establish live-server validation.
 With `CARLA_BRIDGE_LIVE=1`, `tests/test_live_fullbody.py` also runs the
 full-body drive and writes `CARLA_FULLBODY_OUTPUT`
 (default `artifacts/carla-fullbody.json`).
 
-The [CI workflow](.github/workflows/ci.yml) installs MyoSuite `dev` in a separate
-checkout and runs offline CPU tests on Linux and Windows, including the minimum
-MuJoCo version. Its manual `live_carla` option runs the live tests on a
-`self-hosted, carla-ue58` runner. Configure that runner's Python with MyoSuite
-`dev`, the matching CARLA wheel, and an already running exclusive server before
-enabling the option. Set `CARLA_HOST`/`CARLA_PORT` in the runner environment for
-a remote server and `CARLA_BUILD_REF`/`CARLA_BUILD_COMMIT` for its actual build.
-The job uploads measured JSON and JUnit results even if validation fails.
-Hosted offline jobs cannot establish a live CARLA pass.
+The [CI workflow](.github/workflows/ci.yml) tests MyoSuite 3.1.0 and a separate `dev` checkout on Linux and Windows, including MuJoCo 3.6. Both tracks also run the embodied human integration. Installation applies the shared constraint and verifies the actual imported physics runtime. The manual `live_carla` option runs physical control, session and full body tests on a `self-hosted, carla-1.0` runner. Configure that runner with the matching CARLA wheel and an already running exclusive server. Set `CARLA_HOST`/`CARLA_PORT` for a remote server and `CARLA_BUILD_REF`/`CARLA_BUILD_COMMIT` for its actual build. The job uploads measured JSON and JUnit results on success and failure. Hosted offline jobs provide CPU and API compatibility evidence.

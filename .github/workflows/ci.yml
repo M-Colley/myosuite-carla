@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       live_carla:
-        description: Run live tests on the configured self-hosted UE5.8 runner
+        description: Run live tests on the configured self-hosted CARLA 1.0 runner
         type: boolean
         default: false
 
@@ -20,15 +20,19 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - {os: ubuntu-latest, python: "3.10", mujoco: "mujoco==3.6.0"}
-          - {os: ubuntu-latest, python: "3.14", mujoco: "mujoco>=3.6"}
-          - {os: windows-latest, python: "3.13", mujoco: "mujoco>=3.6"}
+          - {os: ubuntu-latest, python: "3.10", mujoco: "mujoco==3.6.0", myosuite: "3.1.0"}
+          - {os: ubuntu-latest, python: "3.10", mujoco: "mujoco==3.6.0", myosuite: dev}
+          - {os: ubuntu-latest, python: "3.14", mujoco: "mujoco>=3.6,<4", myosuite: "3.1.0"}
+          - {os: ubuntu-latest, python: "3.14", mujoco: "mujoco>=3.6,<4", myosuite: dev}
+          - {os: windows-latest, python: "3.13", mujoco: "mujoco>=3.6,<4", myosuite: "3.1.0"}
+          - {os: windows-latest, python: "3.13", mujoco: "mujoco>=3.6,<4", myosuite: dev}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
         with:
           path: bridge
       - uses: actions/checkout@v4
+        if: matrix.myosuite == 'dev'
         with:
           repository: MyoHub/myosuite
           ref: dev
@@ -36,8 +40,24 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
+      - name: Install MyoSuite 3.1 release and standalone bridge
+        if: matrix.myosuite == '3.1.0'
+        run: python -m pip install -c bridge/constraints/myosuite-3.1.txt "myosuite==3.1.0" -e "./bridge[myosuite,test,lint]" "${{ matrix.mujoco }}"
       - name: Install MyoSuite dev and standalone bridge
-        run: python -m pip install -e ./myosuite -e "./bridge[test,lint]" "${{ matrix.mujoco }}"
+        if: matrix.myosuite == 'dev'
+        run: python -m pip install -c bridge/constraints/myosuite-3.1.txt -e ./myosuite -e "./bridge[myosuite,test,lint]" "${{ matrix.mujoco }}"
+      - name: Check imported physics runtime and model builder
+        run: >-
+          python -c "import importlib.metadata as m, mujoco;
+          from myosuite.core.model_builder import ModelBuilder;
+          print('myosuite', m.version('myosuite'), 'myo-sim', m.version('myo-sim'), 'mujoco', m.version('mujoco'), 'runtime', mujoco.__version__);
+          assert m.version('mujoco') == mujoco.__version__;
+          assert not any(d.metadata['Name'].lower().replace('_', '-') == 'mujoco-core' for d in m.distributions())"
+      - name: Check installed dependencies
+        run: python -m pip check
+      - name: Record MyoSuite dev revision
+        if: matrix.myosuite == 'dev'
+        run: git -C myosuite rev-parse HEAD
       - name: Record dependency versions
         working-directory: bridge
         run: python -m pip freeze
@@ -58,12 +78,16 @@ jobs:
         run: python -m build
       - uses: actions/upload-artifact@v4
         with:
-          name: package-${{ matrix.os }}-${{ matrix.python }}
+          name: package-${{ matrix.os }}-${{ matrix.python }}-myosuite-${{ matrix.myosuite }}
           path: |
             bridge/dist/*
             bridge/coverage.xml
 
   embodied-human:
+    strategy:
+      fail-fast: false
+      matrix:
+        myosuite: ["3.1.0", dev]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -71,6 +95,7 @@ jobs:
         with:
           path: bridge
       - uses: actions/checkout@v4
+        if: matrix.myosuite == 'dev'
         with:
           repository: MyoHub/myosuite
           ref: dev
@@ -88,12 +113,27 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install integrated CPU dependencies
-        run: python -m pip install -e ./myosuite -e ./embodied-ui -e "./embodied-human[empirical]" -e "./bridge[test,analysis,rl]"
+      - name: Install integrated CPU dependencies with MyoSuite 3.1
+        if: matrix.myosuite == '3.1.0'
+        run: python -m pip install -c bridge/constraints/myosuite-3.1.txt "myosuite==3.1.0" -e ./embodied-ui -e "./embodied-human[empirical]" -e "./bridge[myosuite,test,analysis,rl]"
+      - name: Install integrated CPU dependencies with MyoSuite dev
+        if: matrix.myosuite == 'dev'
+        run: python -m pip install -c bridge/constraints/myosuite-3.1.txt -e ./myosuite -e ./embodied-ui -e "./embodied-human[empirical]" -e "./bridge[myosuite,test,analysis,rl]"
+      - name: Check imported physics runtime and model builder
+        run: >-
+          python -c "import importlib.metadata as m, mujoco;
+          from myosuite.core.model_builder import ModelBuilder;
+          print('myosuite', m.version('myosuite'), 'myo-sim', m.version('myo-sim'), 'mujoco', m.version('mujoco'), 'runtime', mujoco.__version__);
+          assert m.version('mujoco') == mujoco.__version__;
+          assert not any(d.metadata['Name'].lower().replace('_', '-') == 'mujoco-core' for d in m.distributions())"
+      - name: Check installed dependencies
+        run: python -m pip check
+      - name: Record MyoSuite dev revision
+        if: matrix.myosuite == 'dev'
+        run: git -C myosuite rev-parse HEAD
       - name: Record dependency versions
         run: |
           python -m pip freeze
-          git -C myosuite rev-parse HEAD
           git -C embodied-ui rev-parse HEAD
           git -C embodied-human rev-parse HEAD
       - name: Test bridge with optional interfaces and training
@@ -118,23 +158,32 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: embodied-human-integration
+          name: embodied-human-integration-myosuite-${{ matrix.myosuite }}
           path: bridge/test-results/integration-*.xml
 
   live:
     if: github.event_name == 'workflow_dispatch' && inputs.live_carla
-    runs-on: [self-hosted, carla-ue58]
+    runs-on: [self-hosted, carla-1.0]
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - name: Install standalone bridge
-        run: python -m pip install -e ".[test]"
+        run: python -m pip install -c constraints/myosuite-3.1.txt "myosuite==3.1.0" -e ".[myosuite,test]"
+      - name: Check imported physics runtime and model builder
+        run: >-
+          python -c "import importlib.metadata as m, mujoco;
+          from myosuite.core.model_builder import ModelBuilder;
+          print('myosuite', m.version('myosuite'), 'myo-sim', m.version('myo-sim'), 'mujoco', m.version('mujoco'), 'runtime', mujoco.__version__);
+          assert m.version('mujoco') == mujoco.__version__;
+          assert not any(d.metadata['Name'].lower().replace('_', '-') == 'mujoco-core' for d in m.distributions())"
       - name: Test real server
         env:
           CARLA_BRIDGE_LIVE: "1"
+          CARLA_TARGET_REF: "1.0"
           CARLA_LIVE_OUTPUT: artifacts/carla-live.json
           CARLA_SESSION_OUTPUT: artifacts/carla-session.json
-        run: python -m pytest tests/test_live_server.py tests/test_live_session.py -v --junitxml=live-results.xml
+          CARLA_FULLBODY_OUTPUT: artifacts/carla-fullbody.json
+        run: python -m pytest tests/test_live_server.py tests/test_live_session.py tests/test_live_fullbody.py -v --junitxml=live-results.xml
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -143,3 +192,4 @@ jobs:
             live-results.xml
             artifacts/carla-live.json
             artifacts/carla-session.json
+            artifacts/carla-fullbody.json

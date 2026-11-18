@@ -3,7 +3,8 @@
 The seated ``myofullbody`` operates throttle and brake pedals with its feet,
 steers with both hands, and uses finger switches for the parking brake,
 reverse and sequential manual gears. Evidence is written on success and
-failure. Use --target-ref 0.10.0 --build-ref 0.10.0 for the UE5.5 release.
+failure. The default target is CARLA 1.0. Use --target-ref 0.10.0
+--build-ref 0.10.0 for the UE5.5 release.
 --record DIR also exports every frame (CSV data package, OpenSim tables and an
 arm_force_driving recording by default; see myosuite_carla.recording).
 """
@@ -31,7 +32,7 @@ def main() -> int:
     parser.add_argument("--timeout", type=float, default=30)
     parser.add_argument("--blueprint", default=os.environ.get("CARLA_BLUEPRINT"))
     parser.add_argument(
-        "--target-ref", default=os.environ.get("CARLA_TARGET_REF", "ue58-dev")
+        "--target-ref", default=os.environ.get("CARLA_TARGET_REF", "1.0")
     )
     parser.add_argument("--build-ref", default=os.environ.get("CARLA_BUILD_REF"))
     parser.add_argument("--build-commit", default=os.environ.get("CARLA_BUILD_COMMIT"))

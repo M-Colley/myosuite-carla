@@ -31,7 +31,7 @@ def test_one_full_body_operates_every_control_of_a_real_vehicle() -> None:
             int(os.environ.get("CARLA_PORT", 2000)),
             timeout=float(os.environ.get("CARLA_TIMEOUT", 30)),
             blueprint=os.environ.get("CARLA_BLUEPRINT"),
-            target_ref=os.environ.get("CARLA_TARGET_REF", "ue58-dev"),
+            target_ref=os.environ.get("CARLA_TARGET_REF", "1.0"),
             build_ref=os.environ.get("CARLA_BUILD_REF"),
             build_commit=os.environ.get("CARLA_BUILD_COMMIT"),
         )
