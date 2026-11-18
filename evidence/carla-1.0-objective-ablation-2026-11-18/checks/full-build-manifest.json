@@ -1,0 +1,18 @@
+{
+  "started_utc": "2026-11-18T19:28:52.713446+00:00",
+  "finished_utc": "2026-11-18T19:29:15.908229+00:00",
+  "python_executable": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\.venv\\Scripts\\python.exe",
+  "command": "python -m build --outdir artifacts/carla-1.0-objective-ablation-2026-11-18/build",
+  "wheel_contains_longitudinal_module": true,
+  "sdist_contains_ablation_cli_and_design": true,
+  "artifacts": {
+    "myosuite_carla-0.2.0-py3-none-any.whl": {
+      "bytes": 153814,
+      "sha256": "9c1dde8fee5b9eae298ca78d56833f2a34b422a88674b4d423c057019c35d802"
+    },
+    "myosuite_carla-0.2.0.tar.gz": {
+      "bytes": 61631933,
+      "sha256": "65fc5631343d9a6db85f248b055c1ceb4659258d14cfd47e275cd0439b8fa6e5"
+    }
+  }
+}

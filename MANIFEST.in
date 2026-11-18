@@ -9,3 +9,4 @@ recursive-include tests *.py
 recursive-include evidence *.json *.txt *.xml *.md *.log *.py *.zip *.png
 recursive-exclude evidence/carla-1.0-vehicle-calibration-2026-11-17/data *.zip
 recursive-exclude evidence/carla-1.0-longitudinal-2026-11-18/data *.zip
+recursive-exclude evidence/carla-1.0-objective-ablation-2026-11-18/data *.zip

@@ -1,0 +1,306 @@
+{
+  "schema_version": 1,
+  "compression": "ZIP_DEFLATED",
+  "level": 6,
+  "archives": {
+    "test": {
+      "source_root": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test",
+      "collector_status": "completed",
+      "file": "test.zip",
+      "bytes": 5739885,
+      "sha256": "e275903c4ccab8a156d74c46862d92d7bc1553482245a0e9c170ef2973901d8e",
+      "members": {
+        "run.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\run.json",
+          "bytes": 1970,
+          "sha256": "c8eb784dc7645d19ec7f38ab0d54eb69a7f405f4da35a5a83ba0507bf8bc491d"
+        },
+        "seed2100/attempts/s2100-00-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-00-launch\\datapackage.json",
+          "bytes": 9539,
+          "sha256": "34d42a5db69df114cb91f477ef03087a2a128f78c8f6b8ff3eb6b54809078ae1"
+        },
+        "seed2100/attempts/s2100-00-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-00-launch\\frames.csv",
+          "bytes": 323165,
+          "sha256": "0de5117d627ea7e3848ed7bcdc73c2bd324d577b6c7cceb6507b2f59b15bcdbd"
+        },
+        "seed2100/attempts/s2100-01-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-01-launch\\datapackage.json",
+          "bytes": 9545,
+          "sha256": "1565f94c4c41c45fdf525ad5ae191919ef57272d5bc334745f896dd2284f59fa"
+        },
+        "seed2100/attempts/s2100-01-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-01-launch\\frames.csv",
+          "bytes": 240714,
+          "sha256": "e857c8a3b3583ef7a88452400f9dcaefd244817850739c2149c20296a4b1e5bb"
+        },
+        "seed2100/attempts/s2100-02-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-02-launch\\datapackage.json",
+          "bytes": 9549,
+          "sha256": "ff782d6df123662a73c441b70d742f351d4373c7aa247507ce1c20b4d121479a"
+        },
+        "seed2100/attempts/s2100-02-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-02-launch\\frames.csv",
+          "bytes": 279599,
+          "sha256": "e81f6e3987686d45777e5c5a1575b53a0872476d2eb3f90a05b66d7ba9a24bfd"
+        },
+        "seed2100/attempts/s2100-03-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-03-launch\\datapackage.json",
+          "bytes": 9543,
+          "sha256": "86a35079f7b6435ee7af6d7cab4d0215c7d8676145bf34d6142719775785f199"
+        },
+        "seed2100/attempts/s2100-03-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-03-launch\\frames.csv",
+          "bytes": 367770,
+          "sha256": "ece1e9183528f7b19ac23490d324cf3ba926af91c94b1a776986e381fea25c95"
+        },
+        "seed2100/attempts/s2100-04-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-04-launch\\datapackage.json",
+          "bytes": 9541,
+          "sha256": "b68e23f834da625c4869c2ee8e2ee4267cc1a879da2e5d0ce9daf4e2cba0ba8b"
+        },
+        "seed2100/attempts/s2100-04-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-04-launch\\frames.csv",
+          "bytes": 362645,
+          "sha256": "1bd9ce323b69910e14a54663b7e48677e6707c663b45d5f0bc69217114f3dd98"
+        },
+        "seed2100/attempts/s2100-05-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-05-launch\\datapackage.json",
+          "bytes": 9539,
+          "sha256": "abbf3bd1991fe7c114f3ac83e814140a4d5f778201eeec1dde3380453dfb610b"
+        },
+        "seed2100/attempts/s2100-05-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-05-launch\\frames.csv",
+          "bytes": 329569,
+          "sha256": "7db36a41af78f55e39c6cfb288da0fc87d27435df1bf47bb6ec44e8aa05a5619"
+        },
+        "seed2100/attempts/s2100-06-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-06-launch\\datapackage.json",
+          "bytes": 9541,
+          "sha256": "38967efa4a9ade41d592b7a6bfbd4cecc2569d6f55407b86ab392a8129d75d1a"
+        },
+        "seed2100/attempts/s2100-06-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-06-launch\\frames.csv",
+          "bytes": 289653,
+          "sha256": "aa556f0fc528971dfedc862c6d6912f37527a616d9dd357e4e8b7b18da07324f"
+        },
+        "seed2100/attempts/s2100-07-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-07-launch\\datapackage.json",
+          "bytes": 9546,
+          "sha256": "ae39b34a288ddcd98385d535796f6622f35222d7617a6ed3a73aabfe8624cdfc"
+        },
+        "seed2100/attempts/s2100-07-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\attempts\\s2100-07-launch\\frames.csv",
+          "bytes": 329445,
+          "sha256": "ee8a805d92472c35836ccd507136188e0a83faa3c1c536d67118cebae4a0bf71"
+        },
+        "seed2100/collection.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\collection.json",
+          "bytes": 9525,
+          "sha256": "8afee7077fd69c00b57d60dedf68399c15b0b39447d0db6332985842fb504de4"
+        },
+        "seed2100/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\datapackage.json",
+          "bytes": 8671,
+          "sha256": "93f0e0a5851909a7b32a0678d4602ef046c8f44a77045439d58a40d2170bc95c"
+        },
+        "seed2100/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2100\\frames.csv",
+          "bytes": 2520278,
+          "sha256": "5c6eea87fb2621768bff0055464f2824e1e69c16490e88f52e0c010620a5462b"
+        },
+        "seed2101/attempts/s2101-00-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-00-launch\\datapackage.json",
+          "bytes": 9546,
+          "sha256": "a84e7975256b2908082527dcf0f8ce4c07087cab06943038beeccfe5ead05549"
+        },
+        "seed2101/attempts/s2101-00-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-00-launch\\frames.csv",
+          "bytes": 289107,
+          "sha256": "0011ad4f22764a2c4d1d62086709e026a8d6baa0d8b16ea650efafa36621d3b8"
+        },
+        "seed2101/attempts/s2101-01-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-01-launch\\datapackage.json",
+          "bytes": 9542,
+          "sha256": "64f263435a681c7a9809f67d4df098cbcaa5e075b22a93c9ec772988881514ab"
+        },
+        "seed2101/attempts/s2101-01-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-01-launch\\frames.csv",
+          "bytes": 368763,
+          "sha256": "e2bb8343a45681f1ec2dfd009b00a0c7232a8405b157a3d286c679cef4180240"
+        },
+        "seed2101/attempts/s2101-02-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-02-launch\\datapackage.json",
+          "bytes": 9547,
+          "sha256": "c8e1a07c71492729a83d73e32a493752cd6d346874351e802776c6e3d046fa18"
+        },
+        "seed2101/attempts/s2101-02-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-02-launch\\frames.csv",
+          "bytes": 330408,
+          "sha256": "15d3c506a1fbb68ad56b48825b8f2fc29c2b1de0a786fe1c16f92b7295421792"
+        },
+        "seed2101/attempts/s2101-03-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-03-launch\\datapackage.json",
+          "bytes": 9544,
+          "sha256": "9803c1ccb1b738ea4413f26fa7897330b9112f71888871eceba311e778655b80"
+        },
+        "seed2101/attempts/s2101-03-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-03-launch\\frames.csv",
+          "bytes": 241594,
+          "sha256": "880a39913ddc4024fadcab5e6eb0fc60e4c29f98f707680f76482ac7cecc976d"
+        },
+        "seed2101/attempts/s2101-04-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-04-launch\\datapackage.json",
+          "bytes": 9541,
+          "sha256": "ef9c0364b9eb16bce0f11a28b815ecb9fbc64575621850d60c73fb4769bc18d3"
+        },
+        "seed2101/attempts/s2101-04-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-04-launch\\frames.csv",
+          "bytes": 323363,
+          "sha256": "1457d186f11bb5414c7bcbbd114620adcdb399aef1863da8b2ddc5ae34249d6e"
+        },
+        "seed2101/attempts/s2101-05-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-05-launch\\datapackage.json",
+          "bytes": 9546,
+          "sha256": "7c841c9d42e9d147a91c94da62f388959964f09cf1c92d8768fea7d3317fa172"
+        },
+        "seed2101/attempts/s2101-05-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-05-launch\\frames.csv",
+          "bytes": 281645,
+          "sha256": "1d0dfc4ad8cb6e7344f2bc3f9b2ba790c43f4b11d64157e777f1ddbd9863a900"
+        },
+        "seed2101/attempts/s2101-06-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-06-launch\\datapackage.json",
+          "bytes": 9541,
+          "sha256": "f3685708b6b8efc486d56357646ee83832fbeb55cbee9004e369763dff46fc37"
+        },
+        "seed2101/attempts/s2101-06-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-06-launch\\frames.csv",
+          "bytes": 363630,
+          "sha256": "200a35418dbbf56e93ffd3fc1077ac48e30eb6cae6cb01ae23dfa2dec4fc7525"
+        },
+        "seed2101/attempts/s2101-07-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-07-launch\\datapackage.json",
+          "bytes": 9539,
+          "sha256": "ccb6f794c6e4533add936c1c22aff63673097aac1c898124b02aabbbc27128da"
+        },
+        "seed2101/attempts/s2101-07-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\attempts\\s2101-07-launch\\frames.csv",
+          "bytes": 329418,
+          "sha256": "360ea4d9e69f0f20d6729cfc41f56b36d243d5adfd47d7186b6034e4ae9143fc"
+        },
+        "seed2101/collection.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\collection.json",
+          "bytes": 9528,
+          "sha256": "29577e389c6ae93b3a95f47df36e4d40a70090ee626ebeade86b7b73f6d62a1a"
+        },
+        "seed2101/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\datapackage.json",
+          "bytes": 8671,
+          "sha256": "ad4ddcb2cb96783933cfd10ec118f6c6733fee08ee039c17cce1559be5543528"
+        },
+        "seed2101/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2101\\frames.csv",
+          "bytes": 2525646,
+          "sha256": "ef9abc3c83e1e5ffd6dd7653b3c82c0a3ca3a1b8613cc14d7822823d55d5ccd1"
+        },
+        "seed2102/attempts/s2102-00-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-00-launch\\datapackage.json",
+          "bytes": 9539,
+          "sha256": "742c20f3b03c9bbe4f752307b883df9fb197548080a79467af431745726aead1"
+        },
+        "seed2102/attempts/s2102-00-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-00-launch\\frames.csv",
+          "bytes": 324355,
+          "sha256": "1162c1efbb17c6d61f8d5a3b2773d5e2f961b8874ee16cf5d70120dd8196f5a6"
+        },
+        "seed2102/attempts/s2102-01-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-01-launch\\datapackage.json",
+          "bytes": 9541,
+          "sha256": "ae22800ee350360583ca93fde1e339ca73c284a501921a70c57a6d92f0638138"
+        },
+        "seed2102/attempts/s2102-01-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-01-launch\\frames.csv",
+          "bytes": 368879,
+          "sha256": "76913840035da881b096591f31918345e5e88f87a2c5ee26ca26c7cc41c7b363"
+        },
+        "seed2102/attempts/s2102-02-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-02-launch\\datapackage.json",
+          "bytes": 9537,
+          "sha256": "107b45b7eb6a5005788a0dd310de2f42ad0afdb5554042706e391045cf31486c"
+        },
+        "seed2102/attempts/s2102-02-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-02-launch\\frames.csv",
+          "bytes": 329233,
+          "sha256": "1673f1951db6921248066cd7a377e730b04f596988e9105b2f0efce94cca53cf"
+        },
+        "seed2102/attempts/s2102-03-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-03-launch\\datapackage.json",
+          "bytes": 9545,
+          "sha256": "1c1eeb55f7ed8527989a0b67e999336dd27d0223606993f908f92b0a27f28076"
+        },
+        "seed2102/attempts/s2102-03-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-03-launch\\frames.csv",
+          "bytes": 329440,
+          "sha256": "834a6677564170825e453ca82c9a3a87f4ae7aed9e6a6eac8c3730a26feb0f28"
+        },
+        "seed2102/attempts/s2102-04-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-04-launch\\datapackage.json",
+          "bytes": 9543,
+          "sha256": "64d6f610febdde182ed32edd1fb671cae1508d16ecaee83178368a5c310f6f3b"
+        },
+        "seed2102/attempts/s2102-04-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-04-launch\\frames.csv",
+          "bytes": 241253,
+          "sha256": "09f139f684a1898df5b95049e62fc93314dd76c2d9fcd4cecf2615c796c8c21c"
+        },
+        "seed2102/attempts/s2102-05-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-05-launch\\datapackage.json",
+          "bytes": 9546,
+          "sha256": "db450a1f64d46ed99bacb6beb46084dd3fcaa87408c7adeb80cfd2d5d36b7095"
+        },
+        "seed2102/attempts/s2102-05-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-05-launch\\frames.csv",
+          "bytes": 289168,
+          "sha256": "0eeb78d0e6b7e3da522922e07cb729e5840447d62b374af8cb1e6f0223a1bcfc"
+        },
+        "seed2102/attempts/s2102-06-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-06-launch\\datapackage.json",
+          "bytes": 9547,
+          "sha256": "724b6cae9026e8de8e4e95a6a256e2f408e8607bd022c10f0b644dade4fc5f3e"
+        },
+        "seed2102/attempts/s2102-06-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-06-launch\\frames.csv",
+          "bytes": 282209,
+          "sha256": "44b0c4a90180460a9a1b4f2fe4e05bc6197464bd118d27d32d74f48d2132afa8"
+        },
+        "seed2102/attempts/s2102-07-launch/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-07-launch\\datapackage.json",
+          "bytes": 9543,
+          "sha256": "4117c6de7f2d7936a581c17637cf4b585efc378c409f7cdec218193ba845fb09"
+        },
+        "seed2102/attempts/s2102-07-launch/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\attempts\\s2102-07-launch\\frames.csv",
+          "bytes": 362717,
+          "sha256": "bbaa1c49659aa8ecd475165c112a2604a3343534da12a7187f0704319a81c9c7"
+        },
+        "seed2102/collection.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\collection.json",
+          "bytes": 9523,
+          "sha256": "b684af7e0dd6bd4c5ec7a376227db0074748029f4614dd8b332e8daac00bcada"
+        },
+        "seed2102/datapackage.json": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\datapackage.json",
+          "bytes": 8671,
+          "sha256": "9b63d332bddffe205069061ad9c11f52228a07cb2bec4ca2c9831c7c41683923"
+        },
+        "seed2102/frames.csv": {
+          "original_path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-ablation\\artifacts\\carla-1.0-objective-ablation-2026-11-18\\test\\seed2102\\frames.csv",
+          "bytes": 2524972,
+          "sha256": "3a604e00c74c22421f6039c963b930266ca3ba46460e3c93d3b71ecf9b362055"
+        }
+      }
+    }
+  }
+}
