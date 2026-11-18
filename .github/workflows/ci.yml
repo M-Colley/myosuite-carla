@@ -83,6 +83,51 @@ jobs:
             bridge/dist/*
             bridge/coverage.xml
 
+  revised-model:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      HF_HUB_OFFLINE: "1"
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned development models
+        run: >-
+          python -m pip install -c constraints/myosuite-3.1.txt
+          "mujoco==3.17.0"
+          "myosuite @ git+https://github.com/MyoHub/myosuite.git@fc0892c9c3a82163c4219dc9c5b6ba76ffd0fd04"
+          "myo-sim @ git+https://github.com/fl0fischer/myo_sim.git@dd8663bbd5af22dc49c6c38b958e0288eaeafde5"
+          -e ".[myosuite,test]"
+      - name: Verify native physics dependencies
+        run: |
+          python -m pip check
+          python - <<'PY'
+          from importlib.metadata import version
+          import mujoco
+          import myo_sim
+          from myosuite.core.model_builder import ModelBuilder
+
+          assert mujoco.mj_versionString() == version("mujoco") == "3.17.0"
+          model = myo_sim.load_spec("myofullbody").compile()
+          assert model.joint("node_LUM1_r").id >= 0
+          assert model.actuator("BIClong_r").id >= 0
+          PY
+      - name: Record dependency versions and test native driving
+        run: |
+          python -m pip freeze
+          python -m pytest tests/test_model_compatibility.py tests/test_fullbody.py tests/test_conditions.py tests/test_driving_env.py -q --junitxml=test-results/revised-model.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: revised-model-tests
+          path: test-results/revised-model.xml
+
   embodied-human:
     strategy:
       fail-fast: false

@@ -1,0 +1,206 @@
+{
+  "release": {
+    "date": "2026-11-18",
+    "python": "3.12.13 (main, Apr 14 2026, 14:31:26) [MSC v.1944 64 bit (AMD64)]",
+    "packages": {
+      "MyoSuite": "3.1.0",
+      "myo-sim": "0.2.5",
+      "mujoco": "3.17.0",
+      "numpy": "2.5.5",
+      "scipy": "1.18.1",
+      "gymnasium": "1.2.3",
+      "embodied-ui": "0.1.0",
+      "myosuite-carla": "0.2.0",
+      "pytest": "9.2.0",
+      "ruff": "0.17.5",
+      "mypy": "2.4.1",
+      "build": "1.6.1",
+      "pandas": "3.1.1",
+      "pyarrow": "26.0.1",
+      "mcap": "1.6.0",
+      "imageio": "2.38.2",
+      "mjviser": "0.0.16"
+    },
+    "source_commits": {
+      "embodied-ui": "605862bd551401bfce91afb4afcf280b2bef98fd",
+      "MyoSuite": "v3.1.0",
+      "myo-sim": "0.2.5"
+    },
+    "bridge_base_commit": "ac6b1a91f9beef8fc7c2b0177c2beb65feedc378",
+    "mujoco_runtime": "3.17.0",
+    "command": "python -m pytest tests -q",
+    "environment": {
+      "HF_HUB_OFFLINE": "1",
+      "HF_DATASETS_OFFLINE": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MPLBACKEND": "Agg"
+    },
+    "junit_summary": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "11",
+        "tests": "550",
+        "time": "241.513",
+        "timestamp": "2026-11-18T11:01:11.803603+00:00",
+        "hostname": "DESKTOP-0AVO5Q3"
+      }
+    ],
+    "source_sha256_at_result_recording": {
+      "src\\myosuite_carla\\fullbody.py": "87ad5c89c8b4e33c940838bb7b83f95ea34d234c30ac12ef4aea979568881309",
+      "tests\\test_conditions.py": "8478204ca3266d47fbbbf043fc1310c024b0c16f27c1c5179b5430463ce1aa32",
+      "tests\\test_fullbody.py": "490e59463e797e56bceaeb38f00ec71ab09b3fc636563f1d4ed9febe864ab9e6",
+      "tests\\test_model_compatibility.py": "acc3f83c184e49d58d44e6e5dc867165697d1d805c13b9fa471f022ef37af294"
+    },
+    "source_recording_note": "The recorded fullbody.py hash follows a docstring edit and one inline comment edit made after the test processes started. The parent agent confirmed unchanged executable code.",
+    "baseline_comparison": {
+      "new_cases": [
+        [
+          "tests.test_model_compatibility",
+          "test_cupping_joints_keep_their_native_ranges_and_couplings[complete]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_cupping_joints_keep_their_native_ranges_and_couplings[pruned]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_internal_tendon_nodes_keep_their_native_mobility[complete]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_internal_tendon_nodes_keep_their_native_mobility[pruned]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_seated_body_compiles_and_advances_with_native_muscle_state[complete]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_seated_body_compiles_and_advances_with_native_muscle_state[pruned]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_tendon_constraints_survive_muscle_pruning[complete]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_tendon_constraints_survive_muscle_pruning[pruned]"
+        ]
+      ],
+      "removed_cases": [],
+      "status_changes": []
+    },
+    "optional_skips": {
+      "stable_baselines3": 1,
+      "embodied_human": 4,
+      "carla_import": 1,
+      "explicit_live_server": 4,
+      "opensim": 1
+    }
+  },
+  "dev": {
+    "date": "2026-11-18",
+    "python": "3.12.13 (main, Apr 14 2026, 14:31:26) [MSC v.1944 64 bit (AMD64)]",
+    "packages": {
+      "MyoSuite": "3.1.0",
+      "myo-sim": "0.2.5",
+      "mujoco": "3.17.0",
+      "numpy": "2.5.5",
+      "scipy": "1.18.1",
+      "gymnasium": "1.2.3",
+      "embodied-ui": "0.1.0",
+      "myosuite-carla": "0.2.0",
+      "pytest": "9.2.0",
+      "ruff": "0.17.5",
+      "mypy": "2.4.1",
+      "build": "1.6.1",
+      "pandas": "3.1.1",
+      "pyarrow": "26.0.1",
+      "mcap": "1.6.0",
+      "imageio": "2.38.2",
+      "mjviser": "0.0.16"
+    },
+    "source_commits": {
+      "embodied-ui": "605862bd551401bfce91afb4afcf280b2bef98fd",
+      "MyoSuite": "fc0892c9c3a82163c4219dc9c5b6ba76ffd0fd04",
+      "myo-sim": "0.2.5"
+    },
+    "bridge_base_commit": "ac6b1a91f9beef8fc7c2b0177c2beb65feedc378",
+    "mujoco_runtime": "3.17.0",
+    "command": "python -m pytest tests -q",
+    "environment": {
+      "HF_HUB_OFFLINE": "1",
+      "HF_DATASETS_OFFLINE": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1",
+      "MPLBACKEND": "Agg"
+    },
+    "junit_summary": [
+      {
+        "name": "pytest",
+        "errors": "0",
+        "failures": "0",
+        "skipped": "11",
+        "tests": "550",
+        "time": "244.676",
+        "timestamp": "2026-11-18T11:01:12.475852+00:00",
+        "hostname": "DESKTOP-0AVO5Q3"
+      }
+    ],
+    "source_sha256_at_result_recording": {
+      "src\\myosuite_carla\\fullbody.py": "87ad5c89c8b4e33c940838bb7b83f95ea34d234c30ac12ef4aea979568881309",
+      "tests\\test_conditions.py": "8478204ca3266d47fbbbf043fc1310c024b0c16f27c1c5179b5430463ce1aa32",
+      "tests\\test_fullbody.py": "490e59463e797e56bceaeb38f00ec71ab09b3fc636563f1d4ed9febe864ab9e6",
+      "tests\\test_model_compatibility.py": "acc3f83c184e49d58d44e6e5dc867165697d1d805c13b9fa471f022ef37af294"
+    },
+    "source_recording_note": "The recorded fullbody.py hash follows a docstring edit and one inline comment edit made after the test processes started. The parent agent confirmed unchanged executable code.",
+    "baseline_comparison": {
+      "new_cases": [
+        [
+          "tests.test_model_compatibility",
+          "test_cupping_joints_keep_their_native_ranges_and_couplings[complete]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_cupping_joints_keep_their_native_ranges_and_couplings[pruned]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_internal_tendon_nodes_keep_their_native_mobility[complete]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_internal_tendon_nodes_keep_their_native_mobility[pruned]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_seated_body_compiles_and_advances_with_native_muscle_state[complete]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_seated_body_compiles_and_advances_with_native_muscle_state[pruned]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_tendon_constraints_survive_muscle_pruning[complete]"
+        ],
+        [
+          "tests.test_model_compatibility",
+          "test_tendon_constraints_survive_muscle_pruning[pruned]"
+        ]
+      ],
+      "removed_cases": [],
+      "status_changes": []
+    },
+    "optional_skips": {
+      "stable_baselines3": 1,
+      "embodied_human": 4,
+      "carla_import": 1,
+      "explicit_live_server": 4,
+      "opensim": 1
+    }
+  }
+}

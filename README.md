@@ -8,6 +8,8 @@ contact force becomes `carla.VehicleControl`. CARLA simulates the vehicle.
 
 **Compatibility target:** MyoSuite 3.1.0 or current `dev`, with CARLA 1.0 and its matching Python client. [VALIDATION.md](VALIDATION.md) records exact dependency versions, imported runtime paths, offline results and live measurements.
 
+The revised MyoHand from `myo_sim` PR 147 also runs in the offline driver with a pinned MyoSuite development commit. The driver resolves the revised muscle names and preserves native tendon constraints. The proposed model has 510 actuators. [Model proposal](https://github.com/MyoHub/myo_sim/pull/147), [validation](VALIDATION.md#revised-myosim-model-on-2026-11-18).
+
 Live validation passed against the official CARLA 1.0 package with a physics only server (`-nullrhi`). The complete primary suite passed 546 tests with one optional OpenSim skip. The MyoSuite development snapshot also passed all four live tests. The 416 muscle body passed all 13 driving checks. Applied controls, frame timing, actor cleanup and world restoration passed. The [retained evidence](evidence/carla-1.0-myosuite-3.1-2026-11-17/summary.json) identifies the exact package, client wheel and dependency sources.
 
 Earlier validation with a real CARLA 0.10.0 / UE5.5 server passed 312 tests
@@ -33,7 +35,7 @@ The package provides:
   frame-aligned feedback, emergency-brake commands and retryable cleanup.
 - A Gymnasium wrapper preserving the muscle environment's action/observation
   spaces, rewards and termination; feedback is added to `info["carla"]`.
-- A full-body driver (`myofullbody`, 416 muscles) that feels gravity, the
+- A full-body driver (`myofullbody`) that feels gravity, the
   vehicle's acceleration and rotation, and steering feel.
 - Per-frame recordings exported as a Frictionless data package (CSV), OpenSim
   `.mot`/`.sto`, an arm_force_driving CARLA recording, Parquet and MCAP.
@@ -226,9 +228,7 @@ the vehicle's physics.
 
 ## One full-body driver
 
-`build_fullbody_driver()` composes MyoSuite's `myofullbody` (416 muscles, from
-`myo_sim`) with the cockpit into one MuJoCo model. The seated body works every
-control by contact:
+`build_fullbody_driver()` composes MyoSuite's `myofullbody` from `myo_sim` with the cockpit into one MuJoCo model. The seated body works every control by contact:
 
 | Body part | Mechanism | CARLA control |
 | --- | --- | --- |
@@ -267,9 +267,7 @@ as in production cars: each press toggles them. A press must be held for
 pulls must last `paddle_hold` (0.1 s). These interlocks reject brushes from the
 steering hands. A rigid-capsule fingertip cannot hold a bottomed button under
 gravity for more than about 1 to 7 s, so sustained finger holds are outside the
-model's validity. `FullBodyDriverConfig.fast()` (2 ms physics, 114 of 416
-muscles kept) runs 2.5 times faster with the same discrete controls and
-continuous controls within 0.03; see [VALIDATION.md](VALIDATION.md).
+model's validity. `FullBodyDriverConfig.fast()` uses a 2 ms physics step and prunes muscles that act only on locked joints. On the released model, it keeps 114 of 416 muscles. The recorded released model trial ran 2.5 times faster with the same discrete controls and continuous controls within 0.03. [Validation](VALIDATION.md).
 
 `examples/validate_fullbody.py` drives a real vehicle through holding, throttle,
 push-pull steering both ways, braking, reverse, three manual gears and parking

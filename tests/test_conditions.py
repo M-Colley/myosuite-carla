@@ -59,7 +59,10 @@ def test_weak_left_side_scales_forces_and_weakens_the_brake_foot(healthy: Any) -
     weak = _build(muscle_strength=(("*_l", 0.5),))
     for name in ("soleus_l", "BIClong_l", "FDP2_l"):
         assert _peak(weak, name) == pytest.approx(0.5 * _peak(healthy, name))
-    for name in ("soleus_r", "BIClong", "FDP2"):
+    names = {healthy.model.actuator(i).name for i in range(healthy.model.nu)}
+    for muscle in ("soleus", "BIClong", "FDP2"):
+        name = f"{muscle}_r" if f"{muscle}_r" in names else muscle
+        assert name in names
         assert _peak(weak, name) == pytest.approx(_peak(healthy, name))
     braking = DriverIntent(left_foot=0.04)
     assert _hold(weak, braking)["brake"] < _hold(healthy, braking)["brake"] - 0.05
@@ -78,13 +81,15 @@ def test_sarcopenia_halves_every_peak_force(healthy: Any) -> None:
 
 def test_pre_fatigued_muscles_press_less(healthy: Any) -> None:
     tired = _build(fatigue=True, initial_fatigue=0.98)
+    tired.reset(seed=0)
+    initial = tired.measurement()["driving_fatigued_fraction"]
+    assert initial == pytest.approx(0.98, abs=1e-12)
     throttle = DriverIntent(right_foot=0.03)
     assert (
         _hold(tired, throttle)["throttle"] < _hold(healthy, throttle)["throttle"] - 0.1
     )
-    assert tired.measurement()["driving_fatigued_fraction"] == pytest.approx(
-        0.98, abs=0.01
-    )
+    # MyoSim's functional muscle groups recover during the 1.5 s hold.
+    assert 0 <= tired.measurement()["driving_fatigued_fraction"] < initial
     assert "driving_fatigued_fraction" not in healthy.measurement()
 
 
