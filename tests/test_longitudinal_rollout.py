@@ -114,6 +114,56 @@ def test_rollout_fit_ignores_unavailable_future_pitch():
     assert fitted == baseline
 
 
+def test_derivative_ablation_recovers_same_parameter_family_without_pitch():
+    baseline = carla_1_0_nissan_patrol()
+    truth = longitudinal_correction(baseline, (1.08, 1.16, 0.95, 1.08, 0.12))
+    segments = [
+        replace(synthetic_segment(truth, *values), pitch_deg=np.full(201, 25.0))
+        for values in product((0, 14, 19), (0.75, 1.0), (0.4, 0.8))
+    ]
+    params, report = fit_longitudinal_rollout(
+        segments,
+        baseline,
+        objective="derivative",
+        config=LongitudinalRolloutFitConfig(regularization_weight=0, max_nfev=40),
+    )
+    assert report["success"] and report["objective"] == "derivative"
+    assert report["use_pitch"] is False and report["measured_speed"] is True
+    assert report["fitted_data_mse"] < report["baseline_data_mse"] * 1e-6
+    np.testing.assert_allclose(
+        report["parameters"], (1.08, 1.16, 0.95, 1.08, 0.12), atol=0.003
+    )
+    assert params.steer_gain == baseline.steer_gain
+
+
+def test_moving_origin_carries_only_past_throttle_filter_state():
+    baseline = carla_1_0_nissan_patrol()
+    full = synthetic_segment(baseline, 0, 1, 0.4)
+    start, end = 100, 160
+    window = replace(
+        full,
+        name="moving",
+        **{
+            key: getattr(full, key)[start:end]
+            for key in ("throttle", "brake", "steer", "hand_brake", "reverse")
+        },
+        **{
+            key: getattr(full, key)[start : end + 1]
+            for key in ("x", "y", "yaw_deg", "pitch_deg", "speed", "yaw_rate")
+        },
+    )
+    prediction = simulate(
+        baseline, window, use_pitch=False, throttle_history=full.throttle[:start]
+    )
+    np.testing.assert_allclose(
+        prediction["speed"], full.speed[start : end + 1], atol=1e-12
+    )
+    cold = simulate(baseline, window, use_pitch=False)
+    assert np.max(np.abs(cold["speed"] - prediction["speed"])) > 1e-3
+    with pytest.raises(ValueError, match="Throttle history"):
+        simulate(baseline, window, throttle_history=[float("nan")])
+
+
 SPEC = importlib.util.spec_from_file_location(
     "longitudinal_example",
     Path(__file__).parents[1] / "examples/calibrate_longitudinal.py",
@@ -274,10 +324,16 @@ def test_loader_rejects_changed_collector(prospective_batch):
 def test_ineligible_diagnostics_cannot_select_or_authorize_testing(
     tmp_path, monkeypatch, diagnostic
 ):
-    design = (
+    original_design = (
         Path(__file__).parents[1]
         / "evidence/carla-1.0-longitudinal-2026-11-18/design.json"
     )
+    settings = json.loads(original_design.read_bytes())
+    settings["collector_sha256"] = EXAMPLE.digest(
+        EXAMPLE.PROJECT / settings["collector_file"]
+    )
+    design = tmp_path / "design.json"
+    design.write_text(json.dumps(settings), encoding="utf-8")
     output = tmp_path / "analysis"
     arguments = [
         "calibrate_longitudinal",

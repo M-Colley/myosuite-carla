@@ -563,7 +563,7 @@ def simulate(
     x, y = float(segment.x[0]), float(segment.y[0])
     yaw = math.radians(float(segment.yaw_deg[0]))
     speed, rate = float(segment.speed[0]), float(segment.yaw_rate[0])
-    history = np.asarray(throttle_history, dtype=float)
+    history: NDArray[np.float64] = np.asarray(throttle_history, dtype=float)
     if (
         history.ndim != 1
         or not np.all(np.isfinite(history))

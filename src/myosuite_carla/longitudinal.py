@@ -5,12 +5,18 @@ from __future__ import annotations
 import importlib
 from collections.abc import Sequence
 from dataclasses import asdict, dataclass, replace
-from typing import Any
+from functools import lru_cache
+from typing import Any, Literal
 
 import numpy as np
 from numpy.typing import NDArray
 
-from .vehicle_model import DriveSegment, VehicleModelParams, simulate
+from .vehicle_model import (
+    DriveSegment,
+    VehicleModelParams,
+    _longitudinal_design,
+    simulate,
+)
 
 
 @dataclass(frozen=True)
@@ -88,6 +94,7 @@ def fit_longitudinal_rollout(
     *,
     segment_weights: Sequence[float] | None = None,
     config: LongitudinalRolloutFitConfig | None = None,
+    objective: Literal["rollout", "derivative"] = "rollout",
 ) -> tuple[VehicleModelParams, dict[str, Any]]:
     """Refine five longitudinal parameters with SciPy bounded least squares.
 
@@ -95,9 +102,15 @@ def fit_longitudinal_rollout(
     Future measured speed and pitch are excluded. Segment weights determine
     each trajectory's contribution to the speed MSE. A small normalized
     parameter penalty retains support from the baseline calibration.
+
+    ``objective="derivative"`` provides the original conditional acceleration
+    target as a controlled ablation. It uses measured moving speeds, the
+    original 0.1 m/s and sign masks, and the same five parameters and prior.
     """
     if not segments:
         raise ValueError("Provide at least one complete drive segment")
+    if objective not in ("rollout", "derivative"):
+        raise ValueError("Objective must be rollout or derivative")
     settings = config if config is not None else LongitudinalRolloutFitConfig()
     weights: NDArray[np.float64] = np.asarray(
         np.ones(len(segments)) if segment_weights is None else segment_weights,
@@ -122,13 +135,43 @@ def fit_longitudinal_rollout(
     ]
     prior_scale = np.sqrt(settings.regularization_weight / len(initial))
 
-    def data_residual(values: NDArray[np.float64]) -> NDArray[np.float64]:
+    def rollout_residual(values: NDArray[np.float64]) -> NDArray[np.float64]:
         params = longitudinal_correction(baseline, values)
         return np.concatenate(
             [
                 (simulate(params, segment, use_pitch=False)["speed"] - segment.speed)
                 * scale
                 for segment, scale in zip(segments, scales)
+            ]
+        )
+
+    @lru_cache(maxsize=2)
+    def derivative_design(lag: float) -> list[tuple[Any, Any, float]]:
+        result = []
+        for segment, weight in zip(segments, weights):
+            matrix, target = _longitudinal_design([segment], baseline, lag, 0.1, False)
+            if not len(target):
+                raise ValueError("Each derivative trajectory needs moving samples")
+            result.append((matrix, target, float(np.sqrt(weight / len(target)))))
+        return result
+
+    def data_residual(values: NDArray[np.float64]) -> NDArray[np.float64]:
+        if objective == "rollout":
+            return rollout_residual(values)
+        params = longitudinal_correction(baseline, values)
+        coefficients = np.r_[
+            np.asarray(params.drive).ravel(),
+            params.reverse_drive,
+            params.rolling,
+            params.linear_drag,
+            params.quadratic_drag,
+            params.brake_decel,
+            params.hand_brake_decel,
+        ]
+        return np.concatenate(
+            [
+                (matrix @ coefficients - target) * scale
+                for matrix, target, scale in derivative_design(params.throttle_lag)
             ]
         )
 
@@ -158,13 +201,17 @@ def fit_longitudinal_rollout(
         "njev": int(result.njev) if result.njev is not None else None,
         "parameters": result.x.tolist(),
         "settings": asdict(settings),
-        "baseline_speed_mse": float(np.sum(data_residual(initial) ** 2)),
-        "fitted_speed_mse": float(np.sum(data_residual(result.x) ** 2)),
+        "objective": objective,
+        "residual_unit": "m/s" if objective == "rollout" else "m/s^2",
+        "baseline_data_mse": float(np.sum(data_residual(initial) ** 2)),
+        "fitted_data_mse": float(np.sum(data_residual(result.x) ** 2)),
+        "baseline_speed_mse": float(np.sum(rollout_residual(initial) ** 2)),
+        "fitted_speed_mse": float(np.sum(rollout_residual(result.x) ** 2)),
         "penalized_objective": float(2.0 * result.cost),
         "segments": len(segments),
         "states": sum(len(segment.speed) for segment in segments),
         "segment_weights": weights.tolist(),
         "use_pitch": False,
-        "measured_speed": False,
+        "measured_speed": objective == "derivative",
         "monotonic_drive": True,
     }
