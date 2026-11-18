@@ -1,0 +1,12 @@
+{
+  "launcher_pid": 29888,
+  "runtime": "C:\\Users\\localadmin\\Desktop\\Carla-1.0-Win64-Shipping",
+  "flags": [
+    "-nullrhi",
+    "-nosound",
+    "-unattended",
+    "-notrace",
+    "-carla-rpc-port=2000"
+  ],
+  "started_utc": "2026-11-18T13:17:22.3413734Z"
+}

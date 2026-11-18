@@ -29,6 +29,14 @@ Validation seed 21 failed steering hold coverage before fitting. Reserve seed 22
 
 MyoSuite 3.1.0 and dev commit `c93329ec64bc8b544d0b3427bba6766377c3528e` each passed 616 offline tests on the frozen selection commit. Each suite had six skips for optional dependencies and disabled live tests. Both environments completed the scripted physical following check with the accepted vehicle, the 114 muscle body and a matching acceleration inverse. The check used two 2 s episodes per environment. Human controller parameters require a separate empirical comparison. [Release suite](evidence/carla-1.0-vehicle-calibration-2026-11-17/checks/full-calibration-0.txt) [Development suite](evidence/carla-1.0-vehicle-calibration-2026-11-17/checks/full-calibration-1.txt) [Embodied human checks](evidence/carla-1.0-vehicle-calibration-2026-11-17/README.md#recorded-data)
 
+## High speed CARLA 1.0 longitudinal follow up on 2026-11-18
+
+The bounded longitudinal correction passed all predefined checks on 36 fresh Nissan Patrol trials in Town12. The trials combined speed targets of 17, 19.5 and 22 m/s with two throttle and two service brake levels. Mean speed RMSE fell from 1.830 to 1.192 m/s. Mean final position error fell from 14.576 to 9.956 m. The 95th percentile of trial speed RMSE fell from 3.092 to 1.672 m/s. There were three final seed batches. The mean paired primary error change was −3.016 (m/s)² (95% seed batch percentile interval [−3.036, −3.003]). [Protocol, commands and results](evidence/carla-1.0-longitudinal-2026-11-18/README.md)
+
+The collector used the official CARLA 1.0 Windows package and its matching client. The recorded map was `Carla/Maps/Town12/Town12`. The profile preserves the C3 steering and reverse drive terms. The test supports its use for the tested forward speed range and programmes. The archived parameters can be loaded explicitly with `VehicleModelParams.from_dict`. The public C3 factory retains its original parameters. [Accepted parameters](evidence/carla-1.0-longitudinal-2026-11-18/accepted-parameters.json)
+
+MyoSuite 3.1.0 and development commit `c93329ec64bc8b544d0b3427bba6766377c3528e` each passed 650 offline tests with six optional or disabled tests skipped. Both environments used myo-sim 0.2.5 and MuJoCo 3.17.0. Ruff, mypy and both distribution builds passed. [Checks and package hashes](evidence/carla-1.0-longitudinal-2026-11-18/checks/full-offline-summary.json)
+
 ## CARLA 1.0 and MyoSuite 3.1 on 2026-11-17
 
 The bridge passes offline and live validation against MyoSuite 3.1.0 and current development source. Both retain the public model builder, muscle condition and motor noise APIs used by this package. The model assets were upgraded to `myo-sim` 0.2.5. The official CARLA 1.0 Windows package was installed and tested with its bundled client. The replaced CARLA 0.10 runtime was removed after acceptance.

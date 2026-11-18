@@ -1,0 +1,2 @@
+Verified test.zip: 82 files
+Saved C:\Users\localadmin\Desktop\myosuite-carla-launch\evidence\carla-1.0-longitudinal-2026-11-18\data\test\manifest.json

@@ -1,0 +1,9 @@
+{
+  "server": "1.0",
+  "client": "1.0",
+  "map": "Carla/Maps/Town12/Town12",
+  "synchronous": false,
+  "fixed_delta_seconds": null,
+  "vehicles": [],
+  "collision_sensors": []
+}
