@@ -1,0 +1,90 @@
+{
+  "case": "pr147",
+  "python": "3.12.13 (main, Apr 14 2026, 14:31:26) [MSC v.1944 64 bit (AMD64)]",
+  "bridge_file": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-myosim03\\src\\myosuite_carla\\__init__.py",
+  "packages": {
+    "MyoSuite": {
+      "version": "3.1.0",
+      "direct_url": {
+        "url": "file:///C:/Users/localadmin/Desktop/embodied-human/artifacts/myosuite-fc0892c.zip",
+        "archive_info": {}
+      }
+    },
+    "myo-sim": {
+      "version": "0.2.5",
+      "direct_url": {
+        "url": "file:///C:/Users/localadmin/Desktop/embodied-human/artifacts/myo-sim-dd8663b.zip",
+        "archive_info": {}
+      }
+    },
+    "mujoco": {
+      "version": "3.17.0",
+      "direct_url": null
+    },
+    "numpy": {
+      "version": "2.5.5",
+      "direct_url": null
+    },
+    "scipy": {
+      "version": "1.18.1",
+      "direct_url": null
+    },
+    "gymnasium": {
+      "version": "1.2.3",
+      "direct_url": null
+    },
+    "embodied-ui": {
+      "version": "0.1.0",
+      "direct_url": {
+        "url": "file:///C:/Users/localadmin/Desktop/myosuite-carla-myosim03/artifacts/embodied_ui.zip",
+        "archive_info": {}
+      }
+    },
+    "myosuite-carla": {
+      "version": "0.2.0",
+      "direct_url": {
+        "url": "file:///C:/Users/localadmin/Desktop/myosuite-carla-myosim03",
+        "dir_info": {
+          "editable": true
+        }
+      }
+    },
+    "pytest": {
+      "version": "9.2.0",
+      "direct_url": null
+    },
+    "ruff": {
+      "version": "0.17.5",
+      "direct_url": null
+    },
+    "mypy": {
+      "version": "2.4.1",
+      "direct_url": null
+    },
+    "build": {
+      "version": "1.6.1",
+      "direct_url": null
+    },
+    "pandas": {
+      "version": "3.1.1",
+      "direct_url": null
+    },
+    "pyarrow": {
+      "version": "26.0.1",
+      "direct_url": null
+    },
+    "mcap": {
+      "version": "1.6.0",
+      "direct_url": null
+    },
+    "imageio": {
+      "version": "2.38.2",
+      "direct_url": null
+    },
+    "mjviser": {
+      "version": "0.0.16",
+      "direct_url": null
+    }
+  },
+  "mujoco_runtime": "3.17.0"
+}

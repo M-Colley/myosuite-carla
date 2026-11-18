@@ -1,0 +1,34 @@
+{
+  "default": {
+    "actuators": 510,
+    "gaps": {
+      "throttle": 0.001365757457571004,
+      "brake": 0.0013657007001636572,
+      "cradle_r_upper": 0.0014999999999998556,
+      "cradle_r_lower": 0.0014999999999999927,
+      "cradle_l_upper": 0.0015000000000001505,
+      "cradle_l_lower": 0.0015000000000000586,
+      "gear": 0.005570382805049371,
+      "reverse": 0.004015611213981799,
+      "park": 0.005576179006722389
+    },
+    "pose_sha256": "6f3d7af29e5b28931dc4cdaa8374daf1f9d0cfe39c57901cc7b2d4a39ce57af9",
+    "trace_sha256": "31641ed7ac4891ee2ffc465a213804a782a5c2d960e5883a5ff9c9208ca3d289"
+  },
+  "fast": {
+    "actuators": 130,
+    "gaps": {
+      "throttle": 0.0013657595142572247,
+      "brake": 0.001365702834484367,
+      "cradle_r_upper": 0.0014999999999999389,
+      "cradle_r_lower": 0.0015000000000000967,
+      "cradle_l_upper": 0.0014999999999999996,
+      "cradle_l_lower": 0.0014999999999999614,
+      "gear": 0.006129651099294109,
+      "reverse": 0.003763676114986553,
+      "park": 0.006135426824096377
+    },
+    "pose_sha256": "6a904fc528e92468036412f792f7677bfe785917a11a3820f3ab96a20f52fd43",
+    "trace_sha256": "1dbcf913edf1621b48dff261297a4ca6bc372ffec55f0abe30c63dc64ad63f68"
+  }
+}

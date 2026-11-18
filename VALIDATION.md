@@ -1,5 +1,15 @@
 # Validation record
 
+## Revised MyoSim model on 2026-11-18
+
+The driver builds and operates the cockpit with the revised full body from `myo_sim` PR 147. It resolves the renamed elbow and finger actuators, including both heads of the first dorsal interosseous. It preserves the native motion and constraints of the 14 internal tendon node joints and four CMC4 and CMC5 joints. Pruning retains muscles whose tendons participate in an equality constraint. [Model proposal](https://github.com/MyoHub/myo_sim/pull/147), [model anatomy and names](https://github.com/fl0fischer/myo_sim/blob/dd8663bbd5af22dc49c6c38b958e0288eaeafde5/myo_sim/models/arm/README.md).
+
+The proposed model has 510 actuators in the complete driver and 130 in the fast driver. Clearance fitting uses the revised hand's metacarpal contact surfaces for the four cradle plates. All four gaps reach 1.5 mm in both modes. Offline sequences verified pedal actuation, steering in both directions, return to rest, reverse selection with the brake interlock, parking brake toggles and sequential shifting. A comparison with bridge PR 2 (`ac6b1a91`) on model version 0.2.5 reproduced the rest poses, initial gaps and all 60 sampled outputs exactly in both modes. [Proposed model clearances](evidence/myosim03/proposed-geometry.json), [control comparison](evidence/myosim03/released-control-parity.json).
+
+The bridge suite passed 539 tests on each of three stacks. MyoSuite 3.1.0 and MyoSuite development ran with the released model. MyoSuite development also ran with the proposed model. Each stack skipped 11 optional tests. The bridge PR 2 baseline passed 531 tests. Eight new tests per stack verify joint and tendon constraints, model compilation and actual actuator pruning. The fatigue test checks the configured initial state at reset and tests recovery and reduced pedal travel during the press. [Release JUnit](evidence/myosim03/bridge-release.xml), [development JUnit](evidence/myosim03/bridge-dev.xml), [proposed model JUnit](evidence/myosim03/bridge-proposed.xml), [released model environments](evidence/myosim03/bridge-release-dev-environments.json), [proposed model environment](evidence/myosim03/proposed-environment.json).
+
+The candidate used MyoSuite development commit `fc0892c9c3a82163c4219dc9c5b6ba76ffd0fd04` and model commit `dd8663bbd5af22dc49c6c38b958e0288eaeafde5`. We applied the [MuJoCo constraints](constraints/myosuite-3.1.txt) on Windows with Python 3.12.13 and MuJoCo 3.17.0. CI checks the proposed model's actuator and joint identities and runs the native physics and driving tests. Hosted execution and live CARLA behavior for the proposed model remain unverified. [CI configuration](.github/workflows/ci.yml).
+
 ## CARLA 1.0 and MyoSuite 3.1 on 2026-11-17
 
 The bridge passes offline and live validation against MyoSuite 3.1.0 and current development source. Both retain the public model builder, muscle condition and motor noise APIs used by this package. The model assets were upgraded to `myo-sim` 0.2.5. The official CARLA 1.0 Windows package was installed and tested with its bundled client. The replaced CARLA 0.10 runtime was removed after acceptance.

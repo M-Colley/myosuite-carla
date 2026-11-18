@@ -1,0 +1,95 @@
+{
+  "date": "2026-11-18",
+  "baseline_bridge": "ac6b1a91f9beef8fc7c2b0177c2beb65feedc378",
+  "python": "3.12.13",
+  "mujoco": "3.17.0",
+  "myosuite": "3.1.0",
+  "myo_sim": "0.2.5",
+  "seed": 0,
+  "control_period_seconds": 0.02,
+  "sequence": [
+    {
+      "periods": 20,
+      "intent": {}
+    },
+    {
+      "periods": 20,
+      "intent": {
+        "steer": 0.14,
+        "right_foot": 0.03
+      }
+    },
+    {
+      "periods": 20,
+      "intent": {}
+    }
+  ],
+  "before": {
+    "default": {
+      "actuators": 416,
+      "gaps": {
+        "throttle": 0.0013659760574749429,
+        "brake": 0.0013659186497073997,
+        "cradle_r_upper": 0.0013699750939960374,
+        "cradle_r_lower": 0.0015000000000002008,
+        "cradle_l_upper": 0.0013605152964537171,
+        "cradle_l_lower": 0.0014999999999999614,
+        "gear": 0.0070966117033496355,
+        "reverse": 0.005854177134202692,
+        "park": 0.007127010589388929
+      },
+      "pose_sha256": "18606179dd1df818407fccb632ea8398d93c1e2bcdda050127bc248a9aeff73d",
+      "trace_sha256": "637a9107345fcee00dc605dc00698a6845bfa9c9f675ba3dc0d4ee4776d140ef"
+    },
+    "fast": {
+      "actuators": 114,
+      "gaps": {
+        "throttle": 0.0013659908823519598,
+        "brake": 0.0013659340093198774,
+        "cradle_r_upper": 0.0013722261122753997,
+        "cradle_r_lower": 0.0015000000000001974,
+        "cradle_l_upper": 0.001362822034751389,
+        "cradle_l_lower": 0.0014999999999999805,
+        "gear": 0.00757405622878945,
+        "reverse": 0.006262373553608129,
+        "park": 0.007613929687960144
+      },
+      "pose_sha256": "ffe2a5cef5a51654a498a316418ce97dd3ddfa20eef8a27e8df86034d181d9c0",
+      "trace_sha256": "029afec46e98b11d4d8ec05683e78c1e0d3c1f6ffcd759b496c28fcf4afcd665"
+    }
+  },
+  "after": {
+    "default": {
+      "actuators": 416,
+      "gaps": {
+        "throttle": 0.0013659760574749429,
+        "brake": 0.0013659186497073997,
+        "cradle_r_upper": 0.0013699750939960374,
+        "cradle_r_lower": 0.0015000000000002008,
+        "cradle_l_upper": 0.0013605152964537171,
+        "cradle_l_lower": 0.0014999999999999614,
+        "gear": 0.0070966117033496355,
+        "reverse": 0.005854177134202692,
+        "park": 0.007127010589388929
+      },
+      "pose_sha256": "18606179dd1df818407fccb632ea8398d93c1e2bcdda050127bc248a9aeff73d",
+      "trace_sha256": "637a9107345fcee00dc605dc00698a6845bfa9c9f675ba3dc0d4ee4776d140ef"
+    },
+    "fast": {
+      "actuators": 114,
+      "gaps": {
+        "throttle": 0.0013659908823519598,
+        "brake": 0.0013659340093198774,
+        "cradle_r_upper": 0.0013722261122753997,
+        "cradle_r_lower": 0.0015000000000001974,
+        "cradle_l_upper": 0.001362822034751389,
+        "cradle_l_lower": 0.0014999999999999805,
+        "gear": 0.00757405622878945,
+        "reverse": 0.006262373553608129,
+        "park": 0.007613929687960144
+      },
+      "pose_sha256": "ffe2a5cef5a51654a498a316418ce97dd3ddfa20eef8a27e8df86034d181d9c0",
+      "trace_sha256": "029afec46e98b11d4d8ec05683e78c1e0d3c1f6ffcd759b496c28fcf4afcd665"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 """A seated MyoSuite full-body driver that operates every control with muscles.
 
-The body is MyoSuite's ``myofullbody`` (416 muscles) from ``myo_sim``. Its
+The body is MyoSuite's ``myofullbody`` from ``myo_sim``. Its
 pelvis is fixed to the seat. MuJoCo's own gravity is disabled because the
 cockpit frame moves with the car: gravity and the vehicle's d'Alembert loads
 are applied to the body segments instead (:mod:`.vehicle_loads`). Trunk, hips,
@@ -77,6 +77,9 @@ FREE_JOINT_PREFIXES = (
     "mtp_angle_",
     "elbow_flexion_",
     "cmc_",
+    "cmc4_",
+    "cmc5_",
+    "node_",
     "mp_flexion",
     "ip_flexion",
     "mcp",
@@ -86,6 +89,34 @@ FREE_JOINT_PREFIXES = (
 ELBOW_FLEXORS = ("BIClong", "BICshort", "BRA", "BRD")
 ELBOW_EXTENSORS = ("TRIlong", "TRIlat", "TRImed", "ANC")
 PLANTARFLEXORS = ("soleus", "gasmed", "gaslat")
+
+# The revised MyoHand splits the first dorsal interosseous into two heads.
+# Source: myo_sim PR 147, models/arm/README.md (intrinsic muscle names).
+_REVISED_INTRINSICS = {
+    "RI2": ("DI1d", "DI1s"),
+    "UI_UB2": ("PI1",),
+    "LU_RB2": ("LUM1",),
+    "RI5": ("PI3",),
+    "UI_UB5": ("ADM",),
+    "LU_RB5": ("LUM4",),
+}
+
+
+def _actuator_ids(model: mujoco.MjModel, names: tuple[str, ...]) -> list[int]:
+    """Resolve the released names or their revised MyoHand equivalents."""
+    indices = []
+    for name in names:
+        index = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_ACTUATOR, name)
+        if index >= 0:
+            indices.append(index)
+            continue
+        if name.endswith(("_l", "_r")):
+            muscle, side = name.rsplit("_", 1)
+        else:
+            muscle, side = name, "r"
+        revised = _REVISED_INTRINSICS.get(muscle, (muscle,))
+        indices.extend(model.actuator(f"{alias}_{side}").id for alias in revised)
+    return indices
 
 
 def _side(names: tuple[str, ...], side: str) -> tuple[str, ...]:
@@ -164,8 +195,9 @@ class FullBodyDriverConfig:
         elbow_tone: Common co-activation of elbow flexors and extensors.
         max_gear: Highest manual gear selected by the paddle.
         settle_seconds: Passive settling time before mechanisms are placed.
-        prune_locked_muscles: Remove the muscles that cross only locked joints
-            (302 of 416); see ``_prune_locked_muscles`` and the parity record.
+        prune_locked_muscles: Remove muscles that act only on locked joints.
+            Tendon constraints can transmit force across joints, so coupled
+            tendons and their actuators are retained.
         vehicle_loads: Apply gravity and vehicle-motion d'Alembert loads to
             the body's segments (never to the mechanisms).
         seat_offset: Pelvis position from the vehicle reference point in
@@ -481,8 +513,8 @@ class _Reflex:
         index = model.joint(joint).id
         self.qpos = int(model.jnt_qposadr[index])
         self.dof = int(model.jnt_dofadr[index])
-        self.flexors = [model.actuator(name).id for name in flexors]
-        self.extensors = [model.actuator(name).id for name in extensors]
+        self.flexors = _actuator_ids(model, flexors)
+        self.extensors = _actuator_ids(model, extensors)
         self.gains = gains
         self.tone = tone
         self.setpoint = 0.0
@@ -608,9 +640,17 @@ def _prune_locked_muscles(spec: mujoco.MjSpec, posture: dict[str, float]) -> Non
         data.qpos[model.jnt_qposadr[model.joint(name).id]] = value
     crossing = np.zeros(model.nu, dtype=bool)
     moments = np.zeros((model.nu, model.nv))
+    coupled_tendons = {
+        name
+        for equality in spec.equalities
+        if equality.type == mujoco.mjtEq.mjEQ_TENDON
+        for name in (equality.name1, equality.name2)
+    }
     for displacement in (0.0, 0.15):
         for index in range(model.njnt):
-            if model.joint(index).name.startswith(FREE_JOINT_PREFIXES):
+            name = model.joint(index).name
+            # Tendon constraints determine slide positions for internal nodes.
+            if name.startswith(FREE_JOINT_PREFIXES) and not name.startswith("node_"):
                 low, high = model.jnt_range[index]
                 address = model.jnt_qposadr[index]
                 data.qpos[address] = np.clip(displacement, low, high)
@@ -626,7 +666,7 @@ def _prune_locked_muscles(spec: mujoco.MjSpec, posture: dict[str, float]) -> Non
     pruned = {model.actuator(index).name for index in np.flatnonzero(~crossing)}
     tendons = set()
     for actuator in list(spec.actuators):
-        if actuator.name in pruned:
+        if actuator.name in pruned and actuator.target not in coupled_tendons:
             tendons.add(actuator.target)
             spec.delete(actuator)
     used = {actuator.target for actuator in spec.actuators} | {
@@ -669,7 +709,7 @@ class _ExcitationPlan:
 
 def _excitation_plan(model: mujoco.MjModel) -> _ExcitationPlan:
     def ids(names: tuple[str, ...]) -> np.ndarray:
-        return np.asarray([model.actuator(name).id for name in names], dtype=int)
+        return np.asarray(_actuator_ids(model, names), dtype=int)
 
     return _ExcitationPlan(
         groups=tuple(
@@ -1079,25 +1119,25 @@ def _gap(
     )
 
 
-_HAND_BODIES = (
-    "secondmc",
-    "thirdmc",
-    "fourthmc",
-    "fifthmc",
-    "2proxph",
-    "3proxph",
-    "4proxph",
-    "5proxph",
+_CRADLE_CONTACT_BODIES = ("secondmc", "thirdmc", "fourthmc", "fifthmc")
+_LEGACY_CRADLE_FIT_BODIES = _CRADLE_CONTACT_BODIES + tuple(
+    f"{digit}proxph" for digit in range(2, 6)
 )
 
 
-def _clearance_checks() -> dict[str, tuple[str, tuple[str, ...]]]:
+def _clearance_checks(model: mujoco.MjModel) -> dict[str, tuple[str, tuple[str, ...]]]:
     checks: dict[str, tuple[str, tuple[str, ...]]] = {
         "throttle": ("cockpit_throttle_surface", ("calcn_r", "toes_r")),
         "brake": ("cockpit_brake_surface", ("calcn_l", "toes_l")),
     }
+    revised_hand = (
+        mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, "cmc4_flexion_r") >= 0
+    )
+    # The legacy calibration includes the proximal phalanges. On the revised
+    # hand their collision shapes mask the clearance of the actual contact pair.
+    fit_bodies = _CRADLE_CONTACT_BODIES if revised_hand else _LEGACY_CRADLE_FIT_BODIES
     for side in "rl":
-        hand = tuple(f"{name}_{side}" for name in _HAND_BODIES)
+        hand = tuple(f"{name}_{side}" for name in fit_bodies)
         for plate in ("upper", "lower"):
             checks[f"cradle_{side}_{plate}"] = (f"cradle_{side}_{plate}", hand)
     for name, control in FINGER_CONTROLS.items():
@@ -1184,13 +1224,14 @@ class FullBodyDriver:
         self._plan = _excitation_plan(model)
         self._substeps = round(config.control_dt / config.timestep)
         driving = {
-            muscle
-            for agonists, antagonists in _muscle_groups().values()
-            for muscle in agonists + antagonists
+            int(index)
+            for _, agonists, antagonists in self._plan.groups
+            for group in (agonists, antagonists)
+            for index in group
         }
-        for side in "rl":
-            driving.update(_side(ELBOW_FLEXORS + ELBOW_EXTENSORS, side))
-        self._driving_muscles = sorted(model.actuator(name).id for name in driving)
+        for reflex in self._reflexes.values():
+            driving.update(reflex.flexors + reflex.extensors)
+        self._driving_muscles = sorted(driving)
         self._loads = _body_loads(model, config)
         self._steering_dof = int(
             model.jnt_dofadr[model.joint(cockpit.names.steering_joint).id]
@@ -1416,7 +1457,7 @@ def build_fullbody_driver(
     body = _body_spec(config).compile()
     rest, integrals = _settle(body, config)
     layout = _layout(body, rest, config, integrals)
-    checks = _clearance_checks()
+    checks = _clearance_checks(body)
     shifts = {key: 0.0 for key in checks}
     gaps: dict[str, float] = {}
     for iteration in range(3):

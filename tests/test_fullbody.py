@@ -56,10 +56,15 @@ def test_importing_the_package_loads_neither_carla_nor_myosuite() -> None:
 
 def test_one_full_body_model_contains_every_mechanism(driver: Any) -> None:
     import mujoco
+    import myo_sim
 
     model = driver.model
+    source = myo_sim.load_spec("myofullbody").compile()
     muscles = np.count_nonzero(model.actuator_dyntype == mujoco.mjtDyn.mjDYN_MUSCLE)
-    assert muscles == model.nu == 416
+    assert muscles == model.nu == source.nu
+    assert {model.actuator(i).name for i in range(model.nu)} == {
+        source.actuator(i).name for i in range(source.nu)
+    }
     for name in (
         "cockpit_throttle_joint",
         "cockpit_brake_joint",
