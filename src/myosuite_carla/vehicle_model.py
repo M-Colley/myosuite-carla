@@ -998,7 +998,7 @@ def evaluate_vehicle_model(
 #: (``evidence/steer-lag-speed-2026-11-04``, VALIDATION.md, 2026-11-04). The
 #: steering gains are identified from about 2.4 to 13.6 m/s and confirmed to
 #: three-quarter lock at 0.8-3 m/s; reverse up to throttle 0.53. CARLA 1.0
-#: steers linearly and needs its own fit.
+#: has a separate fitted preset below.
 _PATROL: dict[str, Any] = {
     "wheelbase": 3.075,
     "speed_knots": [0, 1, 2.5, 4, 6, 8, 11, 15, 20],
@@ -1068,3 +1068,95 @@ _PATROL: dict[str, Any] = {
 def carla_nissan_patrol() -> VehicleModelParams:
     """Return the surrogate identified for CARLA 0.10.0's Nissan Patrol."""
     return VehicleModelParams.from_dict(_PATROL)
+
+
+#: CARLA 1.0 (UE5.8) ``vehicle.nissan.patrol`` on Town10HD_Opt, candidate C3.
+#: Full precision parameters are preserved in
+#: ``evidence/carla-1.0-vehicle-calibration-2026-11-17/frozen-selection.json``.
+#: Selection and independent test results are recorded in ``fit-report.json``
+#: and ``test-report.json`` in the same directory. The steering exponent is
+#: the selected effective model parameter.
+_PATROL_1_0: dict[str, Any] = {
+    "wheelbase": 3.075,
+    "speed_knots": [0.0, 1.0, 2.5, 4.0, 6.0, 8.0, 11.0, 15.0, 20.0],
+    "throttle_knots": [0.25, 0.5, 0.75, 1.0],
+    "drive": [
+        [
+            0.09438937178635569,
+            0.18972057876624326,
+            0.2872408750890336,
+            0.44887350978271595,
+            0.6479181505607112,
+            0.8265217131993938,
+            0.9762416438859721,
+            1.1391112734223507,
+            1.3082501929412893,
+        ],
+        [
+            0.7178910874277288,
+            0.9948369067314335,
+            1.3679749306245537,
+            1.8798598952296186,
+            2.330714731295173,
+            2.573044713355567,
+            2.614337006088568,
+            2.6101046721356096,
+            2.5938530842218124,
+        ],
+        [
+            1.3736384093849798,
+            1.9069108770651846,
+            2.577018878942993,
+            3.409364992626544,
+            4.1094913089618395,
+            4.4265530534659305,
+            4.3485670643766525,
+            4.117314503209102,
+            3.8756718194521143,
+        ],
+        [
+            2.07186980080167,
+            2.882621167444341,
+            3.8362738050383114,
+            5.0224692474053985,
+            5.997739170415901,
+            6.377329514267615,
+            6.156334250811415,
+            5.659461971757522,
+            5.158978627924107,
+        ],
+    ],
+    "reverse_drive": [
+        0.3309311094990647,
+        0.9706306035520047,
+        1.6105574485331298,
+        2.250484293514255,
+    ],
+    "steer_gain": [
+        0.9671183493924813,
+        0.9671183493924813,
+        0.9347382582806371,
+        0.909348419806357,
+        0.8907760548444505,
+        0.8746871156620434,
+        0.8599122033968012,
+        0.8469827713089422,
+        0.8469827713089422,
+    ],
+    "steer_exponent": 0.9710941521174783,
+    "steer_rise_rate": 2.5,
+    "steer_fall_rate": 5.0,
+    "rolling": 0.26151369907707717,
+    "linear_drag": 0.0,
+    "quadratic_drag": 0.005088590406164401,
+    "brake_decel": 6.4933400436739435,
+    "hand_brake_decel": 4.875545383891894,
+    "throttle_lag": 0.075,
+    "steer_lag": 4.03431560642913e-23,
+    "steer_lag_slope": 0.01,
+}
+
+
+def carla_1_0_nissan_patrol() -> VehicleModelParams:
+    """Return the surrogate identified for CARLA 1.0's Nissan Patrol."""
+    return VehicleModelParams.from_dict(_PATROL_1_0)

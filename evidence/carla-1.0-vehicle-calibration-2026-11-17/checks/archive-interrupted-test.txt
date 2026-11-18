@@ -1,0 +1,2 @@
+Verified test.zip: 169 files
+Saved C:\Users\localadmin\Desktop\myosuite-carla\evidence\carla-1.0-vehicle-calibration-2026-11-17\data\interrupted-test\manifest.json

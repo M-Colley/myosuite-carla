@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 from dataclasses import replace
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -16,6 +18,7 @@ from myosuite_carla.vehicle_model import (
     THROTTLE_KNOTS,
     SurrogateVehicle,
     VehicleModelParams,
+    carla_1_0_nissan_patrol,
     carla_nissan_patrol,
     evaluate_vehicle_model,
     fit_vehicle_model,
@@ -98,6 +101,33 @@ def test_params_validate_and_round_trip_through_json() -> None:
     with pytest.raises(ValueError, match="steer_exponent"):
         VehicleModelParams(steer_exponent=0.2)
     assert isinstance(carla_nissan_patrol(), VehicleModelParams)
+
+
+def test_versioned_patrol_preset_preserves_selection_and_legacy_defaults() -> None:
+    from myosuite_carla.driver_models import AccelerationControlConfig
+
+    evidence = Path(__file__).parents[1] / "evidence"
+    frozen = json.loads(
+        (
+            evidence / "carla-1.0-vehicle-calibration-2026-11-17/frozen-selection.json"
+        ).read_text(encoding="utf-8")
+    )
+    params = carla_1_0_nissan_patrol()
+    assert frozen["selected"] == "C3"
+    assert params.as_dict() == frozen["parameters"]
+    assert (
+        VehicleModelParams.from_dict(json.loads(json.dumps(params.as_dict()))) == params
+    )
+    assert AccelerationControlConfig(vehicle=params).vehicle is params
+    assert SurrogateVehicle(params).params is params
+    legacy = carla_nissan_patrol()
+    assert params != legacy
+    assert SurrogateVehicle().params == legacy
+    assert AccelerationControlConfig().vehicle == legacy
+    digest = hashlib.sha256(json.dumps(legacy.as_dict(), sort_keys=True).encode())
+    assert digest.hexdigest() == (
+        "c9ed0aa941d8e4c23a0616b430bd1c0482b3b91a631eadaf11fb969dd1543e08"
+    )
 
 
 def test_parameters_saved_without_an_exponent_load_as_linear() -> None:
