@@ -1,5 +1,17 @@
 # Validation record
 
+## Live embodied following on 2026-11-18
+
+The combined embodied human source completed a 12 s following and braking episode on CARLA 1.0. The 114 muscle body executed 600 fixed steps at 50 Hz. The lead began braking at 4 s with a deceleration of 2.5 m/s². The minimum bumper gap was 2.247 m. The maximum absolute lane offset was 0.101 m. The maximum difference between commanded and applied control was 0.00000000745. CARLA reported zero collision contacts. All test actors were removed and the world settings were restored. [Summary and recording checksums](evidence/carla-1.0-embodied-following-2026-11-18/summary.json)
+
+The episode used the official CARLA 1.0 Windows package and its matching 1.0 client. The map was `Town10HD_Opt`, spawn 80. The human checkout combined the head kinematics and empirical evaluation branches at `03d1ec1`. The live controller used the inverse derived from the frozen CARLA 1.0 Nissan Patrol fit. Its configured delay was 0.04 s and its steady observation history lag was 0.02 s. The live test was an engineering check with a scripted lead vehicle. [Full telemetry and configuration](evidence/carla-1.0-embodied-following-2026-11-18/recordings.zip)
+
+The live source record captured changes in both worktrees. The archived recorder and all 24 bridge source files match the subsequent bridge commit. Of the 69 human files, 66 match the final combined source exactly. Three modules changed during subsequent development of the offline calibration tools. The live recorder uses the unchanged human driver and sensing modules. Both release and development environments passed 626 offline bridge tests and skipped six optional or disabled tests. Ruff, mypy and the distribution builds passed. [Source comparison](evidence/carla-1.0-embodied-following-2026-11-18/provenance.json) [Release suite](evidence/carla-1.0-embodied-following-2026-11-18/bridge-tests-0.txt) [Development suite](evidence/carla-1.0-embodied-following-2026-11-18/bridge-tests-1.txt)
+
+```powershell
+python examples/record_embodied_human.py --human-repo PATH --scenario lead_brake --fast --seconds 12 --task none --seed 42 --spawn 80 --reflex-config reflex-c3.json --telemetry-only --record live-following-recording --output live-following.mp4
+```
+
 ## Revised MyoSim model on 2026-11-18
 
 The driver builds and operates the cockpit with the revised full body from `myo_sim` PR 147. It resolves the renamed elbow and finger actuators, including both heads of the first dorsal interosseous. It preserves the native motion and constraints of the 14 internal tendon node joints and four CMC4 and CMC5 joints. Pruning retains muscles whose tendons participate in an equality constraint. [Model proposal](https://github.com/MyoHub/myo_sim/pull/147), [model anatomy and names](https://github.com/fl0fischer/myo_sim/blob/dd8663bbd5af22dc49c6c38b958e0288eaeafde5/myo_sim/models/arm/README.md).

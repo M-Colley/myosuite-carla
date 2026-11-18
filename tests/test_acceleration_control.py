@@ -137,6 +137,22 @@ def test_configuration_roundtrip_preserves_typed_vehicle_and_controller():
     assert legacy.acceleration_control is None and legacy.idm.time_headway == 2
 
 
+def test_reported_history_lag_matches_retained_speed_sample():
+    immediate = ReflexDriver(0.02, ReflexDriverConfig(perception_delay=0.02))
+    delayed = ReflexDriver(0.02, ReflexDriverConfig(perception_delay=0.04))
+    for driver in (immediate, delayed):
+        driver.act(_state(speed=5))
+        driver.act(_state(speed=12))
+    assert immediate.perception_history_lag_s == 0.0
+    assert delayed.perception_history_lag_s == 0.02
+    assert immediate.demand[0] == pytest.approx(
+        idm_acceleration(12, 16, None, 0, immediate.config.idm)
+    )
+    assert delayed.demand[0] == pytest.approx(
+        idm_acceleration(5, 16, None, 0, delayed.config.idm)
+    )
+
+
 @pytest.mark.parametrize(
     "change",
     [
