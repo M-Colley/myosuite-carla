@@ -254,6 +254,113 @@ class Segment:
         raise RuntimeError(f"Unknown segment state {self.kind}/{self.stage}")
 
 
+class MovingProbe(Segment):
+    """Reach a moving origin, apply a fixed probe, and stop within the road."""
+
+    SETTINGS = {
+        "approach_throttle": 1.0,
+        "braking_approach_peak_mps": 22.0,
+        "approach_brake": 0.4,
+        "probe_throttle": 0.75,
+        "probe_brake": 0.4,
+        "probe_seconds": 1.0,
+        "coast_seconds": 1.0,
+        "stop_brake": 0.6,
+        "forecast_seconds": 3.0,
+        "entry_tolerance_mps": 0.25,
+    }
+
+    def __init__(
+        self,
+        rng: np.random.Generator,
+        budget: float,
+        profile: tuple[float, str, str],
+    ) -> None:
+        super().__init__("launch", rng, budget)
+        self.target, self.history, self.action = profile
+        self.targeted_launch = True
+        self.level = self.SETTINGS["approach_throttle"]
+        self.brake = self.SETTINGS["stop_brake"]
+        self.probe_origin_row: int | None = None
+        self.probe_entry_speed: float | None = None
+
+    def _probe_command(self) -> VehicleCommand:
+        if self.action == "throttle":
+            return VehicleCommand(throttle=self.SETTINGS["probe_throttle"])
+        return VehicleCommand(brake=self.SETTINGS["probe_brake"])
+
+    def _start_probe(self, speed: float) -> VehicleCommand:
+        if abs(speed - self.target) > self.SETTINGS["entry_tolerance_mps"]:
+            self.incomplete_reason = "probe_entry_speed"
+            self._next("stop")
+            return VehicleCommand(brake=self.brake)
+        self.target_reached = True
+        self.probe_origin_row = self.frames - 1
+        self.probe_entry_speed = speed
+        self._next("probe")
+        return self._probe_command()
+
+    def command(self, speed: float, step: float) -> VehicleCommand | None:
+        self.frames += 1
+        self.stage_frames += 1
+        self.travelled += abs(speed) * step
+        time = self.stage_frames * step
+        remaining = self.budget - self.travelled
+        stopping = speed * speed / 4 + 2 * abs(speed) + 25
+        if self.stage not in ("rest", "stop") and remaining <= stopping:
+            self.incomplete_reason = "distance_limit"
+            self._next("stop")
+        if self.stage == "rest":
+            if time >= 0.5:
+                self._next("drive")
+            return VehicleCommand()
+        if self.stage == "drive":
+            target = (
+                self.target
+                if self.history == "acceleration"
+                else self.SETTINGS["braking_approach_peak_mps"]
+            )
+            if speed >= target:
+                if self.history == "acceleration":
+                    return self._start_probe(speed)
+                self._next("approach_brake")
+                return VehicleCommand(brake=self.SETTINGS["approach_brake"])
+            if time >= 20:
+                self.incomplete_reason = "approach_time_limit"
+                self._next("stop")
+                return VehicleCommand(brake=self.brake)
+            return VehicleCommand(throttle=self.level)
+        if self.stage == "approach_brake":
+            if speed <= self.target:
+                return self._start_probe(speed)
+            return VehicleCommand(brake=self.SETTINGS["approach_brake"])
+        if self.stage == "probe":
+            if time < self.SETTINGS["probe_seconds"]:
+                return self._probe_command()
+            self._next("coast" if self.action == "throttle" else "stop")
+        if self.stage == "coast":
+            if self.stage_frames * step < self.SETTINGS["coast_seconds"]:
+                return VehicleCommand()
+            self._next("stop")
+        if self.stage == "stop":
+            horizon = (
+                (self.frames - 1 - self.probe_origin_row) * step
+                if self.probe_origin_row is not None
+                else 0
+            )
+            if (
+                abs(speed) < 0.02
+                and self.stage_frames * step > 0.5
+                and (
+                    self.incomplete_reason is not None
+                    or horizon >= self.SETTINGS["forecast_seconds"]
+                )
+            ):
+                return None
+            return VehicleCommand(brake=self.brake)
+        raise RuntimeError(f"Unknown moving probe stage {self.stage}")
+
+
 def _run_seed(
     session: CarlaSession,
     api: Any,
@@ -269,11 +376,15 @@ def _run_seed(
     metadata: dict[str, Any],
     launch_profiles: list[tuple[float, float, float]] | None = None,
     coast_seconds: float = 1.5,
+    probe_profiles: list[tuple[float, str, str]] | None = None,
 ) -> tuple[list[Recording], list[dict[str, Any]]]:
     rng = np.random.default_rng(seed)
     profiles = list(launch_profiles) if launch_profiles is not None else None
     if profiles is not None:
         rng.shuffle(profiles)
+    probes = list(probe_profiles) if probe_profiles is not None else None
+    if probes is not None:
+        rng.shuffle(probes)
     launch_index = 0
     kinds = [kind for kind, count in counts.items() for _ in range(count)]
     rng.shuffle(kinds)
@@ -283,18 +394,22 @@ def _run_seed(
     for index, kind in enumerate(kinds):
         candidates = long if kind in ("steer_fast", "steer_doublet") else spawns
         spawn, budget, road_pitch = candidates[int(rng.integers(len(candidates)))]
-        program = Segment(
-            kind,
-            rng,
-            budget,
-            steer_exponent=steer_exponent,
-            max_lateral_acceleration=max_lateral_acceleration,
-            launch_profile=(
-                profiles[launch_index]
-                if profiles is not None and kind == "launch"
-                else None
-            ),
-            coast_seconds=coast_seconds,
+        program = (
+            MovingProbe(rng, budget, probes[launch_index])
+            if probes is not None
+            else Segment(
+                kind,
+                rng,
+                budget,
+                steer_exponent=steer_exponent,
+                max_lateral_acceleration=max_lateral_acceleration,
+                launch_profile=(
+                    profiles[launch_index]
+                    if profiles is not None and kind == "launch"
+                    else None
+                ),
+                coast_seconds=coast_seconds,
+            )
         )
         if kind == "launch":
             launch_index += 1
@@ -320,6 +435,12 @@ def _run_seed(
             "targeted_launch": program.targeted_launch,
         }
         log.append(entry)
+        if isinstance(program, MovingProbe):
+            entry["probe_profile"] = {
+                "speed_mps": program.target,
+                "history": program.history,
+                "action": program.action,
+            }
         try:
             collisions.clear()
             vehicle.set_transform(spawn)
@@ -375,6 +496,11 @@ def _run_seed(
                 target_reached=program.target_reached,
                 incomplete_reason=program.incomplete_reason,
             )
+            if isinstance(program, MovingProbe):
+                entry.update(
+                    probe_origin_row=program.probe_origin_row,
+                    probe_entry_speed_mps=program.probe_entry_speed,
+                )
             try:
                 if len(recorder):
                     attempt = recorder.recording()
@@ -436,6 +562,19 @@ def main() -> int:
     )
     parser.add_argument("--launch-brakes", type=float, nargs="+", default=[0.4, 0.8])
     parser.add_argument("--launch-coast-seconds", type=float, default=1.5)
+    parser.add_argument("--probe-speeds", type=float, nargs="+")
+    parser.add_argument(
+        "--probe-histories",
+        nargs="+",
+        choices=("acceleration", "braking"),
+        default=["acceleration", "braking"],
+    )
+    parser.add_argument(
+        "--probe-actions",
+        nargs="+",
+        choices=("throttle", "brake"),
+        default=["throttle", "brake"],
+    )
     parser.add_argument("--hand-brake", type=int, default=2)
     parser.add_argument("--reverse", type=int, default=3)
     parser.add_argument("--steer", type=int, default=12)
@@ -465,6 +604,27 @@ def main() -> int:
     ):
         parser.error("spawn indices must be unique and nonnegative")
     launch_profiles = None
+    probe_profiles = None
+    if args.probe_speeds is not None:
+        if args.launch_targets is not None or any(
+            count for kind, count in counts.items() if kind != "launch"
+        ):
+            parser.error("Moving probes require only launch trials and no launch grid")
+        if any(
+            not math.isfinite(speed) or not 0 < speed < 22
+            for speed in args.probe_speeds
+        ):
+            parser.error("Probe speeds must be positive and below 22 m/s")
+        if any(
+            len(set(values)) != len(values)
+            for values in (args.probe_speeds, args.probe_histories, args.probe_actions)
+        ):
+            parser.error("Moving probe conditions must be distinct")
+        probe_profiles = list(
+            product(args.probe_speeds, args.probe_histories, args.probe_actions)
+        )
+        if counts["launch"] != len(probe_profiles):
+            parser.error("Launch count must equal the complete moving probe grid")
     if args.launch_targets is not None:
         for values, upper in (
             (args.launch_targets, 30),
@@ -527,6 +687,16 @@ def main() -> int:
                 "coast_seconds": args.launch_coast_seconds,
             }
             if launch_profiles is not None
+            else None
+        ),
+        "probe_profile_grid": (
+            {
+                "speeds_mps": args.probe_speeds,
+                "histories": args.probe_histories,
+                "actions": args.probe_actions,
+                "settings": MovingProbe.SETTINGS,
+            }
+            if probe_profiles is not None
             else None
         ),
         "command": "examples/identify_vehicle.py " + " ".join(sys.argv[1:]),
@@ -632,6 +802,7 @@ def main() -> int:
                     metadata=metadata,
                     launch_profiles=launch_profiles,
                     coast_seconds=args.launch_coast_seconds,
+                    probe_profiles=probe_profiles,
                 )
                 if kept:
                     recording = Recording.concatenate(kept)

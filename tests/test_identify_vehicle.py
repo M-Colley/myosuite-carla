@@ -104,6 +104,38 @@ def test_targeted_launch_rejects_incomplete_speed_when_road_runs_out(collector):
     assert not program.target_reached
 
 
+@pytest.mark.parametrize("speed", [17.0, 20.0])
+@pytest.mark.parametrize("history", ["acceleration", "braking"])
+@pytest.mark.parametrize("action", ["throttle", "brake"])
+def test_moving_probe_preserves_origin_and_complete_forecast(
+    collector, speed, history, action
+):
+    from myosuite_carla.vehicle_model import SurrogateVehicle, carla_1_0_nissan_patrol
+
+    program = collector.MovingProbe(
+        np.random.default_rng(3), 350, (speed, history, action)
+    )
+    vehicle = SurrogateVehicle(carla_1_0_nissan_patrol())
+    vehicle.start()
+    value = 0.0
+    states, commands = [], []
+    for _ in range(1500):
+        command = program.command(value, 0.02)
+        states.append(value)
+        if command is None:
+            break
+        commands.append(command)
+        value = vehicle.step(command).speed
+    assert program.incomplete_reason is None
+    assert program.target_reached and program.probe_origin_row is not None
+    origin = program.probe_origin_row
+    assert abs(states[origin] - speed) <= 0.25
+    assert len(states) >= origin + 151
+    assert commands[origin].throttle == (0.75 if action == "throttle" else 0)
+    assert commands[origin].brake == (0.4 if action == "brake" else 0)
+    assert value < 0.02 and program.frames < 1500
+
+
 def _waypoint(pitch, following=()):
     return SimpleNamespace(
         transform=SimpleNamespace(rotation=SimpleNamespace(yaw=0.0, pitch=pitch)),
