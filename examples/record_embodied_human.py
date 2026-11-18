@@ -1,4 +1,4 @@
-"""Record a local embodied-human driver in a rendering CARLA 0.10 server.
+"""Record a local embodied human driver on a matching CARLA server.
 
 The chase camera and MuJoCo body share the same synchronous frame. The inset
 shows the human model's gaze and SuRT state. Road perception uses the human
@@ -233,6 +233,12 @@ def main() -> int:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--spawn", type=int, default=105)
     parser.add_argument("--record", type=Path)
+    parser.add_argument(
+        "--reflex-config", type=Path, help="Complete ReflexDriverConfig JSON file"
+    )
+    parser.add_argument(
+        "--telemetry-only", action="store_true", help="Skip cameras and video encoding"
+    )
     args = parser.parse_args()
     if not math.isfinite(args.seconds) or args.seconds < 0.02:
         parser.error("seconds must be finite and at least 0.02")
@@ -258,6 +264,7 @@ def main() -> int:
         lane_from_carla,
         teleport,
     )
+    from myosuite_carla.driver_models import ReflexDriver, ReflexDriverConfig
     from myosuite_carla.driving_env import FullBodyDrivingEnv
     from myosuite_carla.scenario import (
         LaneChange,
@@ -268,12 +275,20 @@ def main() -> int:
 
     if not Path(eh.__file__).resolve().is_relative_to(human_repo):
         raise RuntimeError("The imported human module is outside human-repo")
+    reflex_config = (
+        ReflexDriverConfig.from_dict(
+            json.loads(args.reflex_config.read_text(encoding="utf-8"))
+        )
+        if args.reflex_config
+        else None
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     report: dict[str, Any] = {
         "status": "failed",
         "started_utc": datetime.now(timezone.utc).isoformat(),
         "seed": args.seed,
         "scenario": args.scenario,
+        "telemetry_only": args.telemetry_only,
         "human_import": eh.__file__,
         "human_source": _source(human_repo),
         "bridge_source": _source(Path(__file__).resolve().parents[1]),
@@ -387,7 +402,8 @@ def main() -> int:
                 else None
             )
             human = eh.build_human(seed=args.seed)
-            agent = AttentiveDriver(human, env, task)
+            reflex = ReflexDriver(env.dt, reflex_config) if reflex_config else None
+            agent = AttentiveDriver(human, env, task, reflex=reflex)
             agent.reset(seed=args.seed)
             report.update(
                 server_version=client.get_server_version(),
@@ -396,26 +412,34 @@ def main() -> int:
                 human_parameters=human.provenance(),
                 scenario_config=asdict(scenario),
             )
-            rgb = world.get_blueprint_library().find("sensor.camera.rgb")
-            for name, value in {
-                "image_size_x": "1280",
-                "image_size_y": "720",
-                "fov": "90",
-                # Capture each tick without a second floating point time threshold.
-                "sensor_tick": "0",
-            }.items():
-                rgb.set_attribute(name, value)
-            camera = world.spawn_actor(
-                rgb,
-                carla.Transform(
-                    carla.Location(x=-6.5, z=2.8), carla.Rotation(pitch=-12)
-                ),
-                attach_to=vehicle,
+            report["reflex_config"] = asdict(agent.reflex.config)
+            report["reflex_timing"] = dict(
+                control_dt_s=env.dt,
+                configured_delay_s=agent.reflex.config.perception_delay,
+                history_lag_s=agent.reflex.perception_history_lag_s,
             )
-            stack.callback(cleanup, "camera", camera.destroy)
-            stack.callback(cleanup, "camera_listener", camera.stop)
-            images: queue.Queue[Any] = queue.Queue()
-            camera.listen(images.put)
+            images: queue.Queue[Any] | None = None
+            if not args.telemetry_only:
+                rgb = world.get_blueprint_library().find("sensor.camera.rgb")
+                for name, value in {
+                    "image_size_x": "1280",
+                    "image_size_y": "720",
+                    "fov": "90",
+                    # Capture every simulation tick.
+                    "sensor_tick": "0",
+                }.items():
+                    rgb.set_attribute(name, value)
+                camera = world.spawn_actor(
+                    rgb,
+                    carla.Transform(
+                        carla.Location(x=-6.5, z=2.8), carla.Rotation(pitch=-12)
+                    ),
+                    attach_to=vehicle,
+                )
+                stack.callback(cleanup, "camera", camera.destroy)
+                stack.callback(cleanup, "camera_listener", camera.stop)
+                images = queue.Queue()
+                camera.listen(images.put)
             collision = world.spawn_actor(
                 world.get_blueprint_library().find("sensor.other.collision"),
                 carla.Transform(),
@@ -437,8 +461,9 @@ def main() -> int:
             )
             if args.task == "surt":
                 title += " with SuRT"
-            video = Video(args.output, driver, title)
-            stack.callback(cleanup, "video", video.close)
+            video = None if args.telemetry_only else Video(args.output, driver, title)
+            if video is not None:
+                stack.callback(cleanup, "video", video.close)
             for step in range(math.ceil(args.seconds / env.dt)):
                 intent = agent.act()
                 _, _, terminated, truncated, info = env.step(intent)
@@ -467,20 +492,22 @@ def main() -> int:
                     for name, value in applied_controls.items()
                 ):
                     raise RuntimeError("Applied CARLA controls differ from the command")
-                try:
-                    image = images.get(timeout=60)
-                    while image.frame < telemetry.frame:
+                image = None
+                if images is not None:
+                    try:
                         image = images.get(timeout=60)
-                except queue.Empty as error:
-                    raise TimeoutError(
-                        f"No camera image for CARLA frame {telemetry.frame}"
-                    ) from error
-                if image.frame != telemetry.frame:
-                    raise RuntimeError("CARLA camera and vehicle frames differ")
-                report["camera_frames_matched"] += 1
+                        while image.frame < telemetry.frame:
+                            image = images.get(timeout=60)
+                    except queue.Empty as error:
+                        raise TimeoutError(
+                            f"No camera image for CARLA frame {telemetry.frame}"
+                        ) from error
+                    if image.frame != telemetry.frame:
+                        raise RuntimeError("CARLA camera and vehicle frames differ")
+                    report["camera_frames_matched"] += 1
                 report["frames"].append(
                     {
-                        "camera_frame": image.frame,
+                        "camera_frame": image.frame if image is not None else None,
                         "vehicle": telemetry.as_dict(),
                         "intent": asdict(intent),
                         "inputs": info["inputs"],
@@ -496,7 +523,7 @@ def main() -> int:
                         "mechanics": driver.measurement(),
                     }
                 )
-                if step % 2 == 1 or terminated or truncated:
+                if video is not None and (step % 2 == 1 or terminated or truncated):
                     video.frame(image, env, agent, info)
                 if terminated or truncated:
                     break
@@ -504,7 +531,7 @@ def main() -> int:
                     print(f"{args.scenario}: {step + 1} frames", flush=True)
             time.sleep(0.2)
             report.update(
-                encoded_frames=video.encoded,
+                encoded_frames=video.encoded if video is not None else 0,
                 seconds=info["scenario"]["time"],
                 terminated=terminated,
                 truncated=truncated,
@@ -526,7 +553,9 @@ def main() -> int:
     finally:
         report["wall_seconds"] = time.perf_counter() - started
         report["video_bytes"] = (
-            args.output.stat().st_size if args.output.exists() else 0
+            args.output.stat().st_size
+            if not args.telemetry_only and args.output.exists()
+            else 0
         )
         try:
             report["world_settings_restored"] = world is not None and all(

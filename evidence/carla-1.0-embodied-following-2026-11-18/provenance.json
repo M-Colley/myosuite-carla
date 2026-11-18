@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "role": "forensic_source_provenance",
+  "checked_utc": "2026-11-18T13:36:00.139196+00:00",
+  "archive": "recordings.zip",
+  "archive_sha256": "660f2a2821e7dc5a5e435e268f0c0a516645270a0493d91ce9e8a468e46c3825",
+  "archived_report": "live-following.json",
+  "archived_report_sha256": "3815b5eb0385d099df20094644d828e3d2ee3532b023328905bd176eea69fa34",
+  "recording_started_utc": "2026-11-18T13:19:29.416007+00:00",
+  "normalization": {
+    "working_files": "Compare the exact current bytes with the archived SHA256.",
+    "git_blobs": "Also test only CRLF-to-LF and LF-to-CRLF conversion. No other content transformation is permitted.",
+    "CRLF_normalization_only": "The archived SHA256 matches the Git blob after replacing every LF with CRLF."
+  },
+  "repositories": {
+    "human_source": {
+      "path": "C:\\Users\\localadmin\\.codex\\worktrees\\embodied-human-carla-1-validation",
+      "current_revision": "738324dc42dccef52fdfbdc92b1d89f4813fab04",
+      "tracked_worktree_clean": true,
+      "recorded_revision": "03d1ec167b32b3cf604192e4a45b335636b2f3a5",
+      "recorded_dirty_status": "M examples/calibrate_closed_loop_following.py\n M src/embodied_human/closed_loop_calibration.py\n?? src/embodied_human/driving_configuration.py",
+      "recorded_python_files": 69,
+      "current_working_file_matches": {
+        "exact": 66,
+        "different_content": 3
+      },
+      "content_differences": [
+        {
+          "file": "src/embodied_human/actuation_evaluation.py",
+          "archived_sha256": "c2804d407a7e0086a0fa6e08c05c66fcef87751ec166ecbf8238e241e07eb97e",
+          "current_sha256": "3dfafa341e0fc3296c85854a8b14abbc3176ca84750e2e6e5225abb86f99f01c",
+          "role": "offline experiment orchestration or physical experiment configuration"
+        },
+        {
+          "file": "src/embodied_human/closed_loop_calibration.py",
+          "archived_sha256": "61f0aaa203565410eb139c9cb011220e532a4aa4e789af379acf5734fa329a59",
+          "current_sha256": "5cc92925a21faff84280a7c2ba6b74852044f355a2b128d0a2e3e23e6deff974",
+          "role": "offline experiment orchestration or physical experiment configuration"
+        },
+        {
+          "file": "src/embodied_human/driving_configuration.py",
+          "archived_sha256": "d3898cc0ecee76f60d593917f846457f4acdbdbe62aa32cf2b426e3f1102f406",
+          "current_sha256": "9c4e23e5e2057ed02f26e2fe345694b6a43e0ba719a84e68b5fa74decdcbdfef",
+          "role": "offline experiment orchestration or physical experiment configuration"
+        }
+      ],
+      "committed_comparisons": {
+        "current_committed": {
+          "revision": "738324dc42dccef52fdfbdc92b1d89f4813fab04",
+          "match_counts": {
+            "CRLF_normalization_only": 63,
+            "different_content": 3,
+            "exact": 3
+          },
+          "different_or_absent": [
+            {
+              "file": "src/embodied_human/actuation_evaluation.py",
+              "match": "different_content"
+            },
+            {
+              "file": "src/embodied_human/closed_loop_calibration.py",
+              "match": "different_content"
+            },
+            {
+              "file": "src/embodied_human/driving_configuration.py",
+              "match": "different_content"
+            }
+          ]
+        },
+        "recorded_revision": {
+          "revision": "03d1ec167b32b3cf604192e4a45b335636b2f3a5",
+          "match_counts": {
+            "CRLF_normalization_only": 64,
+            "exact": 3,
+            "different_content": 1,
+            "absent": 1
+          },
+          "different_or_absent": [
+            {
+              "file": "src/embodied_human/closed_loop_calibration.py",
+              "match": "different_content"
+            },
+            {
+              "file": "src/embodied_human/driving_configuration.py",
+              "match": "absent"
+            }
+          ]
+        },
+        "integration_commit": {
+          "revision": "6394332ce84cd8281a256b2af4dfe8a84de9ee8f",
+          "match_counts": {
+            "CRLF_normalization_only": 63,
+            "different_content": 3,
+            "exact": 3
+          },
+          "different_or_absent": [
+            {
+              "file": "src/embodied_human/actuation_evaluation.py",
+              "match": "different_content"
+            },
+            {
+              "file": "src/embodied_human/closed_loop_calibration.py",
+              "match": "different_content"
+            },
+            {
+              "file": "src/embodied_human/driving_configuration.py",
+              "match": "different_content"
+            }
+          ]
+        },
+        "empirical_PR_head": {
+          "revision": "3a19652a2fab5aa4c5556c0ddd844782dc65d981",
+          "match_counts": {
+            "CRLF_normalization_only": 64,
+            "exact": 3,
+            "different_content": 1,
+            "absent": 1
+          },
+          "different_or_absent": [
+            {
+              "file": "src/embodied_human/closed_loop_calibration.py",
+              "match": "different_content"
+            },
+            {
+              "file": "src/embodied_human/driving_configuration.py",
+              "match": "absent"
+            }
+          ]
+        }
+      }
+    },
+    "bridge_source": {
+      "path": "C:\\Users\\localadmin\\Desktop\\myosuite-carla-following",
+      "current_revision": "3ab5e19fcccd21d59031b876d1a1a0b23836264f",
+      "tracked_worktree_clean": true,
+      "recorded_revision": "2b59e66185cfaf93c043c6de06f685b35314329c",
+      "recorded_dirty_status": "M examples/record_embodied_human.py\n M src/myosuite_carla/driver_models.py",
+      "recorded_python_files": 24,
+      "current_working_file_matches": {
+        "exact": 24
+      },
+      "content_differences": [],
+      "committed_comparisons": {
+        "current_committed": {
+          "revision": "3ab5e19fcccd21d59031b876d1a1a0b23836264f",
+          "match_counts": {
+            "CRLF_normalization_only": 24
+          },
+          "different_or_absent": []
+        },
+        "recorded_revision": {
+          "revision": "2b59e66185cfaf93c043c6de06f685b35314329c",
+          "match_counts": {
+            "CRLF_normalization_only": 23,
+            "different_content": 1
+          },
+          "different_or_absent": [
+            {
+              "file": "src/myosuite_carla/driver_models.py",
+              "match": "different_content"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "recording_script": {
+    "file": "examples/record_embodied_human.py",
+    "archived_sha256": "63dcafb6e28a9b52158875f49189baffe843dda1ba3cd55609f4a2c0f93e6f55",
+    "current_working_match": "exact",
+    "current_committed_match": "CRLF_normalization_only",
+    "recorded_revision_match": "different_content"
+  },
+  "interpretation": [
+    "All 24 bridge source files and the recording script match the archived raw working-file hashes.",
+    "Human source has 66 exact raw working-file matches and three different offline calibration or configuration modules.",
+    "The human live entry point, core built-in module loader, attentive driver, body sensing and task imports do not import the three differing modules. This is a static import-path finding.",
+    "The attentive driver, body sensing, human core, sensory and task source hashes match the current clean source exactly.",
+    "The recorded human revision reproduces the archived actuation_evaluation.py after explicit LF-to-CRLF conversion. The archived closed_loop_calibration.py and driving_configuration.py differ from both the recorded and current committed revisions.",
+    "Relative to the recorded bridge revision, driver_models.py adds the read-only perception_history_lag_s property. The current committed implementation exactly matches the archived bytes after explicit LF-to-CRLF conversion.",
+    "This audit compares recorded source hashes. The live archive does not contain the complete dirty source snapshot, a runtime module trace or an end-of-run source hash inventory."
+  ],
+  "physics_rerun": false
+}

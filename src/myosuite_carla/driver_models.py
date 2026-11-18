@@ -269,6 +269,11 @@ class ReflexDriver:
         """Return whether the driver is in the loop (not awaiting a takeover)."""
         return self._engaged
 
+    @property
+    def perception_history_lag_s(self) -> float:
+        """Return the steady lag added by the history at this timestep."""
+        return ((self._history.maxlen or 1) - 1) * self.dt
+
     def act(
         self,
         state: Mapping[str, float],
