@@ -102,7 +102,7 @@
   "objectives": {
     "derivative": "Conditional one-step acceleration residual from the original _longitudinal_design; measured speeds before and after exceed 0.1 m/s and have the same sign; normalized by 1 m/s^2.",
     "rollout": "Complete predicted speed residual from the published rollout fitter; normalized by 1 m/s.",
-    "shared": "Same C3 ownership, training rows, trajectory target/seed weights, five parameter bounds, initial values, regularization, optimizer and no pitch."
+    "shared": "Same C3 ownership, complete training trajectories, trajectory target/seed weights, five parameter bounds, initial values, regularization, optimizer and no pitch."
   },
   "fit_freeze_rule": "Fit both predefined objectives once. Both optimizers must converge. Publish both parameters and diagnostic validation results before new collection. No retuning or model selection.",
   "collector_file": "examples/identify_vehicle.py",
@@ -199,6 +199,7 @@
     "Three test seed batches provide pilot uncertainty.",
     "The new test covers one vehicle and one map.",
     "This experiment isolates fitting objective within the five-parameter model family.",
-    "No human parameters or default presets are changed."
+    "No human parameters or default presets are changed.",
+    "The original derivative objective excludes standstill and sign changes. The rollout objective includes complete trajectories. These masks are part of the published objective comparison."
   ]
 }
