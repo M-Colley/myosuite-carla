@@ -35,6 +35,8 @@ python examples/identify_vehicle.py --host 127.0.0.1 --port 2000 --timeout 60 --
 python examples/evaluate_vehicle_calibration.py --design artifacts/carla-1.0-calibration-2026-11-17/design-v2.json --data artifacts/carla-1.0-calibration-2026-11-17/development --test-data artifacts/carla-1.0-calibration-2026-11-17/test --out artifacts/carla-1.0-calibration-2026-11-17/analysis --stage test
 ```
 
+The original final collection ended during seed 31 after a CARLA RPC error. The recovery retains the completed seed 30 and repeats the complete seed 31 with the same stimuli. It includes the planned seed 32. Use the recovery instructions to reproduce the evaluation from the archived recordings. [Recovery procedure and evidence](test-recovery.md)
+
 ## Recorded data
 
 The repository stores the native recordings for every attempt, including rejected trials. The development archives contain the full original run and validation reserve 22. Extract each ZIP into a directory named after the ZIP stem. Place the directories in the data root used by the commands above. For analysis reproduction, extract the test archive after completing selection. The source distribution includes the reports, manifest and analysis code. The data archives are available in the repository. [Development data and checksums](data/development)
