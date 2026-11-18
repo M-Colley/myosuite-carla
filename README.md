@@ -340,6 +340,8 @@ python examples/fit_vehicle_model.py --train artifacts/vehicle-sysid/seed0 --tes
 `--steer-exponent` fixes it; `--steer-rate-limit RISE FALL` and
 `--steer-lag-slope` fit with a fixed rate limit and lag slope.
 
+Use the same `VehicleModelParams` for `SurrogateVehicle(params)` and `AccelerationControlConfig(vehicle=params)`. The acceleration inverse then maps commands for the vehicle dynamics that execute them. For empirical following, pass `vehicle_parameters=params` to `ClosedLoopFollowingProtocol`. Both profiles use those parameters, and the report records them for video replay.
+
 ## Driving task, scenarios and baseline driver
 
 `FullBodyDrivingEnv` (`driving_env.py`) is an unregistered Gymnasium

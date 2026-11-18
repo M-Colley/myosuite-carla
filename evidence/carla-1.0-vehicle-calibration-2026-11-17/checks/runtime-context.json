@@ -1,0 +1,61 @@
+{
+  "recorded_utc": "2026-11-17T14:38:13.618481+00:00",
+  "operation": "Read-only snapshot. No world tick, actor creation or control command.",
+  "client_version": "1.0",
+  "server_version": "1.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "weather": {
+    "cloudiness": 10.0,
+    "precipitation": 0.0,
+    "precipitation_deposits": 0.0,
+    "wind_intensity": 10.0,
+    "sun_azimuth_angle": 320.0,
+    "sun_altitude_angle": 30.0,
+    "fog_density": 2.0,
+    "fog_distance": 0.75,
+    "fog_falloff": 0.10000000149011612,
+    "wetness": 0.0,
+    "scattering_intensity": 1.0,
+    "mie_scattering_scale": 0.029999999329447746,
+    "rayleigh_scattering_scale": 0.03310000151395798,
+    "dust_storm": 0.0
+  },
+  "world_settings": {
+    "synchronous_mode": true,
+    "fixed_delta_seconds": 0.02,
+    "substepping": true,
+    "max_substep_delta_time": 0.01,
+    "max_substeps": 10,
+    "no_rendering_mode": false
+  },
+  "vehicles": [
+    {
+      "id": 27,
+      "type_id": "vehicle.nissan.patrol",
+      "mass_kg": 2355.0,
+      "drag_coefficient": 0.4000000059604645,
+      "wheel_location_api_values": [
+        {
+          "x": 59.473487854003906,
+          "y": 23.861492156982422,
+          "z": 0.5387424230575562
+        },
+        {
+          "x": 59.473426818847656,
+          "y": 25.697425842285156,
+          "z": 0.5179501175880432
+        },
+        {
+          "x": 56.19450759887695,
+          "y": 23.8613224029541,
+          "z": 0.5331997871398926
+        },
+        {
+          "x": 56.194427490234375,
+          "y": 25.697343826293945,
+          "z": 0.5223300457000732
+        }
+      ]
+    }
+  ]
+}

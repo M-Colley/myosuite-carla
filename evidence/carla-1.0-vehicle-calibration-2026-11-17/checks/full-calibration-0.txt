@@ -1,0 +1,72 @@
+........................................................................ [ 11%]
+........................................................................ [ 23%]
+........................................................................ [ 34%]
+........................................................................ [ 46%]
+........................................................................ [ 57%]
+......................ssss................s............................. [ 69%]
+........................................................................ [ 81%]
+........................................................................ [ 92%]
+.............................................                            [100%]
+============================== warnings summary ===============================
+tests/test_acceleration_control.py: 1 warning
+tests/test_conditions.py: 8 warnings
+tests/test_driving_env.py: 1 warning
+tests/test_empirical_following.py: 2 warnings
+tests/test_empirical_video.py: 2 warnings
+tests/test_fullbody.py: 2 warnings
+tests/test_interfaces.py: 1 warning
+tests/test_training.py: 1 warning
+  C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:563: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    model = spec.compile()
+
+tests/test_acceleration_control.py: 1 warning
+tests/test_conditions.py: 6 warnings
+tests/test_driving_env.py: 1 warning
+tests/test_empirical_following.py: 2 warnings
+tests/test_empirical_video.py: 2 warnings
+tests/test_fullbody.py: 1 warning
+tests/test_interfaces.py: 1 warning
+tests/test_training.py: 1 warning
+  C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:600: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    model = spec.compile()
+
+tests/test_acceleration_control.py: 1 warning
+tests/test_conditions.py: 6 warnings
+tests/test_driving_env.py: 1 warning
+tests/test_empirical_following.py: 2 warnings
+tests/test_empirical_video.py: 2 warnings
+tests/test_fullbody.py: 2 warnings
+tests/test_interfaces.py: 1 warning
+tests/test_training.py: 1 warning
+  C:\Users\localadmin\Desktop\myosuite-carla\src\myosuite_carla\fullbody.py:1416: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    body = _body_spec(config).compile()
+
+tests/test_cockpit.py::test_composes_with_real_muscle_models[elbow]
+  C:\Users\localadmin\Desktop\myosuite-carla\.venv-myosuite31\Lib\site-packages\myosuite\core\model_builder.py:830: UserWarning: Attach conflict when attaching 'MyoElbow_v0.1.7', policy is 'warning'
+  njmax: parent has -1 (default), child has 1000, keeping parent value
+  nconmax: parent has -1 (default), child has 400, keeping parent value
+  nuser_jnt: parent has -1 (default), child has 1, keeping parent value
+    return spec.compile(), spec
+
+tests/test_cockpit.py: 3 warnings
+tests/test_muscle_contact.py: 9 warnings
+tests/test_validation.py: 4 warnings
+tests/test_validation_selection.py: 1 warning
+  C:\Users\localadmin\Desktop\myosuite-carla\.venv-myosuite31\Lib\site-packages\myosuite\core\model_builder.py:830: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    return spec.compile(), spec
+
+tests/test_cockpit.py::test_composes_with_real_muscle_models[arm]
+  C:\Users\localadmin\Desktop\myosuite-carla\.venv-myosuite31\Lib\site-packages\myosuite\core\model_builder.py:830: UserWarning: Attach conflict when attaching 'MyoArm_v0.01', policy is 'warning'
+  njmax: parent has -1 (default), child has 1000, keeping parent value
+  nconmax: parent has -1 (default), child has 400, keeping parent value
+  nuser_jnt: parent has -1 (default), child has 1, keeping parent value
+    return spec.compile(), spec
+
+tests/test_conditions.py::test_weak_left_side_scales_forces_and_weakens_the_brake_foot
+tests/test_conditions.py::test_weak_left_side_scales_forces_and_weakens_the_brake_foot
+tests/test_conditions.py::test_sarcopenia_halves_every_peak_force
+  C:\Users\localadmin\Desktop\myosuite-carla\.venv-myosuite31\Lib\site-packages\myosuite\core\muscle_conditions.py:85: UserWarning: Attaching a spec with an empty prefix may prevent the model from being saved correctly.
+    peak_force = _peak_force(spec.compile())
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+616 passed, 6 skipped, 71 warnings in 382.99s (0:06:22)

@@ -20,7 +20,7 @@ Final evaluation compares the selected candidate with the retained preset on thr
 
 ## Reproduction
 
-Install the dependencies and the matching CARLA client described in the runtime validation evidence. Start the server before collecting data. The following commands assume an empty `artifacts/carla-1.0-calibration-2026-11-17` data root with a copy of `design.json`. Each collector output directory must be empty. Analysis reports cannot be overwritten.
+Install the `analysis` extra and the matching CARLA client described in the runtime validation evidence. Start the server before collecting data. The following commands assume a new `artifacts/carla-1.0-calibration-2026-11-17` data root with an exact copy of `design-v2.json`. Each collector output directory must be empty. Analysis reports cannot be overwritten.
 
 ```powershell
 python examples/identify_vehicle.py --host 127.0.0.1 --port 2000 --timeout 60 --seeds 10 11 12 20 21 --launch 10 --hand-brake 2 --reverse 3 --steer 12 --steer-fast 6 --steer-low 4 --steer-hold 4 --steer-doublet 6 --min-straight 100 --max-road-pitch 1 --max-lateral-acceleration 3 --steer-exponent 1 --data artifacts/carla-1.0-calibration-2026-11-17/development
@@ -34,3 +34,15 @@ Publish the fit report and selected candidate before collecting the final test b
 python examples/identify_vehicle.py --host 127.0.0.1 --port 2000 --timeout 60 --seeds 30 31 32 --launch 10 --hand-brake 2 --reverse 3 --steer 12 --steer-fast 6 --steer-low 4 --steer-hold 4 --steer-doublet 6 --min-straight 100 --max-road-pitch 1 --max-lateral-acceleration 3 --steer-exponent 1 --data artifacts/carla-1.0-calibration-2026-11-17/test
 python examples/evaluate_vehicle_calibration.py --design artifacts/carla-1.0-calibration-2026-11-17/design-v2.json --data artifacts/carla-1.0-calibration-2026-11-17/development --test-data artifacts/carla-1.0-calibration-2026-11-17/test --out artifacts/carla-1.0-calibration-2026-11-17/analysis --stage test
 ```
+
+## Recorded data
+
+The repository stores the native recordings for every attempt, including rejected trials. The development archives contain the full original run and validation reserve 22. Extract each ZIP into a directory named after the ZIP stem. Place the directories in the data root used by the commands above. For analysis reproduction, extract the test archive after completing selection. The source distribution includes the reports, manifest and analysis code. The data archives are available in the repository. [Development data and checksums](data/development)
+
+The published fit report preserves all eight validation evaluations. The frozen selection records the full parameter values and the SHA256 of that report. Commit `74b5889454852708f24c312a98b01dd8fd58b497` was pushed before collection started for seed 30. [Fit report](fit-report.json) [Frozen selection](frozen-selection.json)
+
+Candidate C3 had the lowest validation primary error (0.20235). The legacy preset scored 0.47715. This corresponds to a 57.6% reduction across two validation batches and 79 retained trials. The selected exponent was 0.9711. The steering rate limits were 2.5 and 5.0 per second. The fitted lag increased by 0.01 s for each m/s of speed. Training used 125 trials and 1,079 s of data. The 5th and 95th percentiles of speed during steering were 1.34 and 11.07 m/s. Peak forward or reverse speed was 17.94 m/s. Peak reverse throttle was 0.572.
+
+Seed 21 had a primary error of 0.21191 with C3 and 0.51281 with the legacy preset across 38 retained trials. The same scoring covered all eight observed manoeuvre families. Steering hold was represented by one trial. This diagnostic used the published selection and had no role in selection or promotion. [Diagnostic code](diagnose_seed21.py) [Diagnostic results](seed21-diagnostic.json)
+
+The scripted following check exercised the selected vehicle through MyoSuite 3.1.0 and development commit `c93329ec64bc8b544d0b3427bba6766377c3528e`. Each environment completed two 2 s episodes using the 114 muscle body and a matching acceleration inverse. All episodes reached the full duration and released their vehicles. The check measures execution of the physical control loop with a scripted lead vehicle. [Verification script](verify_embodied_following.py) [Release report](embodied-following-0.json) [Development report](embodied-following-1.json)
