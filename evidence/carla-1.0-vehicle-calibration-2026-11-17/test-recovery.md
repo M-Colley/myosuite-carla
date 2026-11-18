@@ -1,0 +1,5 @@
+# Final test collection recovery
+
+The test collector ended on 18 November 2026 at 09:04:37 UTC when the CARLA RPC client reported `resource unavailable try again` during the 35th attempt in seed 31. Seed 30 completed. Seed 32 had not started. Windows reported 3.13 GiB of available virtual memory at the subsequent check. The source of the RPC error was undetermined. The initial recording root, including the partial seed 31 trial, is retained. No final prediction metrics had been computed at this point. [Interrupted run](checks/test-interrupted-run.json) [Collector log](checks/test-interrupted-collection.txt)
+
+The recovery retains seed 30 byte for byte. A new server process uses the same CARLA 1.0 package, map and launch flags. The collector repeats all 47 trials of seed 31 with the same seed and the unchanged stimuli and capture rules. Seed 32 uses its original plan. Each seed has one complete batch in the analysis directory. The interrupted seed contributes no trials to that analysis. The original model and acceptance checks remain fixed. A completed batch that fails coverage prevents acceptance. [Frozen selection](frozen-selection.json)

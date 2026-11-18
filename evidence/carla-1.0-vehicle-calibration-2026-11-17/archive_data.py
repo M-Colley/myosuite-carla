@@ -21,19 +21,26 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", type=Path, action="append", required=True)
     parser.add_argument("--out", type=Path, required=True)
+    parser.add_argument(
+        "--include-failed",
+        action="store_true",
+        help="Preserve terminated collector runs alongside completed runs",
+    )
     args = parser.parse_args()
     roots = [path.resolve(strict=True) for path in args.data]
     destination = args.out.resolve()
     if len({root.name.casefold() for root in roots}) != len(roots):
         raise ValueError("Collector roots must have unique basenames")
+    statuses = {}
     for root in roots:
         if not root.is_dir():
             raise ValueError(f"Collector root is not a directory: {root}")
         if destination.is_relative_to(root):
             raise ValueError("Archive output must be outside each collector root")
-        status = json.loads((root / "run.json").read_text(encoding="utf-8"))
-        if status.get("status") != "completed":
+        status = json.loads((root / "run.json").read_text(encoding="utf-8"))["status"]
+        if status != "completed" and not (args.include_failed and status == "failed"):
             raise ValueError(f"Collector root is incomplete: {root}")
+        statuses[root] = status
     outputs = [destination / f"{root.name}.zip" for root in roots]
     manifest_path = destination / "manifest.json"
     if any(path.exists() or path.is_symlink() for path in [*outputs, manifest_path]):
@@ -83,6 +90,7 @@ def main() -> int:
             archive_digest = sha256(stream)
         archives[root.name] = {
             "source_root": str(root),
+            "collector_status": statuses[root],
             "file": output.name,
             "bytes": output.stat().st_size,
             "sha256": archive_digest,

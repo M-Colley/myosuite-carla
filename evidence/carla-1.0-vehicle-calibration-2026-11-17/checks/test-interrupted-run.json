@@ -1,0 +1,37 @@
+{
+ "blueprint": "vehicle.nissan.patrol",
+ "min_straight_m": 100.0,
+ "max_road_pitch_deg": 1.0,
+ "max_lateral_acceleration_mps2": 3.0,
+ "counts": {
+  "launch": 10,
+  "hand_brake": 2,
+  "reverse": 3,
+  "steer": 12,
+  "steer_fast": 6,
+  "steer_low": 4,
+  "steer_hold": 4,
+  "steer_doublet": 6
+ },
+ "seeds": [
+  30,
+  31,
+  32
+ ],
+ "control_dt": 0.02,
+ "command": "examples/identify_vehicle.py --host 127.0.0.1 --port 2000 --timeout 60 --seeds 30 31 32 --launch 10 --hand-brake 2 --reverse 3 --steer 12 --steer-fast 6 --steer-low 4 --steer-hold 4 --steer-doublet 6 --min-straight 100 --max-road-pitch 1 --max-lateral-acceleration 3 --steer-exponent 1 --data artifacts/carla-1.0-calibration-2026-11-17/test",
+ "script_sha256": "dba596dc6c29cc62c766179e6d7853cffdbf0a2a988a07c8b015ab60f9e55ce8",
+ "started_utc": "2026-11-18T08:52:19.939674+00:00",
+ "status": "failed",
+ "server_version": "1.0",
+ "client_version": "1.0",
+ "carla_module": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\.venv\\Lib\\site-packages\\carla.cp312-win_amd64.pyd",
+ "steer_input_exponent": 1.0,
+ "map": "Carla/Maps/Town10HD_Opt",
+ "spawn_points_used": 7,
+ "error": {
+  "type": "RuntimeError",
+  "message": "resource unavailable try again: resource unavailable try again"
+ },
+ "finished_utc": "2026-11-18T09:04:37.242979+00:00"
+}
