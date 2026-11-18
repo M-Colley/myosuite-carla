@@ -6,6 +6,8 @@ The combined embodied human source completed a 12 s following and braking episod
 
 The episode used the official CARLA 1.0 Windows package and its matching 1.0 client. The map was `Town10HD_Opt`, spawn 80. The human checkout combined the head kinematics and empirical evaluation branches at `03d1ec1`. The live controller used the inverse derived from the frozen CARLA 1.0 Nissan Patrol fit. Its configured delay was 0.04 s and its steady observation history lag was 0.02 s. The live test was an engineering check with a scripted lead vehicle. [Full telemetry and configuration](evidence/carla-1.0-embodied-following-2026-11-18/recordings.zip)
 
+The live source record captured changes in both worktrees. The archived recorder and all 24 bridge source files match the subsequent bridge commit. Of the 69 human files, 66 match the final combined source exactly. Three modules changed during subsequent development of the offline calibration tools. The live recorder uses the unchanged human driver and sensing modules. Both release and development environments passed 626 offline bridge tests and skipped six optional or disabled tests. Ruff, mypy and the distribution builds passed. [Source comparison](evidence/carla-1.0-embodied-following-2026-11-18/provenance.json) [Release suite](evidence/carla-1.0-embodied-following-2026-11-18/bridge-tests-0.txt) [Development suite](evidence/carla-1.0-embodied-following-2026-11-18/bridge-tests-1.txt)
+
 ```powershell
 python examples/record_embodied_human.py --human-repo PATH --scenario lead_brake --fast --seconds 12 --task none --seed 42 --spawn 80 --reflex-config reflex-c3.json --telemetry-only --record live-following-recording --output live-following.mp4
 ```
