@@ -1,0 +1,30 @@
+{
+  "release": {
+    "tests": 656,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 6,
+    "passed": 650,
+    "seconds": 297.981,
+    "skip_reasons": [
+      "Set CARLA_BRIDGE_LIVE=1 with a matching CARLA server",
+      "Set CARLA_BRIDGE_LIVE=1 with a matching actual CARLA server",
+      "collection skipped",
+      "could not import 'opensim': No module named 'opensim'"
+    ]
+  },
+  "dev": {
+    "tests": 656,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 6,
+    "passed": 650,
+    "seconds": 281.187,
+    "skip_reasons": [
+      "Set CARLA_BRIDGE_LIVE=1 with a matching CARLA server",
+      "Set CARLA_BRIDGE_LIVE=1 with a matching actual CARLA server",
+      "collection skipped",
+      "could not import 'opensim': No module named 'opensim'"
+    ]
+  }
+}

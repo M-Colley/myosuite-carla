@@ -1,0 +1,18 @@
+{
+  "started_utc": "2026-11-18T14:01:48.908120+00:00",
+  "finished_utc": "2026-11-18T14:02:17.753631+00:00",
+  "python_executable": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\.venv\\Scripts\\python.exe",
+  "command": "python -m build --outdir artifacts/carla-1.0-longitudinal-2026-11-18/build",
+  "wheel_contains_longitudinal_module": true,
+  "sdist_contains_reproduction_cli_and_design": true,
+  "artifacts": {
+    "myosuite_carla-0.2.0-py3-none-any.whl": {
+      "bytes": 153031,
+      "sha256": "63ca84c644665c479fad7ad973a072fc421cbcfdd9d7cf085654cd22da2a2d98"
+    },
+    "myosuite_carla-0.2.0.tar.gz": {
+      "bytes": 59974757,
+      "sha256": "af1a24138ef4b87d2bdd084cd7169d6da28954de49212eaa4933b22cd989754a"
+    }
+  }
+}

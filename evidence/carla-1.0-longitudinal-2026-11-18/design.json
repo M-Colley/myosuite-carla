@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-18T13:24:42.024391+00:00",
+  "fixed_before_collection": true,
+  "target": {
+    "carla": "1.0",
+    "source": "1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5",
+    "map": "Carla/Maps/Town12/Town12",
+    "vehicle": "vehicle.nissan.patrol",
+    "dt_s": 0.02
+  },
+  "baseline": {
+    "name": "CARLA 1.0 C3",
+    "selection_file": "evidence/carla-1.0-vehicle-calibration-2026-11-17/frozen-selection.json",
+    "selection_sha256": "176a2bdb7e457c33d59138138c2cab03cd45ea902da1b814ef4666cf459f2e59"
+  },
+  "collector_file": "examples/identify_vehicle.py",
+  "collector_sha256": "319e410afdc70ff4898416ce1cc94ce198a11ff4bb982f8a90b44fe61c63c800",
+  "train_seeds": [
+    1100,
+    1101
+  ],
+  "validation_seeds": [
+    1200,
+    1201
+  ],
+  "test_seeds": [
+    1300,
+    1301,
+    1302
+  ],
+  "counts": {
+    "launch": 12,
+    "hand_brake": 0,
+    "reverse": 0,
+    "steer": 0,
+    "steer_fast": 0,
+    "steer_low": 0,
+    "steer_hold": 0,
+    "steer_doublet": 0
+  },
+  "spawn_indices": [
+    236,
+    252,
+    305
+  ],
+  "min_straight_m": 350.0,
+  "straight_limit_m": 600.0,
+  "max_road_pitch_deg": 1.0,
+  "max_lateral_acceleration_mps2": 3.0,
+  "collection_steer_exponent": 1.0,
+  "launch_profile_grid": {
+    "target_speeds_mps": [
+      17.0,
+      19.5,
+      22.0
+    ],
+    "throttles": [
+      0.75,
+      1.0
+    ],
+    "brakes": [
+      0.4,
+      0.8
+    ],
+    "coast_seconds": 1.5
+  },
+  "exclusions": [
+    "collision",
+    "absolute body roll above 3 degrees",
+    "incomplete or frame-limited trial",
+    "assigned target speed or complete coast not reached before the road or time limit"
+  ],
+  "coverage": {
+    "minimum_accepted_per_seed": 8,
+    "minimum_per_target": 2,
+    "minimum_per_target_throttle": 1,
+    "minimum_per_brake": 3,
+    "all_12_distinct_profiles_attempted": true,
+    "no_reserve_seeds": true
+  },
+  "fit": {
+    "method": "scipy.optimize.least_squares",
+    "loss": "linear",
+    "optimizer": "trf",
+    "max_nfev": 80,
+    "ftol": 1e-07,
+    "xtol": 1e-07,
+    "gtol": 1e-07,
+    "parameters": [
+      "drive_gain_15",
+      "drive_gain_20",
+      "quadratic_drag_scale",
+      "service_brake_scale",
+      "throttle_lag_s"
+    ],
+    "initial": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.075
+    ],
+    "lower": [
+      0.5,
+      0.5,
+      0.5,
+      0.75,
+      0.0
+    ],
+    "upper": [
+      1.5,
+      1.5,
+      1.5,
+      1.25,
+      0.3
+    ],
+    "drive_gain_anchors_mps": [
+      0.0,
+      8.0,
+      15.0,
+      20.0
+    ],
+    "drive_gain_anchor_values": [
+      "fixed 1",
+      "fixed 1",
+      "drive_gain_15",
+      "drive_gain_20"
+    ],
+    "regularization_weight": 0.01,
+    "prior_normalization": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.075
+    ],
+    "training_objective": "mean complete-trajectory speed MSE, equal target means within each seed and equal seed means, plus 0.01 times mean squared normalized departure from the baseline parameters",
+    "unchanged": [
+      "steering gain and dynamics",
+      "speed and throttle knots",
+      "reverse drive",
+      "rolling resistance",
+      "linear drag",
+      "hand brake deceleration"
+    ],
+    "monotonic_drive": true,
+    "use_pitch": false,
+    "measured_speed": false
+  },
+  "primary": "mean complete-trajectory speed MSE, equal target means within each seed and equal seed means",
+  "selection": "the single training fit is frozen only if validation primary is below baseline and pooled 95th percentile trial speed RMSE is no worse",
+  "acceptance": {
+    "paired_seed_percentile_bootstrap_upper_below_zero": true,
+    "resamples": 5000,
+    "confidence": 0.95,
+    "bootstrap_seed": 2026111801,
+    "mean_speed_rmse_not_worse": true,
+    "pooled_p95_trial_speed_rmse_not_worse": true,
+    "maximum_trial_speed_rmse_not_worse": true,
+    "mean_final_position_error_not_worse": true,
+    "per_target_speed_mse_limit": "1.1 * baseline + 0.01",
+    "all_coverage_rules": true
+  },
+  "secondary": [
+    "coast and service brake phase speed RMSE",
+    "target and throttle stratified errors",
+    "observed speed support",
+    "signed speed and acceleration residuals",
+    "stopping time and distance errors"
+  ],
+  "collection_policy": "Preserve every attempt. Stop if a completed batch fails coverage. For an RPC or server interruption before metrics inspection, preserve the failed root and repeat the entire affected seed with the same protocol. Use one complete realization per seed. No test reserves.",
+  "limitations": [
+    "One highway map and one vehicle.",
+    "Three test seed batches provide pilot uncertainty.",
+    "The existing speed table remains constant beyond 20 m/s.",
+    "No human controller parameters are fitted.",
+    "The previous test data are exploratory evidence and are not used for confirmation."
+  ]
+}

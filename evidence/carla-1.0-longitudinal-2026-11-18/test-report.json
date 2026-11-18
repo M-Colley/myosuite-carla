@@ -1,0 +1,3623 @@
+{
+  "started_utc": "2026-11-18T14:00:47.337436+00:00",
+  "design_sha256": "82c46962c62ab14aeaf96355e5d50761c0cfd13a0b67ff1dfb4b5dcdd8c60598",
+  "source_sha256": {
+    "src/myosuite_carla/longitudinal.py": "7a94cecc82230eb5e7488aaf63585f6cb1282d7f34941456f6d93bfbbf3c5a66",
+    "src/myosuite_carla/vehicle_model.py": "c13fe7429b740958e8e98750520e83f9cd3d487ff389f559dad1091e3fffcd73",
+    "examples/calibrate_longitudinal.py": "fdd9d9b870176b65a81efd7bfd163d43a1f799b8913153ea2e704ce564867e77"
+  },
+  "source_hash_normalization": "LF line endings",
+  "use_pitch": false,
+  "measured_speed": false,
+  "test_coverage": {
+    "1300": {
+      "eligible": true,
+      "attempted": 12,
+      "accepted": 12,
+      "rejected": 0,
+      "per_target": {
+        "17.0": 4,
+        "19.5": 4,
+        "22.0": 4
+      },
+      "per_target_throttle": {
+        "17.0:0.75": 2,
+        "17.0:1.0": 2,
+        "19.5:0.75": 2,
+        "19.5:1.0": 2,
+        "22.0:0.75": 2,
+        "22.0:1.0": 2
+      },
+      "per_brake": {
+        "0.4": 6,
+        "0.8": 6
+      }
+    },
+    "1301": {
+      "eligible": true,
+      "attempted": 12,
+      "accepted": 12,
+      "rejected": 0,
+      "per_target": {
+        "17.0": 4,
+        "19.5": 4,
+        "22.0": 4
+      },
+      "per_target_throttle": {
+        "17.0:0.75": 2,
+        "17.0:1.0": 2,
+        "19.5:0.75": 2,
+        "19.5:1.0": 2,
+        "22.0:0.75": 2,
+        "22.0:1.0": 2
+      },
+      "per_brake": {
+        "0.4": 6,
+        "0.8": 6
+      }
+    },
+    "1302": {
+      "eligible": true,
+      "attempted": 12,
+      "accepted": 12,
+      "rejected": 0,
+      "per_target": {
+        "17.0": 4,
+        "19.5": 4,
+        "22.0": 4
+      },
+      "per_target_throttle": {
+        "17.0:0.75": 2,
+        "17.0:1.0": 2,
+        "19.5:0.75": 2,
+        "19.5:1.0": 2,
+        "22.0:0.75": 2,
+        "22.0:1.0": 2
+      },
+      "per_brake": {
+        "0.4": 6,
+        "0.8": 6
+      }
+    }
+  },
+  "baseline": {
+    "rows": [
+      {
+        "name": "s1300-00-launch",
+        "seed": 1300,
+        "target_speed": 19.5,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 12.959999710321426,
+        "speed_mse": 0.41141883011284575,
+        "speed_rmse_mps": 0.6414193870727994,
+        "signed_speed_error_mps": -0.15474286522356123,
+        "signed_acceleration_error_mps2": -0.00099677096351143,
+        "peak_observed_speed_mps": 19.58604199545823,
+        "final_position_error_m": 2.007972979237851,
+        "residual_speed_bins": {
+          "0": {
+            "states": 261,
+            "signed_speed_error_mps": -0.11350471076716283,
+            "signed_acceleration_error_mps2": 0.20621471298486505
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -0.5972199974649386,
+            "signed_acceleration_error_mps2": 0.06479387716352956
+          },
+          "15": {
+            "states": 69,
+            "signed_speed_error_mps": 0.011935152607215014,
+            "signed_acceleration_error_mps2": 0.35539162634396365
+          },
+          "17": {
+            "states": 154,
+            "signed_speed_error_mps": 0.1708906755486385,
+            "signed_acceleration_error_mps2": -0.5819231541945296
+          }
+        },
+        "launch_speed_rmse_mps": 0.42065133508916414,
+        "coast_speed_rmse_mps": 0.43011194971185174,
+        "brake_speed_rmse_mps": 1.0913436431242347,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.1599999964237213,
+        "stopping_distance_error_m": 3.1966798206311893
+      },
+      {
+        "name": "s1300-01-launch",
+        "seed": 1300,
+        "target_speed": 17.0,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 11.259999748319387,
+        "speed_mse": 0.16925683916252482,
+        "speed_rmse_mps": 0.4114083605889953,
+        "signed_speed_error_mps": -0.06096601685791418,
+        "signed_acceleration_error_mps2": -0.0008544633327588023,
+        "peak_observed_speed_mps": 17.065278306836223,
+        "final_position_error_m": 0.6861912149314139,
+        "residual_speed_bins": {
+          "0": {
+            "states": 261,
+            "signed_speed_error_mps": 0.011273502617247971,
+            "signed_acceleration_error_mps2": 0.10446520684399663
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -0.4156770545719643,
+            "signed_acceleration_error_mps2": 0.05111690139370167
+          },
+          "15": {
+            "states": 130,
+            "signed_speed_error_mps": 0.19674603286978756,
+            "signed_acceleration_error_mps2": -0.2853243416667446
+          },
+          "17": {
+            "states": 8,
+            "signed_speed_error_mps": 0.6583543732205541,
+            "signed_acceleration_error_mps2": 0.12031384318542404
+          }
+        },
+        "launch_speed_rmse_mps": 0.3553044240234987,
+        "coast_speed_rmse_mps": 0.36692536220053606,
+        "brake_speed_rmse_mps": 0.5693288570024869,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.07999999821186066,
+        "stopping_distance_error_m": 1.4055587863927634
+      },
+      {
+        "name": "s1300-02-launch",
+        "seed": 1300,
+        "target_speed": 19.5,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 14.919999666512012,
+        "speed_mse": 7.873142160498199,
+        "speed_rmse_mps": 2.8059120015599563,
+        "signed_speed_error_mps": 1.7799225573287187,
+        "signed_acceleration_error_mps2": 0.05204070887476978,
+        "peak_observed_speed_mps": 19.593647820655534,
+        "final_position_error_m": 26.584122916994495,
+        "residual_speed_bins": {
+          "0": {
+            "states": 256,
+            "signed_speed_error_mps": 0.32045648443083463,
+            "signed_acceleration_error_mps2": -0.13861089092605372
+          },
+          "8": {
+            "states": 243,
+            "signed_speed_error_mps": 0.8485689740259084,
+            "signed_acceleration_error_mps2": 0.9320933348943441
+          },
+          "15": {
+            "states": 86,
+            "signed_speed_error_mps": 3.8705215517577027,
+            "signed_acceleration_error_mps2": 0.276357173941341
+          },
+          "17": {
+            "states": 161,
+            "signed_speed_error_mps": 4.400609789880751,
+            "signed_acceleration_error_mps2": -1.0929108101902665
+          }
+        },
+        "launch_speed_rmse_mps": 3.4555940981737354,
+        "coast_speed_rmse_mps": 4.097578505921264,
+        "brake_speed_rmse_mps": 1.0629964363230038,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1300-03-launch",
+        "seed": 1300,
+        "target_speed": 19.5,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 15.419999655336142,
+        "speed_mse": 0.5519410699960491,
+        "speed_rmse_mps": 0.7429273652222329,
+        "signed_speed_error_mps": -0.2963207549680992,
+        "signed_acceleration_error_mps2": -0.0007797727933287652,
+        "peak_observed_speed_mps": 19.574277451792398,
+        "final_position_error_m": 4.574011843516112,
+        "residual_speed_bins": {
+          "0": {
+            "states": 320,
+            "signed_speed_error_mps": -0.27941839462749996,
+            "signed_acceleration_error_mps2": 0.1851398613038377
+          },
+          "8": {
+            "states": 211,
+            "signed_speed_error_mps": -0.7672075348105304,
+            "signed_acceleration_error_mps2": 0.004898842952218619
+          },
+          "15": {
+            "states": 80,
+            "signed_speed_error_mps": -0.10383406542779024,
+            "signed_acceleration_error_mps2": 0.24021225316211914
+          },
+          "17": {
+            "states": 160,
+            "signed_speed_error_mps": 0.1927611157792038,
+            "signed_acceleration_error_mps2": -0.5006037284798263
+          }
+        },
+        "launch_speed_rmse_mps": 0.43368248923859964,
+        "coast_speed_rmse_mps": 0.4201145863293744,
+        "brake_speed_rmse_mps": 1.1075653676357948,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.2799999937415123,
+        "stopping_distance_error_m": 5.876577221480204
+      },
+      {
+        "name": "s1300-04-launch",
+        "seed": 1300,
+        "target_speed": 19.5,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 12.359999723732471,
+        "speed_mse": 9.525537333185957,
+        "speed_rmse_mps": 3.0863469236600665,
+        "signed_speed_error_mps": 2.0765234215567507,
+        "signed_acceleration_error_mps2": 0.10986032926826732,
+        "peak_observed_speed_mps": 19.597553616940512,
+        "final_position_error_m": 25.69445489790485,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.4099002908256223,
+            "signed_acceleration_error_mps2": -0.197724738498011
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": 1.0219212510373579,
+            "signed_acceleration_error_mps2": 1.24964694020941
+          },
+          "15": {
+            "states": 73,
+            "signed_speed_error_mps": 4.299138166551158,
+            "signed_acceleration_error_mps2": 0.5257553577846472
+          },
+          "17": {
+            "states": 154,
+            "signed_speed_error_mps": 4.48898564851348,
+            "signed_acceleration_error_mps2": -1.148447622755989
+          }
+        },
+        "launch_speed_rmse_mps": 3.4534063906387873,
+        "coast_speed_rmse_mps": 4.094276907987727,
+        "brake_speed_rmse_mps": 1.4792000972201065,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1300-05-launch",
+        "seed": 1300,
+        "target_speed": 22.0,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 14.67999967187643,
+        "speed_mse": 1.0878236753403954,
+        "speed_rmse_mps": 1.0429878596323139,
+        "signed_speed_error_mps": -0.4060933663876024,
+        "signed_acceleration_error_mps2": -0.000984898842134382,
+        "peak_observed_speed_mps": 22.064418708387148,
+        "final_position_error_m": 5.969261911660073,
+        "residual_speed_bins": {
+          "0": {
+            "states": 260,
+            "signed_speed_error_mps": -0.2894368588027469,
+            "signed_acceleration_error_mps2": 0.36843370517694013
+          },
+          "8": {
+            "states": 165,
+            "signed_speed_error_mps": -0.9138418802483109,
+            "signed_acceleration_error_mps2": 0.09870285865393388
+          },
+          "15": {
+            "states": 69,
+            "signed_speed_error_mps": -0.21436431281872045,
+            "signed_acceleration_error_mps2": 0.3905057276942546
+          },
+          "17": {
+            "states": 103,
+            "signed_speed_error_mps": 0.02626661050884252,
+            "signed_acceleration_error_mps2": -0.13861856138991419
+          },
+          "20": {
+            "states": 130,
+            "signed_speed_error_mps": -0.4602616092973028,
+            "signed_acceleration_error_mps2": -0.9394850810912415
+          },
+          "22": {
+            "states": 7,
+            "signed_speed_error_mps": -0.07449212206741913,
+            "signed_acceleration_error_mps2": -0.4765390885587415
+          }
+        },
+        "launch_speed_rmse_mps": 0.4104066514904514,
+        "coast_speed_rmse_mps": 0.9943167435067596,
+        "brake_speed_rmse_mps": 1.9457792098079303,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.29999999329447746,
+        "stopping_distance_error_m": 6.3996839867168305
+      },
+      {
+        "name": "s1300-06-launch",
+        "seed": 1300,
+        "target_speed": 17.0,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 10.739999759942293,
+        "speed_mse": 8.44574557329087,
+        "speed_rmse_mps": 2.906156494975945,
+        "signed_speed_error_mps": 1.9501407081078128,
+        "signed_acceleration_error_mps2": 0.200313577525193,
+        "peak_observed_speed_mps": 17.100956770387356,
+        "final_position_error_m": 20.96354839935689,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.6975902830504873,
+            "signed_acceleration_error_mps2": -0.21126834223897742
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": 1.293928049828641,
+            "signed_acceleration_error_mps2": 1.2184470874575721
+          },
+          "15": {
+            "states": 134,
+            "signed_speed_error_mps": 4.4346742156563135,
+            "signed_acceleration_error_mps2": -0.591012485470617
+          },
+          "17": {
+            "states": 12,
+            "signed_speed_error_mps": 5.440779425233237,
+            "signed_acceleration_error_mps2": -0.904519851749356
+          }
+        },
+        "launch_speed_rmse_mps": 2.8298253287036252,
+        "coast_speed_rmse_mps": 4.397464338861512,
+        "brake_speed_rmse_mps": 2.2554914251037763,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1300-07-launch",
+        "seed": 1300,
+        "target_speed": 17.0,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 13.43999969959259,
+        "speed_mse": 0.21425679645676474,
+        "speed_rmse_mps": 0.4628788140072569,
+        "signed_speed_error_mps": -0.16088387449618036,
+        "signed_acceleration_error_mps2": -0.0012560652945016377,
+        "peak_observed_speed_mps": 17.087489063356355,
+        "final_position_error_m": 2.1650568088492737,
+        "residual_speed_bins": {
+          "0": {
+            "states": 319,
+            "signed_speed_error_mps": -0.10130364724343538,
+            "signed_acceleration_error_mps2": 0.1078179746877593
+          },
+          "8": {
+            "states": 212,
+            "signed_speed_error_mps": -0.4868685581477999,
+            "signed_acceleration_error_mps2": -0.028828542767699313
+          },
+          "15": {
+            "states": 132,
+            "signed_speed_error_mps": 0.16325444662313046,
+            "signed_acceleration_error_mps2": -0.2229637826467711
+          },
+          "17": {
+            "states": 9,
+            "signed_speed_error_mps": 0.6341737008674314,
+            "signed_acceleration_error_mps2": 0.0338733969806356
+          }
+        },
+        "launch_speed_rmse_mps": 0.35102066915279045,
+        "coast_speed_rmse_mps": 0.35595091709625354,
+        "brake_speed_rmse_mps": 0.6207328549201498,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.11999999731779099,
+        "stopping_distance_error_m": 2.8487873466799485
+      },
+      {
+        "name": "s1300-08-launch",
+        "seed": 1300,
+        "target_speed": 22.0,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 13.879999689757824,
+        "speed_mse": 9.558478476163229,
+        "speed_rmse_mps": 3.0916789089689165,
+        "signed_speed_error_mps": 1.9324675841950574,
+        "signed_acceleration_error_mps2": 0.024298362443592663,
+        "peak_observed_speed_mps": 22.1122128490054,
+        "final_position_error_m": 26.85860022268352,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.03780639469222047,
+            "signed_acceleration_error_mps2": -0.15694911547448542
+          },
+          "8": {
+            "states": 195,
+            "signed_speed_error_mps": 0.6488192693529388,
+            "signed_acceleration_error_mps2": 1.3026194348428288
+          },
+          "15": {
+            "states": 73,
+            "signed_speed_error_mps": 3.988014173407126,
+            "signed_acceleration_error_mps2": 0.5891504612175289
+          },
+          "17": {
+            "states": 100,
+            "signed_speed_error_mps": 4.378940258704571,
+            "signed_acceleration_error_mps2": -0.25960308734395593
+          },
+          "20": {
+            "states": 120,
+            "signed_speed_error_mps": 3.5838017781347578,
+            "signed_acceleration_error_mps2": -1.7018784873954482
+          },
+          "22": {
+            "states": 11,
+            "signed_speed_error_mps": 4.554335692855515,
+            "signed_acceleration_error_mps2": -1.760445926182169
+          }
+        },
+        "launch_speed_rmse_mps": 3.7381865398774603,
+        "coast_speed_rmse_mps": 3.1797532908513215,
+        "brake_speed_rmse_mps": 0.41201969668032523,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1300-09-launch",
+        "seed": 1300,
+        "target_speed": 22.0,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 17.45999960973859,
+        "speed_mse": 1.6373633838550845,
+        "speed_rmse_mps": 1.2795950077485785,
+        "signed_speed_error_mps": -0.6614764516552419,
+        "signed_acceleration_error_mps2": -0.0009577623320694748,
+        "peak_observed_speed_mps": 22.070164138250153,
+        "final_position_error_m": 11.56207415933426,
+        "residual_speed_bins": {
+          "0": {
+            "states": 321,
+            "signed_speed_error_mps": -0.593808127123943,
+            "signed_acceleration_error_mps2": 0.3256964334728382
+          },
+          "8": {
+            "states": 212,
+            "signed_speed_error_mps": -1.2618552302569745,
+            "signed_acceleration_error_mps2": 0.051454789182140685
+          },
+          "15": {
+            "states": 80,
+            "signed_speed_error_mps": -0.4915307880114854,
+            "signed_acceleration_error_mps2": 0.29514815714252995
+          },
+          "17": {
+            "states": 122,
+            "signed_speed_error_mps": -0.20031768922585613,
+            "signed_acceleration_error_mps2": -0.2000238258295587
+          },
+          "20": {
+            "states": 131,
+            "signed_speed_error_mps": -0.42748971140989717,
+            "signed_acceleration_error_mps2": -0.8561031512219289
+          },
+          "22": {
+            "states": 7,
+            "signed_speed_error_mps": -0.034618257749620795,
+            "signed_acceleration_error_mps2": -0.47893285391644463
+          }
+        },
+        "launch_speed_rmse_mps": 0.42658463289431575,
+        "coast_speed_rmse_mps": 0.963762956791644,
+        "brake_speed_rmse_mps": 2.0360186439692924,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.6199999861419201,
+        "stopping_distance_error_m": 12.154973557382085
+      },
+      {
+        "name": "s1300-10-launch",
+        "seed": 1300,
+        "target_speed": 17.0,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 12.939999710768461,
+        "speed_mse": 7.090894577228797,
+        "speed_rmse_mps": 2.662873368605574,
+        "signed_speed_error_mps": 1.828020810864536,
+        "signed_acceleration_error_mps2": 0.13200041209347155,
+        "peak_observed_speed_mps": 17.076843025873035,
+        "final_position_error_m": 23.67410075290937,
+        "residual_speed_bins": {
+          "0": {
+            "states": 255,
+            "signed_speed_error_mps": 0.801913317343929,
+            "signed_acceleration_error_mps2": -0.14559132735187408
+          },
+          "8": {
+            "states": 242,
+            "signed_speed_error_mps": 1.3273154427742506,
+            "signed_acceleration_error_mps2": 0.8715182591765016
+          },
+          "15": {
+            "states": 139,
+            "signed_speed_error_mps": 4.313726109987065,
+            "signed_acceleration_error_mps2": -0.5703840738596075
+          },
+          "17": {
+            "states": 11,
+            "signed_speed_error_mps": 5.386483916176956,
+            "signed_acceleration_error_mps2": -0.8267252140930892
+          }
+        },
+        "launch_speed_rmse_mps": 2.7844951043270365,
+        "coast_speed_rmse_mps": 4.33091563950014,
+        "brake_speed_rmse_mps": 1.886339201585457,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1300-11-launch",
+        "seed": 1300,
+        "target_speed": 22.0,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 16.699999626725912,
+        "speed_mse": 8.01627760668636,
+        "speed_rmse_mps": 2.8313031640370765,
+        "signed_speed_error_mps": 1.4172168566031784,
+        "signed_acceleration_error_mps2": -0.0007229447015308514,
+        "peak_observed_speed_mps": 22.085088226582904,
+        "final_position_error_m": 23.695361021269257,
+        "residual_speed_bins": {
+          "0": {
+            "states": 255,
+            "signed_speed_error_mps": -0.28014934603136843,
+            "signed_acceleration_error_mps2": -0.04149586546118701
+          },
+          "8": {
+            "states": 243,
+            "signed_speed_error_mps": 0.21515910929507137,
+            "signed_acceleration_error_mps2": 1.0102314608189906
+          },
+          "15": {
+            "states": 86,
+            "signed_speed_error_mps": 3.2779069404458423,
+            "signed_acceleration_error_mps2": 0.3797044044328914
+          },
+          "17": {
+            "states": 118,
+            "signed_speed_error_mps": 3.757713336474938,
+            "signed_acceleration_error_mps2": -0.4199697655391788
+          },
+          "20": {
+            "states": 123,
+            "signed_speed_error_mps": 3.5193020952240572,
+            "signed_acceleration_error_mps2": -1.6382260751565934
+          },
+          "22": {
+            "states": 10,
+            "signed_speed_error_mps": 4.576338350460956,
+            "signed_acceleration_error_mps2": -1.710479731553491
+          }
+        },
+        "launch_speed_rmse_mps": 3.738417122837159,
+        "coast_speed_rmse_mps": 3.1718694624081367,
+        "brake_speed_rmse_mps": 0.5760263842135337,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.11999999731779099,
+        "stopping_distance_error_m": 1.804914626211584
+      },
+      {
+        "name": "s1301-00-launch",
+        "seed": 1301,
+        "target_speed": 19.5,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 12.979999709874392,
+        "speed_mse": 0.3915191165765082,
+        "speed_rmse_mps": 0.6257148844134269,
+        "signed_speed_error_mps": -0.1343596101988795,
+        "signed_acceleration_error_mps2": -0.0008134184302847983,
+        "peak_observed_speed_mps": 19.57499393788645,
+        "final_position_error_m": 1.745009870318167,
+        "residual_speed_bins": {
+          "0": {
+            "states": 261,
+            "signed_speed_error_mps": -0.10182469560790817,
+            "signed_acceleration_error_mps2": 0.19446432323863178
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -0.5869873976300013,
+            "signed_acceleration_error_mps2": 0.06724544131662698
+          },
+          "15": {
+            "states": 69,
+            "signed_speed_error_mps": 0.030363930343100764,
+            "signed_acceleration_error_mps2": 0.3721326494856622
+          },
+          "17": {
+            "states": 155,
+            "signed_speed_error_mps": 0.21556981252928145,
+            "signed_acceleration_error_mps2": -0.5676677555933886
+          }
+        },
+        "launch_speed_rmse_mps": 0.43343209157545654,
+        "coast_speed_rmse_mps": 0.42012908782603176,
+        "brake_speed_rmse_mps": 1.0414876275886638,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.1599999964237213,
+        "stopping_distance_error_m": 3.042676471794401
+      },
+      {
+        "name": "s1301-01-launch",
+        "seed": 1301,
+        "target_speed": 22.0,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 17.45999960973859,
+        "speed_mse": 1.6378715880842856,
+        "speed_rmse_mps": 1.2797935724499814,
+        "signed_speed_error_mps": -0.6615708866365921,
+        "signed_acceleration_error_mps2": -0.000967134076027512,
+        "peak_observed_speed_mps": 22.070213080282834,
+        "final_position_error_m": 11.563655227834705,
+        "residual_speed_bins": {
+          "0": {
+            "states": 321,
+            "signed_speed_error_mps": -0.5939695451401464,
+            "signed_acceleration_error_mps2": 0.32579916309171547
+          },
+          "8": {
+            "states": 212,
+            "signed_speed_error_mps": -1.2619065073916453,
+            "signed_acceleration_error_mps2": 0.05134619496085804
+          },
+          "15": {
+            "states": 80,
+            "signed_speed_error_mps": -0.49153646938873674,
+            "signed_acceleration_error_mps2": 0.29500568425486084
+          },
+          "17": {
+            "states": 122,
+            "signed_speed_error_mps": -0.20038230195727078,
+            "signed_acceleration_error_mps2": -0.20001807590309836
+          },
+          "20": {
+            "states": 131,
+            "signed_speed_error_mps": -0.42757495050965283,
+            "signed_acceleration_error_mps2": -0.8561500093942864
+          },
+          "22": {
+            "states": 7,
+            "signed_speed_error_mps": -0.034667779530745894,
+            "signed_acceleration_error_mps2": -0.47911871172484416
+          }
+        },
+        "launch_speed_rmse_mps": 0.42656746102334153,
+        "coast_speed_rmse_mps": 0.9638770911578766,
+        "brake_speed_rmse_mps": 2.036365039661873,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.6199999861419201,
+        "stopping_distance_error_m": 12.15712907318968
+      },
+      {
+        "name": "s1301-02-launch",
+        "seed": 1301,
+        "target_speed": 22.0,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 13.879999689757824,
+        "speed_mse": 9.565706015034632,
+        "speed_rmse_mps": 3.092847557677978,
+        "signed_speed_error_mps": 1.9339163785549958,
+        "signed_acceleration_error_mps2": 0.02431304112750491,
+        "peak_observed_speed_mps": 22.109844788503302,
+        "final_position_error_m": 26.87850433183019,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.03852125128044755,
+            "signed_acceleration_error_mps2": -0.15716385226819096
+          },
+          "8": {
+            "states": 195,
+            "signed_speed_error_mps": 0.650234482429968,
+            "signed_acceleration_error_mps2": 1.3026965228648324
+          },
+          "15": {
+            "states": 73,
+            "signed_speed_error_mps": 3.9896108859362864,
+            "signed_acceleration_error_mps2": 0.5894661879107206
+          },
+          "17": {
+            "states": 100,
+            "signed_speed_error_mps": 4.38085270720477,
+            "signed_acceleration_error_mps2": -0.25941857988989653
+          },
+          "20": {
+            "states": 120,
+            "signed_speed_error_mps": 3.585958052030413,
+            "signed_acceleration_error_mps2": -1.7018762300809471
+          },
+          "22": {
+            "states": 11,
+            "signed_speed_error_mps": 4.556607580428713,
+            "signed_acceleration_error_mps2": -1.7608769402396418
+          }
+        },
+        "launch_speed_rmse_mps": 3.739408292854389,
+        "coast_speed_rmse_mps": 3.1818063916444435,
+        "brake_speed_rmse_mps": 0.4135126274655331,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1301-03-launch",
+        "seed": 1301,
+        "target_speed": 17.0,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 12.999999709427357,
+        "speed_mse": 7.312098562334831,
+        "speed_rmse_mps": 2.704089229728714,
+        "signed_speed_error_mps": 1.8592074932182372,
+        "signed_acceleration_error_mps2": 0.13021447400102545,
+        "peak_observed_speed_mps": 17.101134633039546,
+        "final_position_error_m": 24.191138520838496,
+        "residual_speed_bins": {
+          "0": {
+            "states": 255,
+            "signed_speed_error_mps": 0.7992895920183902,
+            "signed_acceleration_error_mps2": -0.16206228427235989
+          },
+          "8": {
+            "states": 244,
+            "signed_speed_error_mps": 1.3574953355889188,
+            "signed_acceleration_error_mps2": 0.8649881792153569
+          },
+          "15": {
+            "states": 139,
+            "signed_speed_error_mps": 4.3885556593648145,
+            "signed_acceleration_error_mps2": -0.5340734052371969
+          },
+          "17": {
+            "states": 12,
+            "signed_speed_error_mps": 5.440594465414776,
+            "signed_acceleration_error_mps2": -0.904635150871533
+          }
+        },
+        "launch_speed_rmse_mps": 2.82975544517612,
+        "coast_speed_rmse_mps": 4.397268559206159,
+        "brake_speed_rmse_mps": 1.9145833640092724,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1301-04-launch",
+        "seed": 1301,
+        "target_speed": 17.0,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 13.43999969959259,
+        "speed_mse": 0.21432571104407386,
+        "speed_rmse_mps": 0.46295324930717774,
+        "signed_speed_error_mps": -0.1609574984714821,
+        "signed_acceleration_error_mps2": -0.0012620179914989741,
+        "peak_observed_speed_mps": 17.087607874004412,
+        "final_position_error_m": 2.166348648687249,
+        "residual_speed_bins": {
+          "0": {
+            "states": 319,
+            "signed_speed_error_mps": -0.10138149999930847,
+            "signed_acceleration_error_mps2": 0.10785395789200293
+          },
+          "8": {
+            "states": 212,
+            "signed_speed_error_mps": -0.4869219237334143,
+            "signed_acceleration_error_mps2": -0.02889127102824686
+          },
+          "15": {
+            "states": 132,
+            "signed_speed_error_mps": 0.16316106580610557,
+            "signed_acceleration_error_mps2": -0.22297866184601844
+          },
+          "17": {
+            "states": 9,
+            "signed_speed_error_mps": 0.634054352616649,
+            "signed_acceleration_error_mps2": 0.03384935153627936
+          }
+        },
+        "launch_speed_rmse_mps": 0.35101512782361355,
+        "coast_speed_rmse_mps": 0.3558893685687442,
+        "brake_speed_rmse_mps": 0.6209003024831459,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.11999999731779099,
+        "stopping_distance_error_m": 2.849589000409111
+      },
+      {
+        "name": "s1301-05-launch",
+        "seed": 1301,
+        "target_speed": 19.5,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 15.419999655336142,
+        "speed_mse": 0.5517866247790019,
+        "speed_rmse_mps": 0.7428234142641182,
+        "signed_speed_error_mps": -0.2962102815784973,
+        "signed_acceleration_error_mps2": -0.0007776774876516336,
+        "peak_observed_speed_mps": 19.574153822517445,
+        "final_position_error_m": 4.57248005004819,
+        "residual_speed_bins": {
+          "0": {
+            "states": 320,
+            "signed_speed_error_mps": -0.27933914890972306,
+            "signed_acceleration_error_mps2": 0.18511317442966174
+          },
+          "8": {
+            "states": 211,
+            "signed_speed_error_mps": -0.7670781654283304,
+            "signed_acceleration_error_mps2": 0.004904451691742128
+          },
+          "15": {
+            "states": 81,
+            "signed_speed_error_mps": -0.11432544969330961,
+            "signed_acceleration_error_mps2": 0.23120817420251097
+          },
+          "17": {
+            "states": 159,
+            "signed_speed_error_mps": 0.20017638115124073,
+            "signed_acceleration_error_mps2": -0.5006195382253593
+          }
+        },
+        "launch_speed_rmse_mps": 0.43371928236195645,
+        "coast_speed_rmse_mps": 0.42005131906144005,
+        "brake_speed_rmse_mps": 1.1073562273793822,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.2799999937415123,
+        "stopping_distance_error_m": 5.875206254401611
+      },
+      {
+        "name": "s1301-06-launch",
+        "seed": 1301,
+        "target_speed": 17.0,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 11.259999748319387,
+        "speed_mse": 0.1693929041742755,
+        "speed_rmse_mps": 0.4115736922766997,
+        "signed_speed_error_mps": -0.06152191771757032,
+        "signed_acceleration_error_mps2": -0.0008590887907549838,
+        "peak_observed_speed_mps": 17.06614779826446,
+        "final_position_error_m": 0.6924378886475241,
+        "residual_speed_bins": {
+          "0": {
+            "states": 261,
+            "signed_speed_error_mps": 0.010977300948710534,
+            "signed_acceleration_error_mps2": 0.10453107450536611
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -0.4164215920651729,
+            "signed_acceleration_error_mps2": 0.051006566790437684
+          },
+          "15": {
+            "states": 130,
+            "signed_speed_error_mps": 0.19592178433730484,
+            "signed_acceleration_error_mps2": -0.2853385412326338
+          },
+          "17": {
+            "states": 8,
+            "signed_speed_error_mps": 0.6574839993144481,
+            "signed_acceleration_error_mps2": 0.12033199643937462
+          }
+        },
+        "launch_speed_rmse_mps": 0.3552322646096891,
+        "coast_speed_rmse_mps": 0.3664597403714583,
+        "brake_speed_rmse_mps": 0.5700975460812823,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.07999999821186066,
+        "stopping_distance_error_m": 1.4075693939584362
+      },
+      {
+        "name": "s1301-07-launch",
+        "seed": 1301,
+        "target_speed": 19.5,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 14.959999665617943,
+        "speed_mse": 8.09953613385409,
+        "speed_rmse_mps": 2.8459684000097556,
+        "signed_speed_error_mps": 1.818227548498339,
+        "signed_acceleration_error_mps2": 0.05364604576910671,
+        "peak_observed_speed_mps": 19.600179609763845,
+        "final_position_error_m": 27.22987632671627,
+        "residual_speed_bins": {
+          "0": {
+            "states": 256,
+            "signed_speed_error_mps": 0.33509606441883044,
+            "signed_acceleration_error_mps2": -0.1408602993591953
+          },
+          "8": {
+            "states": 243,
+            "signed_speed_error_mps": 0.8676119966338122,
+            "signed_acceleration_error_mps2": 0.9325131847093913
+          },
+          "15": {
+            "states": 88,
+            "signed_speed_error_mps": 3.9445830896852594,
+            "signed_acceleration_error_mps2": 0.2957886978763387
+          },
+          "17": {
+            "states": 161,
+            "signed_speed_error_mps": 4.460340461240474,
+            "signed_acceleration_error_mps2": -1.0959169591692797
+          }
+        },
+        "launch_speed_rmse_mps": 3.496269525958438,
+        "coast_speed_rmse_mps": 4.155371631914532,
+        "brake_speed_rmse_mps": 1.1006467310141415,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1301-08-launch",
+        "seed": 1301,
+        "target_speed": 22.0,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 14.67999967187643,
+        "speed_mse": 1.0086015704973104,
+        "speed_rmse_mps": 1.0042915764345086,
+        "signed_speed_error_mps": -0.36697122737862886,
+        "signed_acceleration_error_mps2": -0.0009714043604999373,
+        "peak_observed_speed_mps": 22.063124322563127,
+        "final_position_error_m": 5.392868205799619,
+        "residual_speed_bins": {
+          "0": {
+            "states": 260,
+            "signed_speed_error_mps": -0.25449985904718364,
+            "signed_acceleration_error_mps2": 0.36130844524414363
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -0.8588068585092037,
+            "signed_acceleration_error_mps2": 0.09372349841108486
+          },
+          "15": {
+            "states": 69,
+            "signed_speed_error_mps": -0.18362371563492613,
+            "signed_acceleration_error_mps2": 0.39667801188324714
+          },
+          "17": {
+            "states": 104,
+            "signed_speed_error_mps": 0.05969022957449021,
+            "signed_acceleration_error_mps2": -0.1340942790790767
+          },
+          "20": {
+            "states": 130,
+            "signed_speed_error_mps": -0.4299990361031891,
+            "signed_acceleration_error_mps2": -0.9248026871318475
+          },
+          "22": {
+            "states": 7,
+            "signed_speed_error_mps": -0.04963382557679046,
+            "signed_acceleration_error_mps2": -0.460641253154585
+          }
+        },
+        "launch_speed_rmse_mps": 0.421886963990105,
+        "coast_speed_rmse_mps": 0.9574282988138332,
+        "brake_speed_rmse_mps": 1.8629282263971987,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.2799999937415123,
+        "stopping_distance_error_m": 6.082959371601447
+      },
+      {
+        "name": "s1301-09-launch",
+        "seed": 1301,
+        "target_speed": 22.0,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 16.679999627172947,
+        "speed_mse": 8.019492134484716,
+        "speed_rmse_mps": 2.8318707835077355,
+        "signed_speed_error_mps": 1.464413778752427,
+        "signed_acceleration_error_mps2": -0.0005402272158834173,
+        "peak_observed_speed_mps": 22.111428238283082,
+        "final_position_error_m": 24.456479219095566,
+        "residual_speed_bins": {
+          "0": {
+            "states": 255,
+            "signed_speed_error_mps": -0.21083577278153912,
+            "signed_acceleration_error_mps2": -0.05561124070499471
+          },
+          "8": {
+            "states": 242,
+            "signed_speed_error_mps": 0.2592720567835575,
+            "signed_acceleration_error_mps2": 1.0125776820206875
+          },
+          "15": {
+            "states": 86,
+            "signed_speed_error_mps": 3.3012831916202963,
+            "signed_acceleration_error_mps2": 0.3852681012806488
+          },
+          "17": {
+            "states": 117,
+            "signed_speed_error_mps": 3.8031233349994653,
+            "signed_acceleration_error_mps2": -0.4051629638953898
+          },
+          "20": {
+            "states": 123,
+            "signed_speed_error_mps": 3.5351520377601,
+            "signed_acceleration_error_mps2": -1.6070788705433263
+          },
+          "22": {
+            "states": 11,
+            "signed_speed_error_mps": 4.555027659742978,
+            "signed_acceleration_error_mps2": -1.761070093165963
+          }
+        },
+        "launch_speed_rmse_mps": 3.7385938595759467,
+        "coast_speed_rmse_mps": 3.1803495013430823,
+        "brake_speed_rmse_mps": 0.5079713632557882,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.07999999821186066,
+        "stopping_distance_error_m": 1.1685596479953304
+      },
+      {
+        "name": "s1301-10-launch",
+        "seed": 1301,
+        "target_speed": 17.0,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 10.739999759942293,
+        "speed_mse": 8.449609619019352,
+        "speed_rmse_mps": 2.9068212224041834,
+        "signed_speed_error_mps": 1.9508334950199278,
+        "signed_acceleration_error_mps2": 0.20032248016389453,
+        "peak_observed_speed_mps": 17.099884359156068,
+        "final_position_error_m": 20.97075902777715,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.6979078708275752,
+            "signed_acceleration_error_mps2": -0.2114466393216219
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": 1.2947683732079192,
+            "signed_acceleration_error_mps2": 1.218629366389253
+          },
+          "15": {
+            "states": 134,
+            "signed_speed_error_mps": 4.435668876412549,
+            "signed_acceleration_error_mps2": -0.5909785966862203
+          },
+          "17": {
+            "states": 12,
+            "signed_speed_error_mps": 5.441846243442511,
+            "signed_acceleration_error_mps2": -0.9045797783843658
+          }
+        },
+        "launch_speed_rmse_mps": 2.830315489305713,
+        "coast_speed_rmse_mps": 4.398482531087375,
+        "brake_speed_rmse_mps": 2.2564168651639274,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1301-11-launch",
+        "seed": 1301,
+        "target_speed": 19.5,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 12.359999723732471,
+        "speed_mse": 9.526120700806864,
+        "speed_rmse_mps": 3.0864414299978,
+        "signed_speed_error_mps": 2.076576532339528,
+        "signed_acceleration_error_mps2": 0.10985603989338316,
+        "peak_observed_speed_mps": 19.597208910194606,
+        "final_position_error_m": 25.694872875742323,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.40972561667335866,
+            "signed_acceleration_error_mps2": -0.19758449765442762
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": 1.0221328808990093,
+            "signed_acceleration_error_mps2": 1.2496817125002422
+          },
+          "15": {
+            "states": 73,
+            "signed_speed_error_mps": 4.299320770129174,
+            "signed_acceleration_error_mps2": 0.5257778838304988
+          },
+          "17": {
+            "states": 154,
+            "signed_speed_error_mps": 4.489064398644334,
+            "signed_acceleration_error_mps2": -1.1486973472269462
+          }
+        },
+        "launch_speed_rmse_mps": 3.4536374194004327,
+        "coast_speed_rmse_mps": 4.094260166927644,
+        "brake_speed_rmse_mps": 1.4787655799457697,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-00-launch",
+        "seed": 1302,
+        "target_speed": 19.5,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 15.359999656677246,
+        "speed_mse": 0.5192932090105412,
+        "speed_rmse_mps": 0.7206200170759491,
+        "signed_speed_error_mps": -0.27378925469915527,
+        "signed_acceleration_error_mps2": -0.000789924029194134,
+        "peak_observed_speed_mps": 19.56562260341032,
+        "final_position_error_m": 4.210197501669586,
+        "residual_speed_bins": {
+          "0": {
+            "states": 319,
+            "signed_speed_error_mps": -0.23859850030505128,
+            "signed_acceleration_error_mps2": 0.1888530478581442
+          },
+          "8": {
+            "states": 210,
+            "signed_speed_error_mps": -0.7322144835948328,
+            "signed_acceleration_error_mps2": 0.005179713944327595
+          },
+          "15": {
+            "states": 81,
+            "signed_speed_error_mps": -0.10986078755186837,
+            "signed_acceleration_error_mps2": 0.2241403306972035
+          },
+          "17": {
+            "states": 158,
+            "signed_speed_error_mps": 0.1786882916473241,
+            "signed_acceleration_error_mps2": -0.5069233584553884
+          }
+        },
+        "launch_speed_rmse_mps": 0.4313266594504171,
+        "coast_speed_rmse_mps": 0.4214826196531796,
+        "brake_speed_rmse_mps": 1.068309410548655,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.25999999418854713,
+        "stopping_distance_error_m": 5.605540090599725
+      },
+      {
+        "name": "s1302-01-launch",
+        "seed": 1302,
+        "target_speed": 17.0,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 13.459999699145555,
+        "speed_mse": 0.19860807582217183,
+        "speed_rmse_mps": 0.44565465982324454,
+        "signed_speed_error_mps": -0.1469610871612104,
+        "signed_acceleration_error_mps2": -0.000963488273880093,
+        "peak_observed_speed_mps": 17.066185560558704,
+        "final_position_error_m": 1.9801028804820326,
+        "residual_speed_bins": {
+          "0": {
+            "states": 321,
+            "signed_speed_error_mps": -0.10184028170997605,
+            "signed_acceleration_error_mps2": 0.09465298665590473
+          },
+          "8": {
+            "states": 211,
+            "signed_speed_error_mps": -0.46112109404437884,
+            "signed_acceleration_error_mps2": -0.022011174247041
+          },
+          "15": {
+            "states": 133,
+            "signed_speed_error_mps": 0.1930520973991688,
+            "signed_acceleration_error_mps2": -0.20564281989770256
+          },
+          "17": {
+            "states": 8,
+            "signed_speed_error_mps": 0.6574474464401221,
+            "signed_acceleration_error_mps2": 0.12035206095667109
+          }
+        },
+        "launch_speed_rmse_mps": 0.35522701410700874,
+        "coast_speed_rmse_mps": 0.36644399671026556,
+        "brake_speed_rmse_mps": 0.5792055646304785,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.13999999687075615,
+        "stopping_distance_error_m": 2.6946539513523575
+      },
+      {
+        "name": "s1302-02-launch",
+        "seed": 1302,
+        "target_speed": 19.5,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 12.399999722838402,
+        "speed_mse": 9.792902627248038,
+        "speed_rmse_mps": 3.1293613769023287,
+        "signed_speed_error_mps": 2.116542370435715,
+        "signed_acceleration_error_mps2": 0.11231049646349156,
+        "peak_observed_speed_mps": 19.603919085568464,
+        "final_position_error_m": 26.27510399321943,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.4263294100142172,
+            "signed_acceleration_error_mps2": -0.20084481883166916
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": 1.0370764346856611,
+            "signed_acceleration_error_mps2": 1.2521583101191598
+          },
+          "15": {
+            "states": 75,
+            "signed_speed_error_mps": 4.3659416553213255,
+            "signed_acceleration_error_mps2": 0.5433799480411803
+          },
+          "17": {
+            "states": 154,
+            "signed_speed_error_mps": 4.5488699463656985,
+            "signed_acceleration_error_mps2": -1.151813489655218
+          }
+        },
+        "launch_speed_rmse_mps": 3.4943762787555586,
+        "coast_speed_rmse_mps": 4.15180123694681,
+        "brake_speed_rmse_mps": 1.5268122229170598,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-03-launch",
+        "seed": 1302,
+        "target_speed": 17.0,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 11.259999748319387,
+        "speed_mse": 0.1692826938764422,
+        "speed_rmse_mps": 0.411439781591963,
+        "signed_speed_error_mps": -0.06110179743661391,
+        "signed_acceleration_error_mps2": -0.000854914025105692,
+        "peak_observed_speed_mps": 17.065408726352715,
+        "final_position_error_m": 0.6877958746186722,
+        "residual_speed_bins": {
+          "0": {
+            "states": 261,
+            "signed_speed_error_mps": 0.011195037293896122,
+            "signed_acceleration_error_mps2": 0.10442937967712448
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -0.41590637055438046,
+            "signed_acceleration_error_mps2": 0.05112729808409649
+          },
+          "15": {
+            "states": 130,
+            "signed_speed_error_mps": 0.1966118062986438,
+            "signed_acceleration_error_mps2": -0.28526960041495314
+          },
+          "17": {
+            "states": 8,
+            "signed_speed_error_mps": 0.658223933017196,
+            "signed_acceleration_error_mps2": 0.12034830953601305
+          }
+        },
+        "launch_speed_rmse_mps": 0.3553036077485014,
+        "coast_speed_rmse_mps": 0.3668594113391899,
+        "brake_speed_rmse_mps": 0.5694476717328786,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.07999999821186066,
+        "stopping_distance_error_m": 1.4060406495901034
+      },
+      {
+        "name": "s1302-04-launch",
+        "seed": 1302,
+        "target_speed": 17.0,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 10.719999760389328,
+        "speed_mse": 8.15786207453983,
+        "speed_rmse_mps": 2.856197135097616,
+        "signed_speed_error_mps": 1.9058558824700842,
+        "signed_acceleration_error_mps2": 0.18651905666836344,
+        "peak_observed_speed_mps": 17.072776457974307,
+        "final_position_error_m": 20.449673017305138,
+        "residual_speed_bins": {
+          "0": {
+            "states": 196,
+            "signed_speed_error_mps": 0.6765839580775592,
+            "signed_acceleration_error_mps2": -0.2309529937847032
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": 1.273745722794668,
+            "signed_acceleration_error_mps2": 1.2139152296065685
+          },
+          "15": {
+            "states": 133,
+            "signed_speed_error_mps": 4.375070692596223,
+            "signed_acceleration_error_mps2": -0.6284406843800736
+          },
+          "17": {
+            "states": 11,
+            "signed_speed_error_mps": 5.390508120016457,
+            "signed_acceleration_error_mps2": -0.8276157112993672
+          }
+        },
+        "launch_speed_rmse_mps": 2.790705729173126,
+        "coast_speed_rmse_mps": 4.333677821755776,
+        "brake_speed_rmse_mps": 2.18265121877774,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-05-launch",
+        "seed": 1302,
+        "target_speed": 22.0,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 16.679999627172947,
+        "speed_mse": 8.016813771021866,
+        "speed_rmse_mps": 2.8313978475342996,
+        "signed_speed_error_mps": 1.4637175364550181,
+        "signed_acceleration_error_mps2": -0.0005446061256447291,
+        "peak_observed_speed_mps": 22.112423372528397,
+        "final_position_error_m": 24.445042600069858,
+        "residual_speed_bins": {
+          "0": {
+            "states": 255,
+            "signed_speed_error_mps": -0.21119086921198826,
+            "signed_acceleration_error_mps2": -0.05561056179300073
+          },
+          "8": {
+            "states": 242,
+            "signed_speed_error_mps": 0.25852447278436985,
+            "signed_acceleration_error_mps2": 1.0125856558394406
+          },
+          "15": {
+            "states": 86,
+            "signed_speed_error_mps": 3.3004395720521567,
+            "signed_acceleration_error_mps2": 0.3852143417293138
+          },
+          "17": {
+            "states": 117,
+            "signed_speed_error_mps": 3.80220851209589,
+            "signed_acceleration_error_mps2": -0.4051901761813873
+          },
+          "20": {
+            "states": 123,
+            "signed_speed_error_mps": 3.5341830926202396,
+            "signed_acceleration_error_mps2": -1.6070519144235267
+          },
+          "22": {
+            "states": 11,
+            "signed_speed_error_mps": 4.554015697380509,
+            "signed_acceleration_error_mps2": -1.7611849332838219
+          }
+        },
+        "launch_speed_rmse_mps": 3.737993883219827,
+        "coast_speed_rmse_mps": 3.1794116827188024,
+        "brake_speed_rmse_mps": 0.5082538568289198,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.07999999821186066,
+        "stopping_distance_error_m": 1.1735457234881537
+      },
+      {
+        "name": "s1302-06-launch",
+        "seed": 1302,
+        "target_speed": 22.0,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 17.379999611526728,
+        "speed_mse": 1.6146352311447463,
+        "speed_rmse_mps": 1.2706829782226352,
+        "signed_speed_error_mps": -0.6629435700907312,
+        "signed_acceleration_error_mps2": -0.0004608162139337669,
+        "peak_observed_speed_mps": 22.064785176187684,
+        "final_position_error_m": 11.535778250430987,
+        "residual_speed_bins": {
+          "0": {
+            "states": 320,
+            "signed_speed_error_mps": -0.5635363661181481,
+            "signed_acceleration_error_mps2": 0.3297104009723862
+          },
+          "8": {
+            "states": 211,
+            "signed_speed_error_mps": -1.2554738987085452,
+            "signed_acceleration_error_mps2": 0.05451330550077252
+          },
+          "15": {
+            "states": 80,
+            "signed_speed_error_mps": -0.5050547495358402,
+            "signed_acceleration_error_mps2": 0.28375425397335474
+          },
+          "17": {
+            "states": 120,
+            "signed_speed_error_mps": -0.24719088985220045,
+            "signed_acceleration_error_mps2": -0.20775630008516763
+          },
+          "20": {
+            "states": 131,
+            "signed_speed_error_mps": -0.46513744955425135,
+            "signed_acceleration_error_mps2": -0.8537745504702852
+          },
+          "22": {
+            "states": 7,
+            "signed_speed_error_mps": -0.07485479384109794,
+            "signed_acceleration_error_mps2": -0.47645760825370465
+          }
+        },
+        "launch_speed_rmse_mps": 0.41033072910572826,
+        "coast_speed_rmse_mps": 0.9943982661217878,
+        "brake_speed_rmse_mps": 2.0232429174543087,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.5799999870359898,
+        "stopping_distance_error_m": 11.96532942513663
+      },
+      {
+        "name": "s1302-07-launch",
+        "seed": 1302,
+        "target_speed": 17.0,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 12.959999710321426,
+        "speed_mse": 7.05775569697844,
+        "speed_rmse_mps": 2.6566436902562676,
+        "signed_speed_error_mps": 1.8131390664355798,
+        "signed_acceleration_error_mps2": 0.1270264079396626,
+        "peak_observed_speed_mps": 17.06959583456599,
+        "final_position_error_m": 23.518200209154518,
+        "residual_speed_bins": {
+          "0": {
+            "states": 255,
+            "signed_speed_error_mps": 0.7650636751431876,
+            "signed_acceleration_error_mps2": -0.15777716554585117
+          },
+          "8": {
+            "states": 243,
+            "signed_speed_error_mps": 1.3248359886505023,
+            "signed_acceleration_error_mps2": 0.869699615264534
+          },
+          "15": {
+            "states": 140,
+            "signed_speed_error_mps": 4.3260004044092994,
+            "signed_acceleration_error_mps2": -0.5811721575362936
+          },
+          "17": {
+            "states": 10,
+            "signed_speed_error_mps": 5.406081509580414,
+            "signed_acceleration_error_mps2": -0.7426614895107239
+          }
+        },
+        "launch_speed_rmse_mps": 2.7922075392757892,
+        "coast_speed_rmse_mps": 4.336713216578701,
+        "brake_speed_rmse_mps": 1.8497223537257916,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-08-launch",
+        "seed": 1302,
+        "target_speed": 19.5,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 12.959999710321426,
+        "speed_mse": 0.411280207729335,
+        "speed_rmse_mps": 0.6413113188844674,
+        "signed_speed_error_mps": -0.1546638294511673,
+        "signed_acceleration_error_mps2": -0.0009949650572746362,
+        "peak_observed_speed_mps": 19.586015552080326,
+        "final_position_error_m": 2.0069393347481537,
+        "residual_speed_bins": {
+          "0": {
+            "states": 261,
+            "signed_speed_error_mps": -0.11344896085578564,
+            "signed_acceleration_error_mps2": 0.20616235972355262
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -0.597125273569596,
+            "signed_acceleration_error_mps2": 0.06481314167997375
+          },
+          "15": {
+            "states": 69,
+            "signed_speed_error_mps": 0.012035197530541083,
+            "signed_acceleration_error_mps2": 0.35542289043886166
+          },
+          "17": {
+            "states": 154,
+            "signed_speed_error_mps": 0.17098356951531724,
+            "signed_acceleration_error_mps2": -0.5818613501347945
+          }
+        },
+        "launch_speed_rmse_mps": 0.42066677025330496,
+        "coast_speed_rmse_mps": 0.43000363647510953,
+        "brake_speed_rmse_mps": 1.0910815279190782,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.1599999964237213,
+        "stopping_distance_error_m": 3.19612319025455
+      },
+      {
+        "name": "s1302-09-launch",
+        "seed": 1302,
+        "target_speed": 19.5,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 14.959999665617943,
+        "speed_mse": 8.087733795719593,
+        "speed_rmse_mps": 2.8438941252654946,
+        "signed_speed_error_mps": 1.8157313812555989,
+        "signed_acceleration_error_mps2": 0.05362433405422062,
+        "peak_observed_speed_mps": 19.60392356890097,
+        "final_position_error_m": 27.192717932565948,
+        "residual_speed_bins": {
+          "0": {
+            "states": 256,
+            "signed_speed_error_mps": 0.333635476052928,
+            "signed_acceleration_error_mps2": -0.1404531580143627
+          },
+          "8": {
+            "states": 243,
+            "signed_speed_error_mps": 0.864867113770783,
+            "signed_acceleration_error_mps2": 0.9321866121710254
+          },
+          "15": {
+            "states": 88,
+            "signed_speed_error_mps": 3.9415545779797507,
+            "signed_acceleration_error_mps2": 0.2955705600380988
+          },
+          "17": {
+            "states": 161,
+            "signed_speed_error_mps": 4.4568485166607195,
+            "signed_acceleration_error_mps2": -1.0960530789855776
+          }
+        },
+        "launch_speed_rmse_mps": 3.4943754562235103,
+        "coast_speed_rmse_mps": 4.15179711330692,
+        "brake_speed_rmse_mps": 1.0977524871942066,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-10-launch",
+        "seed": 1302,
+        "target_speed": 22.0,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 13.879999689757824,
+        "speed_mse": 9.526093117662697,
+        "speed_rmse_mps": 3.0864369615565934,
+        "signed_speed_error_mps": 1.9061148473720613,
+        "signed_acceleration_error_mps2": 0.015736248092040658,
+        "peak_observed_speed_mps": 22.084971508094988,
+        "final_position_error_m": 26.49287767415557,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": -0.002852784049551761,
+            "signed_acceleration_error_mps2": -0.17726752998221967
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": 0.6297474391764734,
+            "signed_acceleration_error_mps2": 1.3000005203005847
+          },
+          "15": {
+            "states": 73,
+            "signed_speed_error_mps": 3.980683397601953,
+            "signed_acceleration_error_mps2": 0.5832479512121392
+          },
+          "17": {
+            "states": 100,
+            "signed_speed_error_mps": 4.372140037313428,
+            "signed_acceleration_error_mps2": -0.26809895133652356
+          },
+          "20": {
+            "states": 120,
+            "signed_speed_error_mps": 3.5692265770141365,
+            "signed_acceleration_error_mps2": -1.73312532295509
+          },
+          "22": {
+            "states": 10,
+            "signed_speed_error_mps": 4.576453273667466,
+            "signed_acceleration_error_mps2": -1.7104144006728532
+          }
+        },
+        "launch_speed_rmse_mps": 3.7384854434334818,
+        "coast_speed_rmse_mps": 3.172064485359721,
+        "brake_speed_rmse_mps": 0.3685270781624448,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-11-launch",
+        "seed": 1302,
+        "target_speed": 22.0,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 14.67999967187643,
+        "speed_mse": 1.0875216789353819,
+        "speed_rmse_mps": 1.0428430749328403,
+        "signed_speed_error_mps": -0.40606840389353493,
+        "signed_acceleration_error_mps2": -0.0009820601931207022,
+        "peak_observed_speed_mps": 22.06459011305143,
+        "final_position_error_m": 5.969065131112598,
+        "residual_speed_bins": {
+          "0": {
+            "states": 260,
+            "signed_speed_error_mps": -0.2893644048515061,
+            "signed_acceleration_error_mps2": 0.3683822115490715
+          },
+          "8": {
+            "states": 165,
+            "signed_speed_error_mps": -0.9137719447536945,
+            "signed_acceleration_error_mps2": 0.09869410382605275
+          },
+          "15": {
+            "states": 69,
+            "signed_speed_error_mps": -0.21439793054463566,
+            "signed_acceleration_error_mps2": 0.39045532998676563
+          },
+          "17": {
+            "states": 103,
+            "signed_speed_error_mps": 0.02620294031272311,
+            "signed_acceleration_error_mps2": -0.13857639389514706
+          },
+          "20": {
+            "states": 130,
+            "signed_speed_error_mps": -0.46027661323530433,
+            "signed_acceleration_error_mps2": -0.9393621451165396
+          },
+          "22": {
+            "states": 7,
+            "signed_speed_error_mps": -0.07466380571971395,
+            "signed_acceleration_error_mps2": -0.47652923550635656
+          }
+        },
+        "launch_speed_rmse_mps": 0.41034263840423163,
+        "coast_speed_rmse_mps": 0.994215722122338,
+        "brake_speed_rmse_mps": 1.9455048289773935,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.29999999329447746,
+        "stopping_distance_error_m": 6.398865912916179
+      }
+    ],
+    "seeds": {
+      "1300": {
+        "primary": 4.548511360164756,
+        "speed_rmse_mps": 1.830457304673309,
+        "final_position_error_m": 14.536229760720614,
+        "targets": {
+          "17.0": {
+            "primary": 3.980038446534739,
+            "speed_rmse_mps": 1.6108292595444427,
+            "final_position_error_m": 11.872224294011737
+          },
+          "19.5": {
+            "primary": 4.590509848448263,
+            "speed_rmse_mps": 1.819151419378764,
+            "final_position_error_m": 14.71514065941333
+          },
+          "22.0": {
+            "primary": 5.0749857855112674,
+            "speed_rmse_mps": 2.061391235096721,
+            "final_position_error_m": 17.021324328736775
+          }
+        }
+      },
+      "1301": {
+        "primary": 4.578838390057495,
+        "speed_rmse_mps": 1.8329324177060065,
+        "final_position_error_m": 14.629535849444622,
+        "targets": {
+          "17.0": {
+            "primary": 4.036356699143133,
+            "speed_rmse_mps": 1.6213593484291937,
+            "final_position_error_m": 12.005171021487605
+          },
+          "19.5": {
+            "primary": 4.642240644004116,
+            "speed_rmse_mps": 1.8252370321712752,
+            "final_position_error_m": 14.810559780706239
+          },
+          "22.0": {
+            "primary": 5.057917827025236,
+            "speed_rmse_mps": 2.0522008725175507,
+            "final_position_error_m": 17.07287674614002
+          }
+        }
+      },
+      "1302": {
+        "primary": 4.553315181640756,
+        "speed_rmse_mps": 1.828040247261975,
+        "final_position_error_m": 14.563624533294373,
+        "targets": {
+          "17.0": {
+            "primary": 3.8958771353042208,
+            "speed_rmse_mps": 1.5924838166922728,
+            "final_position_error_m": 11.65894299539009
+          },
+          "19.5": {
+            "primary": 4.702802459926877,
+            "speed_rmse_mps": 1.83379670953206,
+            "final_position_error_m": 14.92123969055078
+          },
+          "22.0": {
+            "primary": 5.0612659496911725,
+            "speed_rmse_mps": 2.0578402155615922,
+            "final_position_error_m": 17.110690913942253
+          }
+        }
+      }
+    },
+    "mean": {
+      "primary": 4.5602216439543355,
+      "speed_rmse_mps": 1.8304766565470967,
+      "final_position_error_m": 14.576463381153204
+    },
+    "p95_trial_speed_rmse_mps": 3.091971071146182,
+    "maximum_trial_speed_rmse_mps": 3.1293613769023287
+  },
+  "candidate": {
+    "rows": [
+      {
+        "name": "s1300-00-launch",
+        "seed": 1300,
+        "target_speed": 19.5,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 12.959999710321426,
+        "speed_mse": 1.155375910711363,
+        "speed_rmse_mps": 1.0748841382732202,
+        "signed_speed_error_mps": -0.7150783908692085,
+        "signed_acceleration_error_mps2": -0.00099677096351143,
+        "peak_observed_speed_mps": 19.58604199545823,
+        "final_position_error_m": 9.281123864918614,
+        "residual_speed_bins": {
+          "0": {
+            "states": 261,
+            "signed_speed_error_mps": -0.053910448463281226,
+            "signed_acceleration_error_mps2": 0.26873894320711594
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -0.7773584256988728,
+            "signed_acceleration_error_mps2": -0.11527385000249832
+          },
+          "15": {
+            "states": 69,
+            "signed_speed_error_mps": -1.084992790661204,
+            "signed_acceleration_error_mps2": -0.08330956166487641
+          },
+          "17": {
+            "states": 154,
+            "signed_speed_error_mps": -1.6082075600971537,
+            "signed_acceleration_error_mps2": -0.2995681857540682
+          }
+        },
+        "launch_speed_rmse_mps": 0.7664829815228958,
+        "coast_speed_rmse_mps": 1.7624918576202306,
+        "brake_speed_rmse_mps": 1.361309440236662,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.13999999687075615,
+        "stopping_distance_error_m": 3.8862120590560565
+      },
+      {
+        "name": "s1300-01-launch",
+        "seed": 1300,
+        "target_speed": 17.0,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 11.259999748319387,
+        "speed_mse": 0.40225132694174615,
+        "speed_rmse_mps": 0.6342328649177258,
+        "signed_speed_error_mps": -0.3403382619941263,
+        "signed_acceleration_error_mps2": -0.0008544633327587924,
+        "peak_observed_speed_mps": 17.065278306836223,
+        "final_position_error_m": 3.837484561722564,
+        "residual_speed_bins": {
+          "0": {
+            "states": 261,
+            "signed_speed_error_mps": 0.10066534630829271,
+            "signed_acceleration_error_mps2": 0.14700187803613624
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -0.5634434517028036,
+            "signed_acceleration_error_mps2": -0.12075462941955191
+          },
+          "15": {
+            "states": 130,
+            "signed_speed_error_mps": -0.9068973569502654,
+            "signed_acceleration_error_mps2": -0.1559093689430678
+          },
+          "17": {
+            "states": 8,
+            "signed_speed_error_mps": -0.9903815835446625,
+            "signed_acceleration_error_mps2": 0.15292802045382162
+          }
+        },
+        "launch_speed_rmse_mps": 0.5474916164992781,
+        "coast_speed_rmse_mps": 0.9357015207264182,
+        "brake_speed_rmse_mps": 0.6816241215913056,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.03999999910593033,
+        "stopping_distance_error_m": 1.5314927451440568
+      },
+      {
+        "name": "s1300-02-launch",
+        "seed": 1300,
+        "target_speed": 19.5,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 14.919999666512012,
+        "speed_mse": 1.4353054993154275,
+        "speed_rmse_mps": 1.1980423612357902,
+        "signed_speed_error_mps": 0.7391296426035208,
+        "signed_acceleration_error_mps2": 0.08283963160060999,
+        "peak_observed_speed_mps": 19.593647820655534,
+        "final_position_error_m": 11.030125121126973,
+        "residual_speed_bins": {
+          "0": {
+            "states": 256,
+            "signed_speed_error_mps": 0.5360187645326011,
+            "signed_acceleration_error_mps2": -0.045292025088779886
+          },
+          "8": {
+            "states": 243,
+            "signed_speed_error_mps": 0.29997746616762044,
+            "signed_acceleration_error_mps2": 0.6181578908271432
+          },
+          "15": {
+            "states": 86,
+            "signed_speed_error_mps": 1.6269156109830634,
+            "signed_acceleration_error_mps2": 0.011542812122530322
+          },
+          "17": {
+            "states": 161,
+            "signed_speed_error_mps": 1.255278089945398,
+            "signed_acceleration_error_mps2": -0.48330388643944555
+          }
+        },
+        "launch_speed_rmse_mps": 1.477322254069995,
+        "coast_speed_rmse_mps": 1.005492553044479,
+        "brake_speed_rmse_mps": 0.858226108057571,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1300-03-launch",
+        "seed": 1300,
+        "target_speed": 19.5,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 15.419999655336142,
+        "speed_mse": 0.9862653227074283,
+        "speed_rmse_mps": 0.9931089178470951,
+        "signed_speed_error_mps": -0.6833850034082946,
+        "signed_acceleration_error_mps2": -0.0007797727933287652,
+        "peak_observed_speed_mps": 19.574277451792398,
+        "final_position_error_m": 10.550277683468885,
+        "residual_speed_bins": {
+          "0": {
+            "states": 320,
+            "signed_speed_error_mps": -0.06769028598021525,
+            "signed_acceleration_error_mps2": 0.17075344002339862
+          },
+          "8": {
+            "states": 211,
+            "signed_speed_error_mps": -0.8003592957275194,
+            "signed_acceleration_error_mps2": -0.08241156806863087
+          },
+          "15": {
+            "states": 80,
+            "signed_speed_error_mps": -1.091776374232469,
+            "signed_acceleration_error_mps2": -0.058390074700639914
+          },
+          "17": {
+            "states": 160,
+            "signed_speed_error_mps": -1.5605900611276902,
+            "signed_acceleration_error_mps2": -0.2073891174538233
+          }
+        },
+        "launch_speed_rmse_mps": 0.7589286770532819,
+        "coast_speed_rmse_mps": 1.7202933895313772,
+        "brake_speed_rmse_mps": 1.0631030208913697,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.09999999776482582,
+        "stopping_distance_error_m": 5.212373176682966
+      },
+      {
+        "name": "s1300-04-launch",
+        "seed": 1300,
+        "target_speed": 19.5,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 12.359999723732471,
+        "speed_mse": 1.546290475391004,
+        "speed_rmse_mps": 1.2434992864457157,
+        "signed_speed_error_mps": 0.7031705525352168,
+        "signed_acceleration_error_mps2": 0.09144808611615252,
+        "peak_observed_speed_mps": 19.597553616940512,
+        "final_position_error_m": 8.694623079659378,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.3377007868331382,
+            "signed_acceleration_error_mps2": -0.07994837115010144
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": 0.22490755858377662,
+            "signed_acceleration_error_mps2": 0.7843113796854564
+          },
+          "15": {
+            "states": 73,
+            "signed_speed_error_mps": 1.786247627650416,
+            "signed_acceleration_error_mps2": 0.06606579170218965
+          },
+          "17": {
+            "states": 154,
+            "signed_speed_error_mps": 1.2657984434151732,
+            "signed_acceleration_error_mps2": -0.5613180754451771
+          }
+        },
+        "launch_speed_rmse_mps": 1.4756171230931128,
+        "coast_speed_rmse_mps": 1.0021822113749814,
+        "brake_speed_rmse_mps": 0.7873428854833123,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1300-05-launch",
+        "seed": 1300,
+        "target_speed": 22.0,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 14.67999967187643,
+        "speed_mse": 2.8773540981843957,
+        "speed_rmse_mps": 1.6962765394193235,
+        "signed_speed_error_mps": -1.2000844265555235,
+        "signed_acceleration_error_mps2": -0.000984898842134382,
+        "peak_observed_speed_mps": 22.064418708387148,
+        "final_position_error_m": 17.6409296342084,
+        "residual_speed_bins": {
+          "0": {
+            "states": 260,
+            "signed_speed_error_mps": -0.22827628605826103,
+            "signed_acceleration_error_mps2": 0.4252261953066758
+          },
+          "8": {
+            "states": 165,
+            "signed_speed_error_mps": -1.0759636083206319,
+            "signed_acceleration_error_mps2": -0.09561227291715191
+          },
+          "15": {
+            "states": 69,
+            "signed_speed_error_mps": -1.289704915971509,
+            "signed_acceleration_error_mps2": -0.06656157389416661
+          },
+          "17": {
+            "states": 103,
+            "signed_speed_error_mps": -1.7955527952328239,
+            "signed_acceleration_error_mps2": -0.3626216343518356
+          },
+          "20": {
+            "states": 130,
+            "signed_speed_error_mps": -2.6969055996364597,
+            "signed_acceleration_error_mps2": -0.4098966018722587
+          },
+          "22": {
+            "states": 7,
+            "signed_speed_error_mps": -2.949559815214706,
+            "signed_acceleration_error_mps2": -0.03948090260030033
+          }
+        },
+        "launch_speed_rmse_mps": 1.1626313501019025,
+        "coast_speed_rmse_mps": 2.8773112159198875,
+        "brake_speed_rmse_mps": 2.2531248965482633,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.2799999937415123,
+        "stopping_distance_error_m": 7.305015179528841
+      },
+      {
+        "name": "s1300-06-launch",
+        "seed": 1300,
+        "target_speed": 17.0,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 10.739999759942293,
+        "speed_mse": 2.31779751157378,
+        "speed_rmse_mps": 1.5224314472493596,
+        "signed_speed_error_mps": 0.9414288867897862,
+        "signed_acceleration_error_mps2": 0.18150765348076367,
+        "peak_observed_speed_mps": 17.100956770387356,
+        "final_position_error_m": 10.111829202453132,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.6299012635683439,
+            "signed_acceleration_error_mps2": -0.08463104580129853
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": 0.4836445750266961,
+            "signed_acceleration_error_mps2": 0.7742348400650578
+          },
+          "15": {
+            "states": 134,
+            "signed_speed_error_mps": 1.9652769541818396,
+            "signed_acceleration_error_mps2": -0.2588460968812347
+          },
+          "17": {
+            "states": 12,
+            "signed_speed_error_mps": 2.1263788442899183,
+            "signed_acceleration_error_mps2": -0.25766565168687966
+          }
+        },
+        "launch_speed_rmse_mps": 1.4186194398777,
+        "coast_speed_rmse_mps": 1.898952808924807,
+        "brake_speed_rmse_mps": 1.6464569680150563,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1300-07-launch",
+        "seed": 1300,
+        "target_speed": 17.0,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 13.43999969959259,
+        "speed_mse": 0.3562060758914907,
+        "speed_rmse_mps": 0.5968300226123773,
+        "signed_speed_error_mps": -0.30640138716692816,
+        "signed_acceleration_error_mps2": 0.013257825949343091,
+        "peak_observed_speed_mps": 17.087489063356355,
+        "final_position_error_m": 4.125673092240647,
+        "residual_speed_bins": {
+          "0": {
+            "states": 319,
+            "signed_speed_error_mps": 0.12269125289714089,
+            "signed_acceleration_error_mps2": 0.12593964303796332
+          },
+          "8": {
+            "states": 212,
+            "signed_speed_error_mps": -0.5404936771851853,
+            "signed_acceleration_error_mps2": -0.0981113022860723
+          },
+          "15": {
+            "states": 132,
+            "signed_speed_error_mps": -0.921703801848158,
+            "signed_acceleration_error_mps2": -0.08839905775666361
+          },
+          "17": {
+            "states": 9,
+            "signed_speed_error_mps": -1.010786870034941,
+            "signed_acceleration_error_mps2": 0.13364273526390985
+          }
+        },
+        "launch_speed_rmse_mps": 0.5486268954243562,
+        "coast_speed_rmse_mps": 0.9714872622910842,
+        "brake_speed_rmse_mps": 0.5364981525094006,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1300-08-launch",
+        "seed": 1300,
+        "target_speed": 22.0,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 13.879999689757824,
+        "speed_mse": 1.233058579549551,
+        "speed_rmse_mps": 1.1104317086383795,
+        "signed_speed_error_mps": 0.32599590160334263,
+        "signed_acceleration_error_mps2": 0.019821800655236258,
+        "peak_observed_speed_mps": 22.1122128490054,
+        "final_position_error_m": 4.529267530104344,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.02948772345908329,
+            "signed_acceleration_error_mps2": -0.05014893663523923
+          },
+          "8": {
+            "states": 195,
+            "signed_speed_error_mps": -0.07086668610909269,
+            "signed_acceleration_error_mps2": 0.8029590663267977
+          },
+          "15": {
+            "states": 73,
+            "signed_speed_error_mps": 1.5532111974909406,
+            "signed_acceleration_error_mps2": 0.09386465277967002
+          },
+          "17": {
+            "states": 100,
+            "signed_speed_error_mps": 1.107064845458832,
+            "signed_acceleration_error_mps2": -0.4697284522084533
+          },
+          "20": {
+            "states": 120,
+            "signed_speed_error_mps": 0.08080402309712029,
+            "signed_acceleration_error_mps2": -0.7296096112747911
+          },
+          "22": {
+            "states": 11,
+            "signed_speed_error_mps": 0.07715132697260753,
+            "signed_acceleration_error_mps2": -0.4879787922014174
+          }
+        },
+        "launch_speed_rmse_mps": 1.3958779346154975,
+        "coast_speed_rmse_mps": 0.24777755076580996,
+        "brake_speed_rmse_mps": 0.4533057743583975,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1300-09-launch",
+        "seed": 1300,
+        "target_speed": 22.0,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 17.45999960973859,
+        "speed_mse": 2.7426026881877625,
+        "speed_rmse_mps": 1.6560805198382602,
+        "signed_speed_error_mps": -1.238961179626044,
+        "signed_acceleration_error_mps2": -0.0009577623320695004,
+        "peak_observed_speed_mps": 22.070164138250153,
+        "final_position_error_m": 21.65650580089941,
+        "residual_speed_bins": {
+          "0": {
+            "states": 321,
+            "signed_speed_error_mps": -0.3740983098575689,
+            "signed_acceleration_error_mps2": 0.2922723962776785
+          },
+          "8": {
+            "states": 212,
+            "signed_speed_error_mps": -1.2099681738634798,
+            "signed_acceleration_error_mps2": -0.06293976223573018
+          },
+          "15": {
+            "states": 80,
+            "signed_speed_error_mps": -1.3899819253615786,
+            "signed_acceleration_error_mps2": -0.03889667346576638
+          },
+          "17": {
+            "states": 122,
+            "signed_speed_error_mps": -1.8479103309361085,
+            "signed_acceleration_error_mps2": -0.29520737269341674
+          },
+          "20": {
+            "states": 131,
+            "signed_speed_error_mps": -2.6653340025153582,
+            "signed_acceleration_error_mps2": -0.32010019287238217
+          },
+          "22": {
+            "states": 7,
+            "signed_speed_error_mps": -2.9215559910259516,
+            "signed_acceleration_error_mps2": -0.036025359273781025
+          }
+        },
+        "launch_speed_rmse_mps": 1.1519725036886983,
+        "coast_speed_rmse_mps": 2.8484844488941747,
+        "brake_speed_rmse_mps": 1.9502090076143512,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.3999999910593033,
+        "stopping_distance_error_m": 11.354956123496237
+      },
+      {
+        "name": "s1300-10-launch",
+        "seed": 1300,
+        "target_speed": 17.0,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 12.939999710768461,
+        "speed_mse": 2.432918089834032,
+        "speed_rmse_mps": 1.5597814237366825,
+        "signed_speed_error_mps": 1.0770061646631903,
+        "signed_acceleration_error_mps2": 0.16056559404486298,
+        "peak_observed_speed_mps": 17.076843025873035,
+        "final_position_error_m": 13.937256042614706,
+        "residual_speed_bins": {
+          "0": {
+            "states": 255,
+            "signed_speed_error_mps": 0.9596015444520017,
+            "signed_acceleration_error_mps2": -0.0387121443940263
+          },
+          "8": {
+            "states": 242,
+            "signed_speed_error_mps": 0.6764431317858276,
+            "signed_acceleration_error_mps2": 0.5936402562997984
+          },
+          "15": {
+            "states": 139,
+            "signed_speed_error_mps": 1.9171884311831238,
+            "signed_acceleration_error_mps2": -0.19446224461402845
+          },
+          "17": {
+            "states": 11,
+            "signed_speed_error_mps": 2.092106458169314,
+            "signed_acceleration_error_mps2": -0.26119580506346907
+          }
+        },
+        "launch_speed_rmse_mps": 1.3950839324223114,
+        "coast_speed_rmse_mps": 1.8545332084245365,
+        "brake_speed_rmse_mps": 1.7199221686103212,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1300-11-launch",
+        "seed": 1300,
+        "target_speed": 22.0,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 16.699999626725912,
+        "speed_mse": 1.0623943090032564,
+        "speed_rmse_mps": 1.0307251374654915,
+        "signed_speed_error_mps": 0.22843355289446476,
+        "signed_acceleration_error_mps2": 0.019513223336475427,
+        "peak_observed_speed_mps": 22.085088226582904,
+        "final_position_error_m": 3.8157032398270077,
+        "residual_speed_bins": {
+          "0": {
+            "states": 255,
+            "signed_speed_error_mps": 0.05249828700744556,
+            "signed_acceleration_error_mps2": -0.029127899151891706
+          },
+          "8": {
+            "states": 243,
+            "signed_speed_error_mps": -0.16290510254195345,
+            "signed_acceleration_error_mps2": 0.6473752394196054
+          },
+          "15": {
+            "states": 86,
+            "signed_speed_error_mps": 1.231872335604746,
+            "signed_acceleration_error_mps2": 0.04524759961735941
+          },
+          "17": {
+            "states": 118,
+            "signed_speed_error_mps": 0.8685598596496522,
+            "signed_acceleration_error_mps2": -0.45208735874600586
+          },
+          "20": {
+            "states": 123,
+            "signed_speed_error_mps": 0.06409391467598402,
+            "signed_acceleration_error_mps2": -0.6418268594209364
+          },
+          "22": {
+            "states": 10,
+            "signed_speed_error_mps": 0.08546911447554315,
+            "signed_acceleration_error_mps2": -0.5191308935563803
+          }
+        },
+        "launch_speed_rmse_mps": 1.4021544578817513,
+        "coast_speed_rmse_mps": 0.2619330821471443,
+        "brake_speed_rmse_mps": 0.43943056784312695,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1301-00-launch",
+        "seed": 1301,
+        "target_speed": 19.5,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 12.979999709874392,
+        "speed_mse": 1.1015605837872524,
+        "speed_rmse_mps": 1.0495525636133012,
+        "signed_speed_error_mps": -0.6985619799112334,
+        "signed_acceleration_error_mps2": -0.0008134184302847983,
+        "peak_observed_speed_mps": 19.57499393788645,
+        "final_position_error_m": 9.079634709798095,
+        "residual_speed_bins": {
+          "0": {
+            "states": 261,
+            "signed_speed_error_mps": -0.04239003749094763,
+            "signed_acceleration_error_mps2": 0.2572288553987225
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -0.7677580962707746,
+            "signed_acceleration_error_mps2": -0.1124125285304212
+          },
+          "15": {
+            "states": 69,
+            "signed_speed_error_mps": -1.067231264682057,
+            "signed_acceleration_error_mps2": -0.06611990250972262
+          },
+          "17": {
+            "states": 155,
+            "signed_speed_error_mps": -1.570646465198035,
+            "signed_acceleration_error_mps2": -0.2881723346332997
+          }
+        },
+        "launch_speed_rmse_mps": 0.7593323133458669,
+        "coast_speed_rmse_mps": 1.7209637072787687,
+        "brake_speed_rmse_mps": 1.314589403826756,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.13999999687075615,
+        "stopping_distance_error_m": 3.736831206976394
+      },
+      {
+        "name": "s1301-01-launch",
+        "seed": 1301,
+        "target_speed": 22.0,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 17.45999960973859,
+        "speed_mse": 2.7430815349201665,
+        "speed_rmse_mps": 1.6562250858262493,
+        "signed_speed_error_mps": -1.2390556146073943,
+        "signed_acceleration_error_mps2": -0.0009671340760274866,
+        "peak_observed_speed_mps": 22.070213080282834,
+        "final_position_error_m": 21.658083069358792,
+        "residual_speed_bins": {
+          "0": {
+            "states": 321,
+            "signed_speed_error_mps": -0.37425972787377243,
+            "signed_acceleration_error_mps2": 0.2923751258965558
+          },
+          "8": {
+            "states": 212,
+            "signed_speed_error_mps": -1.2100194509981512,
+            "signed_acceleration_error_mps2": -0.06304835645701279
+          },
+          "15": {
+            "states": 80,
+            "signed_speed_error_mps": -1.38998760673883,
+            "signed_acceleration_error_mps2": -0.03903914635343546
+          },
+          "17": {
+            "states": 122,
+            "signed_speed_error_mps": -1.8479749436675232,
+            "signed_acceleration_error_mps2": -0.29520162276695644
+          },
+          "20": {
+            "states": 131,
+            "signed_speed_error_mps": -2.6654192416151137,
+            "signed_acceleration_error_mps2": -0.32014705104473967
+          },
+          "22": {
+            "states": 7,
+            "signed_speed_error_mps": -2.921605512807077,
+            "signed_acceleration_error_mps2": -0.03621121708218052
+          }
+        },
+        "launch_speed_rmse_mps": 1.1519728863074779,
+        "coast_speed_rmse_mps": 2.8485963459925796,
+        "brake_speed_rmse_mps": 1.950517217471947,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.3999999910593033,
+        "stopping_distance_error_m": 11.357111639303604
+      },
+      {
+        "name": "s1301-02-launch",
+        "seed": 1301,
+        "target_speed": 22.0,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 13.879999689757824,
+        "speed_mse": 1.2341448405560747,
+        "speed_rmse_mps": 1.1109207174934108,
+        "signed_speed_error_mps": 0.3274446959632813,
+        "signed_acceleration_error_mps2": 0.019836479339148474,
+        "peak_observed_speed_mps": 22.109844788503302,
+        "final_position_error_m": 4.549227680990786,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.030202580047310353,
+            "signed_acceleration_error_mps2": -0.050363673428944794
+          },
+          "8": {
+            "states": 195,
+            "signed_speed_error_mps": -0.0694514730320637,
+            "signed_acceleration_error_mps2": 0.8030361543488015
+          },
+          "15": {
+            "states": 73,
+            "signed_speed_error_mps": 1.5548079100201007,
+            "signed_acceleration_error_mps2": 0.0941803794728618
+          },
+          "17": {
+            "states": 100,
+            "signed_speed_error_mps": 1.1089772939590314,
+            "signed_acceleration_error_mps2": -0.46954394475439387
+          },
+          "20": {
+            "states": 120,
+            "signed_speed_error_mps": 0.08296029699277586,
+            "signed_acceleration_error_mps2": -0.7296073539602898
+          },
+          "22": {
+            "states": 11,
+            "signed_speed_error_mps": 0.07942321454580537,
+            "signed_acceleration_error_mps2": -0.4884098062588897
+          }
+        },
+        "launch_speed_rmse_mps": 1.396739834248531,
+        "coast_speed_rmse_mps": 0.24624590199140456,
+        "brake_speed_rmse_mps": 0.45206357828619176,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1301-03-launch",
+        "seed": 1301,
+        "target_speed": 17.0,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 12.999999709427357,
+        "speed_mse": 2.5085667701822003,
+        "speed_rmse_mps": 1.5838455638673237,
+        "signed_speed_error_mps": 1.097692978965149,
+        "signed_acceleration_error_mps2": 0.15874943643495287,
+        "peak_observed_speed_mps": 17.101134633039546,
+        "final_position_error_m": 14.27251058039823,
+        "residual_speed_bins": {
+          "0": {
+            "states": 255,
+            "signed_speed_error_mps": 0.9578992227910766,
+            "signed_acceleration_error_mps2": -0.055459292390100376
+          },
+          "8": {
+            "states": 244,
+            "signed_speed_error_mps": 0.7043636263294235,
+            "signed_acceleration_error_mps2": 0.5963371559708435
+          },
+          "15": {
+            "states": 139,
+            "signed_speed_error_mps": 1.9637034248672713,
+            "signed_acceleration_error_mps2": -0.18045785183440405
+          },
+          "17": {
+            "states": 12,
+            "signed_speed_error_mps": 2.126193884471458,
+            "signed_acceleration_error_mps2": -0.2577809508090568
+          }
+        },
+        "launch_speed_rmse_mps": 1.4185819490652973,
+        "coast_speed_rmse_mps": 1.8987545829786576,
+        "brake_speed_rmse_mps": 1.740044380631384,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1301-04-launch",
+        "seed": 1301,
+        "target_speed": 17.0,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 13.43999969959259,
+        "speed_mse": 0.3562851627070617,
+        "speed_rmse_mps": 0.5968962746634139,
+        "signed_speed_error_mps": -0.3064750111422299,
+        "signed_acceleration_error_mps2": 0.013251873252345772,
+        "peak_observed_speed_mps": 17.087607874004412,
+        "final_position_error_m": 4.126963037047266,
+        "residual_speed_bins": {
+          "0": {
+            "states": 319,
+            "signed_speed_error_mps": 0.12261340014126788,
+            "signed_acceleration_error_mps2": 0.12597562624220693
+          },
+          "8": {
+            "states": 212,
+            "signed_speed_error_mps": -0.5405470427707996,
+            "signed_acceleration_error_mps2": -0.09817403054661984
+          },
+          "15": {
+            "states": 132,
+            "signed_speed_error_mps": -0.9217971826651827,
+            "signed_acceleration_error_mps2": -0.08841393695591092
+          },
+          "17": {
+            "states": 9,
+            "signed_speed_error_mps": -1.0109062182857234,
+            "signed_acceleration_error_mps2": 0.1336186898195536
+          }
+        },
+        "launch_speed_rmse_mps": 0.5486724373838361,
+        "coast_speed_rmse_mps": 0.9715900939622553,
+        "brake_speed_rmse_mps": 0.5365814468607628,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1301-05-launch",
+        "seed": 1301,
+        "target_speed": 19.5,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 15.419999655336142,
+        "speed_mse": 0.9860267305513548,
+        "speed_rmse_mps": 0.9929887867198475,
+        "signed_speed_error_mps": -0.6832745300186926,
+        "signed_acceleration_error_mps2": -0.0007776774876516481,
+        "peak_observed_speed_mps": 19.574153822517445,
+        "final_position_error_m": 10.548742728798564,
+        "residual_speed_bins": {
+          "0": {
+            "states": 320,
+            "signed_speed_error_mps": -0.06761104026243836,
+            "signed_acceleration_error_mps2": 0.17072675314922273
+          },
+          "8": {
+            "states": 211,
+            "signed_speed_error_mps": -0.8002299263453193,
+            "signed_acceleration_error_mps2": -0.08240595932910741
+          },
+          "15": {
+            "states": 81,
+            "signed_speed_error_mps": -1.0986441402433422,
+            "signed_acceleration_error_mps2": -0.05429449823870179
+          },
+          "17": {
+            "states": 159,
+            "signed_speed_error_mps": -1.5598346822130653,
+            "signed_acceleration_error_mps2": -0.21035621745254202
+          }
+        },
+        "launch_speed_rmse_mps": 0.7588801093782788,
+        "coast_speed_rmse_mps": 1.7201422467109404,
+        "brake_speed_rmse_mps": 1.0629052027898196,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.09999999776482582,
+        "stopping_distance_error_m": 5.2110022096017445
+      },
+      {
+        "name": "s1301-06-launch",
+        "seed": 1301,
+        "target_speed": 17.0,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 11.259999748319387,
+        "speed_mse": 0.4028887310840433,
+        "speed_rmse_mps": 0.6347351661000383,
+        "signed_speed_error_mps": -0.3408941628537825,
+        "signed_acceleration_error_mps2": -0.0008590887907549838,
+        "peak_observed_speed_mps": 17.06614779826446,
+        "final_position_error_m": 3.8437529424079084,
+        "residual_speed_bins": {
+          "0": {
+            "states": 261,
+            "signed_speed_error_mps": 0.10036914463975528,
+            "signed_acceleration_error_mps2": 0.1470677456975058
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -0.5641879891960123,
+            "signed_acceleration_error_mps2": -0.12086496402281591
+          },
+          "15": {
+            "states": 130,
+            "signed_speed_error_mps": -0.9077216054827483,
+            "signed_acceleration_error_mps2": -0.1559235685089571
+          },
+          "17": {
+            "states": 8,
+            "signed_speed_error_mps": -0.9912519574507686,
+            "signed_acceleration_error_mps2": 0.1529461737077722
+          }
+        },
+        "launch_speed_rmse_mps": 0.5478038949910289,
+        "coast_speed_rmse_mps": 0.9365449202896459,
+        "brake_speed_rmse_mps": 0.6823207432176508,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.03999999910593033,
+        "stopping_distance_error_m": 1.5335033527097295
+      },
+      {
+        "name": "s1301-07-launch",
+        "seed": 1301,
+        "target_speed": 19.5,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 14.959999665617943,
+        "speed_mse": 1.500226286380442,
+        "speed_rmse_mps": 1.2248372489357278,
+        "signed_speed_error_mps": 0.7684150987930571,
+        "signed_acceleration_error_mps2": 0.08466409310091892,
+        "peak_observed_speed_mps": 19.600179609763845,
+        "final_position_error_m": 11.499061286851385,
+        "residual_speed_bins": {
+          "0": {
+            "states": 256,
+            "signed_speed_error_mps": 0.5527287902119372,
+            "signed_acceleration_error_mps2": -0.04727639091496934
+          },
+          "8": {
+            "states": 243,
+            "signed_speed_error_mps": 0.3195924871362777,
+            "signed_acceleration_error_mps2": 0.6195155715984647
+          },
+          "15": {
+            "states": 88,
+            "signed_speed_error_mps": 1.6751218796946576,
+            "signed_acceleration_error_mps2": 0.02016014320584354
+          },
+          "17": {
+            "states": 161,
+            "signed_speed_error_mps": 1.297966701332289,
+            "signed_acceleration_error_mps2": -0.47754583097404746
+          }
+        },
+        "launch_speed_rmse_mps": 1.4981113419689718,
+        "coast_speed_rmse_mps": 1.0513376722751744,
+        "brake_speed_rmse_mps": 0.8934903709022403,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1301-08-launch",
+        "seed": 1301,
+        "target_speed": 22.0,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 14.67999967187643,
+        "speed_mse": 2.7668596305519326,
+        "speed_rmse_mps": 1.663387997597654,
+        "signed_speed_error_mps": -1.1654265608257783,
+        "signed_acceleration_error_mps2": -0.0009714043604999677,
+        "peak_observed_speed_mps": 22.063124322563127,
+        "final_position_error_m": 17.130160559166654,
+        "residual_speed_bins": {
+          "0": {
+            "states": 260,
+            "signed_speed_error_mps": -0.19350103945415983,
+            "signed_acceleration_error_mps2": 0.41887765326659593
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -1.0217432850353296,
+            "signed_acceleration_error_mps2": -0.10272139386981165
+          },
+          "15": {
+            "states": 69,
+            "signed_speed_error_mps": -1.2592215187323728,
+            "signed_acceleration_error_mps2": -0.0601165445833202
+          },
+          "17": {
+            "states": 104,
+            "signed_speed_error_mps": -1.7689977464257929,
+            "signed_acceleration_error_mps2": -0.35955124793515825
+          },
+          "20": {
+            "states": 130,
+            "signed_speed_error_mps": -2.671813309658853,
+            "signed_acceleration_error_mps2": -0.39299190319089106
+          },
+          "22": {
+            "states": 7,
+            "signed_speed_error_mps": -2.930653218086337,
+            "signed_acceleration_error_mps2": -0.020653325564484633
+          }
+        },
+        "launch_speed_rmse_mps": 1.1577768848812813,
+        "coast_speed_rmse_mps": 2.84364631155793,
+        "brake_speed_rmse_mps": 2.1763433286703395,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.25999999418854713,
+        "stopping_distance_error_m": 6.989900521991917
+      },
+      {
+        "name": "s1301-09-launch",
+        "seed": 1301,
+        "target_speed": 22.0,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 16.679999627172947,
+        "speed_mse": 1.0495904017452609,
+        "speed_rmse_mps": 1.0244951936174522,
+        "signed_speed_error_mps": 0.2690597614687419,
+        "signed_acceleration_error_mps2": 0.027247741250106053,
+        "peak_observed_speed_mps": 22.111428238283082,
+        "final_position_error_m": 4.489440421976875,
+        "residual_speed_bins": {
+          "0": {
+            "states": 255,
+            "signed_speed_error_mps": 0.1247672623342944,
+            "signed_acceleration_error_mps2": -0.01805314409992947
+          },
+          "8": {
+            "states": 242,
+            "signed_speed_error_mps": -0.12382407723916315,
+            "signed_acceleration_error_mps2": 0.6495738587554316
+          },
+          "15": {
+            "states": 86,
+            "signed_speed_error_mps": 1.2512547914216374,
+            "signed_acceleration_error_mps2": 0.05384633629411604
+          },
+          "17": {
+            "states": 117,
+            "signed_speed_error_mps": 0.8960125526542684,
+            "signed_acceleration_error_mps2": -0.44440191771899007
+          },
+          "20": {
+            "states": 123,
+            "signed_speed_error_mps": 0.07737413551025109,
+            "signed_acceleration_error_mps2": -0.6270718200640554
+          },
+          "22": {
+            "states": 11,
+            "signed_speed_error_mps": 0.07784329386007145,
+            "signed_acceleration_error_mps2": -0.48860295918521124
+          }
+        },
+        "launch_speed_rmse_mps": 1.3961656782250895,
+        "coast_speed_rmse_mps": 0.24733695053621507,
+        "brake_speed_rmse_mps": 0.4181291821310004,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1301-10-launch",
+        "seed": 1301,
+        "target_speed": 17.0,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 10.739999759942293,
+        "speed_mse": 2.319671664460143,
+        "speed_rmse_mps": 1.5230468359377998,
+        "signed_speed_error_mps": 0.942121673701901,
+        "signed_acceleration_error_mps2": 0.1815165561194652,
+        "peak_observed_speed_mps": 17.099884359156068,
+        "final_position_error_m": 10.119049104929223,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.6302188513454318,
+            "signed_acceleration_error_mps2": -0.08480934288394319
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": 0.48448489840597425,
+            "signed_acceleration_error_mps2": 0.774417118996738
+          },
+          "15": {
+            "states": 134,
+            "signed_speed_error_mps": 1.966271614938077,
+            "signed_acceleration_error_mps2": -0.25881220809683786
+          },
+          "17": {
+            "states": 12,
+            "signed_speed_error_mps": 2.1274456624991926,
+            "signed_acceleration_error_mps2": -0.2577255783218893
+          }
+        },
+        "launch_speed_rmse_mps": 1.4189756044599378,
+        "coast_speed_rmse_mps": 1.8999796875166224,
+        "brake_speed_rmse_mps": 1.6473623963464983,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1301-11-launch",
+        "seed": 1301,
+        "target_speed": 19.5,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 12.359999723732471,
+        "speed_mse": 1.5463986006125494,
+        "speed_rmse_mps": 1.2435427618753403,
+        "signed_speed_error_mps": 0.703223663317994,
+        "signed_acceleration_error_mps2": 0.09144379674126835,
+        "peak_observed_speed_mps": 19.597208910194606,
+        "final_position_error_m": 8.69507233315711,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.3375261126808745,
+            "signed_acceleration_error_mps2": -0.07980813030651805
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": 0.22511918844542816,
+            "signed_acceleration_error_mps2": 0.7843461519762884
+          },
+          "15": {
+            "states": 73,
+            "signed_speed_error_mps": 1.7864302312284337,
+            "signed_acceleration_error_mps2": 0.0660883177480412
+          },
+          "17": {
+            "states": 154,
+            "signed_speed_error_mps": 1.2658771935460271,
+            "signed_acceleration_error_mps2": -0.5615677999161343
+          }
+        },
+        "launch_speed_rmse_mps": 1.4757826690710516,
+        "coast_speed_rmse_mps": 1.0021537352151406,
+        "brake_speed_rmse_mps": 0.7869220217196987,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-00-launch",
+        "seed": 1302,
+        "target_speed": 19.5,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 15.359999656677246,
+        "speed_mse": 0.9757358791857635,
+        "speed_rmse_mps": 0.9877934395336727,
+        "signed_speed_error_mps": -0.6586503347353395,
+        "signed_acceleration_error_mps2": -0.0007899240291941196,
+        "peak_observed_speed_mps": 19.56562260341032,
+        "final_position_error_m": 10.129357657803252,
+        "residual_speed_bins": {
+          "0": {
+            "states": 319,
+            "signed_speed_error_mps": -0.025760444885137804,
+            "signed_acceleration_error_mps2": 0.17491809092505795
+          },
+          "8": {
+            "states": 210,
+            "signed_speed_error_mps": -0.7667191219941634,
+            "signed_acceleration_error_mps2": -0.08377642149522814
+          },
+          "15": {
+            "states": 81,
+            "signed_speed_error_mps": -1.0933242991998409,
+            "signed_acceleration_error_mps2": -0.06200326858278906
+          },
+          "17": {
+            "states": 158,
+            "signed_speed_error_mps": -1.5741407698680736,
+            "signed_acceleration_error_mps2": -0.21386214803994152
+          }
+        },
+        "launch_speed_rmse_mps": 0.7601751153167302,
+        "coast_speed_rmse_mps": 1.736734189331897,
+        "brake_speed_rmse_mps": 1.0401487516746177,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.05999999865889549,
+        "stopping_distance_error_m": 4.94093857797354
+      },
+      {
+        "name": "s1302-01-launch",
+        "seed": 1302,
+        "target_speed": 17.0,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 13.459999699145555,
+        "speed_mse": 0.3300011686257053,
+        "speed_rmse_mps": 0.5744572818110196,
+        "signed_speed_error_mps": -0.29205661301646385,
+        "signed_acceleration_error_mps2": 0.009356095981478655,
+        "peak_observed_speed_mps": 17.066185560558704,
+        "final_position_error_m": 3.9373779249408294,
+        "residual_speed_bins": {
+          "0": {
+            "states": 321,
+            "signed_speed_error_mps": 0.12218671748496479,
+            "signed_acceleration_error_mps2": 0.10445101117852845
+          },
+          "8": {
+            "states": 211,
+            "signed_speed_error_mps": -0.516514066706395,
+            "signed_acceleration_error_mps2": -0.09244033727049811
+          },
+          "15": {
+            "states": 133,
+            "signed_speed_error_mps": -0.8958896039708288,
+            "signed_acceleration_error_mps2": -0.06730030627442073
+          },
+          "17": {
+            "states": 8,
+            "signed_speed_error_mps": -0.9912885103250946,
+            "signed_acceleration_error_mps2": 0.15296623822506866
+          }
+        },
+        "launch_speed_rmse_mps": 0.5478257009971486,
+        "coast_speed_rmse_mps": 0.9365741849864478,
+        "brake_speed_rmse_mps": 0.48763572964286916,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-02-launch",
+        "seed": 1302,
+        "target_speed": 19.5,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 12.399999722838402,
+        "speed_mse": 1.613868590177897,
+        "speed_rmse_mps": 1.2703812774824326,
+        "signed_speed_error_mps": 0.7323802054860107,
+        "signed_acceleration_error_mps2": 0.09408522649355484,
+        "peak_observed_speed_mps": 19.603919085568464,
+        "final_position_error_m": 9.086090927012915,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": 0.35451468661696783,
+            "signed_acceleration_error_mps2": -0.08272172185649163
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": 0.23970758269914125,
+            "signed_acceleration_error_mps2": 0.787671619583446
+          },
+          "15": {
+            "states": 75,
+            "signed_speed_error_mps": 1.8300650208972191,
+            "signed_acceleration_error_mps2": 0.07555916146327658
+          },
+          "17": {
+            "states": 154,
+            "signed_speed_error_mps": 1.308053122988187,
+            "signed_acceleration_error_mps2": -0.5557597296109175
+          }
+        },
+        "launch_speed_rmse_mps": 1.496617124503893,
+        "coast_speed_rmse_mps": 1.0477350286864526,
+        "brake_speed_rmse_mps": 0.8307801078451079,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-03-launch",
+        "seed": 1302,
+        "target_speed": 17.0,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 11.259999748319387,
+        "speed_mse": 0.402357936342935,
+        "speed_rmse_mps": 0.6343169052949282,
+        "signed_speed_error_mps": -0.340474042572826,
+        "signed_acceleration_error_mps2": -0.000854914025105692,
+        "peak_observed_speed_mps": 17.065408726352715,
+        "final_position_error_m": 3.839091618176562,
+        "residual_speed_bins": {
+          "0": {
+            "states": 261,
+            "signed_speed_error_mps": 0.1005868809849409,
+            "signed_acceleration_error_mps2": 0.14696605086926412
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -0.5636727676852198,
+            "signed_acceleration_error_mps2": -0.12074423272915709
+          },
+          "15": {
+            "states": 130,
+            "signed_speed_error_mps": -0.9070315835214091,
+            "signed_acceleration_error_mps2": -0.15585462769127656
+          },
+          "17": {
+            "states": 8,
+            "signed_speed_error_mps": -0.9905120237480207,
+            "signed_acceleration_error_mps2": 0.15296248680441063
+          }
+        },
+        "launch_speed_rmse_mps": 0.5475567869627934,
+        "coast_speed_rmse_mps": 0.9358197334086158,
+        "brake_speed_rmse_mps": 0.6817330578752296,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.03999999910593033,
+        "stopping_distance_error_m": 1.5319746083375776
+      },
+      {
+        "name": "s1302-04-launch",
+        "seed": 1302,
+        "target_speed": 17.0,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 10.719999760389328,
+        "speed_mse": 2.2179648496631117,
+        "speed_rmse_mps": 1.4892833342460767,
+        "signed_speed_error_mps": 0.9126004992902012,
+        "signed_acceleration_error_mps2": 0.16831074544920596,
+        "peak_observed_speed_mps": 17.072776457974307,
+        "final_position_error_m": 9.784070839622542,
+        "residual_speed_bins": {
+          "0": {
+            "states": 196,
+            "signed_speed_error_mps": 0.6101669264981803,
+            "signed_acceleration_error_mps2": -0.10503495777937698
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": 0.4663571820076352,
+            "signed_acceleration_error_mps2": 0.7681770853344024
+          },
+          "15": {
+            "states": 133,
+            "signed_speed_error_mps": 1.9248895155609118,
+            "signed_acceleration_error_mps2": -0.2772808128950631
+          },
+          "17": {
+            "states": 11,
+            "signed_speed_error_mps": 2.096130662008815,
+            "signed_acceleration_error_mps2": -0.262086302269747
+          }
+        },
+        "launch_speed_rmse_mps": 1.4012104670235055,
+        "coast_speed_rmse_mps": 1.8572237677930639,
+        "brake_speed_rmse_mps": 1.583818726277742,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-05-launch",
+        "seed": 1302,
+        "target_speed": 22.0,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 16.679999627172947,
+        "speed_mse": 1.0491456460143378,
+        "speed_rmse_mps": 1.024278109701822,
+        "signed_speed_error_mps": 0.26836351917133305,
+        "signed_acceleration_error_mps2": 0.027243362340344735,
+        "peak_observed_speed_mps": 22.112423372528397,
+        "final_position_error_m": 4.47800761795717,
+        "residual_speed_bins": {
+          "0": {
+            "states": 255,
+            "signed_speed_error_mps": 0.12441216590384525,
+            "signed_acceleration_error_mps2": -0.018052465187935483
+          },
+          "8": {
+            "states": 242,
+            "signed_speed_error_mps": -0.1245716612383508,
+            "signed_acceleration_error_mps2": 0.6495818325741846
+          },
+          "15": {
+            "states": 86,
+            "signed_speed_error_mps": 1.2504111718534974,
+            "signed_acceleration_error_mps2": 0.05379257674278092
+          },
+          "17": {
+            "states": 117,
+            "signed_speed_error_mps": 0.8950977297506928,
+            "signed_acceleration_error_mps2": -0.4444291300049874
+          },
+          "20": {
+            "states": 123,
+            "signed_speed_error_mps": 0.0764051903703907,
+            "signed_acceleration_error_mps2": -0.6270448639442558
+          },
+          "22": {
+            "states": 11,
+            "signed_speed_error_mps": 0.07683133149760027,
+            "signed_acceleration_error_mps2": -0.4887177993030702
+          }
+        },
+        "launch_speed_rmse_mps": 1.3957357850312864,
+        "coast_speed_rmse_mps": 0.24803388071545432,
+        "brake_speed_rmse_mps": 0.41852997492422644,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-06-launch",
+        "seed": 1302,
+        "target_speed": 22.0,
+        "throttle": 0.75,
+        "brake": 0.4,
+        "seconds": 17.379999611526728,
+        "speed_mse": 2.765935488660227,
+        "speed_rmse_mps": 1.6631101853636239,
+        "signed_speed_error_mps": -1.236152704811728,
+        "signed_acceleration_error_mps2": -0.0004608162139337413,
+        "peak_observed_speed_mps": 22.064785176187684,
+        "final_position_error_m": 21.5096062493617,
+        "residual_speed_bins": {
+          "0": {
+            "states": 320,
+            "signed_speed_error_mps": -0.3431345364962498,
+            "signed_acceleration_error_mps2": 0.2968340855777116
+          },
+          "8": {
+            "states": 211,
+            "signed_speed_error_mps": -1.2058977466199248,
+            "signed_acceleration_error_mps2": -0.06153512668494581
+          },
+          "15": {
+            "states": 80,
+            "signed_speed_error_mps": -1.4031601184206712,
+            "signed_acceleration_error_mps2": -0.05098178360424908
+          },
+          "17": {
+            "states": 120,
+            "signed_speed_error_mps": -1.8796404616021485,
+            "signed_acceleration_error_mps2": -0.29867069392757994
+          },
+          "20": {
+            "states": 131,
+            "signed_speed_error_mps": -2.69271950149442,
+            "signed_acceleration_error_mps2": -0.3222032292254674
+          },
+          "22": {
+            "states": 7,
+            "signed_speed_error_mps": -2.9499224869883847,
+            "signed_acceleration_error_mps2": -0.03939942229526351
+          }
+        },
+        "launch_speed_rmse_mps": 1.1627462496627436,
+        "coast_speed_rmse_mps": 2.8774462270392616,
+        "brake_speed_rmse_mps": 1.946523977741347,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.3799999915063381,
+        "stopping_distance_error_m": 11.172845509802968
+      },
+      {
+        "name": "s1302-07-launch",
+        "seed": 1302,
+        "target_speed": 17.0,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 12.959999710321426,
+        "speed_mse": 2.390207494670528,
+        "speed_rmse_mps": 1.5460295904899517,
+        "signed_speed_error_mps": 1.0638528346734937,
+        "signed_acceleration_error_mps2": 0.1556318348813606,
+        "peak_observed_speed_mps": 17.06959583456599,
+        "final_position_error_m": 13.788765194274843,
+        "residual_speed_bins": {
+          "0": {
+            "states": 255,
+            "signed_speed_error_mps": 0.9241209820536322,
+            "signed_acceleration_error_mps2": -0.05179380279656479
+          },
+          "8": {
+            "states": 243,
+            "signed_speed_error_mps": 0.6767310985931974,
+            "signed_acceleration_error_mps2": 0.5941300736706696
+          },
+          "15": {
+            "states": 140,
+            "signed_speed_error_mps": 1.9237500252973794,
+            "signed_acceleration_error_mps2": -0.19839347927966505
+          },
+          "17": {
+            "states": 10,
+            "signed_speed_error_mps": 2.1018978779641007,
+            "signed_acceleration_error_mps2": -0.25416720865739184
+          }
+        },
+        "launch_speed_rmse_mps": 1.4022792466114025,
+        "coast_speed_rmse_mps": 1.8602854404726015,
+        "brake_speed_rmse_mps": 1.678108868754597,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-08-launch",
+        "seed": 1302,
+        "target_speed": 19.5,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 12.959999710321426,
+        "speed_mse": 1.1551423640503315,
+        "speed_rmse_mps": 1.0747754947198656,
+        "signed_speed_error_mps": -0.7149993550968147,
+        "signed_acceleration_error_mps2": -0.0009949650572746362,
+        "peak_observed_speed_mps": 19.586015552080326,
+        "final_position_error_m": 9.280093229273827,
+        "residual_speed_bins": {
+          "0": {
+            "states": 261,
+            "signed_speed_error_mps": -0.05385469855190406,
+            "signed_acceleration_error_mps2": 0.2686865899458035
+          },
+          "8": {
+            "states": 164,
+            "signed_speed_error_mps": -0.7772637018035303,
+            "signed_acceleration_error_mps2": -0.11525458548605419
+          },
+          "15": {
+            "states": 69,
+            "signed_speed_error_mps": -1.084892745737878,
+            "signed_acceleration_error_mps2": -0.08327829756997845
+          },
+          "17": {
+            "states": 154,
+            "signed_speed_error_mps": -1.6081146661304753,
+            "signed_acceleration_error_mps2": -0.2995063816943331
+          }
+        },
+        "launch_speed_rmse_mps": 0.7664579151367283,
+        "coast_speed_rmse_mps": 1.7623783981114984,
+        "brake_speed_rmse_mps": 1.36105556087086,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.13999999687075615,
+        "stopping_distance_error_m": 3.885655428676074
+      },
+      {
+        "name": "s1302-09-launch",
+        "seed": 1302,
+        "target_speed": 19.5,
+        "throttle": 1.0,
+        "brake": 0.4,
+        "seconds": 14.959999665617943,
+        "speed_mse": 1.4953341735543375,
+        "speed_rmse_mps": 1.2228385721567412,
+        "signed_speed_error_mps": 0.765918931550317,
+        "signed_acceleration_error_mps2": 0.08464238138603286,
+        "peak_observed_speed_mps": 19.60392356890097,
+        "final_position_error_m": 11.461906368203136,
+        "residual_speed_bins": {
+          "0": {
+            "states": 256,
+            "signed_speed_error_mps": 0.5512682018460348,
+            "signed_acceleration_error_mps2": -0.046869249570136745
+          },
+          "8": {
+            "states": 243,
+            "signed_speed_error_mps": 0.3168476042732485,
+            "signed_acceleration_error_mps2": 0.6191889990600989
+          },
+          "15": {
+            "states": 88,
+            "signed_speed_error_mps": 1.672093367989149,
+            "signed_acceleration_error_mps2": 0.019942005367603557
+          },
+          "17": {
+            "states": 161,
+            "signed_speed_error_mps": 1.2944747567525348,
+            "signed_acceleration_error_mps2": -0.47768195079034514
+          }
+        },
+        "launch_speed_rmse_mps": 1.4966165868244161,
+        "coast_speed_rmse_mps": 1.0477309135843214,
+        "brake_speed_rmse_mps": 0.8905978067388693,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-10-launch",
+        "seed": 1302,
+        "target_speed": 22.0,
+        "throttle": 1.0,
+        "brake": 0.8,
+        "seconds": 13.879999689757824,
+        "speed_mse": 1.2489081799788786,
+        "speed_rmse_mps": 1.117545605323952,
+        "signed_speed_error_mps": 0.30559147364207645,
+        "signed_acceleration_error_mps2": 0.011162158473155243,
+        "peak_observed_speed_mps": 22.084971508094988,
+        "final_position_error_m": 4.246395879212322,
+        "residual_speed_bins": {
+          "0": {
+            "states": 195,
+            "signed_speed_error_mps": -0.011202540606636986,
+            "signed_acceleration_error_mps2": -0.07143849904245048
+          },
+          "8": {
+            "states": 196,
+            "signed_speed_error_mps": -0.08854335298859062,
+            "signed_acceleration_error_mps2": 0.8041044217785399
+          },
+          "15": {
+            "states": 73,
+            "signed_speed_error_mps": 1.5454056722589162,
+            "signed_acceleration_error_mps2": 0.0877139610556772
+          },
+          "17": {
+            "states": 100,
+            "signed_speed_error_mps": 1.0998713285094601,
+            "signed_acceleration_error_mps2": -0.4785884627129108
+          },
+          "20": {
+            "states": 120,
+            "signed_speed_error_mps": 0.06889566235528075,
+            "signed_acceleration_error_mps2": -0.7440086552830179
+          },
+          "22": {
+            "states": 10,
+            "signed_speed_error_mps": 0.08558403768205239,
+            "signed_acceleration_error_mps2": -0.5190655626757424
+          }
+        },
+        "launch_speed_rmse_mps": 1.4022077415665402,
+        "coast_speed_rmse_mps": 0.2617482181530478,
+        "brake_speed_rmse_mps": 0.4825759308247935,
+        "predicted_stop_reached": false,
+        "stopping_time_error_s": null,
+        "stopping_distance_error_m": null
+      },
+      {
+        "name": "s1302-11-launch",
+        "seed": 1302,
+        "target_speed": 22.0,
+        "throttle": 0.75,
+        "brake": 0.8,
+        "seconds": 14.67999967187643,
+        "speed_mse": 2.877167375228764,
+        "speed_rmse_mps": 1.6962214994595382,
+        "signed_speed_error_mps": -1.2000594640614564,
+        "signed_acceleration_error_mps2": -0.0009820601931207022,
+        "peak_observed_speed_mps": 22.06459011305143,
+        "final_position_error_m": 17.640713215830115,
+        "residual_speed_bins": {
+          "0": {
+            "states": 260,
+            "signed_speed_error_mps": -0.2282038321070203,
+            "signed_acceleration_error_mps2": 0.4251747016788073
+          },
+          "8": {
+            "states": 165,
+            "signed_speed_error_mps": -1.0758936728260158,
+            "signed_acceleration_error_mps2": -0.09562102774503296
+          },
+          "15": {
+            "states": 69,
+            "signed_speed_error_mps": -1.2897385336974243,
+            "signed_acceleration_error_mps2": -0.06661197160165551
+          },
+          "17": {
+            "states": 103,
+            "signed_speed_error_mps": -1.7956164654289435,
+            "signed_acceleration_error_mps2": -0.3625794668570686
+          },
+          "20": {
+            "states": 130,
+            "signed_speed_error_mps": -2.6969206035744615,
+            "signed_acceleration_error_mps2": -0.40977366589755676
+          },
+          "22": {
+            "states": 7,
+            "signed_speed_error_mps": -2.9497314988670005,
+            "signed_acceleration_error_mps2": -0.03947104954791552
+          }
+        },
+        "launch_speed_rmse_mps": 1.1627190792064124,
+        "coast_speed_rmse_mps": 2.877249011846861,
+        "brake_speed_rmse_mps": 2.2528590421132586,
+        "predicted_stop_reached": true,
+        "stopping_time_error_s": 0.2799999937415123,
+        "stopping_distance_error_m": 7.304197105736229
+      }
+    ],
+    "seeds": {
+      "1300": {
+        "primary": 1.5456516572742698,
+        "speed_rmse_mps": 1.1930270306399517,
+        "final_position_error_m": 9.93423323777034,
+        "targets": {
+          "17.0": {
+            "primary": 1.3772932510602622,
+            "speed_rmse_mps": 1.0783189396290362,
+            "final_position_error_m": 8.003060724757763
+          },
+          "19.5": {
+            "primary": 1.2808093020313056,
+            "speed_rmse_mps": 1.1273836759504552,
+            "final_position_error_m": 9.889037437293462
+          },
+          "22.0": {
+            "primary": 1.9788524187312413,
+            "speed_rmse_mps": 1.3733784763403638,
+            "final_position_error_m": 11.910601551259791
+          }
+        }
+      },
+      "1301": {
+        "primary": 1.5429417447948734,
+        "speed_rmse_mps": 1.1920395163539632,
+        "final_position_error_m": 10.000974871240075,
+        "targets": {
+          "17.0": {
+            "primary": 1.396853082108362,
+            "speed_rmse_mps": 1.0846309601421438,
+            "final_position_error_m": 8.090568916195657
+          },
+          "19.5": {
+            "primary": 1.2835530503328996,
+            "speed_rmse_mps": 1.1277303402860541,
+            "final_position_error_m": 9.95562776465129
+          },
+          "22.0": {
+            "primary": 1.9484191019433585,
+            "speed_rmse_mps": 1.3637572486336915,
+            "final_position_error_m": 11.956727932873276
+          }
+        }
+      },
+      "1302": {
+        "primary": 1.5434807621794013,
+        "speed_rmse_mps": 1.191752607965302,
+        "final_position_error_m": 9.931789726805766,
+        "targets": {
+          "17.0": {
+            "primary": 1.3351328623255698,
+            "speed_rmse_mps": 1.061021777960494,
+            "final_position_error_m": 7.837326394253694
+          },
+          "19.5": {
+            "primary": 1.3100202517420825,
+            "speed_rmse_mps": 1.138947195973178,
+            "final_position_error_m": 9.989362045573282
+          },
+          "22.0": {
+            "primary": 1.985289172470552,
+            "speed_rmse_mps": 1.3752888499622342,
+            "final_position_error_m": 11.968680740590326
+          }
+        }
+      }
+    },
+    "mean": {
+      "primary": 1.5440247214161815,
+      "speed_rmse_mps": 1.1922730516530724,
+      "final_position_error_m": 9.95566594527206
+    },
+    "p95_trial_speed_rmse_mps": 1.671596373063125,
+    "maximum_trial_speed_rmse_mps": 1.6962765394193235
+  },
+  "paired_seed_primary_change": {
+    "mean": -3.0161969225381546,
+    "differences": [
+      -3.002859702890486,
+      -3.0358966452626213,
+      -3.009834419461355
+    ],
+    "interval": [
+      -3.0358966452626213,
+      -3.002859702890486
+    ],
+    "resampling_unit": "seed batch"
+  },
+  "guards": {
+    "speed_rmse_mps": true,
+    "final_position_error_m": true,
+    "p95_trial_speed_rmse_mps": true,
+    "maximum_trial_speed_rmse_mps": true,
+    "target_17.0": true,
+    "target_19.5": true,
+    "target_22.0": true
+  },
+  "decision": "accepted_targeted_longitudinal",
+  "parameters": {
+    "wheelbase": 3.075,
+    "speed_knots": [
+      0.0,
+      1.0,
+      2.5,
+      4.0,
+      6.0,
+      8.0,
+      11.0,
+      15.0,
+      20.0
+    ],
+    "throttle_knots": [
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "drive": [
+      [
+        0.09438937178635569,
+        0.18972057876624326,
+        0.2872408750890336,
+        0.44887350978271595,
+        0.6479181505607112,
+        0.8265217131993938,
+        0.8093911569923927,
+        0.6848422911105666,
+        0.6541250968428639
+      ],
+      [
+        0.7178910874277288,
+        0.9948369067314335,
+        1.3679749306245537,
+        1.8798598952296186,
+        2.330714731295173,
+        2.573044713355567,
+        2.167517916673929,
+        1.5692146196862247,
+        1.2969265428489012
+      ],
+      [
+        1.3736384093849798,
+        1.9069108770651846,
+        2.577018878942993,
+        3.409364992626544,
+        4.1094913089618395,
+        4.4265530534659305,
+        3.605348890347011,
+        2.475360540615961,
+        1.937835910828751
+      ],
+      [
+        2.07186980080167,
+        2.882621167444341,
+        3.8362738050383114,
+        5.0224692474053985,
+        5.997739170415901,
+        6.377329514267615,
+        5.104148684194179,
+        3.402511232767418,
+        2.57948931542987
+      ]
+    ],
+    "reverse_drive": [
+      0.3309311094990647,
+      0.9706306035520047,
+      1.6105574485331298,
+      2.250484293514255
+    ],
+    "steer_gain": [
+      0.9671183493924813,
+      0.9671183493924813,
+      0.9347382582806371,
+      0.909348419806357,
+      0.8907760548444505,
+      0.8746871156620434,
+      0.8599122033968012,
+      0.8469827713089422,
+      0.8469827713089422
+    ],
+    "steer_exponent": 0.9710941521174783,
+    "steer_rise_rate": 2.5,
+    "steer_fall_rate": 5.0,
+    "rolling": 0.26151369907707717,
+    "linear_drag": 0.0,
+    "quadratic_drag": 0.002544295203085098,
+    "brake_decel": 6.366610499787461,
+    "hand_brake_decel": 4.875545383891894,
+    "throttle_lag": 0.0601309919889718,
+    "steer_lag": 4.03431560642913e-23,
+    "steer_lag_slope": 0.01
+  },
+  "finished_utc": "2026-11-18T14:00:49.742226+00:00"
+}
