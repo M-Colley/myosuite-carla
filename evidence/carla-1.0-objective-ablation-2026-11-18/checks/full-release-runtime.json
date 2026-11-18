@@ -1,0 +1,20 @@
+{
+  "started_utc": "2026-11-18T19:20:49.934800+00:00",
+  "python": "3.12.13",
+  "python_executable": "C:\\Users\\localadmin\\Desktop\\myosuite-carla\\.venv-myosuite31\\Scripts\\python.exe",
+  "myosuite": "3.1.0",
+  "myo_sim": "0.2.5",
+  "mujoco_import": "3.17.0",
+  "mujoco_distribution": "3.17.0",
+  "model_builder": "myosuite.core.model_builder.ModelBuilder",
+  "thread_limits": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "NUMEXPR_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "BLIS_NUM_THREADS": "1"
+  },
+  "CARLA_BRIDGE_LIVE": "0",
+  "bridge_commit": "a11583b0fc4925b40ea6ff206afa7cef102959c1"
+}

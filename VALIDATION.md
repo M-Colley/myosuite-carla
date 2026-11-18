@@ -49,6 +49,12 @@ The collector used the official CARLA 1.0 Windows package and its matching clien
 
 MyoSuite 3.1.0 and development commit `c93329ec64bc8b544d0b3427bba6766377c3528e` each passed 650 offline tests with six optional or disabled tests skipped. Both environments used myo-sim 0.2.5 and MuJoCo 3.17.0. Ruff, mypy and both distribution builds passed. [Checks and package hashes](evidence/carla-1.0-longitudinal-2026-11-18/checks/full-offline-summary.json)
 
+## Longitudinal fitting objective comparison on 2026-11-18
+
+The derivative fit had lower error than the full trajectory fit on 24 fresh moving probes collected with the official CARLA 1.0 Nissan Patrol in Town12. Each of three seed batches covered all eight conditions. Mean 3 s speed MSE was 0.05864 (m/s)² for the derivative fit and 0.09413 (m/s)² for the full trajectory fit. The paired change was +0.03549 (m/s)² (95% seed batch percentile bootstrap interval [0.03522, 0.03568]). The full trajectory fit failed the prospective acceptance rule. The two fits used the same 24 development drives, five parameters, bounds, prior and trajectory weighting. [Protocol, commands and raw data](evidence/carla-1.0-objective-ablation-2026-11-18/README.md)
+
+MyoSuite 3.1.0 and development revision `c93329ec64bc8b544d0b3427bba6766377c3528e` each passed 664 tests with six skips on the analysis source. Both used MuJoCo 3.17.0 and myo-sim 0.2.5. Ruff, mypy and both distribution builds passed. [Release tests](evidence/carla-1.0-objective-ablation-2026-11-18/checks/full-release-tests.txt) [Development tests](evidence/carla-1.0-objective-ablation-2026-11-18/checks/full-dev-tests.txt) [Package hashes](evidence/carla-1.0-objective-ablation-2026-11-18/checks/full-build-manifest.json)
+
 ## CARLA 1.0 and MyoSuite 3.1 on 2026-11-17
 
 The bridge passes offline and live validation against MyoSuite 3.1.0 and current development source. Both retain the public model builder, muscle condition and motor noise APIs used by this package. The model assets were upgraded to `myo-sim` 0.2.5. The official CARLA 1.0 Windows package was installed and tested with its bundled client. The replaced CARLA 0.10 runtime was removed after acceptance.

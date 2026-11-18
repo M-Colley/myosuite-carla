@@ -1,0 +1,8 @@
+{
+  "client": "1.0",
+  "server": "1.0",
+  "map": "Carla/Maps/Town12/Town12",
+  "asynchronous": true,
+  "spawn_count": 10422,
+  "vehicles": []
+}

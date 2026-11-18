@@ -104,6 +104,73 @@ def test_targeted_launch_rejects_incomplete_speed_when_road_runs_out(collector):
     assert not program.target_reached
 
 
+@pytest.mark.parametrize("speed", [17.0, 20.0])
+@pytest.mark.parametrize("history", ["acceleration", "braking"])
+@pytest.mark.parametrize("action", ["throttle", "brake"])
+def test_moving_probe_preserves_origin_and_complete_forecast(
+    collector, speed, history, action
+):
+    from myosuite_carla.vehicle_model import SurrogateVehicle, carla_1_0_nissan_patrol
+
+    program = collector.MovingProbe(
+        np.random.default_rng(3), 350, (speed, history, action)
+    )
+    vehicle = SurrogateVehicle(carla_1_0_nissan_patrol())
+    vehicle.start()
+    value = 0.0
+    states, commands = [], []
+    for _ in range(1500):
+        command = program.command(value, 0.02)
+        states.append(value)
+        if command is None:
+            break
+        commands.append(command)
+        value = vehicle.step(command).speed
+    assert program.incomplete_reason is None
+    assert program.target_reached and program.probe_origin_row is not None
+    origin = program.probe_origin_row
+    assert abs(states[origin] - speed) <= 0.25
+    assert len(states) >= origin + 151
+    assert commands[origin].throttle == (0.75 if action == "throttle" else 0)
+    assert commands[origin].brake == (0.4 if action == "brake" else 0)
+    assert value < 0.02 and program.frames < 1500
+
+
+def test_recorded_probe_origin_matches_state_and_next_command(collector, tmp_path):
+    from myosuite_carla.vehicle_model import (
+        SurrogateVehicle,
+        carla_1_0_nissan_patrol,
+        segments_from_recording,
+    )
+
+    session = SurrogateVehicle(carla_1_0_nissan_patrol())
+    session.start()
+    vehicle = SimpleNamespace(
+        set_transform=lambda _: session.reset(),
+        set_target_velocity=lambda _: None,
+        set_target_angular_velocity=lambda _: None,
+    )
+    kept, log = collector._run_seed(
+        session,
+        SimpleNamespace(Vector3D=lambda *_: object()),
+        vehicle,
+        [(object(), 600, 0)],
+        2100,
+        {"launch": 1},
+        [],
+        steer_exponent=1.0,
+        max_lateral_acceleration=3.0,
+        directory=tmp_path,
+        metadata={"seed": 2100},
+        probe_profiles=[(20.0, "braking", "brake")],
+    )
+    segment = segments_from_recording(kept[0])[0]
+    origin = log[0]["probe_origin_row"]
+    assert segment.brake[origin] == 0.4 and segment.throttle[origin] == 0
+    assert abs(segment.speed[origin] - 20.0) <= 0.25
+    assert len(segment.speed) >= origin + 151
+
+
 def _waypoint(pitch, following=()):
     return SimpleNamespace(
         transform=SimpleNamespace(rotation=SimpleNamespace(yaw=0.0, pitch=pitch)),

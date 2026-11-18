@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-18T19:08:53.145928+00:00",
+  "fixed_before_fit_and_new_collection": true,
+  "base_commits": [
+    "c1b4ac07bdf6fe4b5a06995e1badc782c151949e",
+    "9bd4d73c1fbfed3bd3ba54900965a9b017a1c653"
+  ],
+  "target": {
+    "carla": "1.0",
+    "source": "1ad2c15c9280aa10abc985e90ac5b1e6d8ac46d5",
+    "map": "Carla/Maps/Town12/Town12",
+    "vehicle": "vehicle.nissan.patrol",
+    "dt_s": 0.02
+  },
+  "baseline": {
+    "name": "CARLA 1.0 C3",
+    "selection_file": "evidence/carla-1.0-vehicle-calibration-2026-11-17/frozen-selection.json",
+    "selection_sha256": "176a2bdb7e457c33d59138138c2cab03cd45ea902da1b814ef4666cf459f2e59"
+  },
+  "historical_development_protocol": "evidence/carla-1.0-longitudinal-2026-11-18/design.json",
+  "historical_development_protocol_sha256": "82c46962c62ab14aeaf96355e5d50761c0cfd13a0b67ff1dfb4b5dcdd8c60598",
+  "train_seeds": [
+    1100,
+    1101
+  ],
+  "historical_validation_seeds": [
+    1200,
+    1201
+  ],
+  "historical_validation_role": "Previously observed development diagnostics. No model or hyperparameter is selected using these results.",
+  "prior_test_data_policy": "Seeds 1300, 1301, 1302 and all earlier test batches are excluded from fitting and confirmation.",
+  "fit": {
+    "method": "scipy.optimize.least_squares",
+    "loss": "linear",
+    "optimizer": "trf",
+    "max_nfev": 80,
+    "ftol": 1e-07,
+    "xtol": 1e-07,
+    "gtol": 1e-07,
+    "parameters": [
+      "drive_gain_15",
+      "drive_gain_20",
+      "quadratic_drag_scale",
+      "service_brake_scale",
+      "throttle_lag_s"
+    ],
+    "initial": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.075
+    ],
+    "lower": [
+      0.5,
+      0.5,
+      0.5,
+      0.75,
+      0.0
+    ],
+    "upper": [
+      1.5,
+      1.5,
+      1.5,
+      1.25,
+      0.3
+    ],
+    "drive_gain_anchors_mps": [
+      0.0,
+      8.0,
+      15.0,
+      20.0
+    ],
+    "drive_gain_anchor_values": [
+      "fixed 1",
+      "fixed 1",
+      "drive_gain_15",
+      "drive_gain_20"
+    ],
+    "regularization_weight": 0.01,
+    "prior_normalization": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.075
+    ],
+    "training_objective": "mean complete-trajectory speed MSE, equal target means within each seed and equal seed means, plus 0.01 times mean squared normalized departure from the baseline parameters",
+    "unchanged": [
+      "steering gain and dynamics",
+      "speed and throttle knots",
+      "reverse drive",
+      "rolling resistance",
+      "linear drag",
+      "hand brake deceleration"
+    ],
+    "monotonic_drive": true,
+    "use_pitch": false,
+    "measured_speed": false
+  },
+  "objectives": {
+    "derivative": "Conditional one-step acceleration residual from the original _longitudinal_design; measured speeds before and after exceed 0.1 m/s and have the same sign; normalized by 1 m/s^2.",
+    "rollout": "Complete predicted speed residual from the published rollout fitter; normalized by 1 m/s.",
+    "shared": "Same C3 ownership, complete training trajectories, trajectory target/seed weights, five parameter bounds, initial values, regularization, optimizer and no pitch."
+  },
+  "fit_freeze_rule": "Fit both predefined objectives once. Both optimizers must converge. Publish both parameters and diagnostic validation results before new collection. No retuning or model selection.",
+  "collector_file": "examples/identify_vehicle.py",
+  "collector_sha256": "94eed5e4056e46acd0e5742d6fa1d6c532e477b909d4fe14687aaf38103db1f0",
+  "test_seeds": [
+    2100,
+    2101,
+    2102
+  ],
+  "counts": {
+    "launch": 8,
+    "hand_brake": 0,
+    "reverse": 0,
+    "steer": 0,
+    "steer_fast": 0,
+    "steer_low": 0,
+    "steer_hold": 0,
+    "steer_doublet": 0
+  },
+  "spawn_indices": [
+    236,
+    252,
+    305
+  ],
+  "min_straight_m": 350.0,
+  "straight_limit_m": 600.0,
+  "max_road_pitch_deg": 1.0,
+  "max_lateral_acceleration_mps2": 3.0,
+  "collection_steer_exponent": 1.0,
+  "probe_profile_grid": {
+    "speeds_mps": [
+      17.0,
+      20.0
+    ],
+    "histories": [
+      "acceleration",
+      "braking"
+    ],
+    "actions": [
+      "throttle",
+      "brake"
+    ],
+    "settings": {
+      "approach_throttle": 1.0,
+      "braking_approach_peak_mps": 22.0,
+      "approach_brake": 0.4,
+      "probe_throttle": 0.75,
+      "probe_brake": 0.4,
+      "probe_seconds": 1.0,
+      "coast_seconds": 1.0,
+      "stop_brake": 0.6,
+      "forecast_seconds": 3.0,
+      "entry_tolerance_mps": 0.25
+    }
+  },
+  "window": {
+    "seconds": 3.0,
+    "initial_state": "Measured vehicle state at probe origin",
+    "throttle_filter_state": "Computed from all recorded commands before the origin using each frozen model throttle lag",
+    "future_measured_speed": false,
+    "future_pitch": false,
+    "future_inputs": "Identical recorded command sequence for all models"
+  },
+  "exclusions": [
+    "collision",
+    "absolute body roll above 3 degrees",
+    "incomplete or frame-limited trial",
+    "probe entry differs from target by more than 0.25 m/s",
+    "missing complete 3 s forecast window"
+  ],
+  "coverage": "Every seed must retain all eight unique balanced conditions. There are no reserve seeds.",
+  "primary": "3 s speed MSE, equal condition means within each seed and equal seed means; rollout minus derivative",
+  "acceptance": {
+    "confidence": 0.95,
+    "resamples": 5000,
+    "bootstrap_seed": 2026111802,
+    "paired_seed_percentile_bootstrap_upper_below_zero": true,
+    "mean_3s_position_error_not_worse": true,
+    "pooled_p95_trial_speed_rmse_not_worse": true,
+    "maximum_trial_speed_rmse_not_worse": true,
+    "speed_history_probe_family_mse_limit": "1.1 * derivative + 0.01",
+    "all_coverage_rules": true
+  },
+  "secondary": [
+    "C3 reference errors",
+    "1 s speed and position errors",
+    "history effect on signed 1 s acceleration prediction errors",
+    "conditional training objective and full speed rollout errors",
+    "parameter differences and convergence"
+  ],
+  "collection_policy": "Preserve every full approach and attempt. Stop if a completed seed fails coverage. An infrastructure interruption before metrics inspection permits one complete same-seed replay after preserving the failed run. Use one complete realization per seed.",
+  "limitations": [
+    "Historical validation has already been inspected.",
+    "Three test seed batches provide pilot uncertainty.",
+    "The new test covers one vehicle and one map.",
+    "This experiment isolates fitting objective within the five-parameter model family.",
+    "No human parameters or default presets are changed.",
+    "The original derivative objective excludes standstill and sign changes. The rollout objective includes complete trajectories. These masks are part of the published objective comparison."
+  ]
+}

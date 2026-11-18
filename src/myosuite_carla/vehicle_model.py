@@ -548,11 +548,14 @@ def simulate(
     *,
     use_pitch: bool = True,
     measured_speed: bool = False,
+    throttle_history: Sequence[float] = (),
 ) -> dict[str, NDArray[np.float64]]:
     """Open-loop rollout from a segment's initial state with its commands.
 
     With ``measured_speed`` the logged speed replaces the modelled one, as in
     the lateral fit, so yaw and position errors isolate the steering model.
+    ``throttle_history`` contains commands before a moving forecast origin.
+    They initialize the throttle filter without using future observations.
     """
     dt = segment.dt
     count = len(segment.throttle) + 1
@@ -560,7 +563,20 @@ def simulate(
     x, y = float(segment.x[0]), float(segment.y[0])
     yaw = math.radians(float(segment.yaw_deg[0]))
     speed, rate = float(segment.speed[0]), float(segment.yaw_rate[0])
-    throttle = _lag(segment.throttle, params.throttle_lag, dt)
+    history: NDArray[np.float64] = np.asarray(throttle_history, dtype=float)
+    if (
+        history.ndim != 1
+        or not np.all(np.isfinite(history))
+        or np.any((history < 0) | (history > 1))
+    ):
+        raise ValueError("Throttle history must contain finite commands within [0, 1]")
+    throttle = (
+        _lag(np.concatenate((history, segment.throttle)), params.throttle_lag, dt)[
+            len(history) :
+        ]
+        if len(history)
+        else _lag(segment.throttle, params.throttle_lag, dt)
+    )
     limited = _rate_limit(
         segment.steer, params.steer_rise_rate, params.steer_fall_rate, dt
     )

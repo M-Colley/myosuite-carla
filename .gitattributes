@@ -1,4 +1,5 @@
 # Preserve experiment bytes used by the recorded SHA256 checksums.
 evidence/carla-1.0-vehicle-calibration-2026-11-17/** -text
 evidence/carla-1.0-longitudinal-2026-11-18/** -text
+evidence/carla-1.0-objective-ablation-2026-11-18/** -text
 examples/identify_vehicle.py text eol=lf
