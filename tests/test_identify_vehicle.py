@@ -52,6 +52,58 @@ def test_linear_doublet_uses_smaller_input_than_squared_reference(collector):
     assert abs(linear.amplitude) < abs(squared.amplitude)
 
 
+@pytest.mark.parametrize("target", [17.0, 19.5, 22.0])
+@pytest.mark.parametrize("throttle", [0.75, 1.0])
+@pytest.mark.parametrize("brake", [0.4, 0.8])
+def test_targeted_launch_reaches_profile_and_stops_within_reserved_road(
+    collector, target, throttle, brake
+):
+    from myosuite_carla.vehicle_model import (
+        SurrogateVehicle,
+        carla_1_0_nissan_patrol,
+    )
+
+    program = collector.Segment(
+        "launch",
+        np.random.default_rng(0),
+        350,
+        launch_profile=(target, throttle, brake),
+    )
+    vehicle = SurrogateVehicle(carla_1_0_nissan_patrol())
+    vehicle.start()
+    speed = 0.0
+    peak = 0.0
+    coast_frames = 0
+    for _ in range(1500):
+        command = program.command(speed, 0.02)
+        if command is None:
+            break
+        coast_frames += program.stage == "coast"
+        assert command.steer == 0
+        speed = vehicle.step(command).velocity[0]
+        peak = max(peak, speed)
+    assert program.target_reached and peak >= target
+    assert program.incomplete_reason is None
+    assert coast_frames >= 75
+    assert speed < 0.02
+    assert program.frames < 1500 and program.travelled < 350
+
+
+def test_targeted_launch_rejects_incomplete_speed_when_road_runs_out(collector):
+    program = collector.Segment(
+        "launch",
+        np.random.default_rng(0),
+        40,
+        launch_profile=(22.0, 0.75, 0.4),
+    )
+    for _ in range(26):
+        program.command(0, 0.02)
+    program.command(10, 0.02)
+    assert program.stage == "stop"
+    assert program.incomplete_reason == "distance_limit"
+    assert not program.target_reached
+
+
 def _waypoint(pitch, following=()):
     return SimpleNamespace(
         transform=SimpleNamespace(rotation=SimpleNamespace(yaw=0.0, pitch=pitch)),

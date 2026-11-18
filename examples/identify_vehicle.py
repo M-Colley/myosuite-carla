@@ -26,6 +26,7 @@ import os
 import sys
 from contextlib import ExitStack
 from datetime import datetime, timezone
+from itertools import product
 from pathlib import Path
 from typing import Any
 
@@ -73,6 +74,8 @@ class Segment:
         *,
         steer_exponent: float = 1.0,
         max_lateral_acceleration: float = 3.0,
+        launch_profile: tuple[float, float, float] | None = None,
+        coast_seconds: float = 1.5,
     ) -> None:
         if not math.isfinite(steer_exponent) or not 0.5 <= steer_exponent <= 3:
             raise ValueError("steering input exponent must be within [0.5, 3]")
@@ -105,6 +108,12 @@ class Segment:
                 np.clip((angle / 0.92) ** (1 / steer_exponent), 0.01, 1.0)
             )
         self.hold = 0.0
+        self.targeted_launch = launch_profile is not None
+        self.target_reached = False
+        self.incomplete_reason: str | None = None
+        self.coast_seconds = coast_seconds
+        if launch_profile is not None:
+            self.target, self.level, self.brake = launch_profile
         if kind in ("steer_low", "steer_hold"):
             self.target = float(rng.uniform(0.8, 3.0))
             if kind == "steer_low":
@@ -156,6 +165,8 @@ class Segment:
         self.travelled += abs(speed) * step
         time = self.stage_frames * step
         stopping = speed * speed / 8.0 + 2.0 * abs(speed) + 12.0
+        if self.targeted_launch:
+            stopping = speed * speed / 4.0 + 2.0 * abs(speed) + 25.0
         room = self.budget - self.travelled - stopping
         if self.stage == "rest":
             if time >= 0.5:
@@ -172,6 +183,16 @@ class Segment:
             )
         if self.kind in ("launch", "hand_brake"):
             if self.stage == "drive":
+                if self.targeted_launch:
+                    if speed >= self.target:
+                        self.target_reached = True
+                        self._next("coast")
+                    elif room <= 0 or time >= 20.0:
+                        self.incomplete_reason = (
+                            "distance_limit" if room <= 0 else "time_limit"
+                        )
+                        self._next("stop")
+                    return VehicleCommand(throttle=self.level)
                 level = self.level if self.kind == "launch" else 0.6
                 limit = 8.0 if self.kind == "launch" else 4.0
                 if (
@@ -182,7 +203,9 @@ class Segment:
                     self._next("coast" if self.kind == "launch" else "stop")
                 return VehicleCommand(throttle=level)
             if self.stage == "coast":
-                if time >= 1.5 or room <= 0:
+                if time >= self.coast_seconds or room <= 0:
+                    if self.targeted_launch and time < self.coast_seconds:
+                        self.incomplete_reason = "coast_distance_limit"
                     self._next("stop")
                 return VehicleCommand()
         if self.kind == "reverse":
@@ -244,8 +267,14 @@ def _run_seed(
     max_lateral_acceleration: float,
     directory: Path,
     metadata: dict[str, Any],
+    launch_profiles: list[tuple[float, float, float]] | None = None,
+    coast_seconds: float = 1.5,
 ) -> tuple[list[Recording], list[dict[str, Any]]]:
     rng = np.random.default_rng(seed)
+    profiles = list(launch_profiles) if launch_profiles is not None else None
+    if profiles is not None:
+        rng.shuffle(profiles)
+    launch_index = 0
     kinds = [kind for kind, count in counts.items() for _ in range(count)]
     rng.shuffle(kinds)
     kept: list[Recording] = []
@@ -260,7 +289,15 @@ def _run_seed(
             budget,
             steer_exponent=steer_exponent,
             max_lateral_acceleration=max_lateral_acceleration,
+            launch_profile=(
+                profiles[launch_index]
+                if profiles is not None and kind == "launch"
+                else None
+            ),
+            coast_seconds=coast_seconds,
         )
+        if kind == "launch":
+            launch_index += 1
         recorder = DriveRecorder(body=False)
         label = f"s{seed}-{index:02d}-{kind}"
         max_roll = 0.0
@@ -280,6 +317,7 @@ def _run_seed(
             "steer_frequency": program.frequency,
             "steer_hold_s": program.hold,
             "steer_input_exponent": steer_exponent,
+            "targeted_launch": program.targeted_launch,
         }
         log.append(entry)
         try:
@@ -313,7 +351,12 @@ def _run_seed(
                 telemetry = session.step(command)
             for _ in range(3):
                 session.step(VehicleCommand(brake=1.0))
-            valid = completed and not collisions and max_roll <= 3
+            valid = (
+                completed
+                and not collisions
+                and max_roll <= 3
+                and program.incomplete_reason is None
+            )
             entry.update(kept=valid, status="completed" if valid else "rejected")
             if valid:
                 kept.append(recorder.recording())
@@ -329,6 +372,8 @@ def _run_seed(
                 program_stage=program.stage,
                 completed=completed,
                 frame_limit_exceeded=program.frames > 1500,
+                target_reached=program.target_reached,
+                incomplete_reason=program.incomplete_reason,
             )
             try:
                 if len(recorder):
@@ -374,6 +419,8 @@ def main() -> int:
     parser.add_argument("--blueprint", default="vehicle.nissan.patrol")
     parser.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2])
     parser.add_argument("--min-straight", type=float, default=100.0)
+    parser.add_argument("--straight-limit", type=float, default=300.0)
+    parser.add_argument("--spawn-indices", type=int, nargs="+")
     parser.add_argument("--max-road-pitch", type=float, default=1.0)
     parser.add_argument("--max-lateral-acceleration", type=float, default=3.0)
     parser.add_argument(
@@ -383,6 +430,12 @@ def main() -> int:
         help="input exponent; inferred as 1 for CARLA 1.0 or 2 for 0.10 if omitted",
     )
     parser.add_argument("--launch", type=int, default=10)
+    parser.add_argument("--launch-targets", type=float, nargs="+")
+    parser.add_argument(
+        "--launch-throttles", type=float, nargs="+", default=[0.75, 1.0]
+    )
+    parser.add_argument("--launch-brakes", type=float, nargs="+", default=[0.4, 0.8])
+    parser.add_argument("--launch-coast-seconds", type=float, default=1.5)
     parser.add_argument("--hand-brake", type=int, default=2)
     parser.add_argument("--reverse", type=int, default=3)
     parser.add_argument("--steer", type=int, default=12)
@@ -406,9 +459,34 @@ def main() -> int:
         parser.error("manoeuvre counts must be nonnegative with a positive total")
     if any(seed < 0 for seed in args.seeds) or len(set(args.seeds)) != len(args.seeds):
         parser.error("seeds must be unique and nonnegative")
+    if args.spawn_indices is not None and (
+        any(index < 0 for index in args.spawn_indices)
+        or len(set(args.spawn_indices)) != len(args.spawn_indices)
+    ):
+        parser.error("spawn indices must be unique and nonnegative")
+    launch_profiles = None
+    if args.launch_targets is not None:
+        for values, upper in (
+            (args.launch_targets, 30),
+            (args.launch_throttles, 1),
+            (args.launch_brakes, 1),
+        ):
+            if len(set(values)) != len(values) or any(
+                not math.isfinite(value) or not 0 < value <= upper for value in values
+            ):
+                parser.error("launch grid values must be distinct and within bounds")
+        launch_profiles = list(
+            product(args.launch_targets, args.launch_throttles, args.launch_brakes)
+        )
+        if counts["launch"] != len(launch_profiles):
+            parser.error("launch count must equal the complete launch profile grid")
     if (
         not math.isfinite(args.min_straight)
         or args.min_straight <= 0
+        or not math.isfinite(args.straight_limit)
+        or args.straight_limit < args.min_straight
+        or not math.isfinite(args.launch_coast_seconds)
+        or args.launch_coast_seconds < 0
         or not math.isfinite(args.timeout)
         or args.timeout <= 0
         or not math.isfinite(args.max_road_pitch)
@@ -434,11 +512,23 @@ def main() -> int:
     common: dict[str, Any] = {
         "blueprint": args.blueprint,
         "min_straight_m": args.min_straight,
+        "straight_limit_m": args.straight_limit,
+        "spawn_indices": args.spawn_indices,
         "max_road_pitch_deg": args.max_road_pitch,
         "max_lateral_acceleration_mps2": args.max_lateral_acceleration,
         "counts": counts,
         "seeds": args.seeds,
         "control_dt": DT,
+        "launch_profile_grid": (
+            {
+                "target_speeds_mps": args.launch_targets,
+                "throttles": args.launch_throttles,
+                "brakes": args.launch_brakes,
+                "coast_seconds": args.launch_coast_seconds,
+            }
+            if launch_profiles is not None
+            else None
+        ),
         "command": "examples/identify_vehicle.py " + " ".join(sys.argv[1:]),
         "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "started_utc": datetime.now(timezone.utc).isoformat(),
@@ -469,14 +559,26 @@ def main() -> int:
         if world.get_settings().synchronous_mode:
             raise RuntimeError("Stop the existing synchronous client first")
         town = world.get_map()
+        spawn_points = town.get_spawn_points()
+        if args.spawn_indices is not None:
+            if any(index >= len(spawn_points) for index in args.spawn_indices):
+                raise ValueError("A requested spawn index is outside this map")
+            spawn_points = [spawn_points[index] for index in args.spawn_indices]
         spawns = [
             (
                 spawn,
                 length,
                 float(town.get_waypoint(spawn.location).transform.rotation.pitch),
             )
-            for spawn in town.get_spawn_points()
-            if (length := _straight(town, spawn, max_road_pitch=args.max_road_pitch))
+            for spawn in spawn_points
+            if (
+                length := _straight(
+                    town,
+                    spawn,
+                    limit=args.straight_limit,
+                    max_road_pitch=args.max_road_pitch,
+                )
+            )
             >= args.min_straight
         ]
         common.update(map=town.name, spawn_points_used=len(spawns))
@@ -528,6 +630,8 @@ def main() -> int:
                     max_lateral_acceleration=args.max_lateral_acceleration,
                     directory=directory,
                     metadata=metadata,
+                    launch_profiles=launch_profiles,
+                    coast_seconds=args.launch_coast_seconds,
                 )
                 if kept:
                     recording = Recording.concatenate(kept)
