@@ -1,0 +1,296 @@
+{
+  "status": "completed",
+  "started_utc": "2026-11-18T13:19:29.416007+00:00",
+  "server_version": "1.0",
+  "client_version": "1.0",
+  "map": "Carla/Maps/Town10HD_Opt",
+  "muscles": 114,
+  "seed": 42,
+  "seconds": 11.999999999999833,
+  "reflex_config": {
+    "perception_delay": 0.04,
+    "takeover_time": 2.72,
+    "steering": {
+      "k_far": 6.0,
+      "k_near": 2.0,
+      "k_integral": 1.0
+    },
+    "idm": {
+      "max_acceleration": 1.0,
+      "comfortable_deceleration": 1.5,
+      "time_headway": 1.6,
+      "min_gap": 2.0,
+      "exponent": 4.0
+    },
+    "throttle_bias": 0.3,
+    "throttle_per_mps2": 0.25,
+    "brake_per_mps2": 0.15,
+    "coast_band": 0.4,
+    "throttle_map": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.258,
+        0.004
+      ],
+      [
+        0.287,
+        0.006
+      ],
+      [
+        0.348,
+        0.008
+      ],
+      [
+        0.405,
+        0.01
+      ],
+      [
+        0.461,
+        0.012
+      ],
+      [
+        0.553,
+        0.016
+      ],
+      [
+        0.625,
+        0.02
+      ],
+      [
+        0.765,
+        0.03
+      ],
+      [
+        0.941,
+        0.05
+      ],
+      [
+        1.0,
+        0.08
+      ]
+    ],
+    "brake_map": [
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.387,
+        0.02
+      ],
+      [
+        0.568,
+        0.04
+      ],
+      [
+        0.701,
+        0.06
+      ],
+      [
+        0.798,
+        0.08
+      ],
+      [
+        0.871,
+        0.1
+      ],
+      [
+        1.0,
+        0.15
+      ]
+    ],
+    "steer_map": [
+      [
+        -0.877,
+        -0.3
+      ],
+      [
+        -0.533,
+        -0.2
+      ],
+      [
+        -0.253,
+        -0.1
+      ],
+      [
+        -0.1,
+        -0.05
+      ],
+      [
+        0.0,
+        0.0
+      ],
+      [
+        0.105,
+        0.05
+      ],
+      [
+        0.262,
+        0.1
+      ],
+      [
+        0.641,
+        0.2
+      ],
+      [
+        0.801,
+        0.3
+      ]
+    ],
+    "steer_integral": 0.3,
+    "pedal_integral": 0.05,
+    "max_steer_rate": 0.8,
+    "acceleration_control": {
+      "vehicle": {
+        "wheelbase": 3.075,
+        "speed_knots": [
+          0.0,
+          1.0,
+          2.5,
+          4.0,
+          6.0,
+          8.0,
+          11.0,
+          15.0,
+          20.0
+        ],
+        "throttle_knots": [
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "drive": [
+          [
+            0.09438937178635569,
+            0.18972057876624326,
+            0.2872408750890336,
+            0.44887350978271595,
+            0.6479181505607112,
+            0.8265217131993938,
+            0.9762416438859721,
+            1.1391112734223507,
+            1.3082501929412893
+          ],
+          [
+            0.7178910874277288,
+            0.9948369067314335,
+            1.3679749306245537,
+            1.8798598952296186,
+            2.330714731295173,
+            2.573044713355567,
+            2.614337006088568,
+            2.6101046721356096,
+            2.5938530842218124
+          ],
+          [
+            1.3736384093849798,
+            1.9069108770651846,
+            2.577018878942993,
+            3.409364992626544,
+            4.1094913089618395,
+            4.4265530534659305,
+            4.3485670643766525,
+            4.117314503209102,
+            3.8756718194521143
+          ],
+          [
+            2.07186980080167,
+            2.882621167444341,
+            3.8362738050383114,
+            5.0224692474053985,
+            5.997739170415901,
+            6.377329514267615,
+            6.156334250811415,
+            5.659461971757522,
+            5.158978627924107
+          ]
+        ],
+        "reverse_drive": [
+          0.3309311094990647,
+          0.9706306035520047,
+          1.6105574485331298,
+          2.250484293514255
+        ],
+        "steer_gain": [
+          0.9671183493924813,
+          0.9671183493924813,
+          0.9347382582806371,
+          0.909348419806357,
+          0.8907760548444505,
+          0.8746871156620434,
+          0.8599122033968012,
+          0.8469827713089422,
+          0.8469827713089422
+        ],
+        "steer_exponent": 0.9710941521174783,
+        "steer_rise_rate": 2.5,
+        "steer_fall_rate": 5.0,
+        "rolling": 0.26151369907707717,
+        "linear_drag": 0.0,
+        "quadratic_drag": 0.005088590406164401,
+        "brake_decel": 6.4933400436739435,
+        "hand_brake_decel": 4.875545383891894,
+        "throttle_lag": 0.075,
+        "steer_lag": 4.03431560642913e-23,
+        "steer_lag_slope": 0.01
+      },
+      "pedal_integral": 0.05,
+      "integral_limit": 0.02
+    }
+  },
+  "reflex_timing": {
+    "control_dt_s": 0.02,
+    "configured_delay_s": 0.04,
+    "history_lag_s": 0.02
+  },
+  "events": [
+    {
+      "time": 0.0,
+      "type": "scenario_start",
+      "scenario": "lead_brake"
+    },
+    {
+      "time": 4.0,
+      "type": "lead_brake",
+      "deceleration": 2.5
+    }
+  ],
+  "recording_script_sha256": "63dcafb6e28a9b52158875f49189baffe843dda1ba3cd55609f4a2c0f93e6f55",
+  "actors_restored": true,
+  "world_settings_restored": true,
+  "collision_contacts": [],
+  "versions": {
+    "carla": "1.0",
+    "mujoco": "3.17.0",
+    "myosuite": "3.1.0",
+    "numpy": "2.5.5",
+    "embodied-human": "0.1.1",
+    "myosuite-carla": "0.2.0"
+  },
+  "frames": 600,
+  "min_gap_m": 2.2466459030023476,
+  "max_abs_lane_offset_m": 0.10099247062592139,
+  "peak_brake": 0.15933074057102203,
+  "peak_throttle": 0.16965992748737335,
+  "final_speed_mps": 0.5088039463257035,
+  "max_applied_control_error": 7.443706956378193e-09,
+  "any_off_road": false,
+  "human_source_revision": "03d1ec167b32b3cf604192e4a45b335636b2f3a5",
+  "source_command": "python examples/record_embodied_human.py --human-repo PATH --scenario lead_brake --fast --seconds 12 --task none --seed 42 --spawn 80 --reflex-config reflex-c3.json --telemetry-only --record live-following-recording --output live-following.mp4",
+  "archive_sha256": "660f2a2821e7dc5a5e435e268f0c0a516645270a0493d91ce9e8a468e46c3825",
+  "members_sha256": {
+    "live-following.json": "3815b5eb0385d099df20094644d828e3d2ee3532b023328905bd176eea69fa34",
+    "live-following.txt": "a4cefbc8bba1c93ee22874352efb0d7ab363726a7c69c0bd67368cb66ced1ac8",
+    "reflex-c3.json": "3803b1644e3440c5f496b2f12432475f8fa4e5ccc9d930fbbbed1ef8fcca3eac",
+    "server-launch.json": "86356115be184dc30eb54439b84023b28bff9da429e9d2a3dda9b5f75f60d468",
+    "live-following-recording/activation.csv": "7bacdc63773d094b99c1e1d44786555731ca61990b0044886446a857ff937aa6",
+    "live-following-recording/coordinates.csv": "8f44a336327ed6000b71a44bdc86773f8d04c370225d38e2c5f8b07c421b3c69",
+    "live-following-recording/datapackage.json": "77262dc8e255e523d3182ba66207b4ae2311963cd70efc7061655a4453d89a98",
+    "live-following-recording/force.csv": "6b94c25a11143b387663bd512c1237e72b1bc594836ce12e732cb56f2f6d4385",
+    "live-following-recording/frames.csv": "eb96b4131518ce1155ee50211ba59b8200b44909235d500cc14404f8951f156c"
+  }
+}
