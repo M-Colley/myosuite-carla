@@ -80,6 +80,11 @@ def carla_rate_to_cockpit(rate: Sequence[float]) -> NDArray[np.float64]:
     return np.array([right, forward, -up])
 
 
+def _cockpit_to_flu(vec: NDArray[np.float64]) -> NDArray[np.float64]:
+    """Rotate right-handed cockpit ``(left, backward, up)`` vectors to ``FLU``."""
+    return np.stack((-vec[..., 1], vec[..., 0], vec[..., 2]), axis=-1)
+
+
 @dataclass(frozen=True)
 class VehicleMotion:
     """Vehicle kinematics for one control period, in CARLA's world frame.
@@ -179,6 +184,80 @@ class VehicleMotion:
             + 2.0 * np.cross(omega, velocity)
             + acceleration
         )
+
+    def as_base_kinematics_dict(
+        self, *, frame: str = "cockpit"
+    ) -> dict[str, NDArray[np.float64]]:
+        """Return ``lin_acc``, ``ang_vel`` and ``ang_acc`` in ``cockpit`` or ``flu``."""
+        if frame not in ("cockpit", "flu"):
+            raise ValueError(f"frame must be 'cockpit' or 'flu', got {frame!r}")
+        cockpit = self.in_cockpit()
+        lin = cockpit["acceleration"].astype(np.float64, copy=True)
+        omega = cockpit["angular_velocity"].astype(np.float64, copy=True)
+        alpha = cockpit["angular_acceleration"].astype(np.float64, copy=True)
+        if frame == "flu":
+            lin = _cockpit_to_flu(lin)
+            omega = _cockpit_to_flu(omega)
+            alpha = _cockpit_to_flu(alpha)
+        return {"lin_acc": lin, "ang_vel": omega, "ang_acc": alpha}
+
+
+def motions_to_base_profile_kwargs(
+    motions: Sequence[VehicleMotion],
+    *,
+    dt: float | None = None,
+    times: Sequence[float] | None = None,
+    frame: str = "cockpit",
+    derive_ang_acc: bool = True,
+) -> dict[str, NDArray[np.float64]]:
+    """Convert ``VehicleMotion`` samples to ``RecordedBaseProfile`` keyword arrays.
+
+    Args:
+        motions: At least two sequential ``VehicleMotion`` samples.
+        dt: Uniform sample interval in seconds (used when ``times`` is ``None``).
+        times: Explicit strictly increasing timestamps in seconds.
+        frame: Output axis convention, ``'cockpit'`` or ``'flu'``.
+        derive_ang_acc: Differentiate ``ang_vel`` when all explicit ``ang_acc``
+            samples are zero.
+
+    Returns:
+        Dictionary with ``times``, ``lin_acc``, ``ang_vel`` and ``ang_acc``.
+    """
+    if len(motions) < 2:
+        raise ValueError("motions must contain at least 2 samples")
+    if frame not in ("cockpit", "flu"):
+        raise ValueError(f"frame must be 'cockpit' or 'flu', got {frame!r}")
+    if (dt is None) == (times is None):
+        raise ValueError("Specify exactly one of dt or times")
+
+    t_arr: NDArray[np.float64]
+    if times is not None:
+        t_arr = np.asarray(times, dtype=np.float64)
+        if t_arr.shape != (len(motions),) or not np.all(np.isfinite(t_arr)):
+            raise ValueError("times must be a finite 1D array matching len(motions)")
+        if np.any(np.diff(t_arr) <= 0.0):
+            raise ValueError("times must be strictly increasing")
+        t_arr = t_arr - float(t_arr[0])
+    else:
+        assert dt is not None
+        if not (math.isfinite(dt) and dt > 0.0):
+            raise ValueError("dt must be finite and positive")
+        t_arr = np.arange(len(motions), dtype=np.float64) * float(dt)
+
+    converted = [m.as_base_kinematics_dict(frame=frame) for m in motions]
+    lin_acc = np.stack([c["lin_acc"] for c in converted], axis=0)
+    ang_vel = np.stack([c["ang_vel"] for c in converted], axis=0)
+    ang_acc = np.stack([c["ang_acc"] for c in converted], axis=0)
+
+    if derive_ang_acc and not np.any(ang_acc) and np.any(np.diff(ang_vel, axis=0)):
+        ang_acc = np.asarray(np.gradient(ang_vel, t_arr, axis=0), dtype=np.float64)
+
+    return {
+        "times": t_arr,
+        "lin_acc": lin_acc,
+        "ang_vel": ang_vel,
+        "ang_acc": ang_acc,
+    }
 
 
 class InertialLoads:
