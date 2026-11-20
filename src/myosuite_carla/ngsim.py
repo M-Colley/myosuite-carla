@@ -103,12 +103,12 @@ class FollowingTrial:
             raise ValueError("trial acceleration must match time and be finite")
 
         n = t_arr.size
-        lat = (
+        lat: NDArray[np.float64] = (
             np.zeros(n, dtype=np.float64)
             if lateral_left_acc is None
             else np.asarray(lateral_left_acc, dtype=np.float64)
         )
-        vert = (
+        vert: NDArray[np.float64] = (
             np.zeros(n, dtype=np.float64)
             if vertical_acc is None
             else np.asarray(vertical_acc, dtype=np.float64)
@@ -118,6 +118,7 @@ class FollowingTrial:
         if vert.shape != (n,) or not np.all(np.isfinite(vert)):
             raise ValueError("vertical_acc must be finite and match trial length")
 
+        lin_acc: NDArray[np.float64]
         if frame == "cockpit":
             lin_acc = np.column_stack((lat, -fwd, vert))
         else:

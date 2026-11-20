@@ -230,6 +230,7 @@ def motions_to_base_profile_kwargs(
     if (dt is None) == (times is None):
         raise ValueError("Specify exactly one of dt or times")
 
+    t_arr: NDArray[np.float64]
     if times is not None:
         t_arr = np.asarray(times, dtype=np.float64)
         if t_arr.shape != (len(motions),) or not np.all(np.isfinite(t_arr)):
