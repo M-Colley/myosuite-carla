@@ -31,6 +31,7 @@ from .inputs import (
 from .presets import cockpit_mapper
 from .recording import DriveRecorder, Recording
 from .session import CarlaSession, SessionConfig, SynchronizationError, VehicleTelemetry
+from .vehicle_loads import motions_to_base_profile_kwargs
 from .wrapper import CarlaWrapper
 
 __version__ = "0.2.0"
@@ -68,4 +69,5 @@ __all__ = [
     "add_cockpit",
     "build_fullbody_driver",
     "cockpit_mapper",
+    "motions_to_base_profile_kwargs",
 ]

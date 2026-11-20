@@ -74,6 +74,62 @@ class FollowingTrial:
         """Return the window length in seconds."""
         return float(self.time[-1] - self.time[0])
 
+    def as_base_profile_kwargs(
+        self,
+        *,
+        frame: str = "cockpit",
+        lateral_left_acc: Sequence[float] | None = None,
+        vertical_acc: Sequence[float] | None = None,
+    ) -> dict[str, NDArray[np.float64]]:
+        """Export this trial as ``RecordedBaseProfile`` keyword arrays.
+
+        Args:
+            frame: ``'cockpit'`` (``[left, -forward, up]``) or ``'flu'``
+                (``[forward, left, up]``).
+            lateral_left_acc: Optional leftward lateral acceleration [m/s^2].
+            vertical_acc: Optional upward vertical acceleration [m/s^2].
+
+        Returns:
+            Dictionary with ``times``, ``lin_acc``, ``ang_vel`` and ``ang_acc``.
+        """
+        if frame not in ("cockpit", "flu"):
+            raise ValueError(f"frame must be 'cockpit' or 'flu', got {frame!r}")
+        t_arr = np.asarray(self.time, dtype=np.float64)
+        if t_arr.ndim != 1 or t_arr.size < 2 or np.any(np.diff(t_arr) <= 0.0):
+            raise ValueError("trial time must be a strictly increasing 1D array")
+        t_rel = t_arr - float(t_arr[0])
+        fwd = np.asarray(self.acceleration, dtype=np.float64)
+        if fwd.shape != t_arr.shape or not np.all(np.isfinite(fwd)):
+            raise ValueError("trial acceleration must match time and be finite")
+
+        n = t_arr.size
+        lat = (
+            np.zeros(n, dtype=np.float64)
+            if lateral_left_acc is None
+            else np.asarray(lateral_left_acc, dtype=np.float64)
+        )
+        vert = (
+            np.zeros(n, dtype=np.float64)
+            if vertical_acc is None
+            else np.asarray(vertical_acc, dtype=np.float64)
+        )
+        if lat.shape != (n,) or not np.all(np.isfinite(lat)):
+            raise ValueError("lateral_left_acc must be finite and match trial length")
+        if vert.shape != (n,) or not np.all(np.isfinite(vert)):
+            raise ValueError("vertical_acc must be finite and match trial length")
+
+        if frame == "cockpit":
+            lin_acc = np.column_stack((lat, -fwd, vert))
+        else:
+            lin_acc = np.column_stack((fwd, lat, vert))
+        zeros = np.zeros((n, 3), dtype=np.float64)
+        return {
+            "times": t_rel,
+            "lin_acc": lin_acc,
+            "ang_vel": zeros.copy(),
+            "ang_acc": zeros,
+        }
+
 
 def _smooth(position: NDArray[np.float64]) -> tuple[NDArray[np.float64], ...]:
     signal = importlib.import_module("scipy.signal")
